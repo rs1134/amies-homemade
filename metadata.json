@@ -1,0 +1,7 @@
+{
+  "name": "Amie's Homemade",
+  "description": "An elegant e-commerce platform for Amie's Homemade, specializing in traditional Indian mukhwas, snacks, and sweets. Features an AI flavor assistant to help you choose the perfect treat.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
