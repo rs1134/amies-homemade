@@ -29,7 +29,19 @@
     <meta name="robots" content="index, follow" />
 
     <script src="https://cdn.tailwindcss.com/3.4.1"></script>
-    <script>tailwind.config = {}</script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              coral: '#F04E4E',
+              yellow: '#F6C94C',
+              cream: '#FFF8EE',
+            },
+          },
+        },
+      }
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&family=Pacifico&family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
       :root {
@@ -111,6 +123,5 @@
   </head>
   <body class="kitchen-pattern">
     <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
   </body>
 </html>
