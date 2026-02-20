@@ -1,10 +1,25 @@
-import { GoogleGenAI } from "@google/genai";
 import { PRODUCTS } from "./constants";
 
-// Correctly initialize GoogleGenAI using process.env.API_KEY directly
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Check if we're in browser and API key is available
+const getApiKey = (): string | undefined => {
+  if (typeof window !== 'undefined') {
+    return (window as any).__GEMINI_API_KEY__ || undefined;
+  }
+  return undefined;
+};
 
 export const getFlavorRecommendation = async (userInput: string) => {
+  const apiKey = getApiKey();
+  
+  // If no API key, return a fallback message
+  if (!apiKey) {
+    return "AI recommendations are currently unavailable. Please browse our products or contact us on WhatsApp for personalized recommendations!";
+  }
+
+  // Dynamic import only when needed and API key is available
+  const { GoogleGenAI } = await import("@google/genai");
+  const ai = new GoogleGenAI({ apiKey });
+
   // Group products by category to help the AI organize its thoughts and ensure it picks multiple items
   const productsByCategory = PRODUCTS.reduce((acc, p) => {
     if (!acc[p.category]) acc[p.category] = [];
