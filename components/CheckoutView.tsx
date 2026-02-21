@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef } from 'react';
-import { Truck, Wallet, ChevronRight, X, Copy, Check, QrCode, Smartphone, AlertCircle, Loader2, MessageCircle, CheckCircle2, MapPin, Calendar, Building2, Minus, Plus, Trash2, Scale } from 'lucide-react';
+import { Truck, Wallet, ChevronRight, X, Copy, Check, QrCode, Smartphone, AlertCircle, Loader2, MessageCircle, CheckCircle, MapPin, Calendar, Building2, Minus, Plus, Trash2, Scale } from 'lucide-react';
 import { CartItem } from '../types';
 import { STORE_UPI_ID, MERCHANT_NAME, WHATSAPP_NUMBER } from '../constants';
 
@@ -264,7 +264,7 @@ _Please confirm my order and share delivery details._
           <div className="bg-[#F04E4E] p-16 text-center text-white relative">
             <div className="relative z-10 flex flex-col items-center">
               <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center text-[#F04E4E] mb-6 shadow-xl">
-                <CheckCircle2 size={44} strokeWidth={2.5} />
+                <CheckCircle size={44} strokeWidth={2.5} />
               </div>
               <h2 className="text-5xl font-bold serif mb-3">Order Placed!</h2>
               <p className="text-white/80 brand-rounded font-bold uppercase text-[11px] tracking-[0.3em]">
@@ -619,7 +619,7 @@ _Please confirm my order and share delivery details._
               }} 
               className={`w-full py-7 bg-[#F04E4E] text-white rounded-[2.5rem] font-bold brand-rounded uppercase tracking-[0.3em] text-[11px] transition-all shadow-2xl shadow-[#F04E4E]/30 flex items-center justify-center gap-4 ${isSubmitting ? 'opacity-70 cursor-wait' : 'hover:scale-[1.03] active:scale-[0.97]'}`}
             >
-              {isSubmitting ? <><Loader2 className="animate-spin" size={20} /> Verifying...</> : <>Confirm I have Paid <CheckCircle2 size={20} /></>}
+              {isSubmitting ? <><Loader2 className="animate-spin" size={20} /> Verifying...</> : <>Confirm I have Paid <CheckCircle size={20} /></>}
             </button>
           </div>
         </div>
