@@ -7,7 +7,7 @@ const AboutUs: React.FC = () => {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-20">
           <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em]">
-            The Story of <span className="lowercase">amie's</span>
+            The Story of amie's
           </span>
           <h1 className="text-5xl sm:text-7xl font-bold text-[#4A3728] serif mt-6">From Our Kitchen to Yours</h1>
         </div>
@@ -21,9 +21,9 @@ const AboutUs: React.FC = () => {
                 className="relative rounded-[3rem] shadow-2xl z-10 w-full aspect-[4/5] object-cover object-top border-[12px] border-white" 
                 alt="Ami Shah - Founder" 
               />
-              <div className="absolute -bottom-8 -right-4 sm:-right-8 bg-[#F6C94C] p-6 sm:p-8 rounded-[2.5rem] sm:rounded-[3rem] shadow-2xl z-20 hidden md:block border-4 border-white">
-                <p className="text-3xl font-bold text-[#F04E4E] brand-script mb-0.5 text-center leading-none">Ami Shah</p>
-                <p className="text-[10px] brand-rounded font-black uppercase tracking-[0.2em] text-[#4A3728] text-center">Founder</p>
+              <div className="absolute -bottom-6 -right-2 sm:-bottom-8 sm:-right-8 bg-[#F6C94C] p-4 sm:p-8 rounded-[2rem] sm:rounded-[3rem] shadow-2xl z-20 border-4 border-white">
+                <p className="text-xl sm:text-3xl font-bold text-[#F04E4E] brand-script mb-0.5 text-center leading-none">Ami Shah</p>
+                <p className="text-[8px] sm:text-[10px] brand-rounded font-black uppercase tracking-[0.2em] text-[#4A3728] text-center">Founder</p>
               </div>
             </div>
           </div>

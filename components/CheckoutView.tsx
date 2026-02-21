@@ -20,6 +20,20 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   const [copied, setCopied] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [transactionId, setTransactionId] = useState('');
+  const [transactionError, setTransactionError] = useState('');
+
+  // Lock body scroll when payment modal is open
+  React.useEffect(() => {
+    if (showPaymentModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showPaymentModal]);
   
   const [formData, setFormData] = useState({
     name: '',
@@ -43,8 +57,9 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
         }
         return "";
       case 'phone':
-        // Exactly 10 digits, start with 6-9
-        if (!/^[6-9]\d{9}$/.test(value.trim())) {
+        // Allow optional +91 or 91 prefix, and spaces/hyphens
+        const sanitized = value.trim().replace(/[\s-]/g, '');
+        if (!/^(?:\+91|91)?[6-9]\d{9}$/.test(sanitized)) {
           return "Please enter a valid 10-digit Indian mobile number";
         }
         return "";
@@ -157,8 +172,31 @@ ${itemsSummary}
 🚚 DELIVERY: ₹${shippingFee ?? 0}
 💵 GRAND TOTAL: ₹${grandTotal}
 💳 METHOD: ${method.toUpperCase()}
+🆔 TXN ID: ${transactionId}
 ---------------------------
     `.trim();
+
+    // Prepare WhatsApp message for the customer to send to the seller
+    const whatsappMessage = encodeURIComponent(`
+*New Order from Amie's Homemade*
+---------------------------
+*Order ID:* ${orderId}
+*Txn ID:* ${transactionId}
+*Customer:* ${formData.name}
+*Phone:* ${formData.phone}
+*City:* ${formData.city}
+*Address:* ${formData.address}
+
+*Items:*
+${itemsSummary}
+
+*Total Amount:* ₹${grandTotal}
+*Payment:* ${method.toUpperCase()}
+---------------------------
+_Please confirm my order and share delivery details._
+    `.trim());
+
+    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=${whatsappMessage}`;
 
     try {
       await fetch('https://ntfy.sh/amies-homemade-9157537842', {
@@ -170,6 +208,10 @@ ${itemsSummary}
           'Tags': 'shopping_cart,package,star'
         }
       });
+      
+      // Store the WhatsApp URL to show on the success screen
+      (window as any).lastOrderWhatsappUrl = whatsappUrl;
+      
       setIsSuccess(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
@@ -289,12 +331,22 @@ ${itemsSummary}
                  </div>
               </div>
             </div>
-            <button 
-              onClick={() => onComplete()}
-              className="w-full py-6 bg-[#4A3728] text-white rounded-[1.5rem] font-bold brand-rounded uppercase tracking-[0.3em] text-[11px] hover:bg-black transition-all shadow-xl active:scale-[0.98]"
-            >
-              Continue Shopping
-            </button>
+            <div className="flex flex-col gap-4">
+              <a 
+                href={(window as any).lastOrderWhatsappUrl || `https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-6 bg-[#25D366] text-white rounded-[1.5rem] font-bold brand-rounded uppercase tracking-[0.3em] text-[11px] hover:shadow-2xl hover:shadow-[#25D366]/30 transition-all flex items-center justify-center gap-3 active:scale-[0.98]"
+              >
+                <MessageCircle size={20} /> Confirm on WhatsApp
+              </a>
+              <button 
+                onClick={() => onComplete()}
+                className="w-full py-6 bg-[#4A3728] text-white rounded-[1.5rem] font-bold brand-rounded uppercase tracking-[0.3em] text-[11px] hover:bg-black transition-all shadow-xl active:scale-[0.98]"
+              >
+                Continue Shopping
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -513,9 +565,9 @@ ${itemsSummary}
       {showPaymentModal && (
         <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/80 backdrop-blur-lg" onClick={() => !isSubmitting && setShowPaymentModal(false)} />
-          <div className="relative bg-[#FFF8EE] w-full max-w-md rounded-[4rem] p-10 shadow-[0_0_120px_rgba(0,0,0,0.6)] animate-in zoom-in fade-in duration-300 border border-white/20">
+          <div className="relative bg-[#FFF8EE] w-full max-w-md rounded-[3rem] sm:rounded-[4rem] p-6 sm:p-10 shadow-[0_0_120px_rgba(0,0,0,0.6)] animate-in zoom-in fade-in duration-300 border border-white/20 max-h-[90vh] overflow-y-auto no-scrollbar">
             {!isSubmitting && (
-              <button onClick={() => setShowPaymentModal(false)} className="absolute top-10 right-10 p-4 hover:bg-[#F04E4E]/10 rounded-full text-[#F04E4E] transition-colors z-[210] shadow-sm bg-white"><X size={24} /></button>
+              <button onClick={() => setShowPaymentModal(false)} className="absolute top-6 right-6 sm:top-10 sm:right-10 p-3 sm:p-4 hover:bg-[#F04E4E]/10 rounded-full text-[#F04E4E] transition-colors z-[210] shadow-sm bg-white"><X size={20} className="sm:w-6 sm:h-6" /></button>
             )}
             <div className="text-center mb-10">
               <div className="w-20 h-20 bg-blue-50 text-blue-600 rounded-[2rem] flex items-center justify-center mx-auto mb-6 shadow-lg shadow-blue-500/10"><QrCode size={40} /></div>
@@ -534,8 +586,39 @@ ${itemsSummary}
                 <div className="overflow-hidden"><p className="text-[9px] brand-rounded text-[#4A3728]/30 font-bold uppercase tracking-widest mb-1">Store UPI ID</p><p className="text-sm font-bold text-[#4A3728] truncate">{STORE_UPI_ID}</p></div>
                 <button onClick={copyToClipboard} className={`p-4 rounded-2xl transition-all flex items-center gap-3 text-[11px] font-black uppercase brand-rounded flex-shrink-0 ${copied ? 'bg-green-500 text-white' : 'bg-[#F04E4E]/5 text-[#F04E4E] hover:bg-[#F04E4E] hover:text-white'}`}>{copied ? <Check size={16} strokeWidth={3} /> : <Copy size={16} />}{copied ? 'Done' : 'Copy'}</button>
               </div>
+
+              <div className="space-y-2">
+                <label className="text-[9px] font-black uppercase brand-rounded text-[#4A3728]/40 ml-4 tracking-widest">Transaction ID / UTR Number</label>
+                <input 
+                  type="text"
+                  value={transactionId}
+                  onChange={(e) => {
+                    setTransactionId(e.target.value);
+                    if (e.target.value.trim().length >= 6) setTransactionError('');
+                  }}
+                  placeholder="Enter 12-digit UTR or Txn ID"
+                  className={`w-full p-5 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/20 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none brand-rounded text-sm transition-all ${transactionError ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'}`}
+                />
+                {transactionError && (
+                  <p className="text-red-500 text-[9px] font-bold ml-4 mt-1 brand-rounded">{transactionError}</p>
+                )}
+                <p className="text-[8px] text-[#4A3728]/40 italic ml-4 leading-tight">
+                  * Please enter the Transaction ID from your UPI app to verify payment.
+                </p>
+              </div>
             </div>
-            <button disabled={isSubmitting} onClick={() => { setShowPaymentModal(false); submitOrderSilently(); }} className={`w-full py-7 bg-[#F04E4E] text-white rounded-[2.5rem] font-bold brand-rounded uppercase tracking-[0.3em] text-[11px] transition-all shadow-2xl shadow-[#F04E4E]/30 flex items-center justify-center gap-4 ${isSubmitting ? 'opacity-70 cursor-wait' : 'hover:scale-[1.03] active:scale-[0.97]'}`}>
+            <button 
+              disabled={isSubmitting} 
+              onClick={async () => { 
+                if (transactionId.trim().length < 6) {
+                  setTransactionError('Please enter a valid Transaction ID');
+                  return;
+                }
+                await submitOrderSilently();
+                setShowPaymentModal(false); 
+              }} 
+              className={`w-full py-7 bg-[#F04E4E] text-white rounded-[2.5rem] font-bold brand-rounded uppercase tracking-[0.3em] text-[11px] transition-all shadow-2xl shadow-[#F04E4E]/30 flex items-center justify-center gap-4 ${isSubmitting ? 'opacity-70 cursor-wait' : 'hover:scale-[1.03] active:scale-[0.97]'}`}
+            >
               {isSubmitting ? <><Loader2 className="animate-spin" size={20} /> Verifying...</> : <>Confirm I have Paid <CheckCircle2 size={20} /></>}
             </button>
           </div>

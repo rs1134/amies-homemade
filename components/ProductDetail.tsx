@@ -14,6 +14,14 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose, onAddTo
   const [selectedSubOption, setSelectedSubOption] = useState(product.subOptions?.[0]?.name || '');
   const [imageError, setImageError] = useState(false);
 
+  // Lock body scroll when modal is open
+  React.useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+
   // Find the currently selected sub-option prices if they exist
   const activePrices = useMemo(() => {
     if (!product.subOptions) return product.prices || { [product.weight]: product.price };
@@ -27,12 +35,12 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose, onAddTo
   return (
     <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
-      <div className="relative bg-[#FFF8EE] w-full max-w-4xl rounded-[3rem] overflow-hidden shadow-2xl flex flex-col md:flex-row animate-in fade-in zoom-in duration-300">
+      <div className="relative bg-[#FFF8EE] w-full max-w-4xl rounded-[3rem] shadow-2xl flex flex-col md:flex-row animate-in fade-in zoom-in duration-300 max-h-[90vh] overflow-y-auto md:overflow-hidden">
         <button onClick={onClose} className="absolute top-6 right-6 z-10 p-2 bg-white/80 rounded-full hover:bg-white text-coral transition-colors">
           <X size={24} />
         </button>
 
-        <div className="md:w-1/2 relative aspect-square bg-cream/50">
+        <div className="md:w-1/2 relative aspect-square bg-cream/50 flex-shrink-0">
           {!imageError ? (
             <img 
               src={product.image} 
@@ -54,7 +62,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose, onAddTo
           </div>
         </div>
 
-        <div className="md:w-1/2 p-8 md:p-12 overflow-y-auto max-h-[90vh]">
+        <div className="md:w-1/2 p-8 md:p-12 md:overflow-y-auto flex-1">
           <span className="text-coral font-bold brand-rounded text-xs uppercase tracking-widest">{product.category}</span>
           <h2 className="text-4xl font-bold text-[#4A3728] serif mt-2 mb-4">{product.name}</h2>
           <p className="text-[#4A3728]/70 leading-relaxed mb-8">{product.description}</p>

@@ -16,6 +16,14 @@ interface PersonalizationModalProps {
 }
 
 const PersonalizationModal: React.FC<PersonalizationModalProps> = ({ onClose, onConfirm }) => {
+  // Lock body scroll when modal is open
+  React.useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+
   // Helper to flatten products into individual selectable varieties
   const getFlattenedOptions = (category: Category) => {
     const categoryProducts = PRODUCTS.filter(p => p.category === category);
@@ -226,19 +234,20 @@ const PersonalizationModal: React.FC<PersonalizationModalProps> = ({ onClose, on
         </div>
 
         {/* Footer Summary Bar */}
-        <div className="p-6 sm:p-10 bg-white/95 backdrop-blur-2xl border-t border-coral/5 shadow-[0_-20px_60px_rgba(0,0,0,0.12)] flex flex-col lg:flex-row items-center gap-6 sm:gap-10 z-30 shrink-0">
-          <div className="flex-1 flex flex-col sm:flex-row items-center gap-4 sm:gap-8 text-center sm:text-left w-full lg:w-auto">
-            <div className="flex items-center gap-4 p-4 bg-[#C9A84C]/10 rounded-[2rem] border border-[#C9A84C]/10 min-w-[150px] sm:min-w-[180px] justify-center sm:justify-start">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-2xl flex items-center justify-center text-[#C9A84C] shadow-sm flex-shrink-0">
-                <Box size={24} />
+        <div className="p-4 sm:p-10 bg-white/95 backdrop-blur-2xl border-t border-coral/5 shadow-[0_-20px_60px_rgba(0,0,0,0.12)] flex flex-col lg:flex-row items-center gap-4 sm:gap-10 z-30 shrink-0">
+          <div className="flex-1 flex flex-row items-center gap-4 sm:gap-8 text-left w-full lg:w-auto">
+            <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-[#C9A84C]/10 rounded-2xl sm:rounded-[2rem] border border-[#C9A84C]/10 min-w-fit sm:min-w-[180px] justify-start">
+              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-white rounded-xl sm:rounded-2xl flex items-center justify-center text-[#C9A84C] shadow-sm flex-shrink-0">
+                <Box size={18} className="sm:hidden" />
+                <Box size={24} className="hidden sm:block" />
               </div>
               <div>
-                <span className="text-[9px] font-black brand-rounded uppercase text-[#4A3728]/40 tracking-widest">Slots Filled</span>
-                <p className="text-xs font-bold text-[#4A3728] whitespace-nowrap">{selectedMukhwas.length + selectedMithai.length + selectedSnacks.length} / 7 items</p>
+                <span className="text-[8px] sm:text-[9px] font-black brand-rounded uppercase text-[#4A3728]/40 tracking-widest block">Slots Filled</span>
+                <p className="text-[10px] sm:text-xs font-bold text-[#4A3728] whitespace-nowrap">{selectedMukhwas.length + selectedMithai.length + selectedSnacks.length} / 7 items</p>
               </div>
             </div>
 
-            <div className="flex-1 flex flex-wrap justify-center sm:justify-start gap-1.5 max-h-20 overflow-y-auto px-2">
+            <div className="hidden sm:flex flex-1 flex-wrap justify-start gap-1.5 max-h-20 overflow-y-auto px-2">
               {[...selectedMukhwas, ...selectedMithai, ...selectedSnacks].length === 0 && (
                 <p className="text-[9px] font-black brand-rounded uppercase text-coral/30">Select your items to build your box</p>
               )}
@@ -253,16 +262,16 @@ const PersonalizationModal: React.FC<PersonalizationModalProps> = ({ onClose, on
             </div>
           </div>
 
-          <div className="flex gap-4 w-full sm:w-auto">
-             <button onClick={handleReset} className="p-5 border-2 border-coral/10 text-[#4A3728]/40 rounded-[1.5rem] hover:text-coral hover:bg-coral/5 transition-all">
+          <div className="flex gap-3 w-full sm:w-auto">
+             <button onClick={handleReset} className="p-4 sm:p-5 border-2 border-coral/10 text-[#4A3728]/40 rounded-xl sm:rounded-[1.5rem] hover:text-coral hover:bg-coral/5 transition-all">
                 <RotateCcw size={18} />
              </button>
              <button
                disabled={!canConfirm}
                onClick={handleConfirm}
-               className={`flex-1 sm:flex-none px-10 py-5 rounded-[1.5rem] text-[11px] font-black uppercase brand-rounded tracking-[0.2em] shadow-2xl transition-all flex items-center justify-center gap-3 ${canConfirm ? 'bg-coral text-white shadow-coral/30 hover:scale-105 active:scale-95' : 'bg-[#4A3728]/10 text-[#4A3728]/30 cursor-not-allowed shadow-none'}`}
+               className={`flex-1 sm:flex-none px-6 sm:px-10 py-4 sm:py-5 rounded-xl sm:rounded-[1.5rem] text-[10px] sm:text-[11px] font-black uppercase brand-rounded tracking-[0.1em] sm:tracking-[0.2em] shadow-2xl transition-all flex items-center justify-center gap-2 sm:gap-3 ${canConfirm ? 'bg-coral text-white shadow-coral/30 hover:scale-105 active:scale-95' : 'bg-[#4A3728]/10 text-[#4A3728]/30 cursor-not-allowed shadow-none'}`}
              >
-               {canConfirm ? 'Confirm Selection' : 'Fill All Slots'} <Check size={18} />
+               {canConfirm ? 'Confirm' : 'Fill Slots'} <Check size={18} />
              </button>
           </div>
         </div>

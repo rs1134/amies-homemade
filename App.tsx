@@ -316,7 +316,7 @@ const App: React.FC = () => {
         currentPage={currentPage}
       />
       
-      <main className="relative z-10">
+      <main className="relative">
         {renderPage()}
         
         <a 

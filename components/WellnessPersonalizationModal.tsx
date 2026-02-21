@@ -33,6 +33,14 @@ const WellnessPersonalizationModal: React.FC<WellnessPersonalizationModalProps> 
   const [selectedTier, setSelectedTier] = useState<Tier>(TIERS[1]); // Default to 4 jars
   const [selectedFlavors, setSelectedFlavors] = useState<string[]>([]);
 
+  // Lock body scroll when modal is open
+  React.useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+
   const mukhwasFlavors = useMemo(() => {
     const flattened: WellnessFlavor[] = [];
     PRODUCTS.filter(p => p.category === Category.MUKHWAS).forEach(p => {
@@ -187,19 +195,20 @@ const WellnessPersonalizationModal: React.FC<WellnessPersonalizationModalProps> 
         </div>
 
         {/* Summary Footer */}
-        <div className="p-6 sm:p-10 bg-white/95 backdrop-blur-2xl border-t border-coral/5 shadow-[0_-20px_60px_rgba(0,0,0,0.12)] flex flex-col lg:flex-row items-center gap-6 sm:gap-10 z-30 shrink-0">
-          <div className="flex-1 flex flex-col sm:flex-row items-center gap-4 sm:gap-8 text-center sm:text-left w-full lg:w-auto">
-            <div className="flex items-center gap-4 p-4 bg-[#C9A84C]/10 rounded-[2rem] border border-[#C9A84C]/10 min-w-[150px] sm:min-w-[180px] justify-center sm:justify-start">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-2xl flex items-center justify-center text-[#C9A84C] shadow-sm flex-shrink-0">
-                <JarIcon size={24} />
+        <div className="p-4 sm:p-10 bg-white/95 backdrop-blur-2xl border-t border-coral/5 shadow-[0_-20px_60px_rgba(0,0,0,0.12)] flex flex-col lg:flex-row items-center gap-4 sm:gap-10 z-30 shrink-0">
+          <div className="flex-1 flex flex-row items-center gap-4 sm:gap-8 text-left w-full lg:w-auto">
+            <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-[#C9A84C]/10 rounded-2xl sm:rounded-[2rem] border border-[#C9A84C]/10 min-w-fit sm:min-w-[180px] justify-start">
+              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-white rounded-xl sm:rounded-2xl flex items-center justify-center text-[#C9A84C] shadow-sm flex-shrink-0">
+                <JarIcon size={18} className="sm:hidden" />
+                <JarIcon size={24} className="hidden sm:block" />
               </div>
               <div>
-                <span className="text-[9px] font-black brand-rounded uppercase text-[#4A3728]/40 tracking-widest">Selection</span>
-                <p className="text-xs font-bold text-[#4A3728] whitespace-nowrap">{selectedTier.label}</p>
+                <span className="text-[8px] sm:text-[9px] font-black brand-rounded uppercase text-[#4A3728]/40 tracking-widest block">Selection</span>
+                <p className="text-[10px] sm:text-xs font-bold text-[#4A3728] whitespace-nowrap">{selectedTier.label}</p>
               </div>
             </div>
 
-            <div className="flex-1 flex flex-wrap justify-center sm:justify-start gap-1.5 max-h-20 overflow-y-auto px-2">
+            <div className="hidden sm:flex flex-1 flex-wrap justify-start gap-1.5 max-h-20 overflow-y-auto px-2">
               {selectedFlavors.length > 0 ? (
                 selectedFlavors.map(id => {
                   const f = mukhwasFlavors.find(x => x.id === id);
@@ -215,22 +224,22 @@ const WellnessPersonalizationModal: React.FC<WellnessPersonalizationModalProps> 
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center gap-6 w-full lg:w-auto">
-            <div className="text-center sm:text-right">
-              <span className="text-[9px] font-black brand-rounded text-[#4A3728]/30 uppercase tracking-widest">Grand Total</span>
-              <p className="text-3xl font-black text-coral">₹{selectedTier.price}</p>
+          <div className="flex flex-row items-center gap-4 sm:gap-6 w-full lg:w-auto justify-between sm:justify-end">
+            <div className="text-left sm:text-right">
+              <span className="text-[8px] sm:text-[9px] font-black brand-rounded text-[#4A3728]/30 uppercase tracking-widest block">Grand Total</span>
+              <p className="text-xl sm:text-3xl font-black text-coral">₹{selectedTier.price}</p>
             </div>
             
-            <div className="flex gap-3 w-full sm:w-auto">
-              <button onClick={handleReset} className="p-5 border-2 border-coral/10 text-[#4A3728]/40 rounded-[1.5rem] hover:text-coral hover:bg-coral/5 transition-all">
+            <div className="flex gap-2 sm:gap-3">
+              <button onClick={handleReset} className="p-4 sm:p-5 border-2 border-coral/10 text-[#4A3728]/40 rounded-xl sm:rounded-[1.5rem] hover:text-coral hover:bg-coral/5 transition-all">
                 <RotateCcw size={18} />
               </button>
               <button
                 disabled={!isComplete}
                 onClick={handleConfirm}
-                className={`flex-1 sm:flex-none px-10 py-5 rounded-[1.5rem] text-[11px] font-black uppercase brand-rounded tracking-[0.2em] shadow-2xl transition-all flex items-center justify-center gap-3 ${isComplete ? 'bg-coral text-white shadow-coral/30 hover:scale-105 active:scale-95' : 'bg-[#4A3728]/10 text-[#4A3728]/30 cursor-not-allowed shadow-none'}`}
+                className={`px-6 sm:px-10 py-4 sm:py-5 rounded-xl sm:rounded-[1.5rem] text-[10px] sm:text-[11px] font-black uppercase brand-rounded tracking-[0.1em] sm:tracking-[0.2em] shadow-2xl transition-all flex items-center justify-center gap-2 sm:gap-3 ${isComplete ? 'bg-coral text-white shadow-coral/30 hover:scale-105 active:scale-95' : 'bg-[#4A3728]/10 text-[#4A3728]/30 cursor-not-allowed shadow-none'}`}
               >
-                {isComplete ? 'Add to Bag' : `Fill ${selectedTier.id - selectedFlavors.length} jars`} <Check size={18} />
+                {isComplete ? 'Add' : `Fill ${selectedTier.id - selectedFlavors.length}`} <Check size={18} />
               </button>
             </div>
           </div>

@@ -10,6 +10,14 @@ interface SweetMemoriesModalProps {
 }
 
 const SweetMemoriesModal: React.FC<SweetMemoriesModalProps> = ({ onClose, onConfirm, maxVarieties }) => {
+  // Lock body scroll when modal is open
+  React.useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+
   // Extract all traditional sweets from the products list, flattening varieties
   const sweetOptions = useMemo(() => {
     const flattened: any[] = [];
@@ -126,20 +134,20 @@ const SweetMemoriesModal: React.FC<SweetMemoriesModalProps> = ({ onClose, onConf
         </div>
 
         {/* Footer */}
-        <div className="p-6 sm:p-10 bg-white/95 backdrop-blur-2xl border-t border-coral/5 shadow-[0_-20px_50px_rgba(0,0,0,0.1)] flex flex-col sm:flex-row items-center justify-between gap-6 z-30 shrink-0">
+        <div className="p-4 sm:p-10 bg-white/95 backdrop-blur-2xl border-t border-coral/5 shadow-[0_-20px_50px_rgba(0,0,0,0.1)] flex flex-row items-center justify-between gap-4 z-30 shrink-0">
            <button onClick={handleReset} className="flex items-center gap-2 text-[10px] font-black brand-rounded uppercase text-[#4A3728]/40 hover:text-coral transition-colors">
-              <RotateCcw size={16} /> Reset
+              <RotateCcw size={16} /> <span className="hidden sm:inline">Reset</span>
            </button>
-           <div className="flex gap-4 w-full sm:w-auto">
-              <button onClick={onClose} className="flex-1 sm:flex-none px-8 py-4 border-2 border-coral/10 text-[#4A3728]/60 rounded-2xl text-[10px] font-black uppercase brand-rounded tracking-widest hover:bg-coral/5">
+           <div className="flex gap-3 w-full sm:w-auto justify-end">
+              <button onClick={onClose} className="hidden sm:block px-8 py-4 border-2 border-coral/10 text-[#4A3728]/60 rounded-2xl text-[10px] font-black uppercase brand-rounded tracking-widest hover:bg-coral/5">
                  Cancel
               </button>
               <button 
                 onClick={handleConfirm}
                 disabled={!isComplete}
-                className={`flex-1 sm:flex-none px-10 py-4 rounded-2xl text-[10px] font-black uppercase brand-rounded tracking-widest shadow-2xl transition-all flex items-center gap-2 justify-center ${isComplete ? 'bg-coral text-white shadow-coral/30 hover:scale-105' : 'bg-[#4A3728]/10 text-[#4A3728]/30 cursor-not-allowed'}`}
+                className={`flex-1 sm:flex-none px-6 sm:px-10 py-4 rounded-xl sm:rounded-2xl text-[10px] font-black uppercase brand-rounded tracking-widest shadow-2xl transition-all flex items-center gap-2 justify-center ${isComplete ? 'bg-coral text-white shadow-coral/30 hover:scale-105' : 'bg-[#4A3728]/10 text-[#4A3728]/30 cursor-not-allowed'}`}
               >
-                Confirm Box <Check size={16} />
+                {isComplete ? 'Confirm' : 'Select'} <Check size={16} />
               </button>
            </div>
         </div>
