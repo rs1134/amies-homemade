@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Instagram, Facebook, Phone, MapPin, Mail, X, ShieldCheck, Truck, CheckCircle2, Clock, Scale } from 'lucide-react';
+import { Instagram, Facebook, Phone, MapPin, Mail, X, ShieldCheck, Truck, CheckCircle, Clock, Scale } from 'lucide-react';
 import { WHATSAPP_NUMBER } from '../constants';
 import Logo from './Logo';
 
@@ -198,15 +198,15 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               <span>Orders outside Ahmedabad typically take <span className="font-bold">3-5 business days</span> to arrive.</span>
             </li>
             <li className="flex gap-3">
-              <CheckCircle2 className="text-coral shrink-0 mt-0.5" size={16} />
+              <CheckCircle className="text-coral shrink-0 mt-0.5" size={16} />
               <span>Orders are freshly prepared and dispatched within <span className="font-bold">1-2 business days</span> of confirmation.</span>
             </li>
             <li className="flex gap-3">
-              <CheckCircle2 className="text-coral shrink-0 mt-0.5" size={16} />
+              <CheckCircle className="text-coral shrink-0 mt-0.5" size={16} />
               <span>For online orders, only <span className="font-bold">UPI payment</span> is accepted — no Cash on Delivery.</span>
             </li>
             <li className="flex gap-3">
-              <CheckCircle2 className="text-coral shrink-0 mt-0.5" size={16} />
+              <CheckCircle className="text-coral shrink-0 mt-0.5" size={16} />
               <span>If you receive a damaged order, contact us within <span className="font-bold">24 hours</span> on WhatsApp with a photo for resolution.</span>
             </li>
           </ul>
@@ -236,7 +236,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 <span>We do not share your data with any third parties.</span>
               </li>
               <li className="flex gap-4 items-center p-4 bg-white rounded-2xl border border-coral/5">
-                <CheckCircle2 className="text-coral" size={20} />
+                <CheckCircle className="text-coral" size={20} />
                 <span>Your WhatsApp number may be used to confirm your order and send delivery updates only.</span>
               </li>
               <li className="flex gap-4 items-center p-4 bg-white rounded-2xl border border-coral/5">

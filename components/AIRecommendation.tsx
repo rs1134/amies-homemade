@@ -1,5 +1,5 @@
 import React from 'react';
-import { MessageSquare, Send, Sparkles, X, Loader2, CheckCircle2 } from 'lucide-react';
+import { MessageSquare, Send, Sparkles, X, Loader2, CheckCircle } from 'lucide-react';
 import { getFlavorRecommendation } from '../geminiService';
 import { PRODUCTS } from '../constants';
 import { Product } from '../types';
@@ -100,7 +100,7 @@ const AIRecommendation: React.FC<AIRecommendationProps> = ({ onSelectProduct }) 
 
             {matchedProduct && (
               <div className="flex flex-col items-center justify-center py-10 gap-4 animate-bounce my-auto">
-                <CheckCircle2 size={40} className="text-green-500" />
+                <CheckCircle size={40} className="text-green-500" />
                 <div className="text-center">
                   <p className="text-xs uppercase tracking-widest font-black text-green-600 mb-1">Found a match!</p>
                   <p className="text-lg font-bold text-[#4A3728] serif">Opening {matchedProduct.name}...</p>
