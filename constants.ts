@@ -295,7 +295,7 @@ export const PRODUCTS: Product[] = [
     price: 175,
     weight: '250 G',
     description: 'Classic crunchy spiral snack made with rice flour and spices.',
-    image: 'https://i.postimg.cc/5NwjcDyS/wmremove_transformed_(1).jpg',
+    image: 'https://i.postimg.cc/CxxMjswB/Chakli-in-a-bowl.jpg',
     ingredients: ['Rice Flour', 'Sesame', 'Mixed Spices', 'Butter', 'Curd'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 175, '500 G': 350, '1 KG': 700 }
@@ -307,7 +307,7 @@ export const PRODUCTS: Product[] = [
     price: 150,
     weight: '250 G',
     description: 'Flaky crispy puri flavored with black pepper and cumin.',
-    image: 'https://i.postimg.cc/76RvWPSq/gujarati_farsi_puri_diwali_recipe.jpg',
+    image: 'https://i.postimg.cc/qvwLF4fc/4540cc6d6d0f0a3f4c9e1f612e7f0b73.jpg',
     ingredients: ['White Flour', 'Black Pepper', 'Cumin Seeds', 'Pure Ghee'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 150, '500 G': 300, '1 KG': 600 }

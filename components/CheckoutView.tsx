@@ -14,27 +14,10 @@ interface CheckoutViewProps {
 type FieldName = 'name' | 'phone' | 'email' | 'city' | 'address';
 
 const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdateQuantity, onRemove, total }) => {
-  const [method] = useState<'upi'>('upi');
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [qrLoaded, setQrLoaded] = useState(false);
-  const [copied, setCopied] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [transactionId, setTransactionId] = useState('');
-  const [transactionError, setTransactionError] = useState('');
+  const [paymentId, setPaymentId] = useState('');
 
-  // Lock body scroll when payment modal is open
-  React.useEffect(() => {
-    if (showPaymentModal) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
-  }, [showPaymentModal]);
-  
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -140,10 +123,7 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
 
   const grandTotal = total + (shippingFee || 0);
 
-  const upiLink = `upi://pay?pa=${STORE_UPI_ID}&pn=${encodeURIComponent(MERCHANT_NAME)}&am=${grandTotal.toFixed(2)}&cu=INR&tn=${encodeURIComponent('Order from Amie\'s Homemade')}`;
-  const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodeURIComponent(upiLink)}&bgcolor=FFFFFF&color=F04E4E&margin=2`;
-
-  const submitOrderSilently = async () => {
+  const submitOrderSilently = async (razorpayPaymentId: string) => {
     setIsSubmitting(true);
     const orderId = `AM-${Math.floor(Math.random() * 90000 + 10000)}`;
     
@@ -171,17 +151,16 @@ ${itemsSummary}
 💰 SUB-TOTAL: ₹${total}
 🚚 DELIVERY: ₹${shippingFee ?? 0}
 💵 GRAND TOTAL: ₹${grandTotal}
-💳 METHOD: ${method.toUpperCase()}
-🆔 TXN ID: ${transactionId}
+💳 METHOD: RAZORPAY
+🆔 PAYMENT ID: ${razorpayPaymentId}
 ---------------------------
     `.trim();
 
-    // Prepare WhatsApp message for the customer to send to the seller
     const whatsappMessage = encodeURIComponent(`
 *New Order from Amie's Homemade*
 ---------------------------
 *Order ID:* ${orderId}
-*Txn ID:* ${transactionId}
+*Payment ID:* ${razorpayPaymentId}
 *Customer:* ${formData.name}
 *Phone:* ${formData.phone}
 *City:* ${formData.city}
@@ -191,7 +170,7 @@ ${itemsSummary}
 ${itemsSummary}
 
 *Total Amount:* ₹${grandTotal}
-*Payment:* ${method.toUpperCase()}
+*Payment:* ONLINE (RAZORPAY)
 ---------------------------
 _Please confirm my order and share delivery details._
     `.trim());
@@ -209,9 +188,8 @@ _Please confirm my order and share delivery details._
         }
       });
       
-      // Store the WhatsApp URL to show on the success screen
       (window as any).lastOrderWhatsappUrl = whatsappUrl;
-      
+      setPaymentId(razorpayPaymentId);
       setIsSuccess(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
@@ -222,7 +200,7 @@ _Please confirm my order and share delivery details._
     }
   };
 
-  const handleProceed = () => {
+  const handleProceed = async () => {
     const newErrors: Partial<Record<FieldName, string>> = {};
     const fieldNames: FieldName[] = ['name', 'phone', 'city', 'email', 'address'];
     
@@ -237,7 +215,6 @@ _Please confirm my order and share delivery details._
     });
 
     setFieldErrors(newErrors);
-    // Mark all as touched on submit to show errors
     setTouched(fieldNames.reduce((acc, name) => ({ ...acc, [name]: true }), {}));
 
     if (Object.keys(newErrors).length > 0) {
@@ -248,13 +225,58 @@ _Please confirm my order and share delivery details._
       return;
     }
 
-    setShowPaymentModal(true);
-  };
+    setIsSubmitting(true);
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(STORE_UPI_ID);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    try {
+      const response = await fetch('/api/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: grandTotal,
+          currency: 'INR',
+          receipt: `order_rcptid_${Date.now()}`
+        })
+      });
+
+      if (!response.ok) throw new Error('Failed to create Razorpay order');
+      const order = await response.json();
+
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_SJDmF4SPr4RYkL',
+        amount: order.amount,
+        currency: order.currency,
+        name: "Amie's Homemade",
+        description: "Order Payment",
+        image: "https://i.postimg.cc/8Cy68DD6/Whats-App-Image-2026-02-12-at-18-57-42-(1).jpg",
+        order_id: order.id,
+        handler: function (response: any) {
+          submitOrderSilently(response.razorpay_payment_id);
+        },
+        prefill: {
+          name: formData.name,
+          email: formData.email,
+          contact: formData.phone
+        },
+        notes: {
+          address: formData.address
+        },
+        theme: {
+          color: "#F04E4E"
+        },
+        modal: {
+          ondismiss: function() {
+            setIsSubmitting(false);
+          }
+        }
+      };
+
+      const rzp = new (window as any).Razorpay(options);
+      rzp.open();
+    } catch (error) {
+      console.error("Payment Error:", error);
+      alert("Something went wrong with the payment. Please try again.");
+      setIsSubmitting(false);
+    }
   };
 
   if (isSuccess) {
@@ -268,7 +290,7 @@ _Please confirm my order and share delivery details._
               </div>
               <h2 className="text-5xl font-bold serif mb-3">Order Placed!</h2>
               <p className="text-white/80 brand-rounded font-bold uppercase text-[11px] tracking-[0.3em]">
-                Transaction ID: #AM-{Math.floor(Math.random() * 90000 + 10000)}
+                Payment ID: {paymentId}
               </p>
             </div>
           </div>
@@ -458,20 +480,16 @@ _Please confirm my order and share delivery details._
             </div>
           </div>
 
-          {/* Payment Method Section (Fixed to UPI) */}
+          {/* Payment Method Section */}
           <div className="bg-white p-10 rounded-[3.5rem] shadow-xl border border-[#F04E4E]/5">
             <h2 className="text-2xl font-bold serif mb-8 flex items-center gap-4 text-[#4A3728]">
               <Wallet className="text-[#F04E4E]" size={28} /> Payment Method
             </h2>
             <div className="grid grid-cols-1 gap-4">
-              <button disabled={isSubmitting} className="p-6 rounded-[2rem] border-2 border-[#F04E4E] bg-[#F04E4E]/5 transition-all flex flex-col items-center gap-3 shadow-sm">
+              <div className="p-6 rounded-[2rem] border-2 border-[#F04E4E] bg-[#F04E4E]/5 flex flex-col items-center gap-3 shadow-sm">
                 <Smartphone size={28} className="text-blue-500" />
-                <span className="text-[10px] font-black uppercase brand-rounded tracking-widest">UPI Scan</span>
-              </button>
-              
-              <p className="text-[10px] text-center text-[#4A3728]/40 font-bold uppercase brand-rounded mt-4">
-                Cards and COD are currently unavailable
-              </p>
+                <span className="text-[10px] font-black uppercase brand-rounded tracking-widest text-center">Secure Online Payment (UPI, Cards, Netbanking)</span>
+              </div>
             </div>
           </div>
         </div>
@@ -560,70 +578,6 @@ _Please confirm my order and share delivery details._
           </button>
         </div>
       </div>
-
-      {/* UPI Payment Modal */}
-      {showPaymentModal && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/80 backdrop-blur-lg" onClick={() => !isSubmitting && setShowPaymentModal(false)} />
-          <div className="relative bg-[#FFF8EE] w-full max-w-md rounded-[3rem] sm:rounded-[4rem] p-6 sm:p-10 shadow-[0_0_120px_rgba(0,0,0,0.6)] animate-in zoom-in fade-in duration-300 border border-white/20 max-h-[90vh] overflow-y-auto no-scrollbar">
-            {!isSubmitting && (
-              <button onClick={() => setShowPaymentModal(false)} className="absolute top-6 right-6 sm:top-10 sm:right-10 p-3 sm:p-4 hover:bg-[#F04E4E]/10 rounded-full text-[#F04E4E] transition-colors z-[210] shadow-sm bg-white"><X size={20} className="sm:w-6 sm:h-6" /></button>
-            )}
-            <div className="text-center mb-10">
-              <div className="w-20 h-20 bg-blue-50 text-blue-600 rounded-[2rem] flex items-center justify-center mx-auto mb-6 shadow-lg shadow-blue-500/10"><QrCode size={40} /></div>
-              <h2 className="text-4xl font-bold serif text-[#4A3728]">Scan & Pay</h2>
-              <p className="text-[11px] brand-rounded text-[#4A3728]/40 font-black uppercase tracking-[0.3em] mt-3">Verified Merchant Transaction</p>
-            </div>
-            <div className="bg-white p-8 rounded-[3.5rem] shadow-2xl mb-10 flex flex-col items-center border border-[#F04E4E]/5 relative overflow-hidden">
-              <div className="p-5 bg-white rounded-3xl border-4 border-[#F04E4E]/5 mb-6 relative min-h-[220px] min-w-[220px] flex items-center justify-center">
-                {!qrLoaded && <div className="absolute inset-0 flex flex-col items-center justify-center bg-white rounded-xl z-10"><Loader2 className="animate-spin text-[#F04E4E] mb-3" size={40} /></div>}
-                <img src={qrImageUrl} alt="UPI QR Code" className={`w-52 h-52 transition-opacity duration-500 ${qrLoaded ? 'opacity-100' : 'opacity-0'}`} onLoad={() => setQrLoaded(true)} />
-              </div>
-              <p className="text-4xl font-black text-[#F04E4E] mb-2 tracking-tight">₹{grandTotal.toFixed(2)}</p>
-            </div>
-            <div className="space-y-6 mb-10">
-              <div className="flex items-center justify-between p-5 bg-white rounded-[2rem] border border-[#4A3728]/5 shadow-sm">
-                <div className="overflow-hidden"><p className="text-[9px] brand-rounded text-[#4A3728]/30 font-bold uppercase tracking-widest mb-1">Store UPI ID</p><p className="text-sm font-bold text-[#4A3728] truncate">{STORE_UPI_ID}</p></div>
-                <button onClick={copyToClipboard} className={`p-4 rounded-2xl transition-all flex items-center gap-3 text-[11px] font-black uppercase brand-rounded flex-shrink-0 ${copied ? 'bg-green-500 text-white' : 'bg-[#F04E4E]/5 text-[#F04E4E] hover:bg-[#F04E4E] hover:text-white'}`}>{copied ? <Check size={16} strokeWidth={3} /> : <Copy size={16} />}{copied ? 'Done' : 'Copy'}</button>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-[9px] font-black uppercase brand-rounded text-[#4A3728]/40 ml-4 tracking-widest">Transaction ID / UTR Number</label>
-                <input 
-                  type="text"
-                  value={transactionId}
-                  onChange={(e) => {
-                    setTransactionId(e.target.value);
-                    if (e.target.value.trim().length >= 6) setTransactionError('');
-                  }}
-                  placeholder="Enter 12-digit UTR or Txn ID"
-                  className={`w-full p-5 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/20 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none brand-rounded text-sm transition-all ${transactionError ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'}`}
-                />
-                {transactionError && (
-                  <p className="text-red-500 text-[9px] font-bold ml-4 mt-1 brand-rounded">{transactionError}</p>
-                )}
-                <p className="text-[8px] text-[#4A3728]/40 italic ml-4 leading-tight">
-                  * Please enter the Transaction ID from your UPI app to verify payment.
-                </p>
-              </div>
-            </div>
-            <button 
-              disabled={isSubmitting} 
-              onClick={async () => { 
-                if (transactionId.trim().length < 6) {
-                  setTransactionError('Please enter a valid Transaction ID');
-                  return;
-                }
-                await submitOrderSilently();
-                setShowPaymentModal(false); 
-              }} 
-              className={`w-full py-7 bg-[#F04E4E] text-white rounded-[2.5rem] font-bold brand-rounded uppercase tracking-[0.3em] text-[11px] transition-all shadow-2xl shadow-[#F04E4E]/30 flex items-center justify-center gap-4 ${isSubmitting ? 'opacity-70 cursor-wait' : 'hover:scale-[1.03] active:scale-[0.97]'}`}
-            >
-              {isSubmitting ? <><Loader2 className="animate-spin" size={20} /> Verifying...</> : <>Confirm I have Paid <CheckCircle size={20} /></>}
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
