@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { Category, Product, CartItem } from './types';
-import { PRODUCTS, WHATSAPP_NUMBER } from './constants';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import ProductCard from './components/ProductCard';
-import ProductDetail from './components/ProductDetail';
-import AboutUs from './components/AboutUs';
-import GiftingView from './components/GiftingView';
-import CheckoutView from './components/CheckoutView';
-import Cart from './components/Cart';
-import Footer from './components/Footer';
-import AIRecommendation from './components/AIRecommendation';
-import Reviews from './components/Reviews';
+import { Category, Product, CartItem } from './types.ts';
+import { PRODUCTS, WHATSAPP_NUMBER } from './constants.ts';
+import Navbar from './components/Navbar.tsx';
+import Hero from './components/Hero.tsx';
+import ProductCard from './components/ProductCard.tsx';
+import ProductDetail from './components/ProductDetail.tsx';
+import AboutUs from './components/AboutUs.tsx';
+import GiftingView from './components/GiftingView.tsx';
+import CheckoutView from './components/CheckoutView.tsx';
+import Cart from './components/Cart.tsx';
+import Footer from './components/Footer.tsx';
+import AIRecommendation from './components/AIRecommendation.tsx';
+import Reviews from './components/Reviews.tsx';
 import { Sparkles, ArrowRight, MessageCircle, CheckCircle, Heart, ShieldCheck, History, Package, Users, Mail, Building2 } from 'lucide-react';
 
 const App: React.FC = () => {
