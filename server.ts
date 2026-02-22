@@ -2,6 +2,11 @@ import express from "express";
 import { createServer as createViteServer } from "vite";
 import Razorpay from "razorpay";
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
@@ -65,9 +70,9 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    app.use(express.static("dist"));
+    app.use(express.static(path.resolve(__dirname, "dist")));
     app.get("*", (req, res) => {
-      res.sendFile("dist/index.html", { root: "." });
+      res.sendFile(path.resolve(__dirname, "dist", "index.html"));
     });
   }
 
