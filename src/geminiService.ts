@@ -5,15 +5,21 @@ import { PRODUCTS } from "./constants";
 // We use a fallback to empty string to prevent crashes if the variable is missing
 const getApiKey = () => {
   try {
-    return process.env.GEMINI_API_KEY || "";
+    // Check if process exists on globalThis to avoid ReferenceError
+    const g = globalThis as any;
+    return g.process?.env?.GEMINI_API_KEY || "";
   } catch (e) {
     return "";
   }
 };
 
-const ai = new GoogleGenAI({ apiKey: getApiKey() });
-
 export const getFlavorRecommendation = async (userInput: string) => {
+  const apiKey = getApiKey();
+  if (!apiKey) {
+    return "I'm sorry, I can't provide recommendations right now as the API key is missing.";
+  }
+  
+  const ai = new GoogleGenAI({ apiKey });
   // Group products by category to help the AI organize its thoughts and ensure it picks multiple items
   const productsByCategory = PRODUCTS.reduce((acc, p) => {
     if (!acc[p.category]) acc[p.category] = [];
