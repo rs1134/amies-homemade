@@ -14,13 +14,41 @@ import AIRecommendation from './components/AIRecommendation.tsx';
 import Reviews from './components/Reviews.tsx';
 import { Sparkles, ArrowRight, MessageCircle, CheckCircle, Heart, ShieldCheck, History, Package, Users, Mail, Building2 } from 'lucide-react';
 
+const PAGE_TO_PATH: Record<string, string> = {
+  home: '/',
+  shop: '/shop',
+  about: '/about',
+  gifting: '/gifting',
+  checkout: '/checkout',
+  contact: '/contact',
+};
+
+const PATH_TO_PAGE: Record<string, string> = Object.fromEntries(
+  Object.entries(PAGE_TO_PATH).map(([page, path]) => [path, page])
+);
+
+const getPageFromPath = (path: string) => PATH_TO_PAGE[path] || 'home';
+
 const App: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState('home');
+  const [currentPage, setCurrentPage] = useState(() => getPageFromPath(window.location.pathname));
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<Category | 'All'>('All');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [orderComplete, setOrderComplete] = useState(false);
+
+  const navigate = useCallback((page: string) => {
+    const path = PAGE_TO_PATH[page] || '/';
+    window.history.pushState(null, '', path);
+    setCurrentPage(page);
+  }, []);
+
+  // Sync page state with browser back/forward buttons
+  useEffect(() => {
+    const onPopState = () => setCurrentPage(getPageFromPath(window.location.pathname));
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
 
   // Scroll to top on every page change
   useEffect(() => {
@@ -112,7 +140,7 @@ const App: React.FC = () => {
             <h2 className="text-4xl font-bold serif text-[#4A3728] mb-4">Order Received!</h2>
             <p className="text-[#4A3728]/60 mb-8 brand-rounded font-bold uppercase text-xs tracking-widest">Ami Shah is preparing your treats right now with love.</p>
             <button 
-              onClick={() => { setOrderComplete(false); setCurrentPage('home'); setCart([]); }}
+              onClick={() => { setOrderComplete(false); navigate('home'); setCart([]); }}
               className="px-10 py-4 bg-coral text-white rounded-full font-bold uppercase brand-rounded text-xs tracking-widest hover:scale-105 transition-all"
             >
               Back to Home
@@ -242,8 +270,8 @@ const App: React.FC = () => {
       default: return (
         <>
           <Hero 
-            onShopClick={() => setCurrentPage('shop')} 
-            onAboutClick={() => setCurrentPage('about')}
+            onShopClick={() => navigate('shop')}
+            onAboutClick={() => navigate('about')}
           />
           {/* Restored padding to pt-20 for better alignment as pt-0 was too tight */}
           <section className="pt-20 pb-24 px-4 max-w-7xl mx-auto">
@@ -312,7 +340,7 @@ const App: React.FC = () => {
       <Navbar 
         cartCount={cartCount} 
         onCartClick={() => setIsCartOpen(true)} 
-        onNavigate={setCurrentPage} 
+        onNavigate={navigate}
         currentPage={currentPage}
       />
       
@@ -332,7 +360,7 @@ const App: React.FC = () => {
         <AIRecommendation onSelectProduct={(p) => setSelectedProduct(p)} />
       </main>
 
-      <Footer onNavigate={setCurrentPage} />
+      <Footer onNavigate={navigate} />
 
       {selectedProduct && (
         <ProductDetail 
@@ -348,7 +376,7 @@ const App: React.FC = () => {
         items={cart}
         onUpdateQuantity={updateQuantity}
         onRemove={removeFromCart}
-        onCheckout={() => { setIsCartOpen(false); setCurrentPage('checkout'); }}
+        onCheckout={() => { setIsCartOpen(false); navigate('checkout'); }}
       />
     </div>
   );
