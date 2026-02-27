@@ -123,11 +123,10 @@ const Reviews: React.FC = () => {
         <div className="w-16 h-1 bg-coral mx-auto rounded-full mt-6"></div>
       </div>
 
-      <div>
-        {/* Constant motion marquee */}
-        <div className="flex animate-marquee-left">
-          {[...REVIEWS, ...REVIEWS, ...REVIEWS].map((review, idx) => (
-            <ReviewCard key={`${review.id}-${idx}`} review={review} />
+      <div className="overflow-x-auto pb-4 cursor-grab active:cursor-grabbing no-scrollbar px-4">
+        <div className="flex">
+          {REVIEWS.map((review) => (
+            <ReviewCard key={review.id} review={review} />
           ))}
         </div>
       </div>
