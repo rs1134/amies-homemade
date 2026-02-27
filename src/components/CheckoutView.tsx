@@ -252,7 +252,16 @@ _Please confirm my order and share delivery details._
           contact: formData.phone
         },
         notes: {
-          address: formData.address
+          customer_name: formData.name,
+          phone: formData.phone,
+          city: formData.city,
+          address: formData.address,
+          email: formData.email || 'N/A',
+          items: items.map(i => `${i.quantity}x ${i.name} (${i.selectedWeight || i.weight})`).join(', ').slice(0, 250),
+          subtotal: `Rs.${total}`,
+          shipping: `Rs.${shippingFee ?? 0}`,
+          grand_total: `Rs.${grandTotal}`,
+          total_weight: `${totalWeight}g`,
         },
         theme: {
           color: "#F04E4E"
