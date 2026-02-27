@@ -177,24 +177,58 @@ _Please confirm my order and share delivery details._
 
     const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=${whatsappMessage}`;
 
-    try {
-      await fetch('https://ntfy.sh/amies-homemade-9157537842', {
+    const sendNtfy = async (body: string) => {
+      const res = await fetch('https://ntfy.sh/amies-homemade-9157537842', {
         method: 'POST',
-        body: notificationMessage,
+        body,
         headers: {
+          'Content-Type': 'text/plain; charset=utf-8',
           'Title': `New Order: ${formData.name} (Rs. ${grandTotal})`,
           'Priority': 'high',
           'Tags': 'shopping_cart,package,star'
         }
       });
-      
+      if (!res.ok) {
+        const errText = await res.text().catch(() => 'unknown error');
+        throw new Error(`ntfy returned ${res.status}: ${errText}`);
+      }
+      return res;
+    };
+
+    try {
+      try {
+        await sendNtfy(notificationMessage);
+        console.log('[ntfy] Notification sent successfully');
+      } catch (ntfyErr) {
+        console.warn('[ntfy] First attempt failed, retrying with plain text:', ntfyErr);
+        // Retry with emoji-free fallback message
+        const fallback = [
+          `NEW ORDER: ${orderId}`,
+          `Customer: ${formData.name}`,
+          `Phone: ${formData.phone}`,
+          `City: ${formData.city}`,
+          `Address: ${formData.address}`,
+          ``,
+          itemsSummary,
+          ``,
+          `Subtotal: Rs.${total} | Delivery: Rs.${shippingFee ?? 0} | TOTAL: Rs.${grandTotal}`,
+          `Payment ID: ${razorpayPaymentId}`
+        ].join('\n');
+        await sendNtfy(fallback);
+        console.log('[ntfy] Retry succeeded');
+      }
+
       (window as any).lastOrderWhatsappUrl = whatsappUrl;
       setPaymentId(razorpayPaymentId);
       setIsSuccess(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
-      console.error("Notification Error:", err);
-      setIsSuccess(true); 
+      console.error('[ntfy] All notification attempts failed:', err);
+      // Still mark order as complete so customer is not blocked
+      (window as any).lastOrderWhatsappUrl = whatsappUrl;
+      setPaymentId(razorpayPaymentId);
+      setIsSuccess(true);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } finally {
       setIsSubmitting(false);
     }
