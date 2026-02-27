@@ -126,35 +126,14 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   const submitOrderSilently = async (razorpayPaymentId: string) => {
     setIsSubmitting(true);
     const orderId = `AM-${Math.floor(Math.random() * 90000 + 10000)}`;
-    
+
     const itemsSummary = items.map(i => {
       const basicInfo = `${i.quantity}x ${i.name} (${i.selectedWeight || i.weight})`;
-      const choices = (i.ingredients && i.ingredients.length > 0) 
-        ? `\n   └ Choices: ${i.ingredients.join(', ')}` 
+      const choices = (i.ingredients && i.ingredients.length > 0)
+        ? `\n   - Choices: ${i.ingredients.join(', ')}`
         : '';
       return `${basicInfo}${choices}`;
     }).join('\n');
-    
-    const notificationMessage = `
-🛍️ NEW ORDER: ${orderId}
----------------------------
-👤 Customer: ${formData.name}
-📞 Phone: ${formData.phone}
-🏘️ City: ${formData.city}
-📍 Address: ${formData.address}
-📧 Email: ${formData.email || 'N/A'}
-
-⚖️ Weight: ${totalWeight}g
-📦 ITEMS:
-${itemsSummary}
-
-💰 SUB-TOTAL: ₹${total}
-🚚 DELIVERY: ₹${shippingFee ?? 0}
-💵 GRAND TOTAL: ₹${grandTotal}
-💳 METHOD: RAZORPAY
-🆔 PAYMENT ID: ${razorpayPaymentId}
----------------------------
-    `.trim();
 
     const whatsappMessage = encodeURIComponent(`
 *New Order from Amie's Homemade*
@@ -169,7 +148,7 @@ ${itemsSummary}
 *Items:*
 ${itemsSummary}
 
-*Total Amount:* ₹${grandTotal}
+*Total Amount:* Rs.${grandTotal}
 *Payment:* ONLINE (RAZORPAY)
 ---------------------------
 _Please confirm my order and share delivery details._
@@ -177,61 +156,42 @@ _Please confirm my order and share delivery details._
 
     const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=${whatsappMessage}`;
 
-    const sendNtfy = async (body: string) => {
-      const res = await fetch('https://ntfy.sh/amies-homemade-9157537842', {
-        method: 'POST',
-        body,
-        headers: {
-          'Content-Type': 'text/plain; charset=utf-8',
-          'Title': `New Order: ${formData.name} (Rs. ${grandTotal})`,
-          'Priority': 'high',
-          'Tags': 'shopping_cart,package,star'
-        }
-      });
-      if (!res.ok) {
-        const errText = await res.text().catch(() => 'unknown error');
-        throw new Error(`ntfy returned ${res.status}: ${errText}`);
-      }
-      return res;
-    };
-
     try {
-      try {
-        await sendNtfy(notificationMessage);
-        console.log('[ntfy] Notification sent successfully');
-      } catch (ntfyErr) {
-        console.warn('[ntfy] First attempt failed, retrying with plain text:', ntfyErr);
-        // Retry with emoji-free fallback message
-        const fallback = [
-          `NEW ORDER: ${orderId}`,
-          `Customer: ${formData.name}`,
-          `Phone: ${formData.phone}`,
-          `City: ${formData.city}`,
-          `Address: ${formData.address}`,
-          ``,
+      const res = await fetch('/api/notify-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderId,
+          name: formData.name,
+          phone: formData.phone,
+          city: formData.city,
+          address: formData.address,
+          email: formData.email,
           itemsSummary,
-          ``,
-          `Subtotal: Rs.${total} | Delivery: Rs.${shippingFee ?? 0} | TOTAL: Rs.${grandTotal}`,
-          `Payment ID: ${razorpayPaymentId}`
-        ].join('\n');
-        await sendNtfy(fallback);
-        console.log('[ntfy] Retry succeeded');
-      }
+          totalWeight,
+          subtotal: total,
+          shippingFee: shippingFee ?? 0,
+          grandTotal,
+          paymentId: razorpayPaymentId,
+        }),
+      });
 
-      (window as any).lastOrderWhatsappUrl = whatsappUrl;
-      setPaymentId(razorpayPaymentId);
-      setIsSuccess(true);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        console.error('[notify-order] Server notification failed:', err);
+      } else {
+        console.log('[notify-order] Notification sent successfully');
+      }
     } catch (err) {
-      console.error('[ntfy] All notification attempts failed:', err);
-      // Still mark order as complete so customer is not blocked
-      (window as any).lastOrderWhatsappUrl = whatsappUrl;
-      setPaymentId(razorpayPaymentId);
-      setIsSuccess(true);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } finally {
-      setIsSubmitting(false);
+      console.error('[notify-order] Request failed:', err);
     }
+
+    // Always complete the order regardless of notification result
+    (window as any).lastOrderWhatsappUrl = whatsappUrl;
+    setPaymentId(razorpayPaymentId);
+    setIsSuccess(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setIsSubmitting(false);
   };
 
   const handleProceed = async () => {
