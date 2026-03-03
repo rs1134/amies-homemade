@@ -101,7 +101,7 @@ const HamperCard: React.FC<HamperCardProps> = ({ item, onAddToCart, onSelectProd
                   onClick={() => setActiveImgIdx(idx)}
                   className={`w-12 h-12 rounded-xl overflow-hidden border-2 transition-all duration-300 ${activeImgIdx === idx ? 'border-[#D4AF37] scale-110 shadow-lg' : 'border-transparent opacity-60 hover:opacity-100'}`}
                 >
-                  <img src={img} className="w-full h-full object-cover" alt="thumbnail" />
+                  <img src={img} className="w-full h-full object-cover" alt={`${item.name} view ${idx + 1}`} />
                 </button>
               ))}
             </div>

@@ -41,6 +41,59 @@
     <!-- Robots -->
     <meta name="robots" content="index, follow" />
 
+    <!-- LocalBusiness + FoodEstablishment Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": ["FoodEstablishment", "LocalBusiness"],
+          "@id": "https://amieshomemade.com/#business",
+          "name": "Amie's Homemade",
+          "alternateName": "Amies Homemade",
+          "description": "Handcrafted Indian mukhwas, snacks, sweets and gift hampers made fresh in small batches with no preservatives. Founded by Ami Shah in Ahmedabad.",
+          "url": "https://amieshomemade.com",
+          "telephone": "+919157537842",
+          "email": "hello@amieshomemade.com",
+          "image": "https://i.postimg.cc/8Cy68DD6/Whats-App-Image-2026-02-12-at-18-57-42-(1).jpg",
+          "logo": "https://i.postimg.cc/5tJ5zDKr/Whats-App-Image-2026-02-12-at-18-59-03-(2).jpg",
+          "priceRange": "₹₹",
+          "servesCuisine": ["Indian", "Gujarati"],
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Ahmedabad",
+            "addressRegion": "Gujarat",
+            "addressCountry": "IN"
+          },
+          "areaServed": {
+            "@type": "Country",
+            "name": "India"
+          },
+          "sameAs": [],
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Homemade Indian Snacks & Gift Hampers",
+            "itemListElement": [
+              { "@type": "OfferCatalog", "name": "Mukhwas" },
+              { "@type": "OfferCatalog", "name": "Indian Snacks" },
+              { "@type": "OfferCatalog", "name": "Sweets & Mithai" },
+              { "@type": "OfferCatalog", "name": "Gift Hampers" },
+              { "@type": "OfferCatalog", "name": "Masalas" }
+            ]
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://amieshomemade.com/#website",
+          "url": "https://amieshomemade.com",
+          "name": "Amie's Homemade",
+          "description": "Order fresh homemade Indian mukhwas, snacks, sweets and gift hampers online from Ahmedabad.",
+          "publisher": { "@id": "https://amieshomemade.com/#business" }
+        }
+      ]
+    }
+    </script>
+
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&family=Pacifico&family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   </head>

@@ -14,6 +14,51 @@ import AIRecommendation from './components/AIRecommendation.tsx';
 import Reviews from './components/Reviews.tsx';
 import { Sparkles, ArrowRight, MessageCircle, CheckCircle, Heart, ShieldCheck, History, Package, Users, Mail, Building2 } from 'lucide-react';
 
+const PAGE_SEO: Record<string, { title: string; description: string; canonical: string; ogTitle: string; ogDescription: string }> = {
+  home: {
+    title: "Amie's Homemade | Fresh Mukhwas, Snacks & Gift Hampers — Ahmedabad",
+    description: "Order fresh homemade mukhwas, Indian snacks, sweets & premium gift hampers online. Made in small batches by Ami Shah in Ahmedabad. No preservatives. Pan-India delivery.",
+    canonical: "https://amieshomemade.com",
+    ogTitle: "Amie's Homemade | Handcrafted Indian Mukhwas & Gift Hampers",
+    ogDescription: "Fresh homemade mukhwas, snacks, sweets & premium gift hampers. Made with love in small batches. Order from Ahmedabad.",
+  },
+  shop: {
+    title: "Shop Mukhwas, Snacks & Sweets Online | Amie's Homemade",
+    description: "Browse fresh homemade mukhwas, Indian snacks, sweets and masalas. Amla Ginger, Chatpati Mango, Chakri, Ladoo and more. No preservatives. Made in Ahmedabad. Pan-India delivery.",
+    canonical: "https://amieshomemade.com/shop",
+    ogTitle: "Shop Fresh Homemade Mukhwas & Snacks | Amie's Homemade",
+    ogDescription: "Order authentic Indian mukhwas, snacks, sweets and masalas online. Fresh, homemade, no preservatives. Made in Ahmedabad.",
+  },
+  about: {
+    title: "Our Story | Amie's Homemade — Handmade with Love in Ahmedabad",
+    description: "Learn about Ami Shah and Amie's Homemade — a small batch homemade food brand crafting authentic Indian mukhwas, snacks and sweets with love in Ahmedabad since 2024.",
+    canonical: "https://amieshomemade.com/about",
+    ogTitle: "Our Story | Amie's Homemade",
+    ogDescription: "Meet Ami Shah — the heart behind Amie's Homemade. Authentic Indian snacks made with love in Ahmedabad.",
+  },
+  gifting: {
+    title: "Indian Food Gift Hampers & Corporate Gifts | Amie's Homemade",
+    description: "Premium handmade Indian food gift hampers for Diwali, weddings & corporate events. Custom gift boxes with mukhwas, sweets & snacks. Order online, pan-India delivery from Ahmedabad.",
+    canonical: "https://amieshomemade.com/gifting",
+    ogTitle: "Gift Hampers & Corporate Gifts | Amie's Homemade",
+    ogDescription: "Premium handmade gift hampers for Diwali, weddings & corporate events. Order custom gift boxes from Ahmedabad.",
+  },
+  contact: {
+    title: "Contact Us | Amie's Homemade — WhatsApp & Bulk Orders",
+    description: "Get in touch with Amie's Homemade for orders, bulk inquiries and wholesale pricing. Chat on WhatsApp or email hello@amieshomemade.com. Based in Ahmedabad, pan-India delivery.",
+    canonical: "https://amieshomemade.com/contact",
+    ogTitle: "Contact Amie's Homemade",
+    ogDescription: "Chat on WhatsApp or email for orders, bulk pricing and custom gift hampers from Ahmedabad.",
+  },
+  checkout: {
+    title: "Checkout | Amie's Homemade",
+    description: "Complete your order for fresh homemade mukhwas, snacks and sweets from Amie's Homemade.",
+    canonical: "https://amieshomemade.com/checkout",
+    ogTitle: "Checkout | Amie's Homemade",
+    ogDescription: "Complete your order for fresh homemade Indian snacks and mukhwas.",
+  },
+};
+
 const PAGE_TO_PATH: Record<string, string> = {
   home: '/',
   shop: '/shop',
@@ -49,6 +94,21 @@ const App: React.FC = () => {
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
   }, []);
+
+  // Update page title, meta tags and canonical per page
+  useEffect(() => {
+    const seo = PAGE_SEO[currentPage] || PAGE_SEO.home;
+    document.title = seo.title;
+    const setMeta = (sel: string, val: string) => document.querySelector(sel)?.setAttribute('content', val);
+    const setHref = (sel: string, val: string) => document.querySelector(sel)?.setAttribute('href', val);
+    setMeta('meta[name="description"]', seo.description);
+    setHref('link[rel="canonical"]', seo.canonical);
+    setMeta('meta[property="og:title"]', seo.ogTitle);
+    setMeta('meta[property="og:description"]', seo.ogDescription);
+    setMeta('meta[property="og:url"]', seo.canonical);
+    setMeta('meta[name="twitter:title"]', seo.ogTitle);
+    setMeta('meta[name="twitter:description"]', seo.ogDescription);
+  }, [currentPage]);
 
   // Scroll to top on every page change
   useEffect(() => {
