@@ -16,39 +16,39 @@ import { Sparkles, ArrowRight, MessageCircle, CheckCircle, Heart, ShieldCheck, H
 
 const PAGE_SEO: Record<string, { title: string; description: string; canonical: string; ogTitle: string; ogDescription: string }> = {
   home: {
-    title: "Amie's Homemade | Fresh Mukhwas, Snacks & Gift Hampers — Ahmedabad",
-    description: "Order fresh homemade mukhwas, Indian snacks, sweets & premium gift hampers online. Made in small batches by Ami Shah in Ahmedabad. No preservatives. Pan-India delivery.",
+    title: "Amie's Homemade | Best Mukhwas, Snacks & Gift Hampers in Ahmedabad",
+    description: "Order the best homemade mukhwas, Indian snacks, sweets & gift hampers in Ahmedabad. Fresh small batches by Ami Shah. No preservatives. Pan-India delivery. Mukhwas near me.",
     canonical: "https://amieshomemade.com",
-    ogTitle: "Amie's Homemade | Handcrafted Indian Mukhwas & Gift Hampers",
-    ogDescription: "Fresh homemade mukhwas, snacks, sweets & premium gift hampers. Made with love in small batches. Order from Ahmedabad.",
+    ogTitle: "Amie's Homemade | Best Mukhwas & Homemade Snacks in Ahmedabad",
+    ogDescription: "Ahmedabad's finest homemade mukhwas, snacks, sweets & gift hampers. Made fresh in small batches with no preservatives. Pan-India delivery.",
   },
   shop: {
-    title: "Shop Mukhwas, Snacks & Sweets Online | Amie's Homemade",
-    description: "Browse fresh homemade mukhwas, Indian snacks, sweets and masalas. Amla Ginger, Chatpati Mango, Chakri, Ladoo and more. No preservatives. Made in Ahmedabad. Pan-India delivery.",
+    title: "Buy Mukhwas & Homemade Snacks Online Ahmedabad | Amie's Homemade",
+    description: "Buy fresh homemade mukhwas, Indian snacks, sweets & masalas online from Ahmedabad. Amla Ginger, Chatpati Mango, Chakri, Ladoo and more. No preservatives. Pan-India delivery.",
     canonical: "https://amieshomemade.com/shop",
-    ogTitle: "Shop Fresh Homemade Mukhwas & Snacks | Amie's Homemade",
-    ogDescription: "Order authentic Indian mukhwas, snacks, sweets and masalas online. Fresh, homemade, no preservatives. Made in Ahmedabad.",
+    ogTitle: "Buy Mukhwas & Snacks Online | Amie's Homemade Ahmedabad",
+    ogDescription: "Order authentic homemade mukhwas, snacks, sweets & masalas online from Ahmedabad. Fresh, no preservatives. Pan-India delivery.",
   },
   about: {
-    title: "Our Story | Amie's Homemade — Handmade with Love in Ahmedabad",
-    description: "Learn about Ami Shah and Amie's Homemade — a small batch homemade food brand crafting authentic Indian mukhwas, snacks and sweets with love in Ahmedabad since 2024.",
+    title: "Our Story | Amie's Homemade — Homemade Mukhwas Brand in Ahmedabad",
+    description: "Meet Ami Shah, founder of Amie's Homemade — Ahmedabad's favourite small-batch homemade mukhwas & snacks brand. Authentic recipes, no preservatives, made with love since 2024.",
     canonical: "https://amieshomemade.com/about",
-    ogTitle: "Our Story | Amie's Homemade",
-    ogDescription: "Meet Ami Shah — the heart behind Amie's Homemade. Authentic Indian snacks made with love in Ahmedabad.",
+    ogTitle: "Our Story | Amie's Homemade — Ahmedabad's Mukhwas Brand",
+    ogDescription: "Meet Ami Shah — the heart behind Ahmedabad's favourite homemade mukhwas & snacks brand. Authentic recipes made with love.",
   },
   gifting: {
-    title: "Indian Food Gift Hampers & Corporate Gifts | Amie's Homemade",
-    description: "Premium handmade Indian food gift hampers for Diwali, weddings & corporate events. Custom gift boxes with mukhwas, sweets & snacks. Order online, pan-India delivery from Ahmedabad.",
+    title: "Diwali & Wedding Gift Hampers Ahmedabad | Amie's Homemade",
+    description: "Premium handmade Indian food gift hampers in Ahmedabad for Diwali, weddings & corporate events. Custom mukhwas gift boxes with pan-India delivery. Best gifting near me.",
     canonical: "https://amieshomemade.com/gifting",
-    ogTitle: "Gift Hampers & Corporate Gifts | Amie's Homemade",
-    ogDescription: "Premium handmade gift hampers for Diwali, weddings & corporate events. Order custom gift boxes from Ahmedabad.",
+    ogTitle: "Diwali & Wedding Gift Hampers | Amie's Homemade Ahmedabad",
+    ogDescription: "Best handmade Indian food gift hampers in Ahmedabad for Diwali, weddings & corporate gifting. Custom boxes with pan-India delivery.",
   },
   contact: {
-    title: "Contact Us | Amie's Homemade — WhatsApp & Bulk Orders",
-    description: "Get in touch with Amie's Homemade for orders, bulk inquiries and wholesale pricing. Chat on WhatsApp or email hello@amieshomemade.com. Based in Ahmedabad, pan-India delivery.",
+    title: "Contact Amie's Homemade | Order Mukhwas & Snacks in Ahmedabad",
+    description: "Contact Amie's Homemade to order mukhwas, snacks & gift hampers in Ahmedabad. Chat on WhatsApp, email hello@amieshomemade.com. Bulk & wholesale inquiries welcome.",
     canonical: "https://amieshomemade.com/contact",
-    ogTitle: "Contact Amie's Homemade",
-    ogDescription: "Chat on WhatsApp or email for orders, bulk pricing and custom gift hampers from Ahmedabad.",
+    ogTitle: "Contact Amie's Homemade — Ahmedabad Mukhwas & Snacks",
+    ogDescription: "Order mukhwas, snacks & gift hampers in Ahmedabad. Chat on WhatsApp or email for bulk pricing and custom hampers.",
   },
   checkout: {
     title: "Checkout | Amie's Homemade",
@@ -259,9 +259,10 @@ const App: React.FC = () => {
       );
       case 'contact': return (
         <div className="pt-32 pb-24 px-4 text-center min-h-screen">
-          <h1 className="text-5xl sm:text-7xl font-bold serif mb-8 text-[#4A3728]">Let's Talk</h1>
+          <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em] block mb-4">Homemade Mukhwas &amp; Snacks · Ahmedabad, Gujarat</span>
+          <h1 className="text-4xl sm:text-6xl font-bold serif mb-6 text-[#4A3728]">Contact Amie's Homemade</h1>
           <p className="max-w-2xl mx-auto text-[#4A3728]/60 mb-16 text-lg">
-            Whether you're looking for a small treat or planning a grand celebration, we're here to help you share the taste of tradition.
+            Order mukhwas, snacks, sweets &amp; gift hampers from Ahmedabad. Whether you're looking for a small treat or planning a grand celebration, we're here to help.
           </p>
           
           <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12">
@@ -324,6 +325,20 @@ const App: React.FC = () => {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* NAP block — crawlable address for local SEO */}
+          <div className="max-w-xl mx-auto mt-16 p-8 bg-white/60 rounded-[3rem] border border-coral/10 text-center">
+            <h2 className="text-2xl font-bold serif text-[#4A3728] mb-4">Find Us</h2>
+            <address className="not-italic text-[#4A3728]/70 leading-relaxed text-sm">
+              <strong className="text-[#4A3728] font-bold">Amie's Homemade</strong><br/>
+              Ahmedabad, Gujarat 380015, India<br/>
+              <a href="tel:+919157537842" className="text-coral hover:underline">+91 91575 37842</a><br/>
+              <a href="mailto:hello@amieshomemade.com" className="text-coral hover:underline">hello@amieshomemade.com</a>
+            </address>
+            <p className="text-[10px] text-[#4A3728]/50 mt-4 brand-rounded uppercase tracking-widest">
+              Serving Ahmedabad — Satellite · Navrangpura · Bopal · Prahlad Nagar · Vastrapur &amp; Pan-India
+            </p>
           </div>
         </div>
       );

@@ -9,7 +9,7 @@ const AboutUs: React.FC = () => {
           <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em]">
             The Story of amie's
           </span>
-          <h1 className="text-5xl sm:text-7xl font-bold text-[#4A3728] serif mt-6">From Our Kitchen to Yours</h1>
+          <h1 className="text-5xl sm:text-7xl font-bold text-[#4A3728] serif mt-6">From Ahmedabad's Kitchen to Yours</h1>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center mb-32">

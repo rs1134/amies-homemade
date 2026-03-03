@@ -27,12 +27,13 @@ const Hero: React.FC<HeroProps> = ({ onShopClick, onAboutClick }) => {
           <h2 className="text-[#F04E4E] brand-rounded uppercase tracking-[0.4em] font-black text-[10px] mb-6 flex items-center gap-2">
             Ami Shah's Secret Recipes
           </h2>
-          <h1 className="text-5xl sm:text-7xl font-bold text-[#4A3728] mb-8 leading-[1.1] serif">
-            Homemade with <span className="text-coral brand-script">Love.</span><br/>
-            Packed with Tradition.
+          <h1 className="text-4xl sm:text-6xl font-bold text-[#4A3728] mb-8 leading-[1.1] serif">
+            Ahmedabad's Finest<br/>
+            <span className="text-coral brand-script">Mukhwas,</span> Snacks<br/>
+            &amp; Sweets.
           </h1>
           <p className="text-[#4A3728]/70 text-lg mb-10 font-medium leading-relaxed max-w-md">
-            Handcrafted Indian treats made in small batches with pure ingredients and the heartfelt care only a home kitchen can offer.
+            Handcrafted Indian mukhwas, snacks &amp; sweets made in small batches with pure ingredients — the heartfelt care only a home kitchen can offer.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4">
