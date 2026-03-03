@@ -59,6 +59,15 @@ const PAGE_SEO: Record<string, { title: string; description: string; canonical: 
   },
 };
 
+const BREADCRUMBS: Record<string, Array<{ name: string; item: string }>> = {
+  home:     [{ name: 'Home', item: 'https://amieshomemade.com' }],
+  shop:     [{ name: 'Home', item: 'https://amieshomemade.com' }, { name: 'Shop Mukhwas & Snacks', item: 'https://amieshomemade.com/shop' }],
+  about:    [{ name: 'Home', item: 'https://amieshomemade.com' }, { name: 'Our Story', item: 'https://amieshomemade.com/about' }],
+  gifting:  [{ name: 'Home', item: 'https://amieshomemade.com' }, { name: 'Gift Hampers', item: 'https://amieshomemade.com/gifting' }],
+  contact:  [{ name: 'Home', item: 'https://amieshomemade.com' }, { name: 'Contact Us', item: 'https://amieshomemade.com/contact' }],
+  checkout: [{ name: 'Home', item: 'https://amieshomemade.com' }, { name: 'Checkout', item: 'https://amieshomemade.com/checkout' }],
+};
+
 const PAGE_TO_PATH: Record<string, string> = {
   home: '/',
   shop: '/shop',
@@ -95,7 +104,7 @@ const App: React.FC = () => {
     return () => window.removeEventListener('popstate', onPopState);
   }, []);
 
-  // Update page title, meta tags and canonical per page
+  // Update page title, meta tags, canonical and breadcrumb schema per page
   useEffect(() => {
     const seo = PAGE_SEO[currentPage] || PAGE_SEO.home;
     document.title = seo.title;
@@ -108,6 +117,27 @@ const App: React.FC = () => {
     setMeta('meta[property="og:url"]', seo.canonical);
     setMeta('meta[name="twitter:title"]', seo.ogTitle);
     setMeta('meta[name="twitter:description"]', seo.ogDescription);
+
+    // Inject/update BreadcrumbList schema
+    const crumbs = BREADCRUMBS[currentPage] || BREADCRUMBS.home;
+    const schemaId = 'breadcrumb-schema';
+    let schemaEl = document.getElementById(schemaId) as HTMLScriptElement | null;
+    if (!schemaEl) {
+      schemaEl = document.createElement('script');
+      schemaEl.id = schemaId;
+      schemaEl.type = 'application/ld+json';
+      document.head.appendChild(schemaEl);
+    }
+    schemaEl.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: crumbs.map((b, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        name: b.name,
+        item: b.item,
+      })),
+    });
   }, [currentPage]);
 
   // Scroll to top on every page change

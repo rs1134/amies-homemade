@@ -65,9 +65,9 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
           <div className="col-span-1 md:col-span-2">
-            <div className="mb-8 cursor-pointer inline-block" onClick={() => handleNav('home')}>
+            <a href="/" onClick={(e) => { e.preventDefault(); handleNav('home'); }} className="mb-8 inline-block">
               <Logo manualHeight="h-16" />
-            </div>
+            </a>
             <div className="space-y-4 mb-8">
               <p className="text-white/60 text-lg leading-relaxed max-w-md font-light">
                 We bring you the authentic taste of Indian heritage, crafted with traditional recipes and premium ingredients to make every bite memorable.
@@ -104,10 +104,10 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           <div>
             <h4 className="text-sm font-bold uppercase tracking-[0.2em] mb-8 text-[#F14E4E]">Quick Links</h4>
             <ul className="space-y-4 text-white/60 text-lg font-medium">
-              <li><button onClick={() => handleNav('shop')} className="hover:text-white transition-colors text-left">Shop Collection</button></li>
-              <li><button onClick={() => handleNav('shop')} className="hover:text-white transition-colors text-left">Best Sellers</button></li>
-              <li><button onClick={() => handleNav('about')} className="hover:text-white transition-colors text-left">Our Story</button></li>
-              <li><button onClick={() => handleNav('contact')} className="hover:text-white transition-colors text-left">Wholesale Inquiry</button></li>
+              <li><a href="/shop" onClick={(e) => { e.preventDefault(); handleNav('shop'); }} className="hover:text-white transition-colors">Shop Collection</a></li>
+              <li><a href="/shop" onClick={(e) => { e.preventDefault(); handleNav('shop'); }} className="hover:text-white transition-colors">Best Sellers</a></li>
+              <li><a href="/about" onClick={(e) => { e.preventDefault(); handleNav('about'); }} className="hover:text-white transition-colors">Our Story</a></li>
+              <li><a href="/contact" onClick={(e) => { e.preventDefault(); handleNav('contact'); }} className="hover:text-white transition-colors">Wholesale Inquiry</a></li>
             </ul>
           </div>
           
