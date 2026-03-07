@@ -77,10 +77,10 @@ const HamperCard: React.FC<HamperCardProps> = ({ item, onAddToCart, onSelectProd
   };
 
   return (
-    <div id={`hamper-${item.id}`} className="bg-white rounded-[4rem] overflow-hidden shadow-2xl flex flex-col lg:flex-row group border border-coral/5 hover:border-coral/20 transition-all duration-500 min-h-[600px]">
+    <div id={`hamper-${item.id}`} className="bg-white rounded-[2rem] sm:rounded-[4rem] overflow-hidden shadow-2xl flex flex-col lg:flex-row group border border-coral/5 hover:border-coral/20 transition-all duration-500">
       {/* Gallery Section */}
       <div className="lg:w-2/5 flex flex-col bg-[#FDFBF7] relative">
-        <div className="relative w-full h-96 lg:h-full overflow-hidden bg-white">
+        <div className="relative w-full h-52 sm:h-96 lg:h-full overflow-hidden bg-white">
           <img 
             src={images[activeImgIdx]} 
             alt={item.name} 
@@ -110,10 +110,10 @@ const HamperCard: React.FC<HamperCardProps> = ({ item, onAddToCart, onSelectProd
       </div>
 
       {/* Description Section */}
-      <div className="lg:w-3/5 p-8 sm:p-12 md:p-14 flex flex-col bg-white">
+      <div className="lg:w-3/5 p-5 sm:p-8 md:p-14 flex flex-col bg-white">
         <div className="flex-1">
-          <div className="flex justify-between items-start mb-6">
-            <h3 className="text-4xl sm:text-5xl font-bold serif text-[#4A3728] group-hover:text-coral transition-colors leading-tight">
+          <div className="flex justify-between items-start mb-3 sm:mb-6">
+            <h3 className="text-2xl sm:text-4xl lg:text-5xl font-bold serif text-[#4A3728] group-hover:text-coral transition-colors leading-tight">
               {item.name}
             </h3>
             {currentTreats !== item.ingredients && (
@@ -122,11 +122,11 @@ const HamperCard: React.FC<HamperCardProps> = ({ item, onAddToCart, onSelectProd
               </span>
             )}
           </div>
-          <p className="text-base text-[#4A3728]/70 leading-relaxed mb-10 max-w-xl">
+          <p className="text-sm sm:text-base text-[#4A3728]/70 leading-relaxed mb-4 sm:mb-10 max-w-xl">
             {item.description}
           </p>
           
-          <div className="space-y-12">
+          <div className="space-y-6 sm:space-y-12">
             {/* The Collection Includes - Ingredient Pills */}
             <div className="space-y-4">
               <p className="text-[10px] brand-rounded text-coral font-black uppercase tracking-[0.2em]">The Collection Includes:</p>
@@ -167,11 +167,11 @@ const HamperCard: React.FC<HamperCardProps> = ({ item, onAddToCart, onSelectProd
         </div>
 
         {/* Action Bar */}
-        <div className="flex flex-col gap-8 mt-16 pt-10 border-t border-coral/5">
+        <div className="flex flex-col gap-4 sm:gap-8 mt-6 sm:mt-16 pt-6 sm:pt-10 border-t border-coral/5">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-8">
             <div className="flex flex-col">
               <div className="flex items-baseline gap-2">
-                <span className="text-4xl font-black text-[#D4AF37]">₹{currentPrice}</span>
+                <span className="text-2xl sm:text-4xl font-black text-[#D4AF37]">₹{currentPrice}</span>
                 <span className="text-sm font-bold text-[#D4AF37]/60">INR</span>
               </div>
               <span className="text-[10px] brand-rounded text-[#4A3728]/30 font-bold uppercase tracking-widest mt-1">Free Delivery Included</span>
@@ -247,9 +247,9 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
   const giftItems = useMemo(() => PRODUCTS.filter(p => p.category === Category.GIFTING), []);
 
   return (
-    <div className="pt-20 bg-[#FFF8EE] min-h-screen">
+    <div className="pt-24 sm:pt-20 bg-[#FFF8EE] min-h-screen">
       {/* Luxury Hero Section */}
-      <section className="relative h-[55vh] flex items-center justify-center overflow-hidden">
+      <section className="relative h-[35vh] sm:h-[55vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-[#2A1E14]/45 z-10"></div>
         <img 
           src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=2000&auto=format&fit=crop" 
@@ -260,24 +260,24 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
           <div className="inline-flex items-center gap-2 px-6 py-2 bg-white/10 backdrop-blur-xl rounded-full border border-white/20 text-white brand-rounded text-xs font-black uppercase tracking-[0.4em] mb-8 animate-in slide-in-from-top duration-700 shadow-2xl">
             <Sparkles size={14} className="text-[#D4AF37]" /> The Art of Gifting
           </div>
-          <h1 className="text-6xl sm:text-8xl font-bold text-white serif mb-6 leading-tight drop-shadow-2xl animate-in fade-in zoom-in duration-1000">
+          <h1 className="text-4xl sm:text-6xl lg:text-8xl font-bold text-white serif mb-4 sm:mb-6 leading-tight drop-shadow-2xl animate-in fade-in zoom-in duration-1000">
             Share the <span className="text-[#D4AF37] brand-script">Magic.</span>
           </h1>
         </div>
       </section>
 
       {/* Main Gifting Gallery */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
-        <div className="text-center mb-32">
-          <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em] block mb-6">Handpicked Collections</span>
-          <h2 className="text-5xl sm:text-7xl font-bold serif text-[#4A3728]">The Gift Gallery</h2>
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-32">
+        <div className="text-center mb-10 sm:mb-32">
+          <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em] block mb-4 sm:mb-6">Handpicked Collections</span>
+          <h2 className="text-3xl sm:text-5xl lg:text-7xl font-bold serif text-[#4A3728]">The Gift Gallery</h2>
           <div className="w-24 h-2 bg-[#D4AF37] mx-auto rounded-full mt-8 shadow-sm"></div>
           <p className="mt-10 text-[#4A3728]/50 max-w-2xl mx-auto brand-rounded font-bold uppercase text-[10px] tracking-[0.2em] leading-relaxed">
             Beautifully crafted hampers for every occasion. <br/>Customized for your unique taste.
           </p>
         </div>
 
-        <div className="space-y-32">
+        <div className="space-y-10 sm:space-y-32">
           {giftItems.map(item => (
             <HamperCard 
               key={item.id} 
@@ -338,7 +338,7 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
             </div>
 
             {/* Content Section */}
-            <div className="lg:w-1/2 p-12 sm:p-20 relative flex flex-col justify-center bg-white">
+            <div className="lg:w-1/2 p-6 sm:p-12 lg:p-20 relative flex flex-col justify-center bg-white">
               <div className="absolute top-0 right-0 w-80 h-80 bg-[#D4AF37]/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2"></div>
               <div className="absolute bottom-0 left-0 w-80 h-80 bg-coral/5 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2"></div>
               
@@ -348,11 +348,11 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
                   <span className="text-[10px] font-black brand-rounded text-coral uppercase tracking-widest">Bespoke Curation</span>
                 </div>
                 
-                <h2 className="text-4xl sm:text-6xl font-bold serif text-[#4A3728] mb-8 leading-[1.15]">
+                <h2 className="text-2xl sm:text-4xl lg:text-6xl font-bold serif text-[#4A3728] mb-4 sm:mb-8 leading-[1.15]">
                   Want Something Truly <br/><span className="text-coral brand-script">One-of-a-Kind?</span>
                 </h2>
                 
-                <p className="text-lg text-[#4A3728]/60 leading-relaxed mb-12 brand-rounded font-medium max-w-lg">
+                <p className="text-sm sm:text-lg text-[#4A3728]/60 leading-relaxed mb-6 sm:mb-12 brand-rounded font-medium max-w-lg">
                   Beyond our signature collections, we specialize in fully bespoke hampers tailored precisely to your vision. Whether you wish to combine our finest mukhwas with external luxury goods or curate a box of specific artisanal favorites for a grand wedding, we are here to help you gift something unforgettable.
                 </p>
                 
