@@ -368,8 +368,8 @@ const App: React.FC = () => {
               <a href="tel:+919157537842" className="text-coral hover:underline">+91 91575 37842</a><br/>
               <a href="mailto:hello@amieshomemade.com" className="text-coral hover:underline">hello@amieshomemade.com</a>
             </address>
-            <p className="text-[10px] text-[#4A3728]/50 mt-4 brand-rounded uppercase tracking-widest leading-relaxed">
-              Serving all of Ahmedabad — Satellite · Navrangpura · Bopal · Prahlad Nagar · Vastrapur · Thaltej · Maninagar · Paldi · Jodhpur · Ambawadi · Bodakdev · Chandkheda · Gota · SG Highway · Motera · Naranpura · Memnagar · Isanpur · Nikol · Vastral &amp; Pan-India
+            <p className="text-xs text-[#4A3728]/60 mt-4 leading-relaxed max-w-md mx-auto">
+              From our kitchen in Ahmedabad, we deliver fresh homemade mukhwas, snacks &amp; sweets daily across <strong className="text-[#4A3728]/80">Satellite, Navrangpura, Bopal, Prahlad Nagar, Vastrapur, Thaltej, Maninagar, Paldi, Jodhpur, Ambawadi, Bodakdev, Chandkheda, Gota, SG Highway, Motera, Naranpura, Memnagar, Isanpur, Nikol, Vastral</strong> — and every corner of India.
             </p>
           </div>
         </div>
