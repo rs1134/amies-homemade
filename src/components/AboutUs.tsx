@@ -3,16 +3,16 @@ import { Heart, Sparkles, Utensils, ShieldCheck } from 'lucide-react';
 
 const AboutUs: React.FC = () => {
   return (
-    <div className="pt-32 pb-24 px-4 sm:px-6 lg:px-8">
+    <div className="pt-24 pb-14 sm:pt-32 sm:pb-24 px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-20">
           <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em]">
             The Story of amie's
           </span>
-          <h1 className="text-5xl sm:text-7xl font-bold text-[#4A3728] serif mt-6">From Ahmedabad's Kitchen to Yours</h1>
+          <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold text-[#4A3728] serif mt-6">From Ahmedabad's Kitchen to Yours</h1>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center mb-32">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-20 items-center mb-16 sm:mb-32">
           <div className="flex justify-center lg:justify-start">
             <div className="relative w-full max-w-md">
               <div className="absolute inset-0 bg-coral/10 custom-curve transform -rotate-6 scale-110"></div>
@@ -56,7 +56,7 @@ const AboutUs: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-white/50 rounded-[4rem] p-12 sm:p-20 text-center border border-coral/5">
+        <div className="bg-white/50 rounded-[2rem] sm:rounded-[4rem] p-6 sm:p-12 lg:p-20 text-center border border-coral/5">
           <h2 className="text-4xl font-bold serif mb-12">Why Choose amie's?</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
             {[

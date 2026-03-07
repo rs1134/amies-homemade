@@ -19,7 +19,7 @@ const Hero: React.FC<HeroProps> = ({ onShopClick, onAboutClick }) => {
       </div>
       
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-12">
-        <div className="max-w-2xl bg-[#FFF8EE]/90 backdrop-blur-xl p-10 sm:p-16 rounded-[4rem] border border-white/20 shadow-2xl relative animate-in fade-in slide-in-from-left duration-700">
+        <div className="max-w-2xl bg-[#FFF8EE]/90 backdrop-blur-xl p-6 sm:p-10 lg:p-16 rounded-[2.5rem] sm:rounded-[4rem] border border-white/20 shadow-2xl relative animate-in fade-in slide-in-from-left duration-700">
           <div className="absolute -top-6 -right-6 bg-[#F6C94C] p-4 custom-curve animate-bounce shadow-xl">
             <Heart size={24} fill="#F04E4E" className="text-[#F04E4E]" />
           </div>

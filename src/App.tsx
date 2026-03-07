@@ -244,11 +244,11 @@ const App: React.FC = () => {
       case 'about': return <AboutUs />;
       case 'gifting': return <GiftingView onAddToCart={(p) => addToCart(p)} onSelectProduct={(p) => setSelectedProduct(p)} />;
       case 'shop': return (
-        <section id="shop" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 relative z-10">
+        <section id="shop" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-32 relative z-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 text-center md:text-left">
             <div>
               <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em]">Fresh from Our Kitchen</span>
-              <h2 className="text-4xl sm:text-6xl font-bold text-[#4A3728] serif mt-4 leading-tight">Handcrafted Treats</h2>
+              <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-[#4A3728] serif mt-4 leading-tight">Handcrafted Treats</h2>
               <div className="w-20 h-1.5 bg-coral rounded-full mx-auto md:mx-0 mt-4"></div>
             </div>
             <div className="flex flex-wrap justify-center gap-4">
@@ -288,7 +288,7 @@ const App: React.FC = () => {
         />
       );
       case 'contact': return (
-        <div className="pt-32 pb-24 px-4 text-center min-h-screen">
+        <div className="pt-24 pb-14 sm:pt-32 sm:pb-24 px-4 text-center min-h-screen">
           <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em] block mb-4">Homemade Mukhwas &amp; Snacks · Ahmedabad, Gujarat</span>
           <h1 className="text-4xl sm:text-6xl font-bold serif mb-6 text-[#4A3728]">Contact Amie's Homemade</h1>
           <p className="max-w-2xl mx-auto text-[#4A3728]/60 mb-16 text-lg">
@@ -378,11 +378,10 @@ const App: React.FC = () => {
             onShopClick={() => navigate('shop')}
             onAboutClick={() => navigate('about')}
           />
-          {/* Restored padding to pt-20 for better alignment as pt-0 was too tight */}
-          <section className="pt-20 pb-24 px-4 max-w-7xl mx-auto">
-            <div className="text-center mb-16">
+          <section className="pt-12 pb-14 sm:pt-20 sm:pb-24 px-4 max-w-7xl mx-auto">
+            <div className="text-center mb-10 sm:mb-16">
               <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em] mb-4 block">The Amie's Difference</span>
-              <h2 className="text-4xl sm:text-5xl font-bold serif text-[#4A3728]">Why Everyone Loves amie's</h2>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold serif text-[#4A3728]">Why Everyone Loves amie's</h2>
               <div className="w-16 h-1 bg-coral mx-auto rounded-full mt-6"></div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -418,7 +417,7 @@ const App: React.FC = () => {
               ].map((item, i) => (
                 <div 
                   key={i} 
-                  className={`${item.color} p-12 rounded-[4rem] text-center hover:shadow-2xl hover:shadow-[#4A3728]/5 hover:-translate-y-2 transition-all duration-500 flex flex-col items-center group`}
+                  className={`${item.color} p-6 sm:p-12 rounded-[2rem] sm:rounded-[4rem] text-center hover:shadow-2xl hover:shadow-[#4A3728]/5 hover:-translate-y-2 transition-all duration-500 flex flex-col items-center group`}
                 >
                   <div className={`mb-6 p-4 rounded-3xl bg-white shadow-sm ${item.textColor} group-hover:scale-110 transition-transform duration-300`}>
                     {item.icon}
