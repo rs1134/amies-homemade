@@ -142,7 +142,7 @@ export default function Reviews() {
               </div>
             ))}
           </div>
-        ) : data && data.reviews.length > 0 ? (
+        ) : data && data.reviews?.length > 0 ? (
           <div className="flex gap-5 overflow-x-auto pb-4 scrollbar-hide -mx-6 px-6 sm:-mx-10 sm:px-10">
             {data.reviews.map((review, idx) => (
               <a
