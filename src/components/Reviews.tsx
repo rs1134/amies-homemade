@@ -97,7 +97,7 @@ export default function Reviews() {
           <div className="w-12 h-0.5 bg-[#F14E4E] mx-auto mb-6" />
 
           {/* Google rating summary */}
-          {data && (
+          {data && data.rating != null && (
             <a
               href={data.googleMapsUri}
               target="_blank"
