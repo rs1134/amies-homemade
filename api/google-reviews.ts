@@ -4,8 +4,6 @@ const PLACE_ID = 'ChIJk_J9J7KFXjkRxyd9_kxmrz8';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const apiKey = process.env.GOOGLE_PLACES_API_KEY;
-  console.log('[google-reviews] env keys:', Object.keys(process.env).filter(k => k.includes('GOOGLE')));
-  console.log('[google-reviews] apiKey present:', !!apiKey, 'length:', apiKey?.length ?? 0);
   if (!apiKey) {
     return res.status(500).json({ error: 'GOOGLE_PLACES_API_KEY not configured' });
   }
