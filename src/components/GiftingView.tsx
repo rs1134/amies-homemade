@@ -377,9 +377,9 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
                    <div className="flex items-center gap-6">
                       <div className="flex -space-x-4">
                          {[
-                           { url: "https://lh3.googleusercontent.com/a/ACg8ocKRz4LahxiAvpMkMBwHa5lmTL1XKYgPhneEb3eVJ6w3KgX6BQ=s128-c0x00000000-cc-rp-mo", name: "Jinal Ajmera" },
-                           { url: "https://lh3.googleusercontent.com/a-/ALV-UjWnv53uhFYxmZF_5th1OSe-5NuYxaaK8mz8HKmQ9EUCQS7WLmy2=s128-c0x00000000-cc-rp-mo", name: "Jaineel Mehta" },
-                           { url: "https://lh3.googleusercontent.com/a/ACg8ocIZNrzkWVxJLXOmU1v_aA973hUZX0SJZly3R-sfJ-veMLLBpw=s128-c0x00000000-cc-rp-mo", name: "Nirali Shah" },
+                           { url: "https://lh3.googleusercontent.com/a-/ALV-UjXOOzgEDPdqTzFnOvrhxFSceXox3gjqAIqBhl0QsroKczKbSCKfRQ=w144-h144-p-rp-mo-ba3-br100", name: "Krishna Mody" },
+                           { url: "https://lh3.googleusercontent.com/a-/ALV-UjWxH3cjrv3mEBuGaAQvVuvyaxTo0K7q1b3Pf6X8ZeCOZwH68yE94w=w144-h144-p-rp-mo-br100", name: "Pratik Sanghavi" },
+                           { url: "https://lh3.googleusercontent.com/a-/ALV-UjUjnn8q7od8Ko_BCTPygrxFxU6PBI7lD-hNQfRmm6AX1leC_Vla=w144-h144-p-rp-mo-br100", name: "Falguni Mehta" },
                          ].map((reviewer, i) => (
                            <div key={i} className="w-12 h-12 rounded-full border-2 border-white overflow-hidden bg-cream shadow-lg relative z-[5]">
                               <img src={reviewer.url} className="w-full h-full object-cover" alt={reviewer.name} />
