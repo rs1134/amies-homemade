@@ -87,6 +87,19 @@ const PATH_TO_PAGE: Record<string, string> = Object.fromEntries(
   Object.entries(PAGE_TO_PATH).map(([page, path]) => [path, page])
 );
 
+// Product URL helpers
+const slugify = (name: string) =>
+  name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+const PRODUCT_SLUG_MAP: Record<string, Product> = Object.fromEntries(
+  PRODUCTS.map(p => [slugify(p.name), p])
+);
+
+const getProductSlugFromPath = (path: string): string => {
+  const m = path.match(/^\/shop\/(.+)$/);
+  return m ? m[1] : '';
+};
+
 const getAreaFromPath = (path: string): string => {
   const m = path.match(/^\/delivery\/(.+)$/);
   return m ? m[1] : '';
@@ -100,6 +113,7 @@ const getCityFromPath = (path: string): string => {
 const getPageFromPath = (path: string): string => {
   if (path.startsWith('/delivery')) return 'delivery';
   if (path.startsWith('/cities')) return 'cities';
+  if (path.startsWith('/shop')) return 'shop';
   return PATH_TO_PAGE[path] || 'home';
 };
 
@@ -110,7 +124,10 @@ const App: React.FC = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<Category | 'All'>('All');
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(() => {
+    const slug = getProductSlugFromPath(window.location.pathname);
+    return slug ? (PRODUCT_SLUG_MAP[slug] ?? null) : null;
+  });
   const [orderComplete, setOrderComplete] = useState(false);
 
   const navigate = useCallback((page: string) => {
@@ -137,6 +154,18 @@ const App: React.FC = () => {
     setCurrentArea('');
   }, []);
 
+  const openProduct = useCallback((product: Product) => {
+    const slug = slugify(product.name);
+    window.history.pushState(null, '', `/shop/${slug}`);
+    setSelectedProduct(product);
+    setCurrentPage('shop');
+  }, []);
+
+  const closeProduct = useCallback(() => {
+    window.history.pushState(null, '', '/shop');
+    setSelectedProduct(null);
+  }, []);
+
   // Sync page state with browser back/forward buttons
   useEffect(() => {
     const onPopState = () => {
@@ -144,6 +173,8 @@ const App: React.FC = () => {
       setCurrentPage(getPageFromPath(path));
       setCurrentArea(getAreaFromPath(path));
       setCurrentCity(getCityFromPath(path));
+      const slug = getProductSlugFromPath(path);
+      setSelectedProduct(slug ? (PRODUCT_SLUG_MAP[slug] ?? null) : null);
     };
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
@@ -315,6 +346,9 @@ const App: React.FC = () => {
         price: finalPrice 
       }];
     });
+    if (window.location.pathname.startsWith('/shop/')) {
+      window.history.pushState(null, '', '/shop');
+    }
     setSelectedProduct(null);
     setIsCartOpen(true);
   }, [setSelectedProduct, setIsCartOpen]);
@@ -375,7 +409,7 @@ const App: React.FC = () => {
         />
       );
       case 'about': return <AboutUs />;
-      case 'gifting': return <GiftingView onAddToCart={(p) => addToCart(p)} onSelectProduct={(p) => setSelectedProduct(p)} />;
+      case 'gifting': return <GiftingView onAddToCart={(p) => addToCart(p)} onSelectProduct={(p) => setSelectedProduct(p)} />; {/* gifting stays modal-only, no URL change */}
       case 'shop': return (
         <section id="shop" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 sm:pt-32 sm:pb-32 relative z-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 text-center md:text-left">
@@ -405,7 +439,7 @@ const App: React.FC = () => {
               <ProductCard 
                 key={product.id} 
                 product={product} 
-                onAddToCart={(p) => setSelectedProduct(p)} 
+                onAddToCart={(p) => openProduct(p)}
               />
             ))}
           </div>
@@ -598,12 +632,12 @@ const App: React.FC = () => {
         <span className="text-xs uppercase tracking-wider hidden sm:block">Chat with us</span>
       </a>
 
-      <AIRecommendation onSelectProduct={(p) => setSelectedProduct(p)} />
+      <AIRecommendation onSelectProduct={(p) => openProduct(p)} />
 
       {selectedProduct && (
         <ProductDetail 
           product={selectedProduct} 
-          onClose={() => setSelectedProduct(null)} 
+          onClose={() => window.location.pathname.startsWith('/shop/') ? closeProduct() : setSelectedProduct(null)}
           onAddToCart={addToCart} 
         />
       )}
