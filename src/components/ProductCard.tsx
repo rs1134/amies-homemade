@@ -41,7 +41,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
           </button>
         </div>
         <div className="absolute top-4 left-4">
-          <span className="px-3 py-1 bg-white/90 backdrop-blur-md rounded-full text-[10px] font-bold uppercase tracking-widest text-[#4A3728]">
+          <span className="px-3 py-1 bg-white rounded-full text-[10px] font-bold uppercase tracking-widest text-[#4A3728]">
             {product.category}
           </span>
         </div>
