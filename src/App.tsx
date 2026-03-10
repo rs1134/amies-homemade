@@ -96,7 +96,7 @@ const PRODUCT_SLUG_MAP: Record<string, Product> = Object.fromEntries(
 );
 
 const getProductSlugFromPath = (path: string): string => {
-  const m = path.match(/^\/shop\/(.+)$/);
+  const m = path.match(/^\/(?:shop|gifting)\/(.+)$/);
   return m ? m[1] : '';
 };
 
@@ -114,6 +114,7 @@ const getPageFromPath = (path: string): string => {
   if (path.startsWith('/delivery')) return 'delivery';
   if (path.startsWith('/cities')) return 'cities';
   if (path.startsWith('/shop')) return 'shop';
+  if (path.startsWith('/gifting')) return 'gifting';
   return PATH_TO_PAGE[path] || 'home';
 };
 
@@ -156,13 +157,16 @@ const App: React.FC = () => {
 
   const openProduct = useCallback((product: Product) => {
     const slug = slugify(product.name);
-    window.history.pushState(null, '', `/shop/${slug}`);
+    const isGifting = product.category === Category.GIFTING;
+    const basePath = isGifting ? '/gifting' : '/shop';
+    window.history.pushState(null, '', `${basePath}/${slug}`);
     setSelectedProduct(product);
-    setCurrentPage('shop');
+    setCurrentPage(isGifting ? 'gifting' : 'shop');
   }, []);
 
   const closeProduct = useCallback(() => {
-    window.history.pushState(null, '', '/shop');
+    const isGifting = window.location.pathname.startsWith('/gifting/');
+    window.history.pushState(null, '', isGifting ? '/gifting' : '/shop');
     setSelectedProduct(null);
   }, []);
 
@@ -346,9 +350,9 @@ const App: React.FC = () => {
         price: finalPrice 
       }];
     });
-    if (window.location.pathname.startsWith('/shop/')) {
-      window.history.pushState(null, '', '/shop');
-    }
+    const curPath = window.location.pathname;
+    if (curPath.startsWith('/shop/')) window.history.pushState(null, '', '/shop');
+    else if (curPath.startsWith('/gifting/')) window.history.pushState(null, '', '/gifting');
     setSelectedProduct(null);
     setIsCartOpen(true);
   }, [setSelectedProduct, setIsCartOpen]);
@@ -409,7 +413,7 @@ const App: React.FC = () => {
         />
       );
       case 'about': return <AboutUs />;
-      case 'gifting': return <GiftingView onAddToCart={(p) => addToCart(p)} onSelectProduct={(p) => setSelectedProduct(p)} />; {/* gifting stays modal-only, no URL change */}
+      case 'gifting': return <GiftingView onAddToCart={(p) => addToCart(p)} onSelectProduct={(p) => openProduct(p)} />;
       case 'shop': return (
         <section id="shop" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 sm:pt-32 sm:pb-32 relative z-10">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 text-center md:text-left">
@@ -637,7 +641,10 @@ const App: React.FC = () => {
       {selectedProduct && (
         <ProductDetail 
           product={selectedProduct} 
-          onClose={() => window.location.pathname.startsWith('/shop/') ? closeProduct() : setSelectedProduct(null)}
+          onClose={() => {
+            const p = window.location.pathname;
+            (p.startsWith('/shop/') || p.startsWith('/gifting/')) ? closeProduct() : setSelectedProduct(null);
+          }}
           onAddToCart={addToCart} 
         />
       )}
