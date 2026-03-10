@@ -388,7 +388,7 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
                       </div>
                       <div className="flex-1">
                         <p className="text-[10px] font-bold brand-rounded text-[#4A3728]/40 uppercase tracking-widest leading-tight">
-                          TRUSTED BY 500+ HAPPY FAMILIES FOR THEIR <br className="hidden sm:block"/>MOST PRECIOUS CELEBRATIONS.
+                          TRUSTED BY 453+ HAPPY FAMILIES FOR THEIR <br className="hidden sm:block"/>MOST PRECIOUS CELEBRATIONS.
                         </p>
                       </div>
                    </div>
