@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Gift, Sparkles, Heart, ChevronRight, MessageSquareText, PackageCheck, SendHorizontal, Image as ImageIcon, Home, ShieldCheck, Package, MessageCircle, Clock, Star, Users, Trophy, Mail, Sparkle } from 'lucide-react';
 import { PRODUCTS, WHATSAPP_NUMBER } from '../constants.ts';
 import { Category, Product } from '../types.ts';
@@ -178,8 +178,11 @@ const HamperCard: React.FC<HamperCardProps> = ({ item, onAddToCart, onSelectProd
             </div>
             
             <div className="flex gap-4 w-full sm:w-auto">
-              <button 
-                onClick={() => setIsPersonalizing(true)}
+              <button
+                onClick={() => {
+                  setIsPersonalizing(true);
+                  window.history.pushState(null, '', `/gifting#hamper-${item.id}`);
+                }}
                 className="flex-1 sm:flex-none px-10 py-5 border-2 border-[#D4AF37] text-[#D4AF37] rounded-3xl text-[11px] font-black uppercase tracking-[0.2em] hover:bg-[#D4AF37] hover:text-white transition-all flex items-center justify-center gap-3 brand-rounded shadow-lg shadow-[#D4AF37]/5 active:scale-95"
               >
                 <MessageSquareText size={16} /> Personalize Box
@@ -219,22 +222,22 @@ const HamperCard: React.FC<HamperCardProps> = ({ item, onAddToCart, onSelectProd
 
       {/* Specific Modals per Item */}
       {isPersonalizing && isHeritageBox && (
-        <PersonalizationModal 
-          onClose={() => setIsPersonalizing(false)}
+        <PersonalizationModal
+          onClose={() => { setIsPersonalizing(false); window.history.replaceState(null, '', '/gifting'); }}
           onConfirm={handlePersonalizeHeritage}
         />
       )}
 
       {isPersonalizing && isWellnessBox && (
         <WellnessPersonalizationModal
-          onClose={() => setIsPersonalizing(false)}
+          onClose={() => { setIsPersonalizing(false); window.history.replaceState(null, '', '/gifting'); }}
           onConfirm={handlePersonalizeWellness}
         />
       )}
 
       {isPersonalizing && isSweetMemories && (
-        <SweetMemoriesModal 
-          onClose={() => setIsPersonalizing(false)}
+        <SweetMemoriesModal
+          onClose={() => { setIsPersonalizing(false); window.history.replaceState(null, '', '/gifting'); }}
           onConfirm={handlePersonalizeSweetMemories}
           maxVarieties={3}
         />
@@ -246,24 +249,6 @@ const HamperCard: React.FC<HamperCardProps> = ({ item, onAddToCart, onSelectProd
 const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct }) => {
   const giftItems = useMemo(() => PRODUCTS.filter(p => p.category === Category.GIFTING), []);
 
-  // Update URL hash as user scrolls to each hamper (enables shareable anchor links)
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            window.history.replaceState(null, '', `/gifting#${entry.target.id}`);
-          }
-        });
-      },
-      { threshold: 0.4 }
-    );
-    giftItems.forEach(item => {
-      const el = document.getElementById(`hamper-${item.id}`);
-      if (el) observer.observe(el);
-    });
-    return () => observer.disconnect();
-  }, [giftItems]);
 
   return (
     <div className="pt-24 sm:pt-20 bg-[#FFF8EE] min-h-screen">
