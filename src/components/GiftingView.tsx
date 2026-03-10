@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { Gift, Sparkles, Heart, ChevronRight, MessageSquareText, PackageCheck, SendHorizontal, Image as ImageIcon, Home, ShieldCheck, Package, MessageCircle, Clock, Star, Users, Trophy, Mail, Sparkle } from 'lucide-react';
 import { PRODUCTS, WHATSAPP_NUMBER } from '../constants.ts';
 import { Category, Product } from '../types.ts';
@@ -245,6 +245,25 @@ const HamperCard: React.FC<HamperCardProps> = ({ item, onAddToCart, onSelectProd
 
 const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct }) => {
   const giftItems = useMemo(() => PRODUCTS.filter(p => p.category === Category.GIFTING), []);
+
+  // Update URL hash as user scrolls to each hamper (enables shareable anchor links)
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            window.history.replaceState(null, '', `/gifting#${entry.target.id}`);
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
+    giftItems.forEach(item => {
+      const el = document.getElementById(`hamper-${item.id}`);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, [giftItems]);
 
   return (
     <div className="pt-24 sm:pt-20 bg-[#FFF8EE] min-h-screen">
