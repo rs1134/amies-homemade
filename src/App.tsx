@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Category, Product, CartItem } from './types.ts';
 import { PRODUCTS, WHATSAPP_NUMBER } from './constants.ts';
 import { AREA_MAP } from './deliveryAreas.ts';
+import { CITY_MAP } from './cities.ts';
 import Navbar from './components/Navbar.tsx';
 import Hero from './components/Hero.tsx';
 import ProductCard from './components/ProductCard.tsx';
@@ -14,6 +15,7 @@ import Footer from './components/Footer.tsx';
 import AIRecommendation from './components/AIRecommendation.tsx';
 import Reviews from './components/Reviews.tsx';
 import AreaDeliveryPage from './components/AreaDeliveryPage.tsx';
+import CityDeliveryPage from './components/CityDeliveryPage.tsx';
 import { Sparkles, ArrowRight, MessageCircle, CheckCircle, Heart, ShieldCheck, History, Package, Users, Mail, Building2 } from 'lucide-react';
 
 const PAGE_SEO: Record<string, { title: string; description: string; canonical: string; ogTitle: string; ogDescription: string }> = {
@@ -78,6 +80,7 @@ const PAGE_TO_PATH: Record<string, string> = {
   checkout: '/checkout',
   contact: '/contact',
   delivery: '/delivery',
+  cities: '/cities',
 };
 
 const PATH_TO_PAGE: Record<string, string> = Object.fromEntries(
@@ -89,14 +92,21 @@ const getAreaFromPath = (path: string): string => {
   return m ? m[1] : '';
 };
 
+const getCityFromPath = (path: string): string => {
+  const m = path.match(/^\/cities\/(.+)$/);
+  return m ? m[1] : '';
+};
+
 const getPageFromPath = (path: string): string => {
   if (path.startsWith('/delivery')) return 'delivery';
+  if (path.startsWith('/cities')) return 'cities';
   return PATH_TO_PAGE[path] || 'home';
 };
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(() => getPageFromPath(window.location.pathname));
   const [currentArea, setCurrentArea] = useState(() => getAreaFromPath(window.location.pathname));
+  const [currentCity, setCurrentCity] = useState(() => getCityFromPath(window.location.pathname));
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<Category | 'All'>('All');
@@ -108,6 +118,7 @@ const App: React.FC = () => {
     window.history.pushState(null, '', path);
     setCurrentPage(page);
     setCurrentArea('');
+    setCurrentCity('');
   }, []);
 
   const navigateToArea = useCallback((slug: string) => {
@@ -115,6 +126,15 @@ const App: React.FC = () => {
     window.history.pushState(null, '', path);
     setCurrentPage('delivery');
     setCurrentArea(slug);
+    setCurrentCity('');
+  }, []);
+
+  const navigateToCity = useCallback((slug: string) => {
+    const path = slug ? `/cities/${slug}` : '/cities';
+    window.history.pushState(null, '', path);
+    setCurrentPage('cities');
+    setCurrentCity(slug);
+    setCurrentArea('');
   }, []);
 
   // Sync page state with browser back/forward buttons
@@ -123,6 +143,7 @@ const App: React.FC = () => {
       const path = window.location.pathname;
       setCurrentPage(getPageFromPath(path));
       setCurrentArea(getAreaFromPath(path));
+      setCurrentCity(getCityFromPath(path));
     };
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
@@ -153,6 +174,27 @@ const App: React.FC = () => {
       }
     }
 
+    if (currentPage === 'cities') {
+      const cityData = currentCity ? CITY_MAP[currentCity] : null;
+      if (cityData) {
+        seo = {
+          title: `Buy Homemade Mukhwas & Snacks Online, Delivered to ${cityData.name} | Amie's Homemade`,
+          description: `Order authentic homemade mukhwas, chakli, ladoo & snacks from Ahmedabad delivered to ${cityData.name}, ${cityData.state}. No preservatives. Pan-India shipping.`,
+          canonical: `https://amieshomemade.com/cities/${currentCity}`,
+          ogTitle: `Homemade Mukhwas & Snacks Delivered to ${cityData.name} | Amie's Homemade`,
+          ogDescription: `Fresh homemade mukhwas & snacks shipped from Ahmedabad to ${cityData.name}. Small batches, no preservatives, made with love by Ami Shah.`,
+        };
+      } else {
+        seo = {
+          title: "Homemade Mukhwas & Snacks Pan-India Delivery | Amie's Homemade",
+          description: "Amie's Homemade ships authentic homemade mukhwas, snacks & sweets from Ahmedabad to Mumbai, Delhi, Bengaluru, Chennai, Hyderabad & all major Indian cities.",
+          canonical: "https://amieshomemade.com/cities",
+          ogTitle: "Pan-India Homemade Mukhwas & Snack Delivery | Amie's Homemade",
+          ogDescription: "Authentic homemade mukhwas & snacks delivered pan-India from Ahmedabad. No preservatives, made with love.",
+        };
+      }
+    }
+
     document.title = seo.title;
     const setMeta = (sel: string, val: string) => document.querySelector(sel)?.setAttribute('content', val);
     const setHref = (sel: string, val: string) => document.querySelector(sel)?.setAttribute('href', val);
@@ -166,8 +208,10 @@ const App: React.FC = () => {
 
     // Inject/update BreadcrumbList schema
     const areaData = currentArea ? AREA_MAP[currentArea] : null;
-    const crumbs = currentPage === 'delivery'
-      ? areaData
+    const cityData = currentCity ? CITY_MAP[currentCity] : null;
+    let crumbs: Array<{ name: string; item: string }>;
+    if (currentPage === 'delivery') {
+      crumbs = areaData
         ? [
             { name: 'Home', item: 'https://amieshomemade.com' },
             { name: 'Delivery in Ahmedabad', item: 'https://amieshomemade.com/delivery' },
@@ -176,8 +220,21 @@ const App: React.FC = () => {
         : [
             { name: 'Home', item: 'https://amieshomemade.com' },
             { name: 'Delivery in Ahmedabad', item: 'https://amieshomemade.com/delivery' },
+          ];
+    } else if (currentPage === 'cities') {
+      crumbs = cityData
+        ? [
+            { name: 'Home', item: 'https://amieshomemade.com' },
+            { name: 'Delivery Across India', item: 'https://amieshomemade.com/cities' },
+            { name: cityData.name, item: `https://amieshomemade.com/cities/${currentCity}` },
           ]
-      : BREADCRUMBS[currentPage] || BREADCRUMBS.home;
+        : [
+            { name: 'Home', item: 'https://amieshomemade.com' },
+            { name: 'Delivery Across India', item: 'https://amieshomemade.com/cities' },
+          ];
+    } else {
+      crumbs = BREADCRUMBS[currentPage] || BREADCRUMBS.home;
+    }
     const schemaId = 'breadcrumb-schema';
     let schemaEl = document.getElementById(schemaId) as HTMLScriptElement | null;
     if (!schemaEl) {
@@ -196,14 +253,14 @@ const App: React.FC = () => {
         item: b.item,
       })),
     });
-  }, [currentPage, currentArea]);
+  }, [currentPage, currentArea, currentCity]);
 
-  // Scroll to top on every page/area change (instant to avoid smooth-scroll delay)
+  // Scroll to top on every page/area/city change (instant to avoid smooth-scroll delay)
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
-  }, [currentPage, currentArea]);
+  }, [currentPage, currentArea, currentCity]);
 
   const filteredProducts = useMemo(() => {
     // Exclude gifting from the standard shop list to keep it exclusive
@@ -306,6 +363,14 @@ const App: React.FC = () => {
           area={currentArea ? (AREA_MAP[currentArea] ?? null) : null}
           onShopClick={() => navigate('shop')}
           onNavigateToArea={navigateToArea}
+          onNavigate={navigate}
+        />
+      );
+      case 'cities': return (
+        <CityDeliveryPage
+          city={currentCity ? (CITY_MAP[currentCity] ?? null) : null}
+          onShopClick={() => navigate('shop')}
+          onNavigateToCity={navigateToCity}
           onNavigate={navigate}
         />
       );
