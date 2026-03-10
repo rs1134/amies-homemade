@@ -377,12 +377,12 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
                    <div className="flex items-center gap-6">
                       <div className="flex -space-x-4">
                          {[
-                           "https://i.postimg.cc/Z0bx4HBT/2g677zy48hrmw0cwehk808vn7m.png",
-                           "https://i.postimg.cc/xqf3n5J9/jym5s927c1rmw0cwehks58zfc0.png",
-                           "https://i.postimg.cc/5j4SbgYb/sqck0krbvnrmw0cwehkr80gmqm.png"
-                         ].map((url, i) => (
+                           { url: "https://lh3.googleusercontent.com/a/ACg8ocKRz4LahxiAvpMkMBwHa5lmTL1XKYgPhneEb3eVJ6w3KgX6BQ=s128-c0x00000000-cc-rp-mo", name: "Jinal Ajmera" },
+                           { url: "https://lh3.googleusercontent.com/a-/ALV-UjWnv53uhFYxmZF_5th1OSe-5NuYxaaK8mz8HKmQ9EUCQS7WLmy2=s128-c0x00000000-cc-rp-mo", name: "Jaineel Mehta" },
+                           { url: "https://lh3.googleusercontent.com/a/ACg8ocIZNrzkWVxJLXOmU1v_aA973hUZX0SJZly3R-sfJ-veMLLBpw=s128-c0x00000000-cc-rp-mo", name: "Nirali Shah" },
+                         ].map((reviewer, i) => (
                            <div key={i} className="w-12 h-12 rounded-full border-2 border-white overflow-hidden bg-cream shadow-lg relative z-[5]">
-                              <img src={url} className="w-full h-full object-cover" alt="Happy Indian Customer" />
+                              <img src={reviewer.url} className="w-full h-full object-cover" alt={reviewer.name} />
                            </div>
                          ))}
                       </div>
