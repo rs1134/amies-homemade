@@ -583,21 +583,22 @@ const App: React.FC = () => {
       
       <main className="relative z-10">
         {renderPage()}
-        
-        <a 
-          href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white p-5 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center gap-3 group px-8 brand-rounded font-bold"
-        >
-          <MessageCircle size={24} />
-          <span className="text-xs uppercase tracking-wider hidden sm:block">Chat with us</span>
-        </a>
-
-        <AIRecommendation onSelectProduct={(p) => setSelectedProduct(p)} />
       </main>
 
       <Footer onNavigate={navigate} />
+
+      {/* Fixed floating buttons live outside <main> so the footer's z-40 stacking context can't cover them */}
+      <a
+        href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white p-5 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center gap-3 group px-8 brand-rounded font-bold"
+      >
+        <MessageCircle size={24} />
+        <span className="text-xs uppercase tracking-wider hidden sm:block">Chat with us</span>
+      </a>
+
+      <AIRecommendation onSelectProduct={(p) => setSelectedProduct(p)} />
 
       {selectedProduct && (
         <ProductDetail 
