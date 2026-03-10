@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Category, Product, CartItem } from './types.ts';
 import { PRODUCTS, WHATSAPP_NUMBER } from './constants.ts';
+import { AREA_MAP } from './deliveryAreas.ts';
 import Navbar from './components/Navbar.tsx';
 import Hero from './components/Hero.tsx';
 import ProductCard from './components/ProductCard.tsx';
@@ -12,6 +13,7 @@ import Cart from './components/Cart.tsx';
 import Footer from './components/Footer.tsx';
 import AIRecommendation from './components/AIRecommendation.tsx';
 import Reviews from './components/Reviews.tsx';
+import AreaDeliveryPage from './components/AreaDeliveryPage.tsx';
 import { Sparkles, ArrowRight, MessageCircle, CheckCircle, Heart, ShieldCheck, History, Package, Users, Mail, Building2 } from 'lucide-react';
 
 const PAGE_SEO: Record<string, { title: string; description: string; canonical: string; ogTitle: string; ogDescription: string }> = {
@@ -75,16 +77,26 @@ const PAGE_TO_PATH: Record<string, string> = {
   gifting: '/gifting',
   checkout: '/checkout',
   contact: '/contact',
+  delivery: '/delivery',
 };
 
 const PATH_TO_PAGE: Record<string, string> = Object.fromEntries(
   Object.entries(PAGE_TO_PATH).map(([page, path]) => [path, page])
 );
 
-const getPageFromPath = (path: string) => PATH_TO_PAGE[path] || 'home';
+const getAreaFromPath = (path: string): string => {
+  const m = path.match(/^\/delivery\/(.+)$/);
+  return m ? m[1] : '';
+};
+
+const getPageFromPath = (path: string): string => {
+  if (path.startsWith('/delivery')) return 'delivery';
+  return PATH_TO_PAGE[path] || 'home';
+};
 
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(() => getPageFromPath(window.location.pathname));
+  const [currentArea, setCurrentArea] = useState(() => getAreaFromPath(window.location.pathname));
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<Category | 'All'>('All');
@@ -95,18 +107,52 @@ const App: React.FC = () => {
     const path = PAGE_TO_PATH[page] || '/';
     window.history.pushState(null, '', path);
     setCurrentPage(page);
+    setCurrentArea('');
+  }, []);
+
+  const navigateToArea = useCallback((slug: string) => {
+    const path = slug ? `/delivery/${slug}` : '/delivery';
+    window.history.pushState(null, '', path);
+    setCurrentPage('delivery');
+    setCurrentArea(slug);
   }, []);
 
   // Sync page state with browser back/forward buttons
   useEffect(() => {
-    const onPopState = () => setCurrentPage(getPageFromPath(window.location.pathname));
+    const onPopState = () => {
+      const path = window.location.pathname;
+      setCurrentPage(getPageFromPath(path));
+      setCurrentArea(getAreaFromPath(path));
+    };
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
   }, []);
 
   // Update page title, meta tags, canonical and breadcrumb schema per page
   useEffect(() => {
-    const seo = PAGE_SEO[currentPage] || PAGE_SEO.home;
+    let seo = PAGE_SEO[currentPage] || PAGE_SEO.home;
+
+    if (currentPage === 'delivery') {
+      const areaData = currentArea ? AREA_MAP[currentArea] : null;
+      if (areaData) {
+        seo = {
+          title: `Homemade Mukhwas & Snacks Delivery in ${areaData.name}, Ahmedabad | Amie's Homemade`,
+          description: `Order fresh homemade mukhwas, snacks & sweets delivered to ${areaData.name}, Ahmedabad. No preservatives. Made in small batches by Ami Shah.`,
+          canonical: `https://amieshomemade.com/delivery/${currentArea}`,
+          ogTitle: `Mukhwas & Snacks Delivered to ${areaData.name} | Amie's Homemade`,
+          ogDescription: `Get fresh homemade mukhwas & snacks delivered to ${areaData.name}, Ahmedabad. Small batches, no preservatives, made with love.`,
+        };
+      } else {
+        seo = {
+          title: "Homemade Mukhwas & Snacks Delivery Across Ahmedabad | Amie's Homemade",
+          description: "Amie's Homemade delivers fresh mukhwas, snacks & sweets across Ahmedabad — Satellite, Navrangpura, Bopal, Vastrapur, Bodakdev & more. No preservatives.",
+          canonical: "https://amieshomemade.com/delivery",
+          ogTitle: "Homemade Snack Delivery Across Ahmedabad | Amie's Homemade",
+          ogDescription: "Fresh homemade mukhwas & snacks delivered to every area of Ahmedabad. No preservatives, made with love.",
+        };
+      }
+    }
+
     document.title = seo.title;
     const setMeta = (sel: string, val: string) => document.querySelector(sel)?.setAttribute('content', val);
     const setHref = (sel: string, val: string) => document.querySelector(sel)?.setAttribute('href', val);
@@ -119,7 +165,19 @@ const App: React.FC = () => {
     setMeta('meta[name="twitter:description"]', seo.ogDescription);
 
     // Inject/update BreadcrumbList schema
-    const crumbs = BREADCRUMBS[currentPage] || BREADCRUMBS.home;
+    const areaData = currentArea ? AREA_MAP[currentArea] : null;
+    const crumbs = currentPage === 'delivery'
+      ? areaData
+        ? [
+            { name: 'Home', item: 'https://amieshomemade.com' },
+            { name: 'Delivery in Ahmedabad', item: 'https://amieshomemade.com/delivery' },
+            { name: areaData.name, item: `https://amieshomemade.com/delivery/${currentArea}` },
+          ]
+        : [
+            { name: 'Home', item: 'https://amieshomemade.com' },
+            { name: 'Delivery in Ahmedabad', item: 'https://amieshomemade.com/delivery' },
+          ]
+      : BREADCRUMBS[currentPage] || BREADCRUMBS.home;
     const schemaId = 'breadcrumb-schema';
     let schemaEl = document.getElementById(schemaId) as HTMLScriptElement | null;
     if (!schemaEl) {
@@ -138,14 +196,14 @@ const App: React.FC = () => {
         item: b.item,
       })),
     });
-  }, [currentPage]);
+  }, [currentPage, currentArea]);
 
-  // Scroll to top on every page change (instant to avoid smooth-scroll delay)
+  // Scroll to top on every page/area change (instant to avoid smooth-scroll delay)
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
-  }, [currentPage]);
+  }, [currentPage, currentArea]);
 
   const filteredProducts = useMemo(() => {
     // Exclude gifting from the standard shop list to keep it exclusive
@@ -243,6 +301,14 @@ const App: React.FC = () => {
     }
 
     switch (currentPage) {
+      case 'delivery': return (
+        <AreaDeliveryPage
+          area={currentArea ? (AREA_MAP[currentArea] ?? null) : null}
+          onShopClick={() => navigate('shop')}
+          onNavigateToArea={navigateToArea}
+          onNavigate={navigate}
+        />
+      );
       case 'about': return <AboutUs />;
       case 'gifting': return <GiftingView onAddToCart={(p) => addToCart(p)} onSelectProduct={(p) => setSelectedProduct(p)} />;
       case 'shop': return (
