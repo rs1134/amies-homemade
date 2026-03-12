@@ -27,7 +27,7 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount, onCartClick, onNavigate, cur
             </button>
           </div>
 
-          <div className="hidden md:flex items-center space-x-12 uppercase text-[17px] tracking-widest font-bold brand-rounded">
+          <div className="hidden md:flex items-center space-x-8 uppercase text-[15px] tracking-widest font-bold brand-rounded">
             <a href="/" onClick={(e) => { e.preventDefault(); onNavigate('home'); }} className={`transition-colors ${currentPage === 'home' ? 'text-[#F04E4E]' : 'text-[#4A3728]/80 hover:text-[#F04E4E]'}`}>Home</a>
             <a href="/shop" onClick={(e) => { e.preventDefault(); onNavigate('shop'); }} className={`transition-colors ${currentPage === 'shop' ? 'text-[#F04E4E]' : 'text-[#4A3728]/80 hover:text-[#F04E4E]'}`}>Shop All</a>
             <a href="/gifting" onClick={(e) => { e.preventDefault(); onNavigate('gifting'); }} className={`transition-colors flex items-center gap-2 ${currentPage === 'gifting' ? 'text-[#F04E4E]' : 'text-[#4A3728]/80 hover:text-[#F04E4E]'}`}>
@@ -35,6 +35,7 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount, onCartClick, onNavigate, cur
             </a>
             <a href="/about" onClick={(e) => { e.preventDefault(); onNavigate('about'); }} className={`transition-colors ${currentPage === 'about' ? 'text-[#F04E4E]' : 'text-[#4A3728]/80 hover:text-[#F04E4E]'}`}>Our Story</a>
             <a href="/contact" onClick={(e) => { e.preventDefault(); onNavigate('contact'); }} className={`transition-colors ${currentPage === 'contact' ? 'text-[#F04E4E]' : 'text-[#4A3728]/80 hover:text-[#F04E4E]'}`}>Contact</a>
+            <a href="/blog" onClick={(e) => { e.preventDefault(); onNavigate('blog'); }} className={`transition-colors ${currentPage === 'blog' ? 'text-[#F04E4E]' : 'text-[#4A3728]/80 hover:text-[#F04E4E]'}`}>Blog</a>
           </div>
 
           <div className="flex items-center space-x-4">
@@ -60,6 +61,7 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount, onCartClick, onNavigate, cur
           <a href="/gifting" onClick={(e) => { e.preventDefault(); onNavigate('gifting'); setIsOpen(false); }} className="block w-full py-3">Gifting</a>
           <a href="/about" onClick={(e) => { e.preventDefault(); onNavigate('about'); setIsOpen(false); }} className="block w-full py-3">Our Story</a>
           <a href="/contact" onClick={(e) => { e.preventDefault(); onNavigate('contact'); setIsOpen(false); }} className="block w-full py-3">Contact</a>
+          <a href="/blog" onClick={(e) => { e.preventDefault(); onNavigate('blog'); setIsOpen(false); }} className="block w-full py-3">Blog</a>
         </div>
       )}
     </nav>

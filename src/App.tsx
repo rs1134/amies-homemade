@@ -16,6 +16,9 @@ import AIRecommendation from './components/AIRecommendation.tsx';
 import Reviews from './components/Reviews.tsx';
 import AreaDeliveryPage from './components/AreaDeliveryPage.tsx';
 import CityDeliveryPage from './components/CityDeliveryPage.tsx';
+import BlogView from './components/BlogView.tsx';
+import BlogPostView from './components/BlogPostView.tsx';
+import { getPostBySlug } from './blogs.ts';
 import { Sparkles, ArrowRight, MessageCircle, CheckCircle, Heart, ShieldCheck, History, Package, Users, Mail, Building2 } from 'lucide-react';
 
 const PAGE_SEO: Record<string, { title: string; description: string; canonical: string; ogTitle: string; ogDescription: string }> = {
@@ -61,6 +64,13 @@ const PAGE_SEO: Record<string, { title: string; description: string; canonical: 
     ogTitle: "Checkout | Amie's Homemade",
     ogDescription: "Complete your order for fresh homemade Indian snacks and mukhwas.",
   },
+  blog: {
+    title: "The Journal | Amie's Homemade — Mukhwas, Gifting & Food Stories",
+    description: "Gifting guides, mukhwas wisdom, health stories and Ayurvedic food traditions from Amie's home kitchen in Ahmedabad. New stories every week.",
+    canonical: "https://amieshomemade.com/blog",
+    ogTitle: "The Journal | Amie's Homemade Blog",
+    ogDescription: "Gifting guides, mukhwas stories, and healthy snack wisdom from Amie's home kitchen in Ahmedabad.",
+  },
 };
 
 const BREADCRUMBS: Record<string, Array<{ name: string; item: string }>> = {
@@ -70,6 +80,7 @@ const BREADCRUMBS: Record<string, Array<{ name: string; item: string }>> = {
   gifting:  [{ name: 'Home', item: 'https://amieshomemade.com' }, { name: 'Gift Hampers', item: 'https://amieshomemade.com/gifting' }],
   contact:  [{ name: 'Home', item: 'https://amieshomemade.com' }, { name: 'Contact Us', item: 'https://amieshomemade.com/contact' }],
   checkout: [{ name: 'Home', item: 'https://amieshomemade.com' }, { name: 'Checkout', item: 'https://amieshomemade.com/checkout' }],
+  blog:     [{ name: 'Home', item: 'https://amieshomemade.com' }, { name: 'The Journal', item: 'https://amieshomemade.com/blog' }],
 };
 
 const PAGE_TO_PATH: Record<string, string> = {
@@ -81,6 +92,7 @@ const PAGE_TO_PATH: Record<string, string> = {
   contact: '/contact',
   delivery: '/delivery',
   cities: '/cities',
+  blog: '/blog',
 };
 
 const PATH_TO_PAGE: Record<string, string> = Object.fromEntries(
@@ -110,11 +122,17 @@ const getCityFromPath = (path: string): string => {
   return m ? m[1] : '';
 };
 
+const getBlogSlugFromPath = (path: string): string => {
+  const m = path.match(/^\/blog\/(.+)$/);
+  return m ? m[1] : '';
+};
+
 const getPageFromPath = (path: string): string => {
   if (path.startsWith('/delivery')) return 'delivery';
   if (path.startsWith('/cities')) return 'cities';
   if (path.startsWith('/shop')) return 'shop';
   if (path.startsWith('/gifting')) return 'gifting';
+  if (path.startsWith('/blog')) return 'blog';
   return PATH_TO_PAGE[path] || 'home';
 };
 
@@ -122,6 +140,7 @@ const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(() => getPageFromPath(window.location.pathname));
   const [currentArea, setCurrentArea] = useState(() => getAreaFromPath(window.location.pathname));
   const [currentCity, setCurrentCity] = useState(() => getCityFromPath(window.location.pathname));
+  const [currentBlogSlug, setCurrentBlogSlug] = useState(() => getBlogSlugFromPath(window.location.pathname));
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<Category | 'All'>('All');
@@ -135,6 +154,16 @@ const App: React.FC = () => {
     const path = PAGE_TO_PATH[page] || '/';
     window.history.pushState(null, '', path);
     setCurrentPage(page);
+    setCurrentArea('');
+    setCurrentCity('');
+    setCurrentBlogSlug('');
+  }, []);
+
+  const navigateToBlog = useCallback((slug?: string) => {
+    const path = slug ? `/blog/${slug}` : '/blog';
+    window.history.pushState(null, '', path);
+    setCurrentPage('blog');
+    setCurrentBlogSlug(slug || '');
     setCurrentArea('');
     setCurrentCity('');
   }, []);
@@ -177,6 +206,7 @@ const App: React.FC = () => {
       setCurrentPage(getPageFromPath(path));
       setCurrentArea(getAreaFromPath(path));
       setCurrentCity(getCityFromPath(path));
+      setCurrentBlogSlug(getBlogSlugFromPath(path));
       const slug = getProductSlugFromPath(path);
       setSelectedProduct(slug ? (PRODUCT_SLUG_MAP[slug] ?? null) : null);
     };
@@ -187,6 +217,19 @@ const App: React.FC = () => {
   // Update page title, meta tags, canonical and breadcrumb schema per page
   useEffect(() => {
     let seo = PAGE_SEO[currentPage] || PAGE_SEO.home;
+
+    if (currentPage === 'blog' && currentBlogSlug) {
+      const post = getPostBySlug(currentBlogSlug);
+      if (post) {
+        seo = {
+          title: `${post.title} | Amie's Homemade`,
+          description: post.excerpt,
+          canonical: `https://amieshomemade.com/blog/${currentBlogSlug}`,
+          ogTitle: post.title,
+          ogDescription: post.excerpt,
+        };
+      }
+    }
 
     if (currentPage === 'delivery') {
       const areaData = currentArea ? AREA_MAP[currentArea] : null;
@@ -288,14 +331,14 @@ const App: React.FC = () => {
         item: b.item,
       })),
     });
-  }, [currentPage, currentArea, currentCity]);
+  }, [currentPage, currentArea, currentCity, currentBlogSlug]);
 
-  // Scroll to top on every page/area/city change (instant to avoid smooth-scroll delay)
+  // Scroll to top on every page/area/city/blog change (instant to avoid smooth-scroll delay)
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
-  }, [currentPage, currentArea, currentCity]);
+  }, [currentPage, currentArea, currentCity, currentBlogSlug]);
 
   const filteredProducts = useMemo(() => {
     // Exclude gifting from the standard shop list to keep it exclusive
@@ -412,6 +455,10 @@ const App: React.FC = () => {
           onNavigate={navigate}
         />
       );
+      case 'blog':
+        return currentBlogSlug
+          ? <BlogPostView slug={currentBlogSlug} onBack={() => navigateToBlog()} onSelectPost={(s) => navigateToBlog(s)} onNavigate={navigate} />
+          : <BlogView onSelectPost={(s) => navigateToBlog(s)} />;
       case 'about': return <AboutUs />;
       case 'gifting': return <GiftingView onAddToCart={(p) => addToCart(p)} onSelectProduct={(p) => openProduct(p)} />;
       case 'shop': return (

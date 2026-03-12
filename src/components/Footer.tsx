@@ -108,6 +108,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               <li><a href="/shop" onClick={(e) => { e.preventDefault(); handleNav('shop'); }} className="hover:text-white transition-colors">Best Sellers</a></li>
               <li><a href="/about" onClick={(e) => { e.preventDefault(); handleNav('about'); }} className="hover:text-white transition-colors">Our Story</a></li>
               <li><a href="/contact" onClick={(e) => { e.preventDefault(); handleNav('contact'); }} className="hover:text-white transition-colors">Wholesale Inquiry</a></li>
+              <li><a href="/blog" onClick={(e) => { e.preventDefault(); handleNav('blog'); }} className="hover:text-white transition-colors">The Journal</a></li>
             </ul>
           </div>
           
