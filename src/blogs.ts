@@ -34,8 +34,8 @@ export const BLOG_POSTS: BlogPost[] = [
   // ── POST 1 ───────────────────────────────────────────────────────────────
   {
     id: 'post-1',
-    slug: 'top-10-diwali-gift-ideas-gujarati-families',
-    title: 'Top 10 Diwali Gift Ideas for Gujarati Families',
+    slug: 'top-10-diwali-gift-ideas',
+    title: 'Top 10 Diwali Gift Ideas That Will Actually Be Remembered',
     excerpt: 'Diwali is the festival where relationships are renewed through thoughtful gifts. We\'ve curated 10 ideas that strike the perfect balance between tradition and meaning — for every budget.',
     coverImage: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=1600&auto=format&fit=crop',
     publishedAt: '2026-03-03',
