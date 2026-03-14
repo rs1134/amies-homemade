@@ -134,16 +134,75 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         
         {/* Payment Trust Strip */}
         <div className="py-8 border-t border-white/5">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-5">
-            <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-2 shrink-0">
               <ShieldCheck size={15} className="text-green-400" />
-              <span className="text-white/40 text-[11px] uppercase tracking-widest font-bold">100% Secure Checkout</span>
+              <span className="text-white/40 text-[11px] uppercase tracking-widest font-bold">Secure Payments</span>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-2">
-              {['UPI', 'Visa', 'Mastercard', 'RuPay', 'PhonePe', 'Google Pay'].map(m => (
-                <span key={m} className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/50 text-[11px] font-bold tracking-wide">{m}</span>
-              ))}
-              <span className="px-3 py-1.5 rounded-lg bg-[#4F8EF7]/15 border border-[#4F8EF7]/25 text-[#4F8EF7] text-[11px] font-bold tracking-wide">Powered by Razorpay</span>
+
+              {/* Mastercard */}
+              <div className="px-2.5 py-1.5 bg-white/5 border border-white/10 rounded-lg flex items-center gap-1.5">
+                <div className="relative w-7 h-5 flex items-center">
+                  <div className="w-[18px] h-[18px] rounded-full bg-[#EB001B] absolute left-0" />
+                  <div className="w-[18px] h-[18px] rounded-full bg-[#F79E1B] absolute left-[10px] opacity-90" />
+                </div>
+                <span className="text-white/60 text-[10px] font-bold tracking-wide">Mastercard</span>
+              </div>
+
+              {/* Visa */}
+              <div className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg">
+                <span className="text-white font-black italic text-[15px] tracking-widest leading-none">VISA</span>
+              </div>
+
+              {/* RuPay */}
+              <div className="px-2.5 py-1.5 bg-white/5 border border-white/10 rounded-lg flex items-center gap-0.5">
+                <span className="font-black text-[12px] text-white leading-none">Ru</span>
+                <span className="font-black text-[12px] text-[#F89808] leading-none">Pay</span>
+                <svg width="10" height="8" viewBox="0 0 10 8" fill="none" className="ml-0.5">
+                  <path d="M1 1.5l3 2.5-3 2.5" stroke="#F89808" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M5 1.5l3 2.5-3 2.5" stroke="#F89808" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+
+              {/* UPI */}
+              <div className="px-2.5 py-1.5 bg-white/5 border border-white/10 rounded-lg flex items-center gap-1">
+                <span className="font-black text-white text-[13px] tracking-wide leading-none">UPI</span>
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                  <path d="M1.5 2l3 3-3 3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M5.5 2l3 3-3 3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
+
+              {/* PhonePe */}
+              <div className="px-2.5 py-1.5 bg-white/5 border border-white/10 rounded-lg flex items-center gap-1.5">
+                <div className="w-[18px] h-[18px] rounded-full bg-[#5F259F] flex items-center justify-center shrink-0">
+                  <svg width="9" height="9" viewBox="0 0 9 9" fill="none">
+                    <path d="M2 1.5h3a2 2 0 0 1 0 4H3.5V8" stroke="white" strokeWidth="1.2" strokeLinecap="round"/>
+                  </svg>
+                </div>
+                <span className="text-white/60 text-[10px] font-bold">PhonePe</span>
+              </div>
+
+              {/* Google Pay */}
+              <div className="px-2.5 py-1.5 bg-white/5 border border-white/10 rounded-lg flex items-center gap-1.5">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path d="M13 7.15c0-.47-.04-.82-.13-1.17H7v2.1h3.43c-.07.56-.43 1.4-1.24 1.97l-.01.08 1.8 1.4.12.01C12.22 10.39 13 8.9 13 7.15z" fill="#4285F4"/>
+                  <path d="M7 13c1.68 0 3.09-.55 4.12-1.5l-1.96-1.52c-.53.37-1.23.62-2.16.62-1.65 0-3.05-1.09-3.55-2.59l-.07.01-1.87 1.45-.02.06A7 7 0 0 0 7 13z" fill="#34A853"/>
+                  <path d="M3.45 8.01A4.24 4.24 0 0 1 3.22 7c0-.35.06-.7.22-1.01l-.01-.08L1.55 4.44l-.06.03A7 7 0 0 0 0 7c0 1.13.27 2.2.75 3.14l2.7-2.13z" fill="#FBBC05"/>
+                  <path d="M7 2.78c1.17 0 1.96.5 2.41.93l1.76-1.72A6.78 6.78 0 0 0 7 0 7 7 0 0 0 1.49 3.86l2.7 2.13C4.94 4.59 5.83 2.78 7 2.78z" fill="#EA4335"/>
+                </svg>
+                <span className="text-white/60 text-[10px] font-bold">GPay</span>
+              </div>
+
+              {/* Razorpay */}
+              <div className="px-2.5 py-1.5 bg-[#4F8EF7]/10 border border-[#4F8EF7]/25 rounded-lg flex items-center gap-1.5">
+                <svg width="10" height="14" viewBox="0 0 10 14" fill="none">
+                  <path d="M8.5 1L1 7.5h4L3 13l7-7H6.5l2-5z" fill="#4F8EF7"/>
+                </svg>
+                <span className="text-[#4F8EF7] text-[10px] font-bold tracking-wide">Razorpay</span>
+              </div>
+
             </div>
           </div>
         </div>
