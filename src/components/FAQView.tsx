@@ -64,7 +64,7 @@ const FAQ_DATA: FAQCategory[] = [
       },
       {
         q: 'Is there a minimum order quantity?',
-        a: 'No minimum for regular orders — you can order a single item. For bulk/corporate orders, a minimum of 10 hampers applies for wholesale pricing.',
+        a: 'There is no minimum order quantity. For wholesale pricing, a minimum order of 15 kg applies.',
       },
       {
         q: 'Can I schedule delivery for a specific date?',
