@@ -23,28 +23,28 @@ const FAQ_DATA: FAQCategory[] = [
     iconBg: 'bg-[#FFF1F1]',
     items: [
       {
-        q: 'What ingredients do you use? Are there any preservatives?',
-        a: 'Every product at Amie\'s Homemade is made with 100% natural ingredients — the same ones you would find in a traditional Indian kitchen. No artificial colors, no synthetic flavors, and absolutely no preservatives of any kind. Our mukhwas uses real fennel seeds, coriander seeds, sesame seeds, dried rose petals, cardamom, and carom seeds. If it is not a real ingredient with a real name, it is not in our products. The ingredient list on every jar is short, legible, and honest.',
+        q: 'Do you use any artificial colours, flavours, or preservatives?',
+        a: 'No. Every product — mukhwas, snacks, and sweets — is made with 100% natural ingredients. No artificial colours, no synthetic flavours, and no preservatives of any kind.',
       },
       {
-        q: 'What makes Amie\'s mukhwas different from what you find in a supermarket?',
-        a: 'Most commercial mukhwas is made months in advance, coated in sugar syrup and artificial dyes, and sits in a warehouse before reaching you. Amie\'s mukhwas is made fresh in small batches by Ami Shah personally, using the same family recipes that have been passed down through generations. No sugar coating on the seeds, no neon colors, no synthetic aromas. The flavor comes from the actual ingredients — and because the batches are small and made to order, the seeds are genuinely fresh when they arrive.',
-      },
-      {
-        q: 'Do you offer sugar-free options for diabetics?',
-        a: 'Yes — and this is something we feel strongly about. Traditional mukhwas ingredients (fennel, coriander, sesame, carom, cardamom) are naturally low-GI and do not contain sugar in their natural state. Our plain mukhwas blends have no added sugar, no sugar coating, and no glucose syrup. They are genuinely safe for diabetics. If you are gifting to a diabetic family member, please mention it when ordering — we will make sure the hamper contains only uncoated, sugar-free varieties.',
-      },
-      {
-        q: 'Are your products suitable for vegans and vegetarians?',
-        a: 'Yes, all of our products are 100% vegetarian. Our mukhwas, snacks, and most sweets contain no meat, eggs, or animal-derived gelatin. Many products are also vegan — if you have a specific dietary requirement, please ask us before ordering and we will confirm which products are suitable for you.',
+        q: 'Are all your products made in-house?',
+        a: 'Yes. Everything is made by Ami Shah personally in her home kitchen in Ahmedabad, in small batches using traditional family recipes. We do not resell or source products from outside.',
       },
       {
         q: 'What is the shelf life of your products?',
-        a: 'Because we use no preservatives, our products have a shorter shelf life than commercial alternatives — and that is exactly the point. Mukhwas stays fresh for 3 to 4 weeks when stored in an airtight container at room temperature, away from direct sunlight and moisture. Chakli and namkeen stay fresh for 2 to 3 weeks. Ladoo and barfi are best consumed within 10 to 14 days. We recommend ordering closer to when you need the product, rather than storing it for extended periods.',
+        a: 'Mukhwas stays fresh for 3 to 4 weeks in an airtight container. Snacks stay fresh for 2 to 3 weeks. Sweets are best consumed within 10 to 14 days. Because we use no preservatives, we recommend ordering closer to when you need them.',
       },
       {
-        q: 'Are your products made in a licensed and hygienic kitchen?',
-        a: 'Yes. Ami Shah\'s home kitchen operates with rigorous hygiene standards — small batches, clean equipment, and careful handling at every stage. Because we make in limited quantities, every batch receives the same personal attention. We do not run a factory floor. We run a kitchen where someone who cares about the food is present for every step of making it.',
+        q: 'Do you offer sugar-free options for diabetics?',
+        a: 'Yes. Our plain mukhwas blends — saunf, dhana, til, ajwain — have no added sugar, no coating, and no glucose syrup. They are naturally low-GI and safe for diabetics. Just mention it when ordering and we will build your hamper accordingly.',
+      },
+      {
+        q: 'Are your products suitable for vegetarians and vegans?',
+        a: 'All products are 100% vegetarian. Most mukhwas and snack varieties are also vegan. Some sweets contain ghee or dairy — if you have a specific requirement, ask us before ordering and we will confirm.',
+      },
+      {
+        q: 'What are your best-selling products?',
+        a: 'Our most popular mukhwas are the Classic Saunf-Dhana blend and the Rose Petal Mukhwas. Among snacks, the Masala Chakli and Methi Mathri are top sellers. For sweets, Besan Ladoo and Dry Fruit Barfi are ordered most frequently.',
       },
     ],
   },
@@ -56,23 +56,23 @@ const FAQ_DATA: FAQCategory[] = [
     items: [
       {
         q: 'How do I place an order?',
-        a: 'The easiest way is to WhatsApp us directly at +91 91575 37842. You can browse our products on this website, add items to your cart, and complete checkout — or simply message us and Ami Shah will guide you through the options personally. For custom or bulk orders, WhatsApp is the best channel since we can discuss your specific requirements and curate the right hamper for you.',
+        a: 'You can order directly on this website or WhatsApp us at +91 91575 37842. For custom hampers or bulk orders, WhatsApp is the easiest way — Ami Shah will guide you personally.',
       },
       {
         q: 'What payment methods do you accept?',
-        a: 'For online orders, we accept UPI payment (Google Pay, PhonePe, Paytm, and all UPI apps). We do not offer Cash on Delivery for orders outside Ahmedabad. For Ahmedabad-based deliveries, cash payment at the time of delivery is also accepted.',
+        a: 'We accept all UPI apps (Google Pay, PhonePe, Paytm) for online orders. Cash on delivery is available for Ahmedabad orders only. We do not offer COD outside Ahmedabad.',
       },
       {
         q: 'Can I customize the contents of a gift hamper?',
-        a: 'Absolutely — and we encourage it. Customizing a hamper is what separates a thoughtful gift from a generic one. You can choose which mukhwas varieties go in, adjust quantities, add or remove specific products, and specify any dietary requirements (sugar-free, nut-free, etc.). Our Heritage Box is specifically designed to be built around the recipient. Just tell us who it is for and what they love, and we will put together something that feels made for them — because it is.',
+        a: 'Yes. You can choose which mukhwas varieties, snacks, and sweets go in, specify quantities, and mention any dietary needs (sugar-free, nut-free, etc.). Just tell us who it is for and we will build it around them.',
       },
       {
-        q: 'What is the minimum order quantity?',
-        a: 'There is no minimum for regular orders — you can order a single jar if you like. For bulk and corporate orders, a minimum of 10 hampers is required to unlock wholesale pricing. For wedding favors, we typically recommend a minimum of 25 units to ensure consistent packaging and presentation.',
+        q: 'Is there a minimum order quantity?',
+        a: 'No minimum for regular orders — you can order a single item. For bulk/corporate orders, a minimum of 10 hampers applies for wholesale pricing.',
       },
       {
-        q: 'Can I schedule delivery for a specific date — like Diwali or a birthday?',
-        a: 'Yes. When you place your order, simply let us know the date you need the delivery by. For festival seasons (Diwali, Navratri, Raksha Bandhan), we strongly recommend ordering at least 7 to 10 days in advance — demand is high and we make in small batches, so early orders always get priority. For birthdays and anniversaries, 3 to 4 days advance notice is usually sufficient.',
+        q: 'Can I schedule delivery for a specific date?',
+        a: 'Yes. Mention your required delivery date when ordering. For Diwali and festival seasons, order at least 7 to 10 days in advance. For birthdays and events, 3 to 4 days is usually enough.',
       },
     ],
   },
@@ -84,19 +84,19 @@ const FAQ_DATA: FAQCategory[] = [
     items: [
       {
         q: 'Do you deliver across India?',
-        a: 'Yes — we deliver pan-India. Ahmedabad and the surrounding areas of Gujarat receive orders fastest (typically 1 working day). For the rest of India, we ship via reliable courier and orders typically arrive within 3 to 5 business days. We have delivered to Mumbai, Delhi, Bengaluru, Chennai, Hyderabad, Pune, Kolkata, and hundreds of smaller cities across the country.',
-      },
-      {
-        q: 'How long does delivery take?',
-        a: 'Within Ahmedabad: 1 working day after preparation. Across India: 3 to 5 business days after dispatch. Orders are freshly prepared and dispatched within 1 to 2 business days of payment confirmation. During peak festival seasons, preparation may take an additional day — please factor this in when ordering for a specific occasion.',
+        a: 'Yes. We deliver pan-India. Ahmedabad orders arrive in 1 working day. All other cities typically receive orders within 3 to 5 business days via courier.',
       },
       {
         q: 'What are the delivery charges?',
-        a: 'Delivery within Ahmedabad is FREE. For orders outside Ahmedabad, shipping charges are calculated by weight: up to 500g — ₹60; 500g to 1kg — ₹100; 1kg to 2kg — ₹150; 2kg to 5kg — ₹200; above 5kg — ₹250. These rates apply to all courier deliveries across India.',
+        a: 'Delivery within Ahmedabad is FREE. Outside Ahmedabad: up to 500g — ₹60 | 500g–1kg — ₹100 | 1–2kg — ₹150 | 2–5kg — ₹200 | above 5kg — ₹250.',
       },
       {
-        q: 'How do you ensure the products stay fresh during shipping?',
-        a: 'Our products are packed in airtight containers (glass jars for mukhwas, sealed pouches for snacks) and then wrapped carefully in bubble wrap or padded material before being placed in a sturdy outer box. The airtight packaging is the most important factor — it prevents moisture from reaching the products during transit. If you receive a damaged or compromised package, please contact us within 24 hours on WhatsApp with a photo and we will resolve it promptly.',
+        q: 'Do you offer same-day delivery in Ahmedabad?',
+        a: 'Same-day delivery is available for Ahmedabad orders placed before 12 PM, subject to availability. WhatsApp us to confirm.',
+      },
+      {
+        q: 'How are products packed for shipping?',
+        a: 'Mukhwas and snacks are packed in airtight containers, then bubble-wrapped and boxed securely. If your order arrives damaged, WhatsApp us within 24 hours with a photo and we will resolve it immediately.',
       },
     ],
   },
@@ -107,24 +107,24 @@ const FAQ_DATA: FAQCategory[] = [
     iconBg: 'bg-[#F5F3FF]',
     items: [
       {
-        q: 'Do you handle corporate gifting orders?',
-        a: 'Yes — corporate gifting is one of our most requested services, especially during Diwali and other major festivals. We have fulfilled corporate orders for companies across multiple industries, ranging from 20-piece hampers for a small office to 500+ piece orders for large enterprises. Every corporate hamper is made fresh and packed consistently, with the option to include a custom card or branding.',
+        q: 'Do you offer corporate and bulk gifting?',
+        a: 'Yes. We handle corporate gifting for Diwali, Navratri, and all major occasions — from 10-piece sets to 500+ unit orders. Every hamper is made fresh with the option for a custom card or branded packaging.',
       },
       {
-        q: 'What is the minimum quantity for bulk or corporate orders?',
-        a: 'Bulk pricing applies from 10 hampers onwards. The more units you order, the better the per-unit pricing. For corporate orders of 50+ hampers, we offer preferential rates and can discuss a fully custom presentation box with your company\'s branding. Please WhatsApp us with your requirement and timeline and we will send you a detailed quote.',
+        q: 'What is the minimum order for bulk pricing?',
+        a: 'Bulk pricing applies from 10 hampers onwards. For 50+ orders we offer preferential rates and custom branding. WhatsApp us with your requirement and we will send a quote.',
       },
       {
-        q: 'Can you add custom branding or a personalized message to each hamper?',
-        a: 'Yes. For corporate orders, we can include a custom printed card with your company\'s logo and message. For smaller personal orders, we include a handwritten note card with whatever message you want. Custom box printing with your company name or logo is available for bulk orders above 50 units — please inquire in advance as this requires additional lead time.',
+        q: 'Can you add a personalized message or company branding?',
+        a: 'Yes. Personal orders include a handwritten note card. Corporate orders can include a printed card with your logo and message. Custom box branding is available for orders of 50+ units.',
       },
       {
-        q: 'What are the most popular corporate gifting options?',
-        a: 'Our most requested corporate hampers are: the Classic Mukhwas Set (3–5 glass jars in a wooden presentation box), the Wellness Hamper (sugar-free mukhwas varieties for health-conscious recipients), the Heritage Snack Box (mukhwas + chakli + namkeen in a premium wooden box), and the Grand Heritage Hamper (our most luxurious option, ideal for VIP clients and senior management). We can build any combination based on your budget and the impression you want to make.',
+        q: 'What hamper options are popular for corporate gifting?',
+        a: 'Our most requested options are the Classic Mukhwas Set (glass jars in a wooden box), the Wellness Hamper (sugar-free varieties), the Heritage Snack Box (mukhwas + snacks + sweets), and the Grand Heritage Hamper for VIP relationships.',
       },
       {
-        q: 'How much advance notice do you need for a large corporate order?',
-        a: 'For orders up to 50 hampers, 5 to 7 days is usually sufficient. For orders between 50 and 200 hampers, we recommend 10 to 14 days. For orders above 200 hampers — especially for Diwali — please contact us at least 3 to 4 weeks in advance. All hampers are made fresh, so we cannot rush production without compromising quality.',
+        q: 'How early should I place a large corporate order?',
+        a: 'Up to 50 hampers — 5 to 7 days. 50 to 200 hampers — 10 to 14 days. Above 200 hampers — at least 3 to 4 weeks, especially for Diwali season.',
       },
     ],
   },
