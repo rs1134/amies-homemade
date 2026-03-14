@@ -132,7 +132,23 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           </div>
         </div>
         
-        <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-xs uppercase tracking-widest text-white/40 font-semibold text-center md:text-left">
+        {/* Payment Trust Strip */}
+        <div className="py-8 border-t border-white/5">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-5">
+            <div className="flex items-center gap-2">
+              <ShieldCheck size={15} className="text-green-400" />
+              <span className="text-white/40 text-[11px] uppercase tracking-widest font-bold">100% Secure Checkout</span>
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              {['UPI', 'Visa', 'Mastercard', 'RuPay', 'PhonePe', 'Google Pay'].map(m => (
+                <span key={m} className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/50 text-[11px] font-bold tracking-wide">{m}</span>
+              ))}
+              <span className="px-3 py-1.5 rounded-lg bg-[#4F8EF7]/15 border border-[#4F8EF7]/25 text-[#4F8EF7] text-[11px] font-bold tracking-wide">Powered by Razorpay</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-xs uppercase tracking-widest text-white/40 font-semibold text-center md:text-left">
           <p>© 2026 Amie's Homemade. All rights reserved.</p>
           <div className="flex gap-8">
             <button 
@@ -205,7 +221,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </li>
             <li className="flex gap-3">
               <CheckCircle className="text-coral shrink-0 mt-0.5" size={16} />
-              <span>For online orders, only <span className="font-bold">UPI payment</span> is accepted — no Cash on Delivery.</span>
+              <span>We accept <span className="font-bold">UPI, cards, net banking, PhonePe & Google Pay</span> via Razorpay — no Cash on Delivery.</span>
             </li>
             <li className="flex gap-3">
               <CheckCircle className="text-coral shrink-0 mt-0.5" size={16} />
