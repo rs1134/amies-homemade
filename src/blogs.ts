@@ -511,7 +511,7 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: 'corporate-gifting-india-complete-guide-2026',
     title: 'Corporate Gifting in India 2026: A Complete Guide to Getting It Right',
     excerpt: 'Most corporate gifting is forgettable. The companies that get it right understand one thing: a gift is not a transaction, it is a conversation. Here\'s how to make yours memorable.',
-    coverImage: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=1600&auto=format&fit=crop',
+    coverImage: 'https://img.forestessentialsindia.com/pub/media/cms_page/corporate-gifting/Main_Banner_Desktop-2025.jpg',
     publishedAt: '2026-03-14',
     readTime: 6,
     category: 'Corporate Gifting',
