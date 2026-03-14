@@ -52,7 +52,7 @@ const FAQ_DATA: FAQCategory[] = [
     items: [
       {
         q: 'How do I place an order?',
-        a: 'You can order directly on this website or WhatsApp us at +91 91575 37842. For custom hampers or bulk orders, WhatsApp is the easiest way — Ami Shah will guide you personally.',
+        a: 'You can order directly on this website or WhatsApp us at +91 91575 37842. For custom hampers or bulk orders, WhatsApp is the easiest way — we will guide you personally.',
       },
       {
         q: 'What payment methods do you accept?',
