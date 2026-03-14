@@ -214,9 +214,11 @@ const App: React.FC = () => {
     return () => window.removeEventListener('popstate', onPopState);
   }, []);
 
-  // Update page title, meta tags, canonical and breadcrumb schema per page
+  // Update page title, meta tags, canonical, OG image, and all structured data per page
   useEffect(() => {
     let seo = PAGE_SEO[currentPage] || PAGE_SEO.home;
+    let ogImage: string | null = null;
+    const DEFAULT_OG_IMAGE = 'https://i.postimg.cc/8Cy68DD6/Whats-App-Image-2026-02-12-at-18-57-42-(1).jpg';
 
     if (currentPage === 'blog' && currentBlogSlug) {
       const post = getPostBySlug(currentBlogSlug);
@@ -228,6 +230,7 @@ const App: React.FC = () => {
           ogTitle: post.title,
           ogDescription: post.excerpt,
         };
+        ogImage = post.coverImage;
       }
     }
 
@@ -273,6 +276,7 @@ const App: React.FC = () => {
       }
     }
 
+    // ── Core meta tags ──────────────────────────────────────────────────────
     document.title = seo.title;
     const setMeta = (sel: string, val: string) => document.querySelector(sel)?.setAttribute('content', val);
     const setHref = (sel: string, val: string) => document.querySelector(sel)?.setAttribute('href', val);
@@ -283,8 +287,11 @@ const App: React.FC = () => {
     setMeta('meta[property="og:url"]', seo.canonical);
     setMeta('meta[name="twitter:title"]', seo.ogTitle);
     setMeta('meta[name="twitter:description"]', seo.ogDescription);
+    // Per-page OG / Twitter image — use post cover image on blog posts, default elsewhere
+    setMeta('meta[property="og:image"]', ogImage || DEFAULT_OG_IMAGE);
+    setMeta('meta[name="twitter:image"]', ogImage || DEFAULT_OG_IMAGE);
 
-    // Inject/update BreadcrumbList schema
+    // ── BreadcrumbList schema ────────────────────────────────────────────────
     const areaData = currentArea ? AREA_MAP[currentArea] : null;
     const cityData = currentCity ? CITY_MAP[currentCity] : null;
     let crumbs: Array<{ name: string; item: string }>;
@@ -313,15 +320,18 @@ const App: React.FC = () => {
     } else {
       crumbs = BREADCRUMBS[currentPage] || BREADCRUMBS.home;
     }
-    const schemaId = 'breadcrumb-schema';
-    let schemaEl = document.getElementById(schemaId) as HTMLScriptElement | null;
-    if (!schemaEl) {
-      schemaEl = document.createElement('script');
-      schemaEl.id = schemaId;
-      schemaEl.type = 'application/ld+json';
-      document.head.appendChild(schemaEl);
-    }
-    schemaEl.textContent = JSON.stringify({
+    const injectSchema = (id: string, data: object | null) => {
+      let el = document.getElementById(id) as HTMLScriptElement | null;
+      if (!data) { el?.remove(); return; }
+      if (!el) {
+        el = document.createElement('script');
+        el.id = id;
+        el.type = 'application/ld+json';
+        document.head.appendChild(el);
+      }
+      el.textContent = JSON.stringify(data);
+    };
+    injectSchema('breadcrumb-schema', {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
       itemListElement: crumbs.map((b, i) => ({
@@ -331,7 +341,54 @@ const App: React.FC = () => {
         item: b.item,
       })),
     });
-  }, [currentPage, currentArea, currentCity, currentBlogSlug]);
+
+    // ── BlogPosting schema ───────────────────────────────────────────────────
+    if (currentPage === 'blog' && currentBlogSlug) {
+      const post = getPostBySlug(currentBlogSlug);
+      injectSchema('blogposting-schema', post ? {
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        headline: post.title,
+        description: post.excerpt,
+        image: post.coverImage,
+        datePublished: post.publishedAt,
+        dateModified: post.publishedAt,
+        author: { '@type': 'Person', name: 'Ami Shah', url: 'https://amieshomemade.com/about' },
+        publisher: { '@id': 'https://amieshomemade.com/#business' },
+        url: `https://amieshomemade.com/blog/${currentBlogSlug}`,
+        mainEntityOfPage: { '@type': 'WebPage', '@id': `https://amieshomemade.com/blog/${currentBlogSlug}` },
+        keywords: post.tags?.join(', '),
+        articleSection: post.category,
+      } : null);
+    } else {
+      injectSchema('blogposting-schema', null);
+    }
+
+    // ── Product schema ───────────────────────────────────────────────────────
+    if (selectedProduct) {
+      const isGifting = selectedProduct.category === Category.GIFTING;
+      const productUrl = `https://amieshomemade.com/${isGifting ? 'gifting' : 'shop'}/${slugify(selectedProduct.name)}`;
+      injectSchema('product-schema', {
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        name: selectedProduct.name,
+        description: selectedProduct.description,
+        image: selectedProduct.image,
+        url: productUrl,
+        brand: { '@type': 'Brand', name: "Amie's Homemade" },
+        offers: {
+          '@type': 'Offer',
+          url: productUrl,
+          priceCurrency: 'INR',
+          price: selectedProduct.price,
+          availability: 'https://schema.org/InStock',
+          seller: { '@id': 'https://amieshomemade.com/#business' },
+        },
+      });
+    } else {
+      injectSchema('product-schema', null);
+    }
+  }, [currentPage, currentArea, currentCity, currentBlogSlug, selectedProduct]);
 
   // Scroll to top on every page/area/city/blog change (instant to avoid smooth-scroll delay)
   useEffect(() => {

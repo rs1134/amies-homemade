@@ -81,10 +81,11 @@ const HamperCard: React.FC<HamperCardProps> = ({ item, onAddToCart, onSelectProd
       {/* Gallery Section */}
       <div className="lg:w-2/5 flex flex-col bg-[#FDFBF7] relative">
         <div className="relative w-full h-52 sm:h-96 lg:h-full overflow-hidden bg-white">
-          <img 
-            src={images[activeImgIdx]} 
-            alt={item.name} 
-            className="w-full h-full block object-cover object-center transition-transform duration-1000 group-hover:scale-110" 
+          <img
+            src={images[activeImgIdx]}
+            alt={item.name}
+            loading="lazy"
+            className="w-full h-full block object-cover object-center transition-transform duration-1000 group-hover:scale-110"
           />
           <div className="absolute top-6 left-6 z-10">
             <span className="bg-white/90 backdrop-blur-md px-4 py-2 rounded-full text-[10px] font-black text-[#D4AF37] uppercase tracking-widest shadow-lg border border-[#D4AF37]/10">
