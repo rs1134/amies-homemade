@@ -28,7 +28,7 @@ const FAQ_DATA: FAQCategory[] = [
       },
       {
         q: 'Are all your products made in-house?',
-        a: 'Yes. Everything is made by Ami Shah personally in her home kitchen in Ahmedabad, in small batches using traditional family recipes. We do not resell or source products from outside.',
+        a: 'Yes, all our products are made in-house. We do not resell products from anywhere outside of our company premises.',
       },
       {
         q: 'What is the shelf life of your products?',
