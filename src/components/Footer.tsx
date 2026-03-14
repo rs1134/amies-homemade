@@ -156,13 +156,13 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               </div>
 
               {/* RuPay */}
-              <div className="px-2.5 py-1.5 bg-white/5 border border-white/10 rounded-lg flex items-center">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Rupay-Logo.png" alt="RuPay" className="h-4 w-auto object-contain brightness-0 invert" />
+              <div className="px-3 py-2 bg-white/5 border border-white/10 rounded-lg flex items-center">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Rupay-Logo.png" alt="RuPay" className="h-6 w-auto object-contain brightness-0 invert" />
               </div>
 
               {/* UPI */}
-              <div className="px-2.5 py-1.5 bg-white/5 border border-white/10 rounded-lg flex items-center">
-                <img src="https://cdn.iconscout.com/icon/free/png-256/free-upi-logo-icon-svg-download-png-1747946.png" alt="UPI" className="h-5 w-auto object-contain" />
+              <div className="px-3 py-2 bg-white/5 border border-white/10 rounded-lg flex items-center">
+                <img src="https://cdn.iconscout.com/icon/free/png-256/free-upi-logo-icon-svg-download-png-1747946.png" alt="UPI" className="h-6 w-auto object-contain" />
               </div>
 
               {/* PhonePe */}
@@ -187,8 +187,8 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               </div>
 
               {/* Razorpay */}
-              <div className="px-2.5 py-1.5 bg-white/5 border border-white/10 rounded-lg flex items-center">
-                <img src="https://cdn.iconscout.com/icon/free/png-256/free-razorpay-logo-icon-svg-download-png-1399875.png?f=webp" alt="Razorpay" className="h-4 w-auto object-contain brightness-0 invert" />
+              <div className="px-3 py-2 bg-white/5 border border-white/10 rounded-lg flex items-center">
+                <img src="https://cdn.iconscout.com/icon/free/png-256/free-razorpay-logo-icon-svg-download-png-1399875.png?f=webp" alt="Razorpay" className="h-6 w-auto object-contain brightness-0 invert" />
               </div>
 
             </div>
