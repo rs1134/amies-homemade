@@ -140,7 +140,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <img src="https://i.postimg.cc/ht21rpD1/RUPAY_2.png" alt="RuPay" className="h-8 w-auto object-contain" />
             <img src="https://i.postimg.cc/Wp0mK2pZ/UPI.jpg" alt="UPI" className="h-8 w-auto object-contain" />
             <a href="https://razorpay.com/" target="_blank" rel="noopener noreferrer">
-              <img referrerPolicy="origin" src="https://badges.razorpay.com/badge-dark.png" style={{ height: '45px', width: '113px' }} alt="Razorpay | Payment Gateway | Neobank" />
+              <img referrerPolicy="origin" src="https://badges.razorpay.com/badge-light.png" style={{ height: '45px', width: '113px' }} alt="Razorpay | Payment Gateway | Neobank" />
             </a>
           </div>
         </div>
