@@ -39,12 +39,8 @@ const FAQ_DATA: FAQCategory[] = [
         a: 'Yes. Our plain mukhwas blends — saunf, dhana, til, ajwain — have no added sugar, no coating, and no glucose syrup. They are naturally low-GI and safe for diabetics.',
       },
       {
-        q: 'Are your products suitable for vegetarians and vegans?',
-        a: 'All products are 100% vegetarian. Most mukhwas and snack varieties are also vegan. Some sweets contain ghee or dairy — if you have a specific requirement, ask us before ordering and we will confirm.',
-      },
-      {
         q: 'What are your best-selling products?',
-        a: 'Our most popular mukhwas are the Classic Saunf-Dhana blend and the Rose Petal Mukhwas. Among snacks, the Masala Chakli and Methi Mathri are top sellers. For sweets, Besan Ladoo and Dry Fruit Barfi are ordered most frequently.',
+        a: 'For mukhwas, our best sellers are Kharek Coconut Almond and Chatpati Mango. For snacks, Khasta Kachori and Ratalu Chips are most popular. For sweets, Ghughra and Mathadi are ordered most frequently.',
       },
     ],
   },
