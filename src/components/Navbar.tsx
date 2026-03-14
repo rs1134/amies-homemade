@@ -36,6 +36,7 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount, onCartClick, onNavigate, cur
             <a href="/about" onClick={(e) => { e.preventDefault(); onNavigate('about'); }} className={`transition-colors ${currentPage === 'about' ? 'text-[#F04E4E]' : 'text-[#4A3728]/80 hover:text-[#F04E4E]'}`}>Our Story</a>
             <a href="/contact" onClick={(e) => { e.preventDefault(); onNavigate('contact'); }} className={`transition-colors ${currentPage === 'contact' ? 'text-[#F04E4E]' : 'text-[#4A3728]/80 hover:text-[#F04E4E]'}`}>Contact</a>
             <a href="/blog" onClick={(e) => { e.preventDefault(); onNavigate('blog'); }} className={`transition-colors ${currentPage === 'blog' ? 'text-[#F04E4E]' : 'text-[#4A3728]/80 hover:text-[#F04E4E]'}`}>Blog</a>
+            <a href="/faq" onClick={(e) => { e.preventDefault(); onNavigate('faq'); }} className={`transition-colors ${currentPage === 'faq' ? 'text-[#F04E4E]' : 'text-[#4A3728]/80 hover:text-[#F04E4E]'}`}>FAQ</a>
           </div>
 
           <div className="flex items-center space-x-4">
@@ -62,6 +63,7 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount, onCartClick, onNavigate, cur
           <a href="/about" onClick={(e) => { e.preventDefault(); onNavigate('about'); setIsOpen(false); }} className="block w-full py-3">Our Story</a>
           <a href="/contact" onClick={(e) => { e.preventDefault(); onNavigate('contact'); setIsOpen(false); }} className="block w-full py-3">Contact</a>
           <a href="/blog" onClick={(e) => { e.preventDefault(); onNavigate('blog'); setIsOpen(false); }} className="block w-full py-3">Blog</a>
+          <a href="/faq" onClick={(e) => { e.preventDefault(); onNavigate('faq'); setIsOpen(false); }} className="block w-full py-3">FAQ</a>
         </div>
       )}
     </nav>

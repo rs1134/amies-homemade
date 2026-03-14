@@ -18,6 +18,7 @@ import AreaDeliveryPage from './components/AreaDeliveryPage.tsx';
 import CityDeliveryPage from './components/CityDeliveryPage.tsx';
 import BlogView from './components/BlogView.tsx';
 import BlogPostView from './components/BlogPostView.tsx';
+import FAQView from './components/FAQView.tsx';
 import { getPostBySlug } from './blogs.ts';
 import { Sparkles, ArrowRight, MessageCircle, CheckCircle, Heart, ShieldCheck, History, Package, Users, Mail, Building2 } from 'lucide-react';
 
@@ -71,6 +72,13 @@ const PAGE_SEO: Record<string, { title: string; description: string; canonical: 
     ogTitle: "The Journal | Amie's Homemade Blog",
     ogDescription: "Gifting guides, mukhwas stories, and healthy snack wisdom from Amie's home kitchen in Ahmedabad.",
   },
+  faq: {
+    title: "FAQs | Amie's Homemade — Mukhwas, Snacks & Gift Hampers",
+    description: "Answers to your most common questions about Amie's Homemade — ingredients, preservatives, delivery, custom hampers, corporate gifting, and more.",
+    canonical: "https://amieshomemade.com/faq",
+    ogTitle: "Frequently Asked Questions | Amie's Homemade",
+    ogDescription: "Everything you need to know about Amie's Homemade — ingredients, ordering, delivery, and corporate gifting.",
+  },
 };
 
 const BREADCRUMBS: Record<string, Array<{ name: string; item: string }>> = {
@@ -81,6 +89,7 @@ const BREADCRUMBS: Record<string, Array<{ name: string; item: string }>> = {
   contact:  [{ name: 'Home', item: 'https://amieshomemade.com' }, { name: 'Contact Us', item: 'https://amieshomemade.com/contact' }],
   checkout: [{ name: 'Home', item: 'https://amieshomemade.com' }, { name: 'Checkout', item: 'https://amieshomemade.com/checkout' }],
   blog:     [{ name: 'Home', item: 'https://amieshomemade.com' }, { name: 'The Journal', item: 'https://amieshomemade.com/blog' }],
+  faq:      [{ name: 'Home', item: 'https://amieshomemade.com' }, { name: 'FAQs', item: 'https://amieshomemade.com/faq' }],
 };
 
 const PAGE_TO_PATH: Record<string, string> = {
@@ -93,6 +102,7 @@ const PAGE_TO_PATH: Record<string, string> = {
   delivery: '/delivery',
   cities: '/cities',
   blog: '/blog',
+  faq: '/faq',
 };
 
 const PATH_TO_PAGE: Record<string, string> = Object.fromEntries(
@@ -133,6 +143,7 @@ const getPageFromPath = (path: string): string => {
   if (path.startsWith('/shop')) return 'shop';
   if (path.startsWith('/gifting')) return 'gifting';
   if (path.startsWith('/blog')) return 'blog';
+  if (path.startsWith('/faq')) return 'faq';
   return PATH_TO_PAGE[path] || 'home';
 };
 
@@ -342,6 +353,28 @@ const App: React.FC = () => {
       })),
     });
 
+    // ── FAQPage schema ───────────────────────────────────────────────────────
+    if (currentPage === 'faq') {
+      injectSchema('faqpage-schema', {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: [
+          { '@type': 'Question', name: 'What ingredients do you use? Are there any preservatives?', acceptedAnswer: { '@type': 'Answer', text: "Every product at Amie's Homemade is made with 100% natural ingredients — fennel seeds, coriander seeds, sesame seeds, dried rose petals, cardamom, and carom seeds. No artificial colors, no synthetic flavors, and absolutely no preservatives of any kind." } },
+          { '@type': 'Question', name: "Do you offer sugar-free options for diabetics?", acceptedAnswer: { '@type': 'Answer', text: 'Yes. Our plain mukhwas blends have no added sugar, no sugar coating, and no glucose syrup. They are genuinely safe for diabetics. Traditional mukhwas ingredients (fennel, coriander, sesame, carom, cardamom) are naturally low-GI.' } },
+          { '@type': 'Question', name: 'How do I place an order?', acceptedAnswer: { '@type': 'Answer', text: 'The easiest way is to WhatsApp us at +91 91575 37842. You can also browse products on the website, add items to your cart, and complete checkout online.' } },
+          { '@type': 'Question', name: 'Do you deliver pan-India?', acceptedAnswer: { '@type': 'Answer', text: 'Yes — we deliver pan-India. Ahmedabad orders arrive in 1 working day. For the rest of India, orders typically arrive within 3 to 5 business days via courier.' } },
+          { '@type': 'Question', name: 'What are the delivery charges?', acceptedAnswer: { '@type': 'Answer', text: 'Delivery within Ahmedabad is free. For orders outside Ahmedabad: up to 500g — ₹60; 500g to 1kg — ₹100; 1kg to 2kg — ₹150; 2kg to 5kg — ₹200; above 5kg — ₹250.' } },
+          { '@type': 'Question', name: 'What is the shelf life of your products?', acceptedAnswer: { '@type': 'Answer', text: 'Mukhwas stays fresh for 3 to 4 weeks in an airtight container. Chakli and namkeen stay fresh for 2 to 3 weeks. Ladoo and barfi are best consumed within 10 to 14 days. No preservatives means a shorter but more genuine shelf life.' } },
+          { '@type': 'Question', name: 'Can I customize the contents of a gift hamper?', acceptedAnswer: { '@type': 'Answer', text: 'Absolutely. You can choose which mukhwas varieties go in, adjust quantities, add or remove products, and specify dietary requirements. Just tell us who it is for and what they love.' } },
+          { '@type': 'Question', name: 'Do you handle corporate gifting orders?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. We handle corporate gifting for Diwali and all major festivals, from 10-piece hamper sets to 500+ unit orders. Bulk pricing, custom cards, and branded packaging are available.' } },
+          { '@type': 'Question', name: 'What is the minimum quantity for bulk orders?', acceptedAnswer: { '@type': 'Answer', text: 'Bulk pricing applies from 10 hampers onwards. For 50+ hampers we offer preferential rates and custom branding. WhatsApp us with your requirement for a detailed quote.' } },
+          { '@type': 'Question', name: 'What payment methods do you accept?', acceptedAnswer: { '@type': 'Answer', text: 'For online orders, we accept UPI payment (Google Pay, PhonePe, Paytm, and all UPI apps). For Ahmedabad deliveries, cash at delivery is also accepted. We do not offer Cash on Delivery outside Ahmedabad.' } },
+        ],
+      });
+    } else {
+      injectSchema('faqpage-schema', null);
+    }
+
     // ── BlogPosting schema ───────────────────────────────────────────────────
     if (currentPage === 'blog' && currentBlogSlug) {
       const post = getPostBySlug(currentBlogSlug);
@@ -516,6 +549,7 @@ const App: React.FC = () => {
         return currentBlogSlug
           ? <BlogPostView slug={currentBlogSlug} onBack={() => navigateToBlog()} onSelectPost={(s) => navigateToBlog(s)} onNavigate={navigate} />
           : <BlogView onSelectPost={(s) => navigateToBlog(s)} />;
+      case 'faq': return <FAQView onNavigate={navigate} />;
       case 'about': return <AboutUs />;
       case 'gifting': return <GiftingView onAddToCart={(p) => addToCart(p)} onSelectProduct={(p) => openProduct(p)} />;
       case 'shop': return (
