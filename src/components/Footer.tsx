@@ -156,22 +156,13 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               </div>
 
               {/* RuPay */}
-              <div className="px-2.5 py-1.5 bg-white/5 border border-white/10 rounded-lg flex items-center gap-0.5">
-                <span className="font-black text-[12px] text-white leading-none">Ru</span>
-                <span className="font-black text-[12px] text-[#F89808] leading-none">Pay</span>
-                <svg width="10" height="8" viewBox="0 0 10 8" fill="none" className="ml-0.5">
-                  <path d="M1 1.5l3 2.5-3 2.5" stroke="#F89808" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M5 1.5l3 2.5-3 2.5" stroke="#F89808" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+              <div className="px-2.5 py-1.5 bg-white/5 border border-white/10 rounded-lg flex items-center">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Rupay-Logo.png" alt="RuPay" className="h-4 w-auto object-contain brightness-0 invert" />
               </div>
 
               {/* UPI */}
-              <div className="px-2.5 py-1.5 bg-white/5 border border-white/10 rounded-lg flex items-center gap-1">
-                <span className="font-black text-white text-[13px] tracking-wide leading-none">UPI</span>
-                <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-                  <path d="M1.5 2l3 3-3 3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M5.5 2l3 3-3 3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+              <div className="px-2.5 py-1.5 bg-white/5 border border-white/10 rounded-lg flex items-center">
+                <img src="https://cdn.iconscout.com/icon/free/png-256/free-upi-logo-icon-svg-download-png-1747946.png" alt="UPI" className="h-5 w-auto object-contain" />
               </div>
 
               {/* PhonePe */}
@@ -196,11 +187,8 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               </div>
 
               {/* Razorpay */}
-              <div className="px-2.5 py-1.5 bg-[#4F8EF7]/10 border border-[#4F8EF7]/25 rounded-lg flex items-center gap-1.5">
-                <svg width="10" height="14" viewBox="0 0 10 14" fill="none">
-                  <path d="M8.5 1L1 7.5h4L3 13l7-7H6.5l2-5z" fill="#4F8EF7"/>
-                </svg>
-                <span className="text-[#4F8EF7] text-[10px] font-bold tracking-wide">Razorpay</span>
+              <div className="px-2.5 py-1.5 bg-white/5 border border-white/10 rounded-lg flex items-center">
+                <img src="https://cdn.iconscout.com/icon/free/png-256/free-razorpay-logo-icon-svg-download-png-1399875.png?f=webp" alt="Razorpay" className="h-4 w-auto object-contain brightness-0 invert" />
               </div>
 
             </div>
