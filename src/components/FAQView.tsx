@@ -36,7 +36,7 @@ const FAQ_DATA: FAQCategory[] = [
       },
       {
         q: 'Do you offer sugar-free options for diabetics?',
-        a: 'Yes. Our plain mukhwas blends — saunf, dhana, til, ajwain — have no added sugar, no coating, and no glucose syrup. They are naturally low-GI and safe for diabetics. Just mention it when ordering and we will build your hamper accordingly.',
+        a: 'Yes. Our plain mukhwas blends — saunf, dhana, til, ajwain — have no added sugar, no coating, and no glucose syrup. They are naturally low-GI and safe for diabetics.',
       },
       {
         q: 'Are your products suitable for vegetarians and vegans?',
