@@ -134,11 +134,11 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         
         {/* Payment Trust Strip */}
         <div className="py-10 border-t border-white/5">
-          <div className="flex flex-wrap items-center justify-center gap-8 opacity-70">
-            <img src="https://i.postimg.cc/NjsxmWcV/mastecard.png" alt="Mastercard" className="h-8 w-auto object-contain brightness-0 invert" />
-            <img src="https://i.postimg.cc/Wp0mK2pr/VISA.png" alt="Visa" className="h-7 w-auto object-contain brightness-0 invert" />
-            <img src="https://i.postimg.cc/ht21rpD1/RUPAY_2.png" alt="RuPay" className="h-8 w-auto object-contain brightness-0 invert" />
-            <img src="https://i.postimg.cc/Wp0mK2pZ/UPI.jpg" alt="UPI" className="h-8 w-auto object-contain brightness-0 invert" />
+          <div className="flex flex-wrap items-center justify-center gap-8 opacity-80">
+            <img src="https://i.postimg.cc/NjsxmWcV/mastecard.png" alt="Mastercard" className="h-8 w-auto object-contain" />
+            <img src="https://i.postimg.cc/Wp0mK2pr/VISA.png" alt="Visa" className="h-7 w-auto object-contain" />
+            <img src="https://i.postimg.cc/ht21rpD1/RUPAY_2.png" alt="RuPay" className="h-8 w-auto object-contain" />
+            <img src="https://i.postimg.cc/Wp0mK2pZ/UPI.jpg" alt="UPI" className="h-8 w-auto object-contain" />
           </div>
         </div>
 
