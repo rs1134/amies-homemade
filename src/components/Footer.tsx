@@ -135,11 +135,10 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         {/* Payment Trust Strip */}
         <div className="py-10 border-t border-white/5">
           <div className="flex flex-wrap items-center justify-center gap-8 opacity-70">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/MasterCard_Logo.svg/1200px-MasterCard_Logo.svg.png" alt="Mastercard" className="h-8 w-auto object-contain brightness-0 invert" />
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/1200px-Visa_Inc._logo.svg.png" alt="Visa" className="h-7 w-auto object-contain brightness-0 invert" />
-            <img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Rupay-Logo.png" alt="RuPay" className="h-8 w-auto object-contain brightness-0 invert" />
-            <img src="https://cdn.iconscout.com/icon/free/png-256/free-upi-logo-icon-svg-download-png-1747946.png" alt="UPI" className="h-8 w-auto object-contain brightness-0 invert" />
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/512px-Google_Pay_Logo.svg.png" alt="Google Pay" className="h-7 w-auto object-contain brightness-0 invert" />
+            <img src="https://i.postimg.cc/NjsxmWcV/mastecard.png" alt="Mastercard" className="h-8 w-auto object-contain brightness-0 invert" />
+            <img src="https://i.postimg.cc/Wp0mK2pr/VISA.png" alt="Visa" className="h-7 w-auto object-contain brightness-0 invert" />
+            <img src="https://i.postimg.cc/ht21rpD1/RUPAY_2.png" alt="RuPay" className="h-8 w-auto object-contain brightness-0 invert" />
+            <img src="https://i.postimg.cc/Wp0mK2pZ/UPI.jpg" alt="UPI" className="h-8 w-auto object-contain brightness-0 invert" />
           </div>
         </div>
 
