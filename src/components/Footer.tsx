@@ -133,65 +133,13 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         </div>
         
         {/* Payment Trust Strip */}
-        <div className="py-8 border-t border-white/5">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-2 shrink-0">
-              <ShieldCheck size={15} className="text-green-400" />
-              <span className="text-white/40 text-[11px] uppercase tracking-widest font-bold">Secure Payments</span>
-            </div>
-            <div className="flex flex-wrap items-center justify-center gap-2">
-
-              {/* Mastercard */}
-              <div className="px-2.5 py-1.5 bg-white/5 border border-white/10 rounded-lg flex items-center gap-1.5">
-                <div className="relative w-7 h-5 flex items-center">
-                  <div className="w-[18px] h-[18px] rounded-full bg-[#EB001B] absolute left-0" />
-                  <div className="w-[18px] h-[18px] rounded-full bg-[#F79E1B] absolute left-[10px] opacity-90" />
-                </div>
-                <span className="text-white/60 text-[10px] font-bold tracking-wide">Mastercard</span>
-              </div>
-
-              {/* Visa */}
-              <div className="px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg">
-                <span className="text-white font-black italic text-[15px] tracking-widest leading-none">VISA</span>
-              </div>
-
-              {/* RuPay */}
-              <div className="px-3 py-2 bg-white/5 border border-white/10 rounded-lg flex items-center">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Rupay-Logo.png" alt="RuPay" className="h-9 w-auto object-contain brightness-0 invert" />
-              </div>
-
-              {/* UPI */}
-              <div className="px-3 py-2 bg-white/5 border border-white/10 rounded-lg flex items-center">
-                <img src="https://cdn.iconscout.com/icon/free/png-256/free-upi-logo-icon-svg-download-png-1747946.png" alt="UPI" className="h-9 w-auto object-contain" />
-              </div>
-
-              {/* PhonePe */}
-              <div className="px-2.5 py-1.5 bg-white/5 border border-white/10 rounded-lg flex items-center gap-1.5">
-                <div className="w-[18px] h-[18px] rounded-full bg-[#5F259F] flex items-center justify-center shrink-0">
-                  <svg width="9" height="9" viewBox="0 0 9 9" fill="none">
-                    <path d="M2 1.5h3a2 2 0 0 1 0 4H3.5V8" stroke="white" strokeWidth="1.2" strokeLinecap="round"/>
-                  </svg>
-                </div>
-                <span className="text-white/60 text-[10px] font-bold">PhonePe</span>
-              </div>
-
-              {/* Google Pay */}
-              <div className="px-2.5 py-1.5 bg-white/5 border border-white/10 rounded-lg flex items-center gap-1.5">
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <path d="M13 7.15c0-.47-.04-.82-.13-1.17H7v2.1h3.43c-.07.56-.43 1.4-1.24 1.97l-.01.08 1.8 1.4.12.01C12.22 10.39 13 8.9 13 7.15z" fill="#4285F4"/>
-                  <path d="M7 13c1.68 0 3.09-.55 4.12-1.5l-1.96-1.52c-.53.37-1.23.62-2.16.62-1.65 0-3.05-1.09-3.55-2.59l-.07.01-1.87 1.45-.02.06A7 7 0 0 0 7 13z" fill="#34A853"/>
-                  <path d="M3.45 8.01A4.24 4.24 0 0 1 3.22 7c0-.35.06-.7.22-1.01l-.01-.08L1.55 4.44l-.06.03A7 7 0 0 0 0 7c0 1.13.27 2.2.75 3.14l2.7-2.13z" fill="#FBBC05"/>
-                  <path d="M7 2.78c1.17 0 1.96.5 2.41.93l1.76-1.72A6.78 6.78 0 0 0 7 0 7 7 0 0 0 1.49 3.86l2.7 2.13C4.94 4.59 5.83 2.78 7 2.78z" fill="#EA4335"/>
-                </svg>
-                <span className="text-white/60 text-[10px] font-bold">GPay</span>
-              </div>
-
-              {/* Razorpay */}
-              <div className="px-3 py-2 bg-white/5 border border-white/10 rounded-lg flex items-center">
-                <img src="https://cdn.iconscout.com/icon/free/png-256/free-razorpay-logo-icon-svg-download-png-1399875.png?f=webp" alt="Razorpay" className="h-9 w-auto object-contain brightness-0 invert" />
-              </div>
-
-            </div>
+        <div className="py-10 border-t border-white/5">
+          <div className="flex flex-wrap items-center justify-center gap-8 opacity-70">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/MasterCard_Logo.svg/1200px-MasterCard_Logo.svg.png" alt="Mastercard" className="h-8 w-auto object-contain brightness-0 invert" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/1200px-Visa_Inc._logo.svg.png" alt="Visa" className="h-7 w-auto object-contain brightness-0 invert" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/cb/Rupay-Logo.png" alt="RuPay" className="h-8 w-auto object-contain brightness-0 invert" />
+            <img src="https://cdn.iconscout.com/icon/free/png-256/free-upi-logo-icon-svg-download-png-1747946.png" alt="UPI" className="h-8 w-auto object-contain brightness-0 invert" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Google_Pay_Logo.svg/512px-Google_Pay_Logo.svg.png" alt="Google Pay" className="h-7 w-auto object-contain brightness-0 invert" />
           </div>
         </div>
 
