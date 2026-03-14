@@ -108,7 +108,7 @@ const FAQ_DATA: FAQCategory[] = [
       },
       {
         q: 'What is the minimum order for bulk pricing?',
-        a: 'Bulk pricing applies from 10 hampers onwards. For 50+ orders we offer preferential rates and custom branding. WhatsApp us with your requirement and we will send a quote.',
+        a: 'For hampers, bulk pricing starts from a minimum of 50 hampers. For wholesale loose products, the minimum is 15 kg. WhatsApp us with your requirement and we will send a quote.',
       },
       {
         q: 'Can you add a personalized message or company branding?',

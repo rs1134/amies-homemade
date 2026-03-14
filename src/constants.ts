@@ -166,6 +166,18 @@ export const PRODUCTS: Product[] = [
     prices: { '250 G': 350, '500 G': 700, '1 KG': 1400 }
   },
   {
+    id: 'm12',
+    name: 'Ginger Chat',
+    category: Category.MUKHWAS,
+    price: 300,
+    weight: '250 G',
+    description: 'A bold and tangy mukhwas with the zesty punch of ginger and chaat masala. A unique twist on a classic digestive.',
+    image: 'https://i.postimg.cc/zXWZbHkP/Whats-App-Image-2026-03-14-at-21-37-48.jpg',
+    ingredients: ['Ginger', 'Chaat Masala', 'Black Salt'],
+    weights: ['250 G', '500 G', '1 KG'],
+    prices: { '250 G': 300, '500 G': 600, '1 KG': 1200 }
+  },
+  {
     id: 'sf3',
     name: 'Kharek Coconut Almond (Sugarfree)',
     category: Category.MUKHWAS,
