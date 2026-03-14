@@ -32,7 +32,7 @@ const FAQ_DATA: FAQCategory[] = [
       },
       {
         q: 'What is the shelf life of your products?',
-        a: 'Mukhwas stays fresh for 3 to 4 months in an airtight container. Snacks stay fresh for up to 60 days. Sweets are best consumed within 30 days. Store all products in a cool, dry place away from direct sunlight.',
+        a: 'Mukhwas stays fresh for 3 to 4 months. Snacks stay fresh for up to 60 days. Sweets are best consumed within 30 days. Store all products in a cool, dry place away from direct sunlight.',
       },
       {
         q: 'Do you offer sugar-free options for diabetics?',
