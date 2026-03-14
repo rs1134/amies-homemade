@@ -56,7 +56,7 @@ const FAQ_DATA: FAQCategory[] = [
       },
       {
         q: 'What payment methods do you accept?',
-        a: 'We accept all UPI apps (Google Pay, PhonePe, Paytm) for online orders. Cash on delivery is available for Ahmedabad orders only. We do not offer COD outside Ahmedabad.',
+        a: 'We accept all UPI apps (Google Pay, PhonePe, Paytm), net banking, and debit/credit cards.',
       },
       {
         q: 'Can I customize the contents of a gift hamper?',
