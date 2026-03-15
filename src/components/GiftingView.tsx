@@ -408,14 +408,14 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
             <div className="lg:w-1/2 flex flex-col overflow-hidden">
               <div className="relative overflow-hidden flex-1 border-b border-white/10" style={{minHeight: '240px'}}>
                 <img
-                  src="https://i.postimg.cc/Lq05Q11K/Whats-App-Image-2026-03-10-at-23-09-28.jpg"
+                  src="https://i.postimg.cc/9Mc9MPXM/Whats_App_Image_2026_03_10_at_23_09_28.jpg"
                   className="w-full h-full object-cover object-center"
                   alt="Mukhwas Bar at Mehndi"
                 />
               </div>
               <div className="relative overflow-hidden flex-1" style={{minHeight: '240px'}}>
                 <img
-                  src="https://i.postimg.cc/XZDq1CC0/Whats-App-Image-2026-03-10-at-23-09-28-(1).jpg"
+                  src="https://i.postimg.cc/26CW6dj3/Whats_App_Image_2026_03_10_at_23_09_28_(1).jpg"
                   className="w-full h-full object-cover object-center"
                   alt="Mukhwas Bar setup at wedding"
                 />
