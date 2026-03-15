@@ -292,60 +292,6 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
             />
           ))}
 
-          {/* LIVE MUKHWAS BAR SECTION */}
-          <div className="relative overflow-hidden bg-[#2A1E14] rounded-[4rem] flex flex-col lg:flex-row shadow-2xl">
-            {/* Photos */}
-            <div className="lg:w-1/2 grid grid-cols-2 h-72 sm:h-[480px] lg:h-auto overflow-hidden">
-              <div className="relative overflow-hidden group/img col-span-1 border-r border-white/10">
-                <img
-                  src="https://i.postimg.cc/Lq05Q11K/Whats-App-Image-2026-03-10-at-23-09-28.jpg"
-                  className="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-105"
-                  alt="Mukhwas Bar at Mehndi"
-                />
-              </div>
-              <div className="relative overflow-hidden group/img col-span-1">
-                <img
-                  src="https://i.postimg.cc/XZDq1CC0/Whats-App-Image-2026-03-10-at-23-09-28-(1).jpg"
-                  className="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-105"
-                  alt="Mukhwas Bar setup at wedding"
-                />
-              </div>
-            </div>
-
-            {/* Content */}
-            <div className="lg:w-1/2 p-8 sm:p-12 lg:p-20 flex flex-col justify-center">
-              <div className="inline-flex items-center gap-3 px-5 py-2 bg-white/10 rounded-full mb-8 border border-white/20 w-fit">
-                <Sparkles size={14} className="text-[#D4AF37]" />
-                <span className="text-[10px] font-black brand-rounded text-white/80 uppercase tracking-widest">Live Experience</span>
-              </div>
-
-              <h2 className="text-3xl sm:text-5xl lg:text-6xl font-bold serif text-white mb-4 sm:mb-6 leading-tight">
-                Book a <span className="text-[#D4AF37] brand-script">Mukhwas Bar</span><br/>for Your Event
-              </h2>
-
-              <p className="text-sm sm:text-base text-white/60 leading-relaxed mb-8 sm:mb-12 brand-rounded font-medium max-w-lg">
-                We set up a beautiful live Mukhwas Bar at your wedding, mehndi, reception, or corporate event — a curated spread of our finest mukhwas for your guests to pick and enjoy. A unique touch that leaves a lasting impression.
-              </p>
-
-              <div className="flex flex-wrap gap-3 mb-10">
-                {['Weddings', 'Mehndi Functions', 'Receptions', 'Corporate Events', 'Festivals'].map(tag => (
-                  <span key={tag} className="px-4 py-2 bg-white/10 text-white/70 text-[10px] font-bold brand-rounded rounded-full border border-white/10">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
-              <a
-                href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full sm:w-auto px-10 py-5 bg-[#25D366] text-white rounded-full font-black brand-rounded uppercase tracking-[0.3em] text-[11px] flex items-center justify-center gap-4 hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-[#25D366]/30 sm:self-start"
-              >
-                <MessageCircle size={18} /> Enquire on WhatsApp
-              </a>
-            </div>
-          </div>
-
           {/* HIGH-APPEAL CUSTOM HAMPER CALLOUT CARD */}
           <div className="relative overflow-hidden bg-white rounded-[4rem] flex flex-col lg:flex-row border-2 border-[#D4AF37]/20 shadow-2xl group transition-all duration-700 hover:shadow-[#D4AF37]/25">
             {/* Rich Image Collage Section */}
@@ -453,6 +399,60 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
                    </div>
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* LIVE MUKHWAS BAR SECTION */}
+          <div className="relative overflow-hidden bg-[#2A1E14] rounded-[4rem] flex flex-col lg:flex-row shadow-2xl">
+            {/* Photos */}
+            <div className="lg:w-1/2 flex flex-col overflow-hidden">
+              <div className="relative overflow-hidden flex-1 border-b border-white/10" style={{minHeight: '240px'}}>
+                <img
+                  src="https://i.postimg.cc/Lq05Q11K/Whats-App-Image-2026-03-10-at-23-09-28.jpg"
+                  className="w-full h-full object-cover object-center"
+                  alt="Mukhwas Bar at Mehndi"
+                />
+              </div>
+              <div className="relative overflow-hidden flex-1" style={{minHeight: '240px'}}>
+                <img
+                  src="https://i.postimg.cc/XZDq1CC0/Whats-App-Image-2026-03-10-at-23-09-28-(1).jpg"
+                  className="w-full h-full object-cover object-center"
+                  alt="Mukhwas Bar setup at wedding"
+                />
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="lg:w-1/2 p-8 sm:p-12 lg:p-20 flex flex-col justify-center">
+              <div className="inline-flex items-center gap-3 px-5 py-2 bg-white/10 rounded-full mb-8 border border-white/20 w-fit">
+                <Sparkles size={14} className="text-[#D4AF37]" />
+                <span className="text-[10px] font-black brand-rounded text-white/80 uppercase tracking-widest">Live Experience</span>
+              </div>
+
+              <h2 className="text-3xl sm:text-5xl lg:text-6xl font-bold serif text-white mb-4 sm:mb-6 leading-tight">
+                Book a <span className="text-[#D4AF37] brand-script">Mukhwas Bar</span><br/>for Your Event
+              </h2>
+
+              <p className="text-sm sm:text-base text-white/60 leading-relaxed mb-8 sm:mb-12 brand-rounded font-medium max-w-lg">
+                We set up a beautiful live Mukhwas Bar at your wedding, mehndi, reception, or corporate event — a curated spread of our finest mukhwas for your guests to pick and enjoy. A unique touch that leaves a lasting impression.
+              </p>
+
+              <div className="flex flex-wrap gap-3 mb-10">
+                {['Weddings', 'Mehndi Functions', 'Receptions', 'Corporate Events', 'Festivals'].map(tag => (
+                  <span key={tag} className="px-4 py-2 bg-white/10 text-white/70 text-[10px] font-bold brand-rounded rounded-full border border-white/10">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              <a
+                href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto px-10 py-5 bg-[#25D366] text-white rounded-full font-black brand-rounded uppercase tracking-[0.3em] text-[11px] flex items-center justify-center gap-4 hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-[#25D366]/30 sm:self-start"
+              >
+                <MessageCircle size={18} /> Enquire on WhatsApp
+              </a>
             </div>
           </div>
         </div>
