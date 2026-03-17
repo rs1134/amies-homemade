@@ -368,7 +368,7 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
                     rel="noopener noreferrer"
                     className="w-full sm:w-auto px-12 py-6 bg-[#25D366] text-white rounded-full font-black brand-rounded uppercase tracking-[0.3em] text-[11px] flex items-center justify-center gap-4 hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-[#25D366]/30"
                   >
-                    <MessageCircle size={20} /> WhatsApp Ami Shah
+                    <MessageCircle size={20} /> WhatsApp Us
                   </a>
                   <a 
                     href="mailto:hello@amieshomemade.com?subject=Custom Hamper Inquiry"

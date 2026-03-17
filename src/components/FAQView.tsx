@@ -217,7 +217,7 @@ const FAQView: React.FC<FAQViewProps> = ({ onNavigate }) => {
           </div>
           <h3 className="text-2xl sm:text-3xl font-bold serif text-[#4A3728] mb-3">Still have a question?</h3>
           <p className="text-[#4A3728]/60 mb-8 max-w-md mx-auto leading-relaxed">
-            We typically respond on WhatsApp within minutes. Ami Shah answers every message personally.
+            We typically respond on WhatsApp within minutes and answer every message personally.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
