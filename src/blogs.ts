@@ -270,7 +270,7 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: 'what-is-mukhwas-complete-guide',
     title: 'What is Mukhwas? A Complete Guide to India\'s Favourite After-Meal Tradition',
     excerpt: 'If you\'ve ever reached into a silver bowl at the end of a Gujarati meal and taken a pinch of fennel and coriander — you\'ve had mukhwas. But what is it, where does it come from, and why has it lasted thousands of years?',
-    coverImage: 'https://images.unsplash.com/photo-1585399000684-d2f72660f092?q=80&w=1600&auto=format&fit=crop',
+    coverImage: 'https://i.postimg.cc/YC2hk5Wy/Whats_App_Image_2026_03_14_at_21_45_14.jpg',
     publishedAt: '2026-03-18',
     readTime: 5,
     category: 'Culture & Tradition',
