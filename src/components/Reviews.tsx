@@ -108,7 +108,7 @@ export default function Reviews() {
               <span className="text-sm font-bold text-[#4A3728]">{data.rating.toFixed(1)}</span>
               <StarRating rating={Math.round(data.rating)} size="sm" />
               <span className="text-sm text-[#4A3728]/60">
-                {data.userRatingCount} reviews on Google
+                on Google
               </span>
             </a>
           )}
