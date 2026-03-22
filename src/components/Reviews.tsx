@@ -189,7 +189,7 @@ export default function Reviews() {
               className="inline-flex items-center gap-2 text-sm font-semibold text-[#F14E4E] hover:underline"
             >
               <GoogleLogo />
-              View all {data.userRatingCount} reviews on Google
+              View all reviews on Google
               <span>→</span>
             </a>
           </div>
