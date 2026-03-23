@@ -446,7 +446,7 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
               </div>
 
               <a
-                href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}`}
+                href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=${encodeURIComponent("Hey Amie's Homemade! I'd love to book a Live Mukhwas Bar for my event. Could you please share more details on availability, setup, and pricing?")}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-full sm:w-auto px-10 py-5 bg-[#25D366] text-white rounded-full font-black brand-rounded uppercase tracking-[0.3em] text-[11px] flex items-center justify-center gap-4 hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-[#25D366]/30 sm:self-start"
