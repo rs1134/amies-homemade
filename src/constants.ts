@@ -364,7 +364,7 @@ export const PRODUCTS: Product[] = [
     price: 215,
     weight: '250 G',
     description: 'Crispy premium purple yam chips, a traditional favorite.',
-    image: 'https://i.postimg.cc/X7jjBqxP/રતળ_ચપસ_ratalu_chips_recipe_in_gujarati_રસપ_મખય_ફટ.jpg',
+    image: 'https://i.postimg.cc/tCkwYrnf/istockphoto-1360236832-612x612.jpg',
     ingredients: ['Purple Yam', 'Oil', 'Salt and Pepper'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 215, '500 G': 425, '1 KG': 850 }
