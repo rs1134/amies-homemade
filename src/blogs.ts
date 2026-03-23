@@ -429,7 +429,7 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: 'traditional-indian-ladoo-varieties-guide',
     title: 'A Guide to Traditional Indian Ladoo: Every Variety You Should Know',
     excerpt: 'Ladoo is perhaps India\'s most beloved mithai — offered at temples, shared at weddings, gifted at festivals. But not all ladoos are created equal. Here\'s a guide to the real varieties and what makes each one special.',
-    coverImage: 'https://images.unsplash.com/photo-1559496417-e7f25cb247f3?q=80&w=1600&auto=format&fit=crop',
+    coverImage: 'https://i.postimg.cc/yd3Pvt2V/Ladoo-on-a-plate-small.jpg',
     publishedAt: '2026-03-22',
     readTime: 5,
     category: 'Homemade Sweets',
