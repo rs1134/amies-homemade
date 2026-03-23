@@ -1,57 +1,263 @@
-import React from 'react';
-import { Sparkles, MessageCircle, Mail, Star, Heart, Building2, Sparkle } from 'lucide-react';
-import { WHATSAPP_NUMBER } from '../constants.ts';
-import { Product } from '../types.ts';
+import React, { useMemo, useState } from 'react';
+import { Gift, Sparkles, Heart, ChevronRight, MessageSquareText, PackageCheck, SendHorizontal, Image as ImageIcon, Home, ShieldCheck, Package, MessageCircle, Clock, Star, Users, Trophy, Mail, Sparkle } from 'lucide-react';
+import { PRODUCTS, WHATSAPP_NUMBER } from '../constants.ts';
+import { Category, Product } from '../types.ts';
+import PersonalizationModal from './PersonalizationModal.tsx';
+import WellnessPersonalizationModal from './WellnessPersonalizationModal.tsx';
+import SweetMemoriesModal from './SweetMemoriesModal.tsx';
+
+interface HamperCardProps {
+  item: Product;
+  onAddToCart: (product: Product) => void;
+  onSelectProduct: (product: Product) => void;
+}
 
 interface GiftingViewProps {
   onAddToCart: (product: Product) => void;
   onSelectProduct: (product: Product) => void;
 }
 
-const INQUIRY_OPTIONS = [
-  {
-    icon: <Star size={24} />,
-    title: 'Personalized Gifting',
-    desc: 'Curated hampers built around the recipient — their taste, dietary needs, and the occasion. No two boxes the same.',
-    color: '#F04E4E',
-    bg: '#FFF1F1',
-    msg: "Hi! I'm interested in a Personalized Gift Hamper.",
-  },
-  {
-    icon: <Building2 size={24} />,
-    title: 'Corporate Gifting',
-    desc: 'Bulk orders for Diwali, Navratri, and corporate milestones. Consistent quality, elegant presentation, custom branding available for 50+ units.',
-    color: '#4A3728',
-    bg: '#FFF8EE',
-    msg: "Hi! I'd like to enquire about Corporate Gift Hampers.",
-  },
-  {
-    icon: <Sparkles size={24} />,
-    title: 'Festive Hampers',
-    desc: 'Season-specific collections for Diwali, Navratri, Holi, Eid, and every celebration in between. Order early for festival seasons.',
-    color: '#D4AF37',
-    bg: '#FFFBEE',
-    msg: "Hi! I'm interested in Festive Gift Hampers.",
-  },
-  {
-    icon: <Heart size={24} />,
-    title: 'Wedding & Events',
-    desc: 'Wedding favors, return gifts, and our beloved live Mukhwas Bar — because every celebration deserves something truly special.',
-    color: '#7C3AED',
-    bg: '#F5F3FF',
-    msg: "Hi! I'd like to enquire about Wedding & Event Gifting.",
-  },
-];
+const HamperCard: React.FC<HamperCardProps> = ({ item, onAddToCart, onSelectProduct }) => {
+  const images = item.images && item.images.length > 0 ? item.images : [item.image];
+  const [activeImgIdx, setActiveImgIdx] = useState(0);
+  const [isPersonalizing, setIsPersonalizing] = useState(false);
+  const [currentTreats, setCurrentTreats] = useState<string[]>(item.ingredients);
+  const [currentPrice, setCurrentPrice] = useState<number>(item.price);
 
-const GiftingView: React.FC<GiftingViewProps> = () => {
+  const isHeritageBox = item.id === 'g1';
+  const isWellnessBox = item.id === 'g2';
+  const isSweetMemories = item.id === 'g3';
+
+  // Benefit Row Configs
+  const benefits = useMemo(() => {
+    if (isHeritageBox) return [
+      { icon: <Star size={16} />, text: "Ami's Signature Recipes" },
+      { icon: <ShieldCheck size={16} />, text: "No Artificial Preservatives" },
+      { icon: <Package size={16} />, text: "Luxury Wooden Packaging" },
+    ];
+    if (isWellnessBox) return [
+      { icon: <Heart size={16} />, text: "Health-Focused Ingredients" },
+      { icon: <ShieldCheck size={16} />, text: "Sugar-Free Options Available" },
+      { icon: <Clock size={16} />, text: "Prepared Fresh to Order" },
+    ];
+    return [
+      { icon: <Home size={16} />, text: "Handcrafted Fresh Daily" },
+      { icon: <ShieldCheck size={16} />, text: "Zero Artificial Colors" },
+      { icon: <Package size={16} />, text: "Gift-Ready Presentation" },
+    ];
+  }, [isHeritageBox, isWellnessBox]);
+
+  // Occasion Tags
+  const occasions = useMemo(() => {
+    if (isHeritageBox) return ['Weddings', 'Grand Festivals', 'Housewarming', 'Anniversaries'];
+    if (isWellnessBox) return ['Self-Care', 'Birthdays', 'Get Well Soon', 'New Year'];
+    return ['Tea Time', 'Small Gatherings', 'Corporate Gifts', 'Thank You'];
+  }, [isHeritageBox, isWellnessBox]);
+
+  const handlePersonalizeHeritage = (newTreats: string[]) => {
+    setCurrentTreats(newTreats);
+    setIsPersonalizing(false);
+    // Directly add the personalized hamper to the cart
+    onAddToCart({ ...item, ingredients: newTreats, price: currentPrice });
+  };
+
+  const handlePersonalizeWellness = (newTreats: string[], price: number) => {
+    setCurrentTreats(newTreats);
+    setCurrentPrice(price);
+    setIsPersonalizing(false);
+    // Directly add the personalized hamper to the cart with updated price
+    onAddToCart({ ...item, ingredients: newTreats, price: price });
+  };
+
+  const handlePersonalizeSweetMemories = (newTreats: string[]) => {
+    setCurrentTreats(newTreats);
+    setIsPersonalizing(false);
+    // Directly add the personalized hamper to the cart
+    onAddToCart({ ...item, ingredients: newTreats, price: currentPrice });
+  };
+
+  return (
+    <div id={`hamper-${item.id}`} className="bg-white rounded-[2rem] sm:rounded-[4rem] overflow-hidden shadow-2xl flex flex-col lg:flex-row group border border-coral/5 hover:border-coral/20 transition-all duration-500">
+      {/* Gallery Section */}
+      <div className="lg:w-2/5 flex flex-col bg-[#FDFBF7] relative">
+        <div className="relative w-full h-52 sm:h-96 lg:h-full overflow-hidden bg-white">
+          <img
+            src={images[activeImgIdx]}
+            alt={item.name}
+            loading="lazy"
+            className="w-full h-full block object-cover object-center transition-transform duration-1000 group-hover:scale-110"
+          />
+          <div className="absolute top-6 left-6 z-10">
+            <span className="bg-white/90 backdrop-blur-md px-4 py-2 rounded-full text-[10px] font-black text-[#D4AF37] uppercase tracking-widest shadow-lg border border-[#D4AF37]/10">
+              {item.category === Category.GIFTING ? 'Premium Hamper' : item.category}
+            </span>
+          </div>
+          
+          {/* Internal Thumbnails */}
+          {images.length > 1 && (
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 z-10 p-2 bg-white/20 backdrop-blur-md rounded-2xl border border-white/30">
+              {images.map((img, idx) => (
+                <button 
+                  key={idx}
+                  onClick={() => setActiveImgIdx(idx)}
+                  className={`w-12 h-12 rounded-xl overflow-hidden border-2 transition-all duration-300 ${activeImgIdx === idx ? 'border-[#D4AF37] scale-110 shadow-lg' : 'border-transparent opacity-60 hover:opacity-100'}`}
+                >
+                  <img src={img} className="w-full h-full object-cover" alt={`${item.name} view ${idx + 1}`} />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Description Section */}
+      <div className="lg:w-3/5 p-5 sm:p-8 md:p-14 flex flex-col bg-white">
+        <div className="flex-1">
+          <div className="flex justify-between items-start mb-3 sm:mb-6">
+            <h3 className="text-2xl sm:text-4xl lg:text-5xl font-bold serif text-[#4A3728] group-hover:text-coral transition-colors leading-tight">
+              {item.name}
+            </h3>
+            {currentTreats !== item.ingredients && (
+              <span className="bg-green-50 text-green-600 px-4 py-1.5 rounded-full text-[9px] font-black brand-rounded uppercase tracking-widest border border-green-100 shadow-sm whitespace-nowrap">
+                Personalized
+              </span>
+            )}
+          </div>
+          <p className="text-sm sm:text-base text-[#4A3728]/70 leading-relaxed mb-4 sm:mb-10 max-w-xl">
+            {item.description}
+          </p>
+          
+          <div className="space-y-6 sm:space-y-12">
+            {/* The Collection Includes - Ingredient Pills */}
+            <div className="space-y-4">
+              <p className="text-[10px] brand-rounded text-coral font-black uppercase tracking-[0.2em]">The Collection Includes:</p>
+              <div className="flex flex-wrap gap-2.5">
+                {currentTreats.map((ing, idx) => (
+                  <span key={idx} className="bg-coral/5 text-coral text-[9px] font-bold brand-rounded px-4 py-2 rounded-2xl uppercase tracking-wider border border-coral/10 animate-in fade-in slide-in-from-left duration-500 shadow-sm">
+                    {ing}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Why You'll Love It - Icon Grid */}
+            <div className="space-y-4">
+              <p className="text-[10px] brand-rounded text-coral font-black uppercase tracking-[0.2em]">Why You'll Love It</p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8">
+                {benefits.map((b, i) => (
+                  <div key={i} className="flex items-center gap-3 text-xs text-[#4A3728]/70 font-medium">
+                    <div className="w-8 h-8 rounded-full bg-cream flex items-center justify-center text-[#D4AF37] shadow-sm">{b.icon}</div>
+                    {b.text}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Perfect For - Occasion Tags */}
+            <div className="space-y-4">
+              <p className="text-[10px] brand-rounded text-coral font-black uppercase tracking-[0.2em]">Perfect For</p>
+              <div className="flex flex-wrap gap-2">
+                {occasions.map(occ => (
+                  <span key={occ} className="px-4 py-2 bg-[#D4AF37]/5 text-[#D4AF37] text-[10px] font-bold brand-rounded rounded-full border border-[#D4AF37]/10">
+                    {occ}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Action Bar */}
+        <div className="flex flex-col gap-4 sm:gap-8 mt-6 sm:mt-16 pt-6 sm:pt-10 border-t border-coral/5">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-8">
+            <div className="flex flex-col">
+              <div className="flex items-baseline gap-2">
+                <span className="text-2xl sm:text-4xl font-black text-[#D4AF37]">₹{currentPrice}</span>
+                <span className="text-sm font-bold text-[#D4AF37]/60">INR</span>
+              </div>
+              <span className="text-[10px] brand-rounded text-[#4A3728]/30 font-bold uppercase tracking-widest mt-1">Free Delivery Included</span>
+            </div>
+            
+            <div className="flex gap-4 w-full sm:w-auto">
+              <button
+                onClick={() => {
+                  setIsPersonalizing(true);
+                  window.history.pushState(null, '', `/gifting#hamper-${item.id}`);
+                }}
+                className="flex-1 sm:flex-none px-10 py-5 border-2 border-[#D4AF37] text-[#D4AF37] rounded-3xl text-[11px] font-black uppercase tracking-[0.2em] hover:bg-[#D4AF37] hover:text-white transition-all flex items-center justify-center gap-3 brand-rounded shadow-lg shadow-[#D4AF37]/5 active:scale-95"
+              >
+                <MessageSquareText size={16} /> Personalize Box
+              </button>
+              <button 
+                onClick={() => onAddToCart({ ...item, ingredients: currentTreats, price: currentPrice })}
+                className="p-5 bg-coral text-white rounded-3xl shadow-2xl hover:scale-110 active:scale-95 transition-all shadow-coral/30 flex items-center justify-center"
+                title="Add to Cart"
+              >
+                <Gift size={26} />
+              </button>
+            </div>
+          </div>
+
+          {/* Corporate / Bulk Callout */}
+          <div className="bg-[#FDFBF7] p-6 rounded-[2.5rem] border border-[#D4AF37]/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+             <div className="flex items-center gap-4">
+                <div className="w-10 h-10 bg-[#D4AF37]/10 rounded-2xl flex items-center justify-center text-[#D4AF37]">
+                  <PackageCheck size={20} />
+                </div>
+                <p className="text-xs font-bold text-[#4A3728]/70 brand-rounded">
+                  <span className="text-[#4A3728] font-black">🏢 Need bulk corporate orders?</span><br/>
+                  Contact us on WhatsApp for custom pricing.
+                </p>
+             </div>
+             <a 
+               href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}`}
+               target="_blank"
+               rel="noopener noreferrer"
+               className="px-6 py-3 bg-[#25D366] text-white rounded-xl text-[10px] font-black brand-rounded uppercase tracking-widest flex items-center gap-2 hover:scale-105 transition-all shadow-lg"
+             >
+               <MessageCircle size={14} /> WhatsApp Inquiry
+             </a>
+          </div>
+        </div>
+      </div>
+
+      {/* Specific Modals per Item */}
+      {isPersonalizing && isHeritageBox && (
+        <PersonalizationModal
+          onClose={() => { setIsPersonalizing(false); window.history.replaceState(null, '', '/gifting'); }}
+          onConfirm={handlePersonalizeHeritage}
+        />
+      )}
+
+      {isPersonalizing && isWellnessBox && (
+        <WellnessPersonalizationModal
+          onClose={() => { setIsPersonalizing(false); window.history.replaceState(null, '', '/gifting'); }}
+          onConfirm={handlePersonalizeWellness}
+        />
+      )}
+
+      {isPersonalizing && isSweetMemories && (
+        <SweetMemoriesModal
+          onClose={() => { setIsPersonalizing(false); window.history.replaceState(null, '', '/gifting'); }}
+          onConfirm={handlePersonalizeSweetMemories}
+          maxVarieties={3}
+        />
+      )}
+    </div>
+  );
+};
+
+const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct }) => {
+  const giftItems = useMemo(() => PRODUCTS.filter(p => p.category === Category.GIFTING), []);
+
+
   return (
     <div className="pt-24 sm:pt-20 bg-[#FFF8EE] min-h-screen">
-
-      {/* Hero */}
+      {/* Luxury Hero Section */}
       <section className="relative h-[35vh] sm:h-[55vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-[#2A1E14]/45 z-10" />
-        <img
-          src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=2000&auto=format&fit=crop"
+        <div className="absolute inset-0 bg-[#2A1E14]/45 z-10"></div>
+        <img 
+          src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=2000&auto=format&fit=crop" 
           className="absolute inset-0 w-full h-full object-cover animate-slow-zoom"
           alt="Gifting Hampers"
         />
@@ -65,195 +271,192 @@ const GiftingView: React.FC<GiftingViewProps> = () => {
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-
-        {/* Intro */}
-        <div className="text-center mb-16 sm:mb-20">
-          <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em] block mb-4">Handcrafted with Intention</span>
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-bold serif text-[#4A3728] mb-6">The Gift Gallery</h2>
-          <div className="w-24 h-2 bg-[#D4AF37] mx-auto rounded-full mb-8" />
-          <p className="text-[#4A3728]/60 max-w-2xl mx-auto text-base leading-relaxed">
-            Every hamper is made fresh to order — no warehouse stock, no generic boxes. Tell us who it's for and we'll build something they'll remember.
+      {/* Main Gifting Gallery */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-32">
+        <div className="text-center mb-10 sm:mb-32">
+          <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em] block mb-4 sm:mb-6">Handpicked Collections</span>
+          <h2 className="text-3xl sm:text-5xl lg:text-7xl font-bold serif text-[#4A3728]">The Gift Gallery</h2>
+          <div className="w-24 h-2 bg-[#D4AF37] mx-auto rounded-full mt-8 shadow-sm"></div>
+          <p className="mt-10 text-[#4A3728]/50 max-w-2xl mx-auto brand-rounded font-bold uppercase text-[10px] tracking-[0.2em] leading-relaxed">
+            Beautifully crafted hampers for every occasion. <br/>Customized for your unique taste.
           </p>
         </div>
 
-        {/* Photo Gallery */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 auto-rows-[220px] gap-3 sm:gap-4 mb-20 sm:mb-28">
-
-          {/* Large: Heritage */}
-          <div className="col-span-2 row-span-2 relative rounded-[2rem] overflow-hidden group">
-            <img
-              src="https://i.postimg.cc/1zLyVYrk/Whats-App-Image-2026-02-12-at-18-57-42.jpg"
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              alt="Heritage Hamper"
-              loading="lazy"
+        <div className="space-y-10 sm:space-y-32">
+          {giftItems.map(item => (
+            <HamperCard 
+              key={item.id} 
+              item={item} 
+              onAddToCart={onAddToCart} 
+              onSelectProduct={onSelectProduct} 
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-6 sm:p-8">
-              <span className="text-white text-sm font-black brand-rounded uppercase tracking-widest">Heritage Collection</span>
+          ))}
+
+          {/* HIGH-APPEAL CUSTOM HAMPER CALLOUT CARD */}
+          <div className="relative overflow-hidden bg-white rounded-[4rem] flex flex-col lg:flex-row border-2 border-[#D4AF37]/20 shadow-2xl group transition-all duration-700 hover:shadow-[#D4AF37]/25">
+            {/* Rich Image Collage Section */}
+            <div className="lg:w-1/2 grid grid-cols-2 grid-rows-2 h-[500px] lg:h-auto overflow-hidden">
+               {/* WEDDINGS */}
+               <div className="relative overflow-hidden group/img border-r border-b border-[#D4AF37]/10">
+                  <img 
+                    src="https://i.postimg.cc/3xwTWHm9/amish-thakkar-7O422y-G-b80-unsplash.jpg" 
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-110" 
+                    alt="Weddings at Amie's" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-6">
+                    <span className="text-white text-[11px] font-black brand-rounded uppercase tracking-[0.3em]">Weddings</span>
+                  </div>
+               </div>
+               {/* FESTIVALS */}
+               <div className="relative overflow-hidden group/img border-b border-[#D4AF37]/10">
+                  <img 
+                    src="https://i.postimg.cc/cHcWr19P/bh6cmv93h5rmt0cwehc94w18rr.png" 
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-110" 
+                    alt="Festivals at Amie's" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-6">
+                    <span className="text-white text-[11px] font-black brand-rounded uppercase tracking-[0.3em]">Festivals</span>
+                  </div>
+               </div>
+               {/* CORPORATE GIFTS */}
+               <div className="relative overflow-hidden group/img border-r border-[#D4AF37]/10">
+                  <img 
+                    src="https://i.postimg.cc/bYFML2t9/3mx66mz99srmr0cwehfssqfz10.png" 
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-110" 
+                    alt="Corporate Gifting" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-6">
+                    <span className="text-white text-[11px] font-black brand-rounded uppercase tracking-[0.3em]">Corporate</span>
+                  </div>
+               </div>
+               {/* CELEBRATIONS */}
+               <div className="relative overflow-hidden group/img">
+                  <img 
+                    src="https://i.postimg.cc/4ytzzMcq/nescmvzyzhrmw0cweh988hsnk0.png" 
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-110" 
+                    alt="Celebrations" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-6">
+                    <span className="text-white text-[11px] font-black brand-rounded uppercase tracking-[0.3em]">Celebrations</span>
+                  </div>
+               </div>
             </div>
-          </div>
 
-
-          {/* Small: Wedding */}
-          <div className="relative rounded-[1.5rem] overflow-hidden group">
-            <img src="https://i.postimg.cc/3xwTWHm9/amish-thakkar-7O422y-G-b80-unsplash.jpg" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Wedding Gifting" loading="lazy" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-4">
-              <span className="text-white text-[10px] font-black brand-rounded uppercase tracking-widest">Wedding Gifting</span>
-            </div>
-          </div>
-
-          {/* Small: Premium Hamper */}
-          <div className="relative rounded-[1.5rem] overflow-hidden group">
-            <img src="https://i.postimg.cc/RZm4Bt9q/p-regal-elephant-lacquered-dry-fruit-gift-box-435757-m.avif" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Premium Hamper" loading="lazy" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-4">
-              <span className="text-white text-[10px] font-black brand-rounded uppercase tracking-widest">Premium Hamper</span>
-            </div>
-          </div>
-
-          {/* Wide: Curated Gift Box */}
-          <div className="col-span-2 relative rounded-[2rem] overflow-hidden group">
-            <img src="https://i.postimg.cc/j2N28r64/p-golden-joys-446182-m.avif" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Curated Gift Box" loading="lazy" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-6">
-              <span className="text-white text-[10px] font-black brand-rounded uppercase tracking-widest">Curated Gift Box</span>
-            </div>
-          </div>
-
-          {/* Large: Sweet Platter */}
-          <div className="col-span-2 relative rounded-[2rem] overflow-hidden group">
-            <img src="https://i.postimg.cc/5tkDXYbB/Whats_App_Image_2026_02_12_at_18_57_59_(1).jpg" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Sweet Memories Platter" loading="lazy" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-6 sm:p-8">
-              <span className="text-white text-sm font-black brand-rounded uppercase tracking-widest">Sweet Memories Platter</span>
-            </div>
-          </div>
-
-          {/* Small: Festive */}
-          <div className="relative rounded-[1.5rem] overflow-hidden group">
-            <img src="https://i.postimg.cc/cHcWr19P/bh6cmv93h5rmt0cwehc94w18rr.png" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Festive Hamper" loading="lazy" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-4">
-              <span className="text-white text-[10px] font-black brand-rounded uppercase tracking-widest">Festive Gifting</span>
-            </div>
-          </div>
-
-          {/* Small: Corporate */}
-          <div className="relative rounded-[1.5rem] overflow-hidden group">
-            <img src="https://i.postimg.cc/bYFML2t9/3mx66mz99srmr0cwehfssqfz10.png" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Corporate Gifting" loading="lazy" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-4">
-              <span className="text-white text-[10px] font-black brand-rounded uppercase tracking-widest">Corporate Hamper</span>
-            </div>
-          </div>
-
-
-          {/* Wide: Celebrations */}
-          <div className="col-span-2 relative rounded-[2rem] overflow-hidden group">
-            <img src="https://i.postimg.cc/4ytzzMcq/nescmvzyzhrmw0cweh988hsnk0.png" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Celebrations" loading="lazy" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-6">
-              <span className="text-white text-[10px] font-black brand-rounded uppercase tracking-widest">Celebrations</span>
-            </div>
-          </div>
-
-        </div>
-
-        {/* Inquiry Cards */}
-        <div className="mb-16 sm:mb-24">
-          <div className="text-center mb-12 sm:mb-16">
-            <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em] block mb-4">How Can We Help</span>
-            <h2 className="text-3xl sm:text-5xl font-bold serif text-[#4A3728]">What Are You Looking For?</h2>
-            <div className="w-16 h-1.5 bg-coral rounded-full mx-auto mt-6" />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
-            {INQUIRY_OPTIONS.map(({ icon, title, desc, color, bg, msg }) => (
-              <div key={title} className="bg-white rounded-[2.5rem] p-8 sm:p-10 border border-[#4A3728]/5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
-                <div
-                  className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110"
-                  style={{ backgroundColor: bg, color }}
-                >
-                  {icon}
+            {/* Content Section */}
+            <div className="lg:w-1/2 p-6 sm:p-12 lg:p-20 relative flex flex-col justify-center bg-white">
+              <div className="absolute top-0 right-0 w-80 h-80 bg-[#D4AF37]/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2"></div>
+              <div className="absolute bottom-0 left-0 w-80 h-80 bg-coral/5 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2"></div>
+              
+              <div className="relative z-10">
+                <div className="inline-flex items-center gap-3 px-5 py-2 bg-coral/5 rounded-full mb-8 border border-coral/10">
+                  <Sparkle size={16} className="text-coral animate-spin-slow" />
+                  <span className="text-[10px] font-black brand-rounded text-coral uppercase tracking-widest">Bespoke Curation</span>
                 </div>
-                <h3 className="text-xl sm:text-2xl font-bold serif text-[#4A3728] mb-3">{title}</h3>
-                <p className="text-[#4A3728]/60 leading-relaxed text-sm sm:text-base mb-6">{desc}</p>
-                <a
-                  href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=${encodeURIComponent(msg)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-xs font-black brand-rounded uppercase tracking-widest hover:gap-3 transition-all"
-                  style={{ color }}
-                >
-                  <MessageCircle size={14} /> Enquire on WhatsApp →
-                </a>
+                
+                <h2 className="text-2xl sm:text-4xl lg:text-6xl font-bold serif text-[#4A3728] mb-4 sm:mb-8 leading-[1.15]">
+                  Want Something Truly <br/><span className="text-coral brand-script">One-of-a-Kind?</span>
+                </h2>
+                
+                <p className="text-sm sm:text-lg text-[#4A3728]/60 leading-relaxed mb-6 sm:mb-12 brand-rounded font-medium max-w-lg">
+                  Beyond our signature collections, we specialize in fully bespoke hampers tailored precisely to your vision. Whether you wish to combine our finest mukhwas with external luxury goods or curate a box of specific artisanal favorites for a grand wedding, we are here to help you gift something unforgettable.
+                </p>
+                
+                <div className="flex flex-col sm:flex-row items-center gap-6">
+                  <a 
+                    href={`https://wa.me/919157537842`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full sm:w-auto px-12 py-6 bg-[#25D366] text-white rounded-full font-black brand-rounded uppercase tracking-[0.3em] text-[11px] flex items-center justify-center gap-4 hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-[#25D366]/30"
+                  >
+                    <MessageCircle size={20} /> WhatsApp Us
+                  </a>
+                  <a 
+                    href="mailto:hello@amieshomemade.com?subject=Custom Hamper Inquiry"
+                    className="w-full sm:w-auto px-12 py-6 border-2 border-[#D4AF37]/30 text-[#D4AF37] rounded-full font-black brand-rounded uppercase tracking-[0.3em] text-[11px] flex items-center justify-center gap-4 hover:bg-[#D4AF37] hover:text-white transition-all shadow-lg"
+                  >
+                    <Mail size={20} /> Send an Email
+                  </a>
+                </div>
+                
+                <div className="mt-12 pt-10 border-t border-[#4A3728]/5">
+                   <div className="flex items-center gap-6">
+                      <div className="flex -space-x-4">
+                         {[
+                           { url: "https://lh3.googleusercontent.com/a-/ALV-UjXOOzgEDPdqTzFnOvrhxFSceXox3gjqAIqBhl0QsroKczKbSCKfRQ=w144-h144-p-rp-mo-ba3-br100", name: "Krishna Mody" },
+                           { url: "https://lh3.googleusercontent.com/a-/ALV-UjWxH3cjrv3mEBuGaAQvVuvyaxTo0K7q1b3Pf6X8ZeCOZwH68yE94w=w144-h144-p-rp-mo-br100", name: "Pratik Sanghavi" },
+                           { url: "https://lh3.googleusercontent.com/a-/ALV-UjUjnn8q7od8Ko_BCTPygrxFxU6PBI7lD-hNQfRmm6AX1leC_Vla=w144-h144-p-rp-mo-br100", name: "Falguni Mehta" },
+                         ].map((reviewer, i) => (
+                           <div key={i} className="w-12 h-12 rounded-full border-2 border-white overflow-hidden bg-cream shadow-lg relative z-[5]">
+                              <img src={reviewer.url} className="w-full h-full object-cover" alt={reviewer.name} />
+                           </div>
+                         ))}
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-[10px] font-bold brand-rounded text-[#4A3728]/40 uppercase tracking-widest leading-tight">
+                          TRUSTED BY 453+ HAPPY FAMILIES FOR THEIR <br className="hidden sm:block"/>MOST PRECIOUS CELEBRATIONS.
+                        </p>
+                      </div>
+                   </div>
+                </div>
               </div>
-            ))}
+            </div>
           </div>
-        </div>
 
-        {/* Big CTA */}
-        <div className="bg-[#FFF1F1] rounded-[3rem] p-10 sm:p-16 text-center border border-[#F04E4E]/10">
-          <div className="inline-flex items-center gap-2 px-5 py-2 bg-[#F04E4E]/10 rounded-full border border-[#F04E4E]/20 text-coral brand-rounded text-xs font-black uppercase tracking-[0.3em] mb-8">
-            <Sparkle size={12} className="text-coral" /> Get in Touch
-          </div>
-          <h2 className="text-3xl sm:text-5xl font-bold text-[#4A3728] serif mb-4">
-            Ready to Create Something <span className="text-coral brand-script">Special?</span>
-          </h2>
-          <p className="text-[#4A3728]/60 max-w-xl mx-auto text-sm sm:text-base leading-relaxed mb-10">
-            Tell us about your occasion, your budget, and who it's for — we'll handle everything else. Every hamper is made fresh to order.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
-              href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=${encodeURIComponent("Hi! I'd like to enquire about gifting hampers.")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-10 py-5 bg-[#F04E4E] text-white rounded-full font-black brand-rounded uppercase tracking-[0.3em] text-[11px] flex items-center justify-center gap-3 hover:scale-105 transition-all shadow-2xl shadow-[#F04E4E]/30"
-            >
-              <MessageCircle size={18} /> WhatsApp Us
-            </a>
-            <a
-              href="mailto:hello@amieshomemade.com?subject=Gifting Inquiry"
-              className="px-10 py-5 border-2 border-[#F04E4E]/30 text-coral rounded-full font-black brand-rounded uppercase tracking-[0.3em] text-[11px] flex items-center justify-center gap-3 hover:bg-[#F04E4E] hover:text-white transition-all"
-            >
-              <Mail size={18} /> Send an Email
-            </a>
-          </div>
-        </div>
-      </section>
+          {/* LIVE MUKHWAS BAR SECTION */}
+          <div className="relative overflow-hidden bg-[#2A1E14] rounded-[4rem] flex flex-col lg:flex-row shadow-2xl">
+            {/* Photos */}
+            <div className="lg:w-1/2 flex flex-col overflow-hidden">
+              <div className="relative overflow-hidden flex-1 border-b border-white/10" style={{minHeight: '240px'}}>
+                <img
+                  src="https://i.postimg.cc/9Mc9MPXM/Whats_App_Image_2026_03_10_at_23_09_28.jpg"
+                  className="w-full h-full object-cover object-center"
+                  alt="Mukhwas Bar at Mehndi"
+                />
+              </div>
+              <div className="relative overflow-hidden flex-1" style={{minHeight: '240px'}}>
+                <img
+                  src="https://i.postimg.cc/26CW6dj3/Whats_App_Image_2026_03_10_at_23_09_28_(1).jpg"
+                  className="w-full h-full object-cover object-center"
+                  alt="Mukhwas Bar setup at wedding"
+                />
+              </div>
+            </div>
 
-      {/* Mukhwas Bar */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 sm:pb-24">
-        <div className="relative overflow-hidden bg-[#2A1E14] rounded-[4rem] flex flex-col lg:flex-row shadow-2xl">
-          <div className="lg:w-1/2 flex flex-col overflow-hidden">
-            <div className="relative overflow-hidden flex-1 border-b border-white/10" style={{ minHeight: '240px' }}>
-              <img src="https://i.postimg.cc/9Mc9MPXM/Whats_App_Image_2026_03_10_at_23_09_28.jpg" className="w-full h-full object-cover object-center" alt="Mukhwas Bar at Mehndi" loading="lazy" />
+            {/* Content */}
+            <div className="lg:w-1/2 p-8 sm:p-12 lg:p-20 flex flex-col justify-center">
+              <div className="inline-flex items-center gap-3 px-5 py-2 bg-white/10 rounded-full mb-8 border border-white/20 w-fit">
+                <Sparkles size={14} className="text-[#D4AF37]" />
+                <span className="text-[10px] font-black brand-rounded text-white/80 uppercase tracking-widest">Live Experience</span>
+              </div>
+
+              <h2 className="text-3xl sm:text-5xl lg:text-6xl font-bold serif text-white mb-4 sm:mb-6 leading-tight">
+                Book a <span className="text-[#D4AF37] brand-script">Mukhwas Bar</span><br/>for Your Event
+              </h2>
+
+              <p className="text-sm sm:text-base text-white/60 leading-relaxed mb-8 sm:mb-12 brand-rounded font-medium max-w-lg">
+                We set up a beautiful live Mukhwas Bar at your wedding, mehndi, reception, or corporate event — a curated spread of our finest mukhwas for your guests to pick and enjoy. A unique touch that leaves a lasting impression.
+              </p>
+
+              <div className="flex flex-wrap gap-3 mb-10">
+                {['Weddings', 'Mehndi Functions', 'Receptions', 'Corporate Events', 'Festivals'].map(tag => (
+                  <span key={tag} className="px-4 py-2 bg-white/10 text-white/70 text-[10px] font-bold brand-rounded rounded-full border border-white/10">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              <a
+                href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto px-10 py-5 bg-[#25D366] text-white rounded-full font-black brand-rounded uppercase tracking-[0.3em] text-[11px] flex items-center justify-center gap-4 hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-[#25D366]/30 sm:self-start"
+              >
+                <MessageCircle size={18} /> Enquire on WhatsApp
+              </a>
             </div>
-            <div className="relative overflow-hidden flex-1" style={{ minHeight: '240px' }}>
-              <img src="https://i.postimg.cc/26CW6dj3/Whats_App_Image_2026_03_10_at_23_09_28_(1).jpg" className="w-full h-full object-cover object-center" alt="Mukhwas Bar setup" loading="lazy" />
-            </div>
-          </div>
-          <div className="lg:w-1/2 p-8 sm:p-12 lg:p-20 flex flex-col justify-center">
-            <div className="inline-flex items-center gap-3 px-5 py-2 bg-white/10 rounded-full mb-8 border border-white/20 w-fit">
-              <Sparkles size={14} className="text-[#D4AF37]" />
-              <span className="text-[10px] font-black brand-rounded text-white/80 uppercase tracking-widest">Live Experience</span>
-            </div>
-            <h2 className="text-3xl sm:text-5xl lg:text-6xl font-bold serif text-white mb-4 sm:mb-6 leading-tight">
-              Book a <span className="text-[#D4AF37] brand-script">Mukhwas Bar</span><br />for Your Event
-            </h2>
-            <p className="text-sm sm:text-base text-white/60 leading-relaxed mb-8 sm:mb-12 brand-rounded font-medium max-w-lg">
-              We set up a beautiful live Mukhwas Bar at your wedding, mehndi, reception, or corporate event — a curated spread of our finest mukhwas for your guests to pick and enjoy. A unique touch that leaves a lasting impression.
-            </p>
-            <div className="flex flex-wrap gap-3 mb-10">
-              {['Weddings', 'Mehndi Functions', 'Receptions', 'Corporate Events', 'Festivals'].map(tag => (
-                <span key={tag} className="px-4 py-2 bg-white/10 text-white/70 text-[10px] font-bold brand-rounded rounded-full border border-white/10">{tag}</span>
-              ))}
-            </div>
-            <a
-              href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto px-10 py-5 bg-[#25D366] text-white rounded-full font-black brand-rounded uppercase tracking-[0.3em] text-[11px] flex items-center justify-center gap-4 hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-[#25D366]/30 sm:self-start"
-            >
-              <MessageCircle size={18} /> Enquire on WhatsApp
-            </a>
           </div>
         </div>
       </section>
-
     </div>
   );
 };
