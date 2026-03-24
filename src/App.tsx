@@ -431,6 +431,16 @@ const App: React.FC = () => {
     document.body.scrollTop = 0;
   }, [currentPage, currentArea, currentCity, currentBlogSlug]);
 
+  // Fire GA4 page_view on every SPA route change
+  useEffect(() => {
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', 'page_view', {
+        page_path: window.location.pathname,
+        page_title: document.title,
+      });
+    }
+  }, [currentPage, currentArea, currentCity, currentBlogSlug]);
+
   useEffect(() => {
     if (currentPage === 'shop') {
       const timer = setTimeout(() => setShowMangoToast(true), 600);

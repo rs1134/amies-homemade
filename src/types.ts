@@ -1,4 +1,10 @@
 
+declare global {
+  interface Window {
+    gtag: (...args: unknown[]) => void;
+  }
+}
+
 export enum Category {
   MUKHWAS = 'Mukhwas',
   MASALA = 'Masala',
