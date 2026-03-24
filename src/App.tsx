@@ -565,18 +565,52 @@ const App: React.FC = () => {
       case 'gifting': return <GiftingView onAddToCart={(p) => addToCart(p)} onSelectProduct={(p) => openProduct(p)} />;
       case 'shop': return (
         <section id="shop" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 sm:pt-32 sm:pb-32 relative z-10">
-          {/* Chatpati Mango spotlight toast */}
-          <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ${showMangoToast ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8 pointer-events-none'}`}>
-            <div className="flex items-center gap-4 bg-[#2A1E14] text-white px-6 py-4 rounded-2xl shadow-2xl border border-[#D4AF37]/20 max-w-sm sm:max-w-md">
-              <span className="text-2xl">🥭</span>
-              <div className="flex-1">
-                <p className="text-[10px] font-black brand-rounded uppercase tracking-[0.2em] text-[#D4AF37] mb-0.5">Something Special</p>
-                <p className="text-sm font-bold serif leading-tight">Chatpati Mango Mukhwas</p>
-                <p className="text-[11px] text-white/60 brand-rounded font-medium mt-0.5">Limited stock — order before it's gone!</p>
+          {/* Chatpati Mango spotlight popup */}
+          {showMangoToast && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" onClick={() => setShowMangoToast(false)}>
+              <div
+                className="relative bg-white rounded-3xl overflow-hidden shadow-2xl max-w-sm w-full animate-in zoom-in-95 duration-300 cursor-pointer"
+                onClick={(e) => { e.stopPropagation(); setShowMangoToast(false); openProduct(PRODUCTS.find(p => p.id === 'm2')!); }}
+              >
+                {/* Close */}
+                <button
+                  onClick={(e) => { e.stopPropagation(); setShowMangoToast(false); }}
+                  className="absolute top-3 right-3 z-10 w-8 h-8 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center text-[#4A3728]/50 hover:text-[#4A3728] transition-colors shadow"
+                >✕</button>
+
+                {/* Badge */}
+                <div className="absolute top-4 left-4 z-10 flex flex-col gap-1.5">
+                  <span className="px-3 py-1 bg-[#F04E4E] rounded-full text-[9px] font-black uppercase tracking-widest text-white shadow-lg animate-pulse">
+                    🔥 Limited Stock
+                  </span>
+                  <span className="px-3 py-1 bg-[#D4AF37] rounded-full text-[9px] font-black uppercase tracking-widest text-white shadow-lg">
+                    ✨ Something Special
+                  </span>
+                </div>
+
+                {/* Image */}
+                <div className="relative h-56 overflow-hidden bg-[#FFF8EE]">
+                  <img
+                    src={PRODUCTS.find(p => p.id === 'm2')!.image}
+                    alt="Chatpati Mango Mukhwas"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                </div>
+
+                {/* Content */}
+                <div className="p-6">
+                  <h3 className="text-2xl font-bold serif text-[#4A3728] mb-1">Chatpati Mango Mukhwas</h3>
+                  <p className="text-sm text-[#4A3728]/60 brand-rounded mb-5 leading-relaxed">
+                    Tangy raw mango with a secret homemade spice blend — a seasonal favourite. Grab it before it runs out!
+                  </p>
+                  <button className="w-full py-4 bg-[#F04E4E] text-white rounded-2xl font-black brand-rounded uppercase tracking-[0.2em] text-xs hover:bg-[#d43d3d] transition-colors shadow-lg shadow-[#F04E4E]/30">
+                    Order Now →
+                  </button>
+                </div>
               </div>
-              <button onClick={() => setShowMangoToast(false)} className="text-white/30 hover:text-white/60 transition-colors text-lg leading-none">✕</button>
             </div>
-          </div>
+          )}
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 text-center md:text-left">
             <div>
               <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em]">Fresh from Our Kitchen</span>
