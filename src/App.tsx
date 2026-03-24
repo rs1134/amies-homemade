@@ -434,8 +434,7 @@ const App: React.FC = () => {
   useEffect(() => {
     if (currentPage === 'shop') {
       const timer = setTimeout(() => setShowMangoToast(true), 600);
-      const hide = setTimeout(() => setShowMangoToast(false), 6000);
-      return () => { clearTimeout(timer); clearTimeout(hide); };
+      return () => clearTimeout(timer);
     } else {
       setShowMangoToast(false);
     }
@@ -578,34 +577,38 @@ const App: React.FC = () => {
                   className="absolute top-3 right-3 z-10 w-8 h-8 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center text-[#4A3728]/50 hover:text-[#4A3728] transition-colors shadow"
                 >✕</button>
 
-                {/* Badge */}
+                {/* Badges */}
                 <div className="absolute top-4 left-4 z-10 flex flex-col gap-1.5">
                   <span className="px-3 py-1 bg-[#F04E4E] rounded-full text-[9px] font-black uppercase tracking-widest text-white shadow-lg animate-pulse">
-                    🔥 Limited Stock
+                    🔥 Limited Batch
                   </span>
                   <span className="px-3 py-1 bg-[#D4AF37] rounded-full text-[9px] font-black uppercase tracking-widest text-white shadow-lg">
-                    ✨ Something Special
+                    ☀️ Summer Special
                   </span>
                 </div>
 
                 {/* Image */}
-                <div className="relative h-56 overflow-hidden bg-[#FFF8EE]">
+                <div className="relative h-60 overflow-hidden bg-[#FFF8EE]">
                   <img
                     src={PRODUCTS.find(p => p.id === 'm2')!.image}
                     alt="Chatpati Mango Mukhwas"
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#2A1E14]/60 via-transparent to-transparent" />
+                  <p className="absolute bottom-4 left-4 right-4 text-white font-black serif text-2xl leading-tight drop-shadow-lg">
+                    Mango Season<br/>is Here. 🥭
+                  </p>
                 </div>
 
                 {/* Content */}
                 <div className="p-6">
-                  <h3 className="text-2xl font-bold serif text-[#4A3728] mb-1">Chatpati Mango Mukhwas</h3>
-                  <p className="text-sm text-[#4A3728]/60 brand-rounded mb-5 leading-relaxed">
-                    Tangy raw mango with a secret homemade spice blend — a seasonal favourite. Grab it before it runs out!
+                  <h3 className="text-xl font-bold serif text-[#4A3728] mb-1">Chatpati Mango Mukhwas</h3>
+                  <p className="text-sm text-[#4A3728]/60 brand-rounded mb-1 leading-relaxed">
+                    Our summer special is back — tangy raw mango tossed in a secret homemade spice blend, made fresh in a <span className="font-bold text-[#F04E4E]">limited seasonal batch</span> only.
                   </p>
+                  <p className="text-xs text-[#4A3728]/40 brand-rounded font-bold uppercase tracking-widest mb-5">Once it's gone, it's gone until next season.</p>
                   <button className="w-full py-4 bg-[#F04E4E] text-white rounded-2xl font-black brand-rounded uppercase tracking-[0.2em] text-xs hover:bg-[#d43d3d] transition-colors shadow-lg shadow-[#F04E4E]/30">
-                    Order Now →
+                    Order Now — Before It's Gone →
                   </button>
                 </div>
               </div>
