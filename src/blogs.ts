@@ -890,7 +890,7 @@ export const BLOG_POSTS: BlogPost[] = [
 // Returns only posts whose publishedAt date has passed (auto-scheduling)
 export const getPublishedPosts = (): BlogPost[] => {
   const today = new Date().toISOString().split('T')[0];
-  return BLOG_POSTS.filter(p => p.publishedAt <= today);
+  return BLOG_POSTS.filter(p => p.publishedAt <= today).sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
 };
 
 export const getPostBySlug = (slug: string): BlogPost | undefined =>
