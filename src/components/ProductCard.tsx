@@ -40,10 +40,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
             <Plus size={20} />
           </button>
         </div>
-        <div className="absolute top-4 left-4">
+        <div className="absolute top-4 left-4 flex flex-col gap-1.5">
           <span className="px-3 py-1 bg-white rounded-full text-[10px] font-bold uppercase tracking-widest text-[#4A3728]">
             {product.category}
           </span>
+          {product.id === 'm2' && (
+            <span className="px-3 py-1 bg-[#F04E4E] rounded-full text-[9px] font-black uppercase tracking-widest text-white animate-pulse shadow-lg">
+              🥭 Limited Stock
+            </span>
+          )}
         </div>
       </div>
       

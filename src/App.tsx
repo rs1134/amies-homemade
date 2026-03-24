@@ -155,6 +155,7 @@ const App: React.FC = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<Category | 'All'>('All');
+  const [showMangoToast, setShowMangoToast] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(() => {
     const slug = getProductSlugFromPath(window.location.pathname);
     return slug ? (PRODUCT_SLUG_MAP[slug] ?? null) : null;
@@ -430,6 +431,16 @@ const App: React.FC = () => {
     document.body.scrollTop = 0;
   }, [currentPage, currentArea, currentCity, currentBlogSlug]);
 
+  useEffect(() => {
+    if (currentPage === 'shop') {
+      const timer = setTimeout(() => setShowMangoToast(true), 600);
+      const hide = setTimeout(() => setShowMangoToast(false), 6000);
+      return () => { clearTimeout(timer); clearTimeout(hide); };
+    } else {
+      setShowMangoToast(false);
+    }
+  }, [currentPage]);
+
   const filteredProducts = useMemo(() => {
     // Exclude gifting from the standard shop list to keep it exclusive
     const availableProducts = PRODUCTS.filter(p => p.category !== Category.GIFTING);
@@ -554,6 +565,18 @@ const App: React.FC = () => {
       case 'gifting': return <GiftingView onAddToCart={(p) => addToCart(p)} onSelectProduct={(p) => openProduct(p)} />;
       case 'shop': return (
         <section id="shop" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 sm:pt-32 sm:pb-32 relative z-10">
+          {/* Chatpati Mango spotlight toast */}
+          <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ${showMangoToast ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8 pointer-events-none'}`}>
+            <div className="flex items-center gap-4 bg-[#2A1E14] text-white px-6 py-4 rounded-2xl shadow-2xl border border-[#D4AF37]/20 max-w-sm sm:max-w-md">
+              <span className="text-2xl">🥭</span>
+              <div className="flex-1">
+                <p className="text-[10px] font-black brand-rounded uppercase tracking-[0.2em] text-[#D4AF37] mb-0.5">Something Special</p>
+                <p className="text-sm font-bold serif leading-tight">Chatpati Mango Mukhwas</p>
+                <p className="text-[11px] text-white/60 brand-rounded font-medium mt-0.5">Limited stock — order before it's gone!</p>
+              </div>
+              <button onClick={() => setShowMangoToast(false)} className="text-white/30 hover:text-white/60 transition-colors text-lg leading-none">✕</button>
+            </div>
+          </div>
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 text-center md:text-left">
             <div>
               <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em]">Fresh from Our Kitchen</span>
