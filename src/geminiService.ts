@@ -3,8 +3,7 @@ import { PRODUCTS } from "./constants";
 
 const getApiKey = () => {
   try {
-    const g = globalThis as any;
-    return g.process?.env?.GEMINI_API_KEY || "";
+    return (import.meta as any).env?.VITE_GEMINI_API_KEY || "";
   } catch (e) {
     return "";
   }
