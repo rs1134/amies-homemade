@@ -9,10 +9,10 @@ export const PRODUCTS: Product[] = [
     price: 1850,
     weight: 'Large Hamper',
     description: 'A curated masterpiece of artisanal flavors, designed for those who appreciate the finer things in life. This heritage collection brings together the best of our kitchen: four signature mukhwas, the indulgent Almond Motichoor Ladoo, and our most-loved crunchy snacks. Elegantly presented.',
-    image: 'https://i.postimg.cc/8Cy68DD6/Whats-App-Image-2026-02-12-at-18-57-42-(1).jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.42_1_sexa8u.jpg',
     images: [
-      'https://i.postimg.cc/1zLyVYrk/Whats-App-Image-2026-02-12-at-18-57-42.jpg',
-      'https://i.postimg.cc/8Cy68DD6/Whats-App-Image-2026-02-12-at-18-57-42-(1).jpg'
+      'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.42_grwebi.jpg',
+      'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.42_1_sexa8u.jpg'
     ],
     ingredients: [
       'Amla Ginger Mukhwas', 
@@ -32,10 +32,10 @@ export const PRODUCTS: Product[] = [
     price: 1250,
     weight: 'Medium Box',
     description: 'A thoughtful gift for the health-conscious. Features our signature Amla Ginger, Tender Coconut Chips, and Dryfruit & Seeds mix in elegant glass jars.',
-    image: 'https://i.postimg.cc/CKVgFfM5/Whats_App_Image_2026_02_12_at_18_57_44.jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.44_g0dzok.jpg',
     images: [
-      'https://i.postimg.cc/CKVgFfM5/Whats_App_Image_2026_02_12_at_18_57_44.jpg',
-      'https://i.postimg.cc/rpLk8tym/Whats_App_Image_2026_02_12_at_18_57_44_(1).jpg'
+      'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.44_g0dzok.jpg',
+      'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.44_1_gyu0jj.jpg'
     ],
     ingredients: ['Amla Ginger', 'Coconut Chips', 'Dryfruit Mix'],
     isGift: true
@@ -47,9 +47,9 @@ export const PRODUCTS: Product[] = [
     price: 950,
     weight: 'Gift Box',
     description: 'A sweet selection of our finest traditional bites. Ideal for corporate gifting or small family gatherings.',
-    image: 'https://i.postimg.cc/5tkDXYbB/Whats_App_Image_2026_02_12_at_18_57_59_(1).jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.59_1_bjvcyg.jpg',
     images: [
-      'https://i.postimg.cc/5tkDXYbB/Whats_App_Image_2026_02_12_at_18_57_59_(1).jpg',
+      'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.59_1_bjvcyg.jpg',
       'https://i.postimg.cc/R0b2W64f/Whats_App_Image_2026_02_15_at_20_10_16_(2).jpg'
     ],
     ingredients: ['Pista Ghugra', 'Badam Puri', 'Kaju Rotla'],
@@ -64,7 +64,7 @@ export const PRODUCTS: Product[] = [
     price: 300,
     weight: '250 G',
     description: 'A refreshing and digestive blend of dried amla and zesty ginger. Prepared with traditional methods.',
-    image: 'https://i.postimg.cc/RVMF1NsY/Whats-App-Image-2026-02-12-at-18-57-58-(2).jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.58_2_qlbxrc.jpg',
     ingredients: ['Amla', 'Ginger', 'Black Salt'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 300, '500 G': 600, '1 KG': 1200 }
@@ -88,7 +88,7 @@ export const PRODUCTS: Product[] = [
     price: 300,
     weight: '250 G',
     description: 'Tangy dried raw mango pieces seasoned with a special homemade spice blend.',
-    image: 'https://i.postimg.cc/7hPkzTHJ/Whats-App-Image-2026-02-12-at-18-57-57-(2).jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.57_2_g3kejf.jpg',
     ingredients: ['Raw Mango', 'Secret Churan'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 300, '500 G': 600, '1 KG': 1200 }
@@ -100,7 +100,7 @@ export const PRODUCTS: Product[] = [
     price: 300,
     weight: '250 G',
     description: 'Digestive balls made with nutrient-rich black grapes and toasted black sesame.',
-    image: 'https://i.postimg.cc/fLT2j7dX/Whats-App-Image-2026-02-12-at-18-57-55-(2).jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.55_2_zsdkam.jpg',
     ingredients: ['Black Grapes', 'Black Til'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 300, '500 G': 600, '1 KG': 1200 }
@@ -112,7 +112,7 @@ export const PRODUCTS: Product[] = [
     price: 375,
     weight: '250 G',
     description: 'Crispy, natural slices of fresh tender coconut. Light and tropical.',
-    image: 'https://i.postimg.cc/YjczVQvF/Whats-App-Image-2026-02-12-at-18-57-57-(1).jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.57_1_mp1guy.jpg',
     ingredients: ['Coconut', 'Natural Sugar'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 375, '500 G': 750, '1 KG': 1500 }
@@ -136,7 +136,7 @@ export const PRODUCTS: Product[] = [
     price: 350,
     weight: '250 G',
     description: 'Nutrient-dense mix of roasted almonds, cashews, and super-seeds.',
-    image: 'https://i.postimg.cc/j2yMR80k/Whats_App_Image_2026_02_12_at_18_57_55.jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.55_x6btgg.jpg',
     ingredients: ['Almonds', 'Cashews', 'Pumpkin Seeds'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 350, '500 G': 700, '1 KG': 1400 }
@@ -244,7 +244,7 @@ export const PRODUCTS: Product[] = [
     price: 400,
     weight: '250 G',
     description: 'Delicate flaky discs soaked in saffron syrup. Pick your favorite base of Cashews, Almonds, or Pistachios.',
-    image: 'https://i.postimg.cc/FzMwp7Kg/Kajupuri2PS-(5-of-7).jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/Kajupuri2PS-_5-of-7_blmxyn.jpg',
     ingredients: ['Almonds', 'Cashews', 'Saffron', 'Pure Ghee', 'Pistachios', 'Elaichi'],
     weights: ['250 G', '500 G', '1 KG'],
     subOptions: [
@@ -319,7 +319,7 @@ export const PRODUCTS: Product[] = [
     price: 150,
     weight: '250 G',
     description: 'Flaky crispy puri flavored with black pepper and cumin.',
-    image: 'https://i.postimg.cc/qvwLF4fc/4540cc6d6d0f0a3f4c9e1f612e7f0b73.jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/4540cc6d6d0f0a3f4c9e1f612e7f0b73_1_lgqb4z.jpg',
     ingredients: ['White Flour', 'Black Pepper', 'Cumin Seeds', 'Pure Ghee'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 150, '500 G': 300, '1 KG': 600 }

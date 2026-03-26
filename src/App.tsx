@@ -230,7 +230,7 @@ const App: React.FC = () => {
   useEffect(() => {
     let seo = PAGE_SEO[currentPage] || PAGE_SEO.home;
     let ogImage: string | null = null;
-    const DEFAULT_OG_IMAGE = 'https://i.postimg.cc/8Cy68DD6/Whats-App-Image-2026-02-12-at-18-57-42-(1).jpg';
+    const DEFAULT_OG_IMAGE = 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.42_1_sexa8u.jpg';
 
     if (currentPage === 'blog' && currentBlogSlug) {
       const post = getPostBySlug(currentBlogSlug);
