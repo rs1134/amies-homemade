@@ -18,10 +18,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
     <div className="group bg-white rounded-3xl overflow-hidden border border-[#4A3728]/5 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
       <div className="relative aspect-[4/5] overflow-hidden bg-cream/50">
         {!imageError ? (
-          <img 
-            src={product.image} 
+          <img
+            src={product.image}
             alt={product.name}
             onError={() => setImageError(true)}
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           />
         ) : (
