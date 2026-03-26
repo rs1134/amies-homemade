@@ -76,7 +76,7 @@ export const PRODUCTS: Product[] = [
     price: 350,
     weight: '250 G',
     description: 'Vibrant digestive blend combining amla, ginger, and earthy beetroot.',
-    image: 'https://i.postimg.cc/YqCTkHDJ/Whats-App-Image-2026-02-15-at-17-53-58.jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543465/WhatsApp_Image_2026-02-15_at_17.53.58_tnzte2.jpg',
     ingredients: ['Amla', 'Ginger', 'Beetroot'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 350, '500 G': 700, '1 KG': 1400 }
@@ -124,7 +124,7 @@ export const PRODUCTS: Product[] = [
     price: 450,
     weight: '250 G',
     description: 'Premium coconut slices coated in rich dark chocolate. A perfect fusion.',
-    image: 'https://i.postimg.cc/Y0qqNP2K/Whats-App-Image-2026-02-15-at-17-30-02.jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543462/WhatsApp_Image_2026-01-28_at_20.21.40_sgnmbl.jpg',
     ingredients: ['Coconut', 'Cocoa', 'Sugar'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 450, '500 G': 900, '1 KG': 1800 }
@@ -148,7 +148,7 @@ export const PRODUCTS: Product[] = [
     price: 400,
     weight: '250 G',
     description: 'Vibrant sweet-and-sour mix of premium cranberries and digestive nuts.',
-    image: 'https://i.postimg.cc/7Ldv6Qdy/Whats-App-Image-2026-02-15-at-16-57-49.jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543456/WhatsApp_Image_2026-02-12_at_18.57.56_3_xwxf5y.jpg',
     ingredients: ['Cranberries', 'Roasted Nuts'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 400, '500 G': 800, '1 KG': 1600 }
@@ -160,7 +160,7 @@ export const PRODUCTS: Product[] = [
     price: 350,
     weight: '250 G',
     description: 'Chopped premium dates paired with crunchy almond slivers.',
-    image: 'https://i.postimg.cc/qMPpbqjq/Whats-App-Image-2026-02-12-at-18-57-40-(1).jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543463/WhatsApp_Image_2026-02-12_at_18.57.41_rkhf9z.jpg',
     ingredients: ['Dates', 'Almonds'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 350, '500 G': 700, '1 KG': 1400 }
@@ -172,7 +172,7 @@ export const PRODUCTS: Product[] = [
     price: 300,
     weight: '250 G',
     description: 'A bold and tangy mukhwas with the zesty punch of ginger and chaat masala. A unique twist on a classic digestive.',
-    image: 'https://i.postimg.cc/zXWZbHkP/Whats-App-Image-2026-03-14-at-21-37-48.jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543469/WhatsApp_Image_2026-03-14_at_21.37.48_knoien.jpg',
     ingredients: ['Ginger', 'Chaat Masala', 'Black Salt'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 300, '500 G': 600, '1 KG': 1200 }
@@ -184,7 +184,7 @@ export const PRODUCTS: Product[] = [
     price: 375,
     weight: '250 G',
     description: 'Sugar-free blend of dried dates, coconut, and almond slivers.',
-    image: 'https://i.postimg.cc/TYprj74M/Whats-App-Image-2026-02-15-at-17-06-18.jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543464/WhatsApp_Image_2026-02-15_at_17.06.18_qsid6v.jpg',
     ingredients: ['Dried Dates', 'Coconut', 'Almonds'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 375, '500 G': 750, '1 KG': 1500 }
@@ -198,7 +198,7 @@ export const PRODUCTS: Product[] = [
     price: 450,
     weight: '250 G',
     description: 'Decadent sweet dumplings. Choose between premium Pista-filled or classic Rava Dryfruit filling.',
-    image: 'https://i.postimg.cc/zXPQYwXw/Whats_App_Image_2026_02_15_at_20_10_12.jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543466/WhatsApp_Image_2026-02-15_at_20.10.12_jvzm16.jpg',
     ingredients: ['Pistachios', 'Elaichi', 'Pure Ghee', 'White Flour'],
     weights: ['250 G', '500 G', '1 KG'],
     subOptions: [
@@ -219,7 +219,7 @@ export const PRODUCTS: Product[] = [
     price: 470,
     weight: '250 G',
     description: 'Rich, fudge-like traditional sweet prepared with your choice of Cashews, Almonds or Pistachios.',
-    image: 'https://i.postimg.cc/gk9YN01F/vj17zw61fxrmr0cwejfr4h0s5w.png',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543462/vj17zw61fxrmr0cwejfr4h0s5w_waghxx.png',
     ingredients: ['Cashews', 'Almonds', 'Pure Ghee', 'Pistachios', 'Elaichi','Saffron'],
     weights: ['250 G', '500 G', '1 KG'],
     subOptions: [
@@ -269,7 +269,7 @@ export const PRODUCTS: Product[] = [
     price: 400,
     weight: '250 G',
     description: 'Premium twist on motichoor with toasted almond slivers.',
-    image: 'https://i.postimg.cc/5NkrW5NB/Whats_App_Image_2026_02_15_at_20_10_14_(2).jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543467/WhatsApp_Image_2026-02-15_at_20.10.14_2_rnbqyr.jpg',
     ingredients: ['Besan', 'Pure Ghee', 'Almonds', 'Elaichi'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 400, '500 G': 800, '1 KG': 1600 }
@@ -281,7 +281,7 @@ export const PRODUCTS: Product[] = [
     price: 250,
     weight: '250 G',
     description: 'Beloved Gujarati classic made with coarse gram flour and pure ghee.',
-    image: 'https://i.postimg.cc/HkY1h82Q/magas-recipe-2.jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543461/magas-recipe-2_svofa6.jpg',
     ingredients: ['Gram Flour', 'Pure Ghee', 'Nuts', 'Elaichi'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 250, '500 G': 500, '1 KG': 1000 }
@@ -293,7 +293,7 @@ export const PRODUCTS: Product[] = [
     price: 300,
     weight: '250 G',
     description: 'Sweet, crunchy flaky biscuits enriched with chopped nuts.',
-    image: 'https://i.postimg.cc/W1FHNDhx/Whats_App_Image_2026_02_15_at_20_10_16.jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543469/WhatsApp_Image_2026-02-15_at_20.10.16_mx3fnn.jpg',
     ingredients: ['White Flour', 'Mixed Nuts', 'Pure Ghee'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 300, '500 G': 600, '1 KG': 1200 }
@@ -352,7 +352,7 @@ export const PRODUCTS: Product[] = [
     price: 165,
     weight: '250 G',
     description: 'Thinly sliced raw bananas fried to perfection.',
-    image: 'https://i.postimg.cc/bwPQtQ41/istockphoto_1149101234_1024x1024.jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543459/istockphoto-1149101234-1024x1024_ipuvuy.jpg',
     ingredients: ['Raw Banana', 'Oil', 'Salt Pepper'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 165, '500 G': 325, '1 KG': 650 }
@@ -364,7 +364,7 @@ export const PRODUCTS: Product[] = [
     price: 215,
     weight: '250 G',
     description: 'Crispy premium purple yam chips, a traditional favorite.',
-    image: 'https://i.postimg.cc/tCkwYrnf/istockphoto-1360236832-612x612.jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774544872/istockphoto-1360236832-612x612_jb7lgc.jpg',
     ingredients: ['Purple Yam', 'Oil', 'Salt and Pepper'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 215, '500 G': 425, '1 KG': 850 }
@@ -388,7 +388,7 @@ export const PRODUCTS: Product[] = [
     price: 150,
     weight: '250 G',
     description: 'Spicy thin gram flour noodles with a kick of heat.',
-    image: 'https://i.postimg.cc/x17NPM4H/istockphoto-2196882416-1024x1024.jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543460/istockphoto-2196882416-1024x1024_ojyojd.jpg',
     ingredients: ['Gram Flour', 'Red Chilli', 'Carrum Seeds'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 150, '500 G': 300, '1 KG': 600 }
@@ -400,7 +400,7 @@ export const PRODUCTS: Product[] = [
     price: 210,
     weight: '250 G',
     description: 'Flaky deep-fried pastry filled with spiced moong dal.',
-    image: 'https://i.postimg.cc/9MX2RNYd/istockphoto-1080623274-1024x1024.jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543459/istockphoto-1080623274-1024x1024_ddkbga.jpg',
     ingredients: ['White Flour', 'Spices'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 210, '500 G': 420, '1 KG': 840 }
@@ -412,7 +412,7 @@ export const PRODUCTS: Product[] = [
     price: 150,
     weight: '250 G',
     description: 'Traditional savory mix with roasted poha and peanuts.',
-    image: 'https://i.postimg.cc/7LrVHFnL/bv8arqx6axrmw0cwc5hbxzzzy0.png',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543458/bv8arqx6axrmw0cwc5hbxzzzy0_xxqz73.png',
     ingredients: ['Poha', 'Peanuts', 'Mixed Spices'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 150, '500 G': 300, '1 KG': 600 }
@@ -424,7 +424,7 @@ export const PRODUCTS: Product[] = [
     price: 150,
     weight: '250 G',
     description: 'Crunchy wheat sticks flavored with dried fenugreek leaves.',
-    image: 'https://i.postimg.cc/FFybHYyJ/Whats-App-Image-2026-02-19-at-11-57-05.jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543469/WhatsApp_Image_2026-02-19_at_11.57.05_hiqois.jpg',
     ingredients: ['Wheat Flour', 'Methi Leaves', 'Mixed Spices'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 150, '500 G': 300, '1 KG': 600 }
@@ -438,7 +438,7 @@ export const PRODUCTS: Product[] = [
     price: 400,
     weight: '100 G',
     description: 'Rich aromatic blend of nuts and saffron for milk.',
-    image: 'https://i.postimg.cc/7h7Jcd8w/Whats-App-Image-2026-02-15-at-17-09-52.jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543464/WhatsApp_Image_2026-02-15_at_17.09.52_nouzpm.jpg',
     ingredients: ['Saffron', 'Pistachios', 'Almonds'],
     weights: ['100 G', '250 G'],
     prices: { '100 G': 400, '250 G': 800 }
@@ -450,7 +450,7 @@ export const PRODUCTS: Product[] = [
     price: 160,
     weight: '100 G',
     description: 'Hand-ground spices for the perfect authentic Indian chai.',
-    image: 'https://i.postimg.cc/tgZq2PHs/Whats-App-Image-2026-02-15-at-17-15-19.jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543464/WhatsApp_Image_2026-02-15_at_17.15.19_tovhut.jpg',
     ingredients: ['Cardamom', 'Ginger', 'Cinnamon'],
     weights: ['100 G', '250 G'],
     prices: { '100 G': 160, '250 G': 320 }
