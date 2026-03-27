@@ -288,6 +288,22 @@ const App: React.FC = () => {
       }
     }
 
+    // ── Product page meta tags ───────────────────────────────────────────────
+    if (selectedProduct) {
+      const isGifting = selectedProduct.category === Category.GIFTING;
+      const productUrl = `https://amieshomemade.com/${isGifting ? 'gifting' : 'shop'}/${slugify(selectedProduct.name)}`;
+      const productTitle = `${selectedProduct.name} | Amie's Homemade`;
+      const productDesc = `${selectedProduct.description} Handcrafted in Ahmedabad by Ami Shah. No preservatives, made fresh in small batches.`;
+      seo = {
+        title: productTitle,
+        description: productDesc,
+        canonical: productUrl,
+        ogTitle: productTitle,
+        ogDescription: productDesc,
+      };
+      ogImage = selectedProduct.image;
+    }
+
     // ── Core meta tags ──────────────────────────────────────────────────────
     document.title = seo.title;
     const setMeta = (sel: string, val: string) => document.querySelector(sel)?.setAttribute('content', val);
