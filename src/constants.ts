@@ -438,10 +438,10 @@ export const PRODUCTS: Product[] = [
     price: 450,
     weight: '250 G',
     description: 'A wholesome blend of rolled oats, mixed nuts, seeds, dried cranberries, and dates — baked fresh with no preservatives. The perfect nutritious breakfast or snack, crafted the Amie\'s way.',
-    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/v1774697511/ChatGPT_Image_Mar_27_2026_at_03_46_41_PM_hm2dc5.png',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/v1774697443/Granola_jar_with_colorful_label_and_hand_oiqmtv.png',
     images: [
-      'https://res.cloudinary.com/dqs95a7w2/image/upload/v1774697511/ChatGPT_Image_Mar_27_2026_at_03_46_41_PM_hm2dc5.png',
-      'https://res.cloudinary.com/dqs95a7w2/image/upload/v1774697443/Granola_jar_with_colorful_label_and_hand_oiqmtv.png'
+      'https://res.cloudinary.com/dqs95a7w2/image/upload/v1774697443/Granola_jar_with_colorful_label_and_hand_oiqmtv.png',
+      'https://res.cloudinary.com/dqs95a7w2/image/upload/v1774697511/ChatGPT_Image_Mar_27_2026_at_03_46_41_PM_hm2dc5.png'
     ],
     ingredients: ['Rolled Oats', 'Mixed Nuts', 'Seeds', 'Dried Cranberries', 'Dates'],
     weights: ['250 G', '500 G', '1 KG'],
