@@ -7,7 +7,7 @@ declare global {
 
 export enum Category {
   MUKHWAS = 'Mukhwas',
-  MASALA = 'Masala',
+  WELLNESS = 'Health & Wellness',
   SNACKS = 'Snacks',
   SWEETS = 'Traditional Sweets',
   GIFTING = 'Gifting & Hampers'

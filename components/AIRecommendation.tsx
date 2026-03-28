@@ -26,7 +26,7 @@ const AIRecommendation: React.FC<AIRecommendationProps> = ({ onSelectProduct }) 
 
     // 1. Try Direct Matching first 
     // We only trigger direct match if the query isn't just a category name
-    const categories = ['mukhwas', 'snack', 'sweet', 'masala', 'traditional sweets'];
+    const categories = ['mukhwas', 'snack', 'sweet', 'health', 'wellness', 'granola', 'traditional sweets'];
     const isCategoryQuery = categories.some(cat => query.includes(cat));
 
     const directMatch = !isCategoryQuery ? PRODUCTS.find(p => 
