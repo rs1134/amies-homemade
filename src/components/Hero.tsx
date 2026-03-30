@@ -10,12 +10,17 @@ const Hero: React.FC<HeroProps> = ({ onShopClick, onAboutClick }) => {
   return (
     <section className="relative min-h-[75vh] flex items-center overflow-hidden pt-20">
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-black/15 z-10"></div>
         <img
           src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774878055/pexels-momentsbypeterpatel-11835220_mgoeu7.jpg"
-          className="w-full h-full object-cover"
-          alt="Amie's Homemade Products Background"
+          className="w-full h-full object-cover object-center"
+          alt="Ahmedabad Heritage Background"
         />
+        {/* subtle darkening overlay for text readability */}
+        <div className="absolute inset-0 bg-black/10" />
+        {/* fade to cream at bottom — blends into page */}
+        <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-[#FFF8EE] via-[#FFF8EE]/60 to-transparent" />
+        {/* soft fade on left edge behind the card */}
+        <div className="absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-[#FFF8EE]/30 to-transparent" />
       </div>
       
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-12">
