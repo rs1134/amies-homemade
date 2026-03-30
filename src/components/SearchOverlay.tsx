@@ -263,13 +263,6 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose, onSelect
           )}
         </div>
 
-        {/* ── Footer hint ── */}
-        <div className="px-5 py-3 border-t border-[#4A3728]/5 bg-white/50 flex items-center gap-4 text-[11px] text-[#4A3728]/40">
-          <span className="flex items-center gap-1"><kbd className="px-1.5 py-0.5 bg-[#4A3728]/8 rounded text-[10px] font-mono">↑↓</kbd> navigate</span>
-          <span className="flex items-center gap-1"><kbd className="px-1.5 py-0.5 bg-[#4A3728]/8 rounded text-[10px] font-mono">↵</kbd> open</span>
-          <span className="flex items-center gap-1"><kbd className="px-1.5 py-0.5 bg-[#4A3728]/8 rounded text-[10px] font-mono">esc</kbd> close</span>
-          <span className="ml-auto">⌘K to search anywhere</span>
-        </div>
       </div>
     </div>
   );
