@@ -14,14 +14,7 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ cartCount, onCartClick, onNavigate, onSearchOpen, currentPage }) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
-  const offers = [
-    '🚚 Free Delivery across Ahmedabad',
-    '✨ 100% Homemade — No Preservatives, No Shortcuts',
-    '🎁 Custom Gift Hampers for Diwali, Weddings & Corporate Events',
-    '📦 Pan-India Delivery Available',
-    '💬 Order on WhatsApp: +91 91575 37842',
-  ];
-  const marqueeText = offers.join('   \u00A0\u00A0\u00A0★\u00A0\u00A0\u00A0   ');
+  const marqueeText = 'Free Delivery across Ahmedabad  ·  Made Fresh in Small Batches  ·  No Preservatives, No Additives  ·  Custom Gift Hampers Available  ·  Pan-India Delivery  ·  Handcrafted by Ami Shah in Ahmedabad  ·  ';
 
   return (
     <nav className="fixed w-full bg-[#FFF8EE]/90 backdrop-blur-md z-50 border-b border-[#F04E4E]/10">
