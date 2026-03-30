@@ -15,10 +15,7 @@ const Hero: React.FC<HeroProps> = ({ onShopClick, onAboutClick }) => {
           className="w-full h-full object-cover object-center"
           alt="Ahmedabad Heritage Background"
         />
-        {/* subtle darkening overlay */}
         <div className="absolute inset-0 bg-black/15" />
-        {/* gentle fade to cream at bottom only */}
-        <div className="absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-[#FFF8EE]/80 to-transparent" />
       </div>
       
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-12">
