@@ -12,7 +12,7 @@ const Hero: React.FC<HeroProps> = ({ onShopClick, onAboutClick }) => {
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-black/15 z-10"></div>
         <img
-          src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774878055/pexels-momentsbypeterpatel-11835220_mgoeu7.jpg"
+          src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774878801/ChatGPT_Image_Mar_30_2026_07_23_08_PM_eyvqfz.png"
           className="w-full h-full object-cover"
           alt="Amie's Homemade Products Background"
         />
