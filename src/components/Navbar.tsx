@@ -17,14 +17,7 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount, onCartClick, onNavigate, onS
 
   return (
     <nav className="fixed w-full bg-[#FFF8EE]/90 backdrop-blur-md z-50 border-b border-[#F04E4E]/10">
-      {/* ── Announcement Bar ── */}
-      <div className="bg-[#F04E4E] h-9 flex items-center justify-center gap-6">
-        <span className="text-white text-[13px] font-semibold tracking-wide">Free Delivery across Ahmedabad</span>
-        <span className="text-white/50 text-[10px]">|</span>
-        <span className="text-white text-[13px] font-semibold tracking-wide">Pan-India Shipping Available</span>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
           <div className="flex items-center gap-6">
             <button className="md:hidden p-2 text-[#4A3728]" onClick={() => setIsOpen(!isOpen)}>

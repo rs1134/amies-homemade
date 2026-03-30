@@ -252,7 +252,7 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
 
 
   return (
-    <div className="pt-[132px] sm:pt-[116px] bg-[#FFF8EE] min-h-screen">
+    <div className="pt-24 sm:pt-20 bg-[#FFF8EE] min-h-screen">
       {/* Luxury Hero Section */}
       <section className="relative h-[35vh] sm:h-[55vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-[#2A1E14]/45 z-10"></div>
