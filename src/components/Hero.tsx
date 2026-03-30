@@ -11,10 +11,10 @@ const Hero: React.FC<HeroProps> = ({ onShopClick, onAboutClick }) => {
     <section className="relative min-h-[75vh] flex items-center overflow-hidden pt-20">
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-black/15 z-10"></div>
-        <img 
-          src="https://images.unsplash.com/photo-1589114115995-17a47545b778?auto=format&fit=crop&q=80&w=2000" 
+        <img
+          src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774864541/activity-1317-1-2000-0-20230119172803_srrbzo.jpg"
           className="w-full h-full object-cover scale-105 animate-slow-zoom"
-          alt="Traditional Indian Sweets Background"
+          alt="Amie's Homemade Products Background"
         />
       </div>
       
