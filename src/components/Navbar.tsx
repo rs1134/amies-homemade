@@ -14,16 +14,14 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ cartCount, onCartClick, onNavigate, onSearchOpen, currentPage }) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
-  const marqueeText = 'Free Delivery across Ahmedabad  ·  Made Fresh in Small Batches  ·  No Preservatives, No Additives  ·  Custom Gift Hampers Available  ·  Pan-India Delivery  ·  Handcrafted by Ami Shah in Ahmedabad  ·  ';
 
   return (
     <nav className="fixed w-full bg-[#FFF8EE]/90 backdrop-blur-md z-50 border-b border-[#F04E4E]/10">
       {/* ── Announcement Bar ── */}
-      <div className="bg-[#F04E4E] overflow-hidden h-9 flex items-center">
-        <div className="flex whitespace-nowrap animate-marquee-left pause-on-hover">
-          <span className="text-white text-[13px] font-semibold tracking-wide pr-16">{marqueeText}</span>
-          <span className="text-white text-[13px] font-semibold tracking-wide pr-16" aria-hidden>{marqueeText}</span>
-        </div>
+      <div className="bg-[#F04E4E] h-9 flex items-center justify-center gap-6">
+        <span className="text-white text-[13px] font-semibold tracking-wide">Free Delivery across Ahmedabad</span>
+        <span className="text-white/50 text-[10px]">|</span>
+        <span className="text-white text-[13px] font-semibold tracking-wide">Pan-India Shipping Available</span>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
