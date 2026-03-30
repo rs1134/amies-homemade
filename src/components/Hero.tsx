@@ -21,10 +21,11 @@ const Hero: React.FC<HeroProps> = ({ onShopClick, onAboutClick }) => {
         <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-b from-transparent to-[#FFF8EE] md:hidden" />
         {/* Desktop: subtle dark tint */}
         <div className="absolute inset-0 bg-black/15 hidden md:block" />
+
       </div>
 
       {/* Content card — pulls up over the image on mobile (-mt-6), normal on desktop */}
-      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full -mt-6 md:mt-0 md:py-12">
+      <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full -mt-6 md:mt-0 md:py-12 pb-10 md:pb-0">
         <div className="max-w-2xl bg-[#FFF8EE] md:bg-[#FFF8EE]/90 backdrop-blur-xl p-5 sm:p-10 lg:p-16 rounded-2xl sm:rounded-[4rem] border border-white/20 shadow-xl md:shadow-2xl relative animate-in fade-in slide-in-from-left duration-700">
           <div className="absolute -top-5 -right-5 sm:-top-6 sm:-right-6 bg-[#F6C94C] p-3 sm:p-4 custom-curve animate-bounce shadow-xl">
             <Heart size={20} fill="#F04E4E" className="text-[#F04E4E] sm:hidden" />
@@ -59,6 +60,8 @@ const Hero: React.FC<HeroProps> = ({ onShopClick, onAboutClick }) => {
           </div>
         </div>
       </div>
+      {/* Mobile only: fade section bottom into page background */}
+      <div className="md:hidden absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent to-[#FFF8EE] z-30 pointer-events-none" />
     </section>
   );
 };
