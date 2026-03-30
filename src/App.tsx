@@ -452,6 +452,128 @@ const App: React.FC = () => {
     } else {
       injectSchema('product-schema', null);
     }
+
+    // ── WebSite schema (enables Sitelinks Searchbox + tells Google site identity) ──
+    // Injected once — always present regardless of page
+    injectSchema('website-schema', {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      '@id': 'https://amieshomemade.com/#website',
+      name: "Amie's Homemade",
+      alternateName: ["Amies Homemade", "Amie's Homemade Ahmedabad"],
+      url: 'https://amieshomemade.com',
+      description: "Ahmedabad's finest handmade mukhwas, snacks, sweets & gift hampers. Made fresh in small batches by Ami Shah. No preservatives. Pan-India delivery.",
+      inLanguage: 'en-IN',
+      potentialAction: {
+        '@type': 'SearchAction',
+        target: {
+          '@type': 'EntryPoint',
+          urlTemplate: 'https://amieshomemade.com/shop?q={search_term_string}',
+        },
+        'query-input': 'required name=search_term_string',
+      },
+      publisher: { '@id': 'https://amieshomemade.com/#business' },
+    });
+
+    // ── Organization schema (business identity for Google Knowledge Panel) ─────
+    injectSchema('organization-schema', {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      '@id': 'https://amieshomemade.com/#business',
+      name: "Amie's Homemade",
+      url: 'https://amieshomemade.com',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://amieshomemade.com/favicon.png',
+        width: 512,
+        height: 512,
+      },
+      image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.42_1_sexa8u.jpg',
+      description: "Family-run artisan food brand crafting authentic Indian mukhwas, snacks, sweets & gift hampers in Ahmedabad, Gujarat. Handmade by Ami Shah with pure ingredients and no preservatives.",
+      founder: {
+        '@type': 'Person',
+        name: 'Ami Shah',
+        jobTitle: 'Founder & Head Chef',
+        url: 'https://amieshomemade.com/about',
+      },
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Ahmedabad',
+        addressRegion: 'Gujarat',
+        postalCode: '380001',
+        addressCountry: 'IN',
+      },
+      contactPoint: [
+        {
+          '@type': 'ContactPoint',
+          telephone: '+91-91575-37842',
+          contactType: 'customer service',
+          availableLanguage: ['English', 'Hindi', 'Gujarati'],
+          contactOption: 'TollFree',
+        },
+      ],
+      sameAs: [
+        'https://www.instagram.com/amies_homemadefoods',
+      ],
+      email: 'hello@amieshomemade.com',
+    });
+
+    // ── SiteNavigationElement schema (explicitly tells Google your main nav links) ─
+    // This is the key schema for triggering sitelinks in search results
+    injectSchema('sitenav-schema', {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      name: "Amie's Homemade — Main Navigation",
+      itemListElement: [
+        {
+          '@type': 'SiteLinksSearchBox',
+          target: 'https://amieshomemade.com/shop',
+        },
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'Shop All Products',
+          description: 'Browse all homemade mukhwas, snacks, sweets and wellness products',
+          url: 'https://amieshomemade.com/shop',
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: 'Gifting & Hampers',
+          description: 'Curated gift hampers for Diwali, weddings and corporate events',
+          url: 'https://amieshomemade.com/gifting',
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: 'Our Story',
+          description: "Meet Ami Shah, the founder and heart of Amie's Homemade",
+          url: 'https://amieshomemade.com/about',
+        },
+        {
+          '@type': 'ListItem',
+          position: 4,
+          name: 'Blog',
+          description: 'Mukhwas guides, gifting ideas and traditional food stories',
+          url: 'https://amieshomemade.com/blog',
+        },
+        {
+          '@type': 'ListItem',
+          position: 5,
+          name: 'Contact Us',
+          description: 'Order on WhatsApp or email hello@amieshomemade.com',
+          url: 'https://amieshomemade.com/contact',
+        },
+        {
+          '@type': 'ListItem',
+          position: 6,
+          name: 'FAQs',
+          description: 'Answers about ingredients, delivery, gifting and ordering',
+          url: 'https://amieshomemade.com/faq',
+        },
+      ],
+    });
+
   }, [currentPage, currentArea, currentCity, currentBlogSlug, selectedProduct]);
 
   // Scroll to top on every page/area/city/blog change (instant to avoid smooth-scroll delay)
