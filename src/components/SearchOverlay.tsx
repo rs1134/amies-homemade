@@ -36,10 +36,12 @@ function searchProducts(query: string): Product[] {
     if (desc.includes(q))              score += 15;
     if (ings.includes(q))              score += 10;
 
-    // multi-word: each word that matches
+    // multi-word: each word that matches across all fields
     q.split(/\s+/).forEach(word => {
       if (word.length > 1) {
         if (name.includes(word))       score += 8;
+        if (cat.includes(word))        score += 6;
+        if (desc.includes(word))       score += 4;
         if (ings.includes(word))       score += 4;
       }
     });
