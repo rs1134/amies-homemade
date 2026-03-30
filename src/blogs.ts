@@ -560,7 +560,7 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: 'best-mukhwas-in-ahmedabad-local-guide',
     title: 'The Best Mukhwas in Ahmedabad: A Local\'s Honest Guide',
     excerpt: 'Ahmedabad takes its mukhwas seriously. From the old city\'s traditional shops to the rise of home kitchens making it fresh — here\'s everything you need to know about finding the real thing.',
-    coverImage: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1600&auto=format&fit=crop',
+    coverImage: 'https://res.cloudinary.com/dqs95a7w2/image/upload/v1774864541/activity-1317-1-2000-0-20230119172803_srrbzo.jpg',
     publishedAt: '2026-03-30',
     readTime: 4,
     category: 'Ahmedabad',
