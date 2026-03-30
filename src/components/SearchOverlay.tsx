@@ -130,8 +130,8 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose, onSelect
       className="fixed inset-0 z-[200] flex items-start justify-center pt-[12vh] px-4"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
-      {/* Backdrop */}
-      <div className="absolute inset-0 bg-[#2A1A0E]/60 backdrop-blur-sm" />
+      {/* Backdrop — click outside to close */}
+      <div className="absolute inset-0 bg-[#2A1A0E]/60 backdrop-blur-sm" onClick={onClose} />
 
       {/* Panel */}
       <div className="relative w-full max-w-2xl bg-[#FFF8EE] rounded-2xl shadow-2xl overflow-hidden animate-search-in">
