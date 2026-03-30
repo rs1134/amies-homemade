@@ -72,7 +72,7 @@ const BlogView: React.FC<BlogViewProps> = ({ onSelectPost }) => {
   );
 
   return (
-    <div className="pt-24 sm:pt-20 bg-[#FFF8EE] min-h-screen">
+    <div className="pt-[132px] sm:pt-[116px] bg-[#FFF8EE] min-h-screen">
 
       {/* ── Hero ─────────────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-[#2A1E14] py-20 sm:py-32">

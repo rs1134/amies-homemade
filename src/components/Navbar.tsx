@@ -14,8 +14,25 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ cartCount, onCartClick, onNavigate, onSearchOpen, currentPage }) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
+  const offers = [
+    '🚚 Free Delivery across Ahmedabad',
+    '✨ 100% Homemade — No Preservatives, No Shortcuts',
+    '🎁 Custom Gift Hampers for Diwali, Weddings & Corporate Events',
+    '📦 Pan-India Delivery Available',
+    '💬 Order on WhatsApp: +91 91575 37842',
+  ];
+  const marqueeText = offers.join('   \u00A0\u00A0\u00A0★\u00A0\u00A0\u00A0   ');
+
   return (
     <nav className="fixed w-full bg-[#FFF8EE]/90 backdrop-blur-md z-50 border-b border-[#F04E4E]/10">
+      {/* ── Announcement Bar ── */}
+      <div className="bg-[#F04E4E] overflow-hidden h-9 flex items-center">
+        <div className="flex whitespace-nowrap animate-marquee-left pause-on-hover">
+          <span className="text-white text-[13px] font-semibold tracking-wide pr-16">{marqueeText}</span>
+          <span className="text-white text-[13px] font-semibold tracking-wide pr-16" aria-hidden>{marqueeText}</span>
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
           <div className="flex items-center gap-6">

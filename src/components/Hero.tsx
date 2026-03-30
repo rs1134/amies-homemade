@@ -8,7 +8,7 @@ interface HeroProps {
 
 const Hero: React.FC<HeroProps> = ({ onShopClick, onAboutClick }) => {
   return (
-    <section className="relative min-h-[75vh] flex items-center overflow-hidden pt-20">
+    <section className="relative min-h-[75vh] flex items-center overflow-hidden pt-[116px]">
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-black/15 z-10"></div>
         <img 
