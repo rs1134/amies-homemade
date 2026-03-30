@@ -9,11 +9,11 @@ interface HeroProps {
 const Hero: React.FC<HeroProps> = ({ onShopClick, onAboutClick }) => {
   return (
     <section className="relative min-h-[75vh] flex items-center overflow-hidden pt-20">
-      <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-black/15 z-10"></div>
+      <div className="absolute inset-0 z-0 bg-[#3B2A1A]">
+        <div className="absolute inset-0 bg-black/20 z-10"></div>
         <img
           src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774878055/pexels-momentsbypeterpatel-11835220_mgoeu7.jpg"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-contain object-center"
           alt="Amie's Homemade Products Background"
         />
       </div>
