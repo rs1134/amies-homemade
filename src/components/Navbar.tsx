@@ -41,20 +41,11 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount, onCartClick, onNavigate, onS
           </div>
 
           <div className="flex items-center space-x-1">
-            {/* Search button — desktop: pill, mobile: icon */}
+            {/* Search icon */}
             <button
               onClick={onSearchOpen}
-              className="hidden md:flex items-center gap-2 px-3.5 py-2 rounded-full border border-[#4A3728]/15 bg-white/60 text-[#4A3728]/60 hover:border-[#F04E4E]/50 hover:text-[#F04E4E] transition-all text-sm font-medium brand-rounded mr-2"
+              className="p-2 text-[#4A3728] hover:text-[#F04E4E] transition-colors"
               title="Search (⌘K)"
-            >
-              <Search size={15} />
-              <span className="text-[13px]">Search</span>
-              <kbd className="hidden lg:inline text-[10px] bg-[#4A3728]/8 px-1.5 py-0.5 rounded font-mono">⌘K</kbd>
-            </button>
-            <button
-              onClick={onSearchOpen}
-              className="md:hidden p-2 text-[#4A3728] hover:text-[#F04E4E] transition-colors"
-              title="Search"
             >
               <Search size={22} />
             </button>
