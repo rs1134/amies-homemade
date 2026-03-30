@@ -22,6 +22,7 @@ const POPULAR_QUERIES = ['Amla Ginger', 'Granola', 'Chakri', 'Pista Ghugra', 'Gi
 function searchProducts(query: string): Product[] {
   if (!query.trim()) return [];
   const q = query.toLowerCase().trim();
+
   const scored = PRODUCTS.map(p => {
     let score = 0;
     const name = p.name.toLowerCase();
@@ -48,11 +49,15 @@ function searchProducts(query: string): Product[] {
     return { product: p, score };
   });
 
-  return scored
-    .filter(s => s.score > 0)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 8)
-    .map(s => s.product);
+  const filtered = scored.filter(s => s.score > 0).sort((a, b) => b.score - a.score);
+
+  // If the query matches a category, show ALL products in that category — no cap
+  const isCategorySearch = Object.values(Category).some(cat =>
+    cat.toLowerCase().includes(q) || q.includes(cat.toLowerCase().split(' ')[0])
+  );
+
+  const limit = isCategorySearch ? filtered.length : 12;
+  return filtered.slice(0, limit).map(s => s.product);
 }
 
 function getDisplayPrice(p: Product): string {
