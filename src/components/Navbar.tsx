@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShoppingCart, Menu, X, Heart, Gift } from 'lucide-react';
+import { ShoppingCart, Menu, X, Gift, Search } from 'lucide-react';
 import { CartItem } from '../types.ts';
 import Logo from './Logo.tsx';
 
@@ -7,10 +7,11 @@ interface NavbarProps {
   cartCount: number;
   onCartClick: () => void;
   onNavigate: (page: string) => void;
+  onSearchOpen: () => void;
   currentPage: string;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ cartCount, onCartClick, onNavigate, currentPage }) => {
+const Navbar: React.FC<NavbarProps> = ({ cartCount, onCartClick, onNavigate, onSearchOpen, currentPage }) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
@@ -39,8 +40,27 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount, onCartClick, onNavigate, cur
             <a href="/faq" onClick={(e) => { e.preventDefault(); onNavigate('faq'); }} className={`transition-colors ${currentPage === 'faq' ? 'text-[#F04E4E]' : 'text-[#4A3728]/80 hover:text-[#F04E4E]'}`}>FAQ</a>
           </div>
 
-          <div className="flex items-center space-x-4">
-            <button 
+          <div className="flex items-center space-x-1">
+            {/* Search button — desktop: pill, mobile: icon */}
+            <button
+              onClick={onSearchOpen}
+              className="hidden md:flex items-center gap-2 px-3.5 py-2 rounded-full border border-[#4A3728]/15 bg-white/60 text-[#4A3728]/60 hover:border-[#F04E4E]/50 hover:text-[#F04E4E] transition-all text-sm font-medium brand-rounded mr-2"
+              title="Search (⌘K)"
+            >
+              <Search size={15} />
+              <span className="text-[13px]">Search</span>
+              <kbd className="hidden lg:inline text-[10px] bg-[#4A3728]/8 px-1.5 py-0.5 rounded font-mono">⌘K</kbd>
+            </button>
+            <button
+              onClick={onSearchOpen}
+              className="md:hidden p-2 text-[#4A3728] hover:text-[#F04E4E] transition-colors"
+              title="Search"
+            >
+              <Search size={22} />
+            </button>
+
+            {/* Cart */}
+            <button
               onClick={onCartClick}
               className="relative p-2 text-[#4A3728] hover:text-[#F04E4E] transition-colors flex items-center gap-2"
             >

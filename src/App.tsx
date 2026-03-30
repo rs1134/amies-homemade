@@ -4,6 +4,7 @@ import { PRODUCTS, WHATSAPP_NUMBER } from './constants.ts';
 import { AREA_MAP } from './deliveryAreas.ts';
 import { CITY_MAP } from './cities.ts';
 import Navbar from './components/Navbar.tsx';
+import SearchOverlay from './components/SearchOverlay.tsx';
 import Hero from './components/Hero.tsx';
 import ProductCard from './components/ProductCard.tsx';
 import ProductDetail from './components/ProductDetail.tsx';
@@ -161,6 +162,7 @@ const App: React.FC = () => {
     return slug ? (PRODUCT_SLUG_MAP[slug] ?? null) : null;
   });
   const [orderComplete, setOrderComplete] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const navigate = useCallback((page: string) => {
     const path = PAGE_TO_PATH[page] || '/';
@@ -224,6 +226,18 @@ const App: React.FC = () => {
     };
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+
+  // ⌘K / Ctrl+K global shortcut to open search
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsSearchOpen(prev => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   // Update page title, meta tags, canonical, OG image, and all structured data per page
@@ -834,11 +848,21 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen">
-      <Navbar 
-        cartCount={cartCount} 
-        onCartClick={() => setIsCartOpen(true)} 
+      <Navbar
+        cartCount={cartCount}
+        onCartClick={() => setIsCartOpen(true)}
         onNavigate={navigate}
+        onSearchOpen={() => setIsSearchOpen(true)}
         currentPage={currentPage}
+      />
+
+      <SearchOverlay
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+        onSelectProduct={(product) => {
+          setIsSearchOpen(false);
+          openProduct(product);
+        }}
       />
       
       <main className="relative z-10">
