@@ -13,7 +13,7 @@ const Hero: React.FC<HeroProps> = ({ onShopClick, onAboutClick }) => {
         <div className="absolute inset-0 bg-black/15 z-10"></div>
         <img
           src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774878055/pexels-momentsbypeterpatel-11835220_mgoeu7.jpg"
-          className="w-full h-full object-cover scale-105 animate-slow-zoom"
+          className="w-full h-full object-cover"
           alt="Amie's Homemade Products Background"
         />
       </div>
