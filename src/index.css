@@ -21,6 +21,14 @@
     @apply bg-cream text-[#4A3728] font-inter;
     overflow-x: hidden;
     max-width: 100vw;
+    /* Restrict touch gestures to vertical scroll only — prevents left/right page swipe on mobile */
+    touch-action: pan-y;
+  }
+
+  #root {
+    overflow-x: hidden;
+    max-width: 100vw;
+    width: 100%;
   }
 
   h1, h2, h3, .serif {
