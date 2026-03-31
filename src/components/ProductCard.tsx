@@ -15,7 +15,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
   const displayPrice = product.prices?.['250 G'] ?? product.price;
 
   return (
-    <div className="group bg-white rounded-3xl overflow-hidden border border-[#4A3728]/5 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
+    <div onClick={() => onAddToCart(product)} className="group bg-white rounded-3xl overflow-hidden border border-[#4A3728]/5 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 cursor-pointer">
       <div className="relative aspect-[4/5] overflow-hidden bg-cream/50">
         {!imageError ? (
           <img
@@ -35,8 +35,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
         )}
         
         <div className="absolute top-4 right-4 flex flex-col gap-2 translate-x-12 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300">
-          <button 
-            onClick={() => onAddToCart(product)}
+          <button
+            onClick={(e) => { e.stopPropagation(); onAddToCart(product); }}
             className="p-3 bg-[#F14E4E] text-white rounded-full shadow-lg hover:bg-[#d43d3d] transition-colors"
           >
             <Plus size={20} />
