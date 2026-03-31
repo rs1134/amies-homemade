@@ -916,7 +916,7 @@ const App: React.FC = () => {
               {[
                 { 
                   title: "100% Homemade", 
-                  desc: "Every treat is personally crafted by Ami Shah in her home kitchen, ensuring the same authentic warmth and care you'd find in a mother's cooking.", 
+                  desc: "Every treat is personally crafted in our home kitchen, ensuring the same authentic warmth and care you'd find in a mother's cooking.",
                   color: "bg-[#FFF1F1]",
                   textColor: "text-[#F04E4E]",
                   icon: <Heart size={20} />
