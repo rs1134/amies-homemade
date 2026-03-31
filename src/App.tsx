@@ -13,7 +13,6 @@ import GiftingView from './components/GiftingView.tsx';
 import CheckoutView from './components/CheckoutView.tsx';
 import Cart from './components/Cart.tsx';
 import Footer from './components/Footer.tsx';
-import AIRecommendation from './components/AIRecommendation.tsx';
 import Reviews from './components/Reviews.tsx';
 import AreaDeliveryPage from './components/AreaDeliveryPage.tsx';
 import CityDeliveryPage from './components/CityDeliveryPage.tsx';
@@ -1004,7 +1003,6 @@ const App: React.FC = () => {
         <span className="text-xs uppercase tracking-wider hidden sm:block">Chat with us</span>
       </a>
 
-      <AIRecommendation onSelectProduct={(p) => openProduct(p)} />
 
       {selectedProduct && (
         <ProductDetail 
