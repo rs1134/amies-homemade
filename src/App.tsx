@@ -593,9 +593,13 @@ const App: React.FC = () => {
   }, [currentPage, currentArea, currentCity, currentBlogSlug]);
 
   useEffect(() => {
-    if (currentPage === 'shop' && !sessionStorage.getItem('mangoPopupSeen')) {
-      const timer = setTimeout(() => setShowMangoToast(true), 600);
-      return () => clearTimeout(timer);
+    if (currentPage === 'shop') {
+      const today = new Date().toDateString();
+      const lastSeen = localStorage.getItem('mangoPopupDate');
+      if (lastSeen !== today) {
+        const timer = setTimeout(() => setShowMangoToast(true), 600);
+        return () => clearTimeout(timer);
+      }
     }
   }, [currentPage]);
 
@@ -725,14 +729,14 @@ const App: React.FC = () => {
         <section id="shop" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 sm:pt-32 sm:pb-32 relative z-10">
           {/* Chatpati Mango spotlight popup */}
           {showMangoToast && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" onClick={() => { sessionStorage.setItem('mangoPopupSeen', '1'); setShowMangoToast(false); }}>
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" onClick={() => { localStorage.setItem('mangoPopupDate', new Date().toDateString()); setShowMangoToast(false); }}>
               <div
                 className="relative bg-white rounded-3xl overflow-hidden shadow-2xl max-w-[85vw] sm:max-w-sm w-full animate-in zoom-in-95 duration-300 cursor-pointer"
-                onClick={(e) => { e.stopPropagation(); sessionStorage.setItem('mangoPopupSeen', '1'); setShowMangoToast(false); openProduct(PRODUCTS.find(p => p.id === 'm2')!); }}
+                onClick={(e) => { e.stopPropagation(); localStorage.setItem('mangoPopupDate', new Date().toDateString()); setShowMangoToast(false); openProduct(PRODUCTS.find(p => p.id === 'm2')!); }}
               >
                 {/* Close */}
                 <button
-                  onClick={(e) => { e.stopPropagation(); sessionStorage.setItem('mangoPopupSeen', '1'); setShowMangoToast(false); }}
+                  onClick={(e) => { e.stopPropagation(); localStorage.setItem('mangoPopupDate', new Date().toDateString()); setShowMangoToast(false); }}
                   className="absolute top-3 right-3 z-10 w-8 h-8 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center text-[#4A3728]/50 hover:text-[#4A3728] transition-colors shadow"
                 >✕</button>
 
