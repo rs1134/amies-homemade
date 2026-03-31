@@ -14,9 +14,23 @@
       gtag('config', 'G-Z1QY7YJYQ3');
     </script>
 
-    <!-- Preconnect to image CDN for faster product image loading -->
+    <!-- Preconnect to all external resources used on first paint -->
+    <link rel="preconnect" href="https://res.cloudinary.com" crossorigin />
     <link rel="preconnect" href="https://i.postimg.cc" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://res.cloudinary.com" />
     <link rel="dns-prefetch" href="https://i.postimg.cc" />
+
+    <!-- Preload hero image (LCP element) — mobile gets smaller file, desktop gets larger -->
+    <link rel="preload" as="image"
+      href="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto,w_1200/v1774878055/pexels-momentsbypeterpatel-11835220_mgoeu7.jpg"
+      imagesrcset="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto,w_800/v1774878055/pexels-momentsbypeterpatel-11835220_mgoeu7.jpg 800w, https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto,w_1200/v1774878055/pexels-momentsbypeterpatel-11835220_mgoeu7.jpg 1200w, https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto,w_1920/v1774878055/pexels-momentsbypeterpatel-11835220_mgoeu7.jpg 1920w"
+      imagesizes="100vw"
+    />
+
+    <!-- Preload logo (visible on first paint, in fixed navbar) -->
+    <link rel="preload" as="image" href="https://i.postimg.cc/5tJ5zDKr/Whats-App-Image-2026-02-12-at-18-59-03-(2).jpg" />
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="256x256" href="/favicon.png" />
@@ -151,7 +165,8 @@
     </script>
 
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&family=Pacifico&family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <!-- Razorpay deferred — not needed until checkout, defer keeps it off the critical path -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
   </head>
   <body class="kitchen-pattern">
     <div id="root"></div>

@@ -23,6 +23,8 @@ const Logo: React.FC<LogoProps> = ({ className = '', size = 'md', manualHeight }
         alt="Amie's Homemade Logo" 
         className={`w-auto object-contain mix-blend-multiply ${finalHeightClass}`}
         loading="eager"
+        fetchPriority="high"
+        decoding="async"
       />
     </div>
   );

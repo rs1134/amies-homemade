@@ -13,9 +13,14 @@ const Hero: React.FC<HeroProps> = ({ onShopClick, onAboutClick }) => {
       {/* Image — visible strip on mobile, full-bleed on desktop */}
       <div className="relative h-64 mt-20 md:absolute md:inset-0 md:h-auto md:mt-0 z-0">
         <img
-          src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774878055/pexels-momentsbypeterpatel-11835220_mgoeu7.jpg"
+          src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto,w_1200/v1774878055/pexels-momentsbypeterpatel-11835220_mgoeu7.jpg"
+          srcSet="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto,w_800/v1774878055/pexels-momentsbypeterpatel-11835220_mgoeu7.jpg 800w, https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto,w_1200/v1774878055/pexels-momentsbypeterpatel-11835220_mgoeu7.jpg 1200w, https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto,w_1920/v1774878055/pexels-momentsbypeterpatel-11835220_mgoeu7.jpg 1920w"
+          sizes="100vw"
           className="w-full h-full object-cover object-center"
           alt="Ahmedabad Heritage Background"
+          fetchPriority="high"
+          loading="eager"
+          decoding="async"
         />
         {/* Mobile: fade the bottom of the image into the card colour so they blend */}
         <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-b from-transparent to-[#FFF8EE] md:hidden" />
