@@ -25,6 +25,18 @@ export const DELIVERY_AREAS: DeliveryArea[] = [
   { name: 'Isanpur',        slug: 'isanpur',        tagline: 'Homemade mukhwas & snacks delivered to Isanpur' },
   { name: 'Nikol',          slug: 'nikol',          tagline: 'Authentic snacks & mukhwas across Nikol & Naroda' },
   { name: 'Vastral',        slug: 'vastral',        tagline: 'Pure homemade mukhwas delivered to Vastral' },
+  { name: 'Ghatlodia',      slug: 'ghatlodia',      tagline: 'Fresh homemade mukhwas & snacks delivered to Ghatlodia' },
+  { name: 'Sola',           slug: 'sola',           tagline: 'Authentic homemade treats delivered across Sola, Ahmedabad' },
+  { name: 'Ranip',          slug: 'ranip',          tagline: 'Homemade mukhwas & snacks delivered to Ranip' },
+  { name: 'Ellisbridge',    slug: 'ellisbridge',    tagline: 'Pure homemade snacks & mukhwas for Ellisbridge households' },
+  { name: 'Science City',   slug: 'science-city',   tagline: 'Handcrafted homemade mukhwas delivered near Science City' },
+  { name: 'Shela',          slug: 'shela',          tagline: 'Fresh homemade mukhwas & snacks delivered to Shela' },
+  { name: 'Anand Nagar',    slug: 'anand-nagar',    tagline: 'Homemade mukhwas & snacks for Anand Nagar families' },
+  { name: 'Drive-In Road',  slug: 'drive-in-road',  tagline: 'Authentic homemade snacks delivered along Drive-In Road' },
+  { name: 'Bapunagar',      slug: 'bapunagar',      tagline: 'Pure homemade mukhwas & snacks delivered to Bapunagar' },
+  { name: 'Sabarmati',      slug: 'sabarmati',      tagline: 'Homemade mukhwas & snacks delivered to Sabarmati' },
+  { name: 'Naroda',         slug: 'naroda',         tagline: 'Fresh homemade snacks & mukhwas across Naroda & Nikol' },
+  { name: 'Odhav',          slug: 'odhav',          tagline: 'Handcrafted homemade mukhwas delivered to Odhav' },
 ];
 
 export const AREA_MAP: Record<string, DeliveryArea> = Object.fromEntries(
