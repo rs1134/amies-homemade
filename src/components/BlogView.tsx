@@ -89,11 +89,6 @@ const BlogView: React.FC<BlogViewProps> = ({ onSelectPost }) => {
           <p className="text-white/60 text-lg brand-rounded font-medium max-w-xl mx-auto leading-relaxed">
             Gifting guides, mukhwas wisdom, health stories, and the traditions behind every jar we make.
           </p>
-          <div className="flex items-center justify-center gap-6 mt-10 text-white/40 text-xs brand-rounded font-bold uppercase tracking-widest">
-            <span className="flex items-center gap-2"><BookOpen size={14} /> {published.length} Articles</span>
-            <span>·</span>
-            <span className="flex items-center gap-2"><Clock size={14} /> New post every 3–4 days</span>
-          </div>
         </div>
       </section>
 
