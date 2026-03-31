@@ -26,6 +26,16 @@ export const CITIES: City[] = [
   { name: 'Visakhapatnam',  slug: 'visakhapatnam',  state: 'Andhra Pradesh', tagline: 'Authentic homemade mukhwas shipped to the City of Destiny' },
   { name: 'Rajkot',         slug: 'rajkot',         state: 'Gujarat',        tagline: 'Freshly made homemade treats from Ahmedabad to Rajkot' },
   { name: 'Patna',          slug: 'patna',          state: 'Bihar',          tagline: 'Homemade mukhwas & snacks delivered to the ancient capital' },
+  { name: 'Gurugram',       slug: 'gurugram',       state: 'Haryana',        tagline: 'Authentic homemade mukhwas & snacks delivered to Gurugram' },
+  { name: 'Noida',          slug: 'noida',          state: 'Uttar Pradesh',  tagline: 'Fresh homemade Gujarati mukhwas shipped to Noida' },
+  { name: 'Agra',           slug: 'agra',           state: 'Uttar Pradesh',  tagline: 'Homemade mukhwas & snacks delivered to the City of the Taj' },
+  { name: 'Varanasi',       slug: 'varanasi',       state: 'Uttar Pradesh',  tagline: 'Authentic homemade mukhwas delivered to the spiritual capital' },
+  { name: 'Amritsar',       slug: 'amritsar',       state: 'Punjab',         tagline: 'Homemade mukhwas & snacks delivered to the Golden City' },
+  { name: 'Nashik',         slug: 'nashik',         state: 'Maharashtra',    tagline: 'Pure homemade Gujarati treats delivered across Nashik' },
+  { name: 'Mysuru',         slug: 'mysuru',         state: 'Karnataka',      tagline: 'Handcrafted mukhwas & snacks delivered to the City of Palaces' },
+  { name: 'Thiruvananthapuram', slug: 'thiruvananthapuram', state: 'Kerala', tagline: 'Fresh homemade mukhwas shipped to the capital of Kerala' },
+  { name: 'Guwahati',       slug: 'guwahati',       state: 'Assam',          tagline: 'Homemade mukhwas & snacks delivered to the gateway of Northeast India' },
+  { name: 'Kanpur',         slug: 'kanpur',         state: 'Uttar Pradesh',  tagline: 'Authentic homemade mukhwas & snacks delivered to Kanpur' },
 ];
 
 export const CITY_MAP: Record<string, City> = Object.fromEntries(
