@@ -36,6 +36,12 @@ export const CITIES: City[] = [
   { name: 'Thiruvananthapuram', slug: 'thiruvananthapuram', state: 'Kerala', tagline: 'Fresh homemade mukhwas shipped to the capital of Kerala' },
   { name: 'Guwahati',       slug: 'guwahati',       state: 'Assam',          tagline: 'Homemade mukhwas & snacks delivered to the gateway of Northeast India' },
   { name: 'Kanpur',         slug: 'kanpur',         state: 'Uttar Pradesh',  tagline: 'Authentic homemade mukhwas & snacks delivered to Kanpur' },
+  { name: 'Jodhpur',        slug: 'jodhpur',        state: 'Rajasthan',      tagline: 'Homemade mukhwas & snacks delivered to the Blue City' },
+  { name: 'Udaipur',        slug: 'udaipur',        state: 'Rajasthan',      tagline: 'Authentic homemade mukhwas delivered to the City of Lakes' },
+  { name: 'Dehradun',       slug: 'dehradun',       state: 'Uttarakhand',    tagline: 'Fresh homemade mukhwas & snacks delivered to Dehradun' },
+  { name: 'Bhubaneswar',    slug: 'bhubaneswar',    state: 'Odisha',         tagline: 'Homemade mukhwas & snacks delivered to the Temple City' },
+  { name: 'Raipur',         slug: 'raipur',         state: 'Chhattisgarh',   tagline: 'Authentic homemade mukhwas & snacks delivered to Raipur' },
+  { name: 'Goa',            slug: 'goa',            state: 'Goa',            tagline: 'Pure homemade Gujarati mukhwas & snacks delivered across Goa' },
 ];
 
 export const CITY_MAP: Record<string, City> = Object.fromEntries(
