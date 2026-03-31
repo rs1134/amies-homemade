@@ -727,7 +727,7 @@ const App: React.FC = () => {
           {showMangoToast && (
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" onClick={() => { sessionStorage.setItem('mangoPopupSeen', '1'); setShowMangoToast(false); }}>
               <div
-                className="relative bg-white rounded-3xl overflow-hidden shadow-2xl max-w-sm w-full animate-in zoom-in-95 duration-300 cursor-pointer"
+                className="relative bg-white rounded-3xl overflow-hidden shadow-2xl max-w-[85vw] sm:max-w-sm w-full animate-in zoom-in-95 duration-300 cursor-pointer"
                 onClick={(e) => { e.stopPropagation(); sessionStorage.setItem('mangoPopupSeen', '1'); setShowMangoToast(false); openProduct(PRODUCTS.find(p => p.id === 'm2')!); }}
               >
                 {/* Close */}
@@ -747,7 +747,7 @@ const App: React.FC = () => {
                 </div>
 
                 {/* Image */}
-                <div className="relative h-60 overflow-hidden bg-[#FFF8EE]">
+                <div className="relative h-44 sm:h-60 overflow-hidden bg-[#FFF8EE]">
                   <img
                     src={PRODUCTS.find(p => p.id === 'm2')!.image}
                     alt="Chatpati Mango Mukhwas"
@@ -760,13 +760,13 @@ const App: React.FC = () => {
                 </div>
 
                 {/* Content */}
-                <div className="p-6">
-                  <h3 className="text-xl font-bold serif text-[#4A3728] mb-1">Chatpati Mango Mukhwas</h3>
-                  <p className="text-sm text-[#4A3728]/60 brand-rounded mb-1 leading-relaxed">
+                <div className="p-4 sm:p-6">
+                  <h3 className="text-base sm:text-xl font-bold serif text-[#4A3728] mb-1">Chatpati Mango Mukhwas</h3>
+                  <p className="text-xs sm:text-sm text-[#4A3728]/60 brand-rounded mb-1 leading-relaxed">
                     Our summer special is back — tangy raw mango tossed in a secret homemade spice blend, made fresh in a <span className="font-bold text-[#F04E4E]">limited seasonal batch</span> only.
                   </p>
-                  <p className="text-xs text-[#4A3728]/40 brand-rounded font-bold uppercase tracking-widest mb-5">Once it's gone, it's gone until next season.</p>
-                  <button className="w-full py-4 bg-[#F04E4E] text-white rounded-2xl font-black brand-rounded uppercase tracking-[0.2em] text-xs hover:bg-[#d43d3d] transition-colors shadow-lg shadow-[#F04E4E]/30">
+                  <p className="text-[10px] sm:text-xs text-[#4A3728]/40 brand-rounded font-bold uppercase tracking-widest mb-4">Once it's gone, it's gone until next season.</p>
+                  <button className="w-full py-3 sm:py-4 bg-[#F04E4E] text-white rounded-2xl font-black brand-rounded uppercase tracking-[0.2em] text-xs hover:bg-[#d43d3d] transition-colors shadow-lg shadow-[#F04E4E]/30">
                     Order Now — Before It's Gone →
                   </button>
                 </div>
