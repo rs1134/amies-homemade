@@ -145,10 +145,9 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             {/* FSSAI Badge */}
             <div className="flex items-center gap-3">
               <img
-                src="https://www.fssai.gov.in/upload/images/fssai_logo.png"
+                src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1775019843/fssai-logo-fssai-icon-free-free-vector_xhqumj.jpg"
                 alt="FSSAI Registered"
                 className="h-8 w-auto object-contain"
-                onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
               />
               <span className="text-white/50 text-xs">
                 FSSAI Reg. No. <strong className="text-white/70">20726034001023</strong>
