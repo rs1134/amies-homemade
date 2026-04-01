@@ -31,16 +31,16 @@ const AboutUs: React.FC = () => {
           <div className="space-y-8">
             <h2 className="text-4xl font-bold serif text-[#4A3728]">A Legacy of Flavor</h2>
             <p className="text-xl text-[#4A3728]/70 leading-relaxed">
-              In 2020, when the world shut its doors, we opened ours — to our kitchen.
+              In 2020, when the world shut its doors, we opened ours to our kitchen.
             </p>
             <p className="text-xl text-[#4A3728]/70 leading-relaxed">
-              What started as a way to fill quiet afternoons during lockdown became something none of us expected. Neighbors began knocking. Friends started calling. Word spread the way it always does in Ahmedabad — quietly, genuinely, one household at a time.
+              What started as a way to fill quiet afternoons during lockdown became something none of us expected. Neighbors began knocking. Friends started calling. Word spread the way it always does in Ahmedabad, quietly, genuinely, one household at a time.
             </p>
             <p className="text-xl text-[#4A3728]/70 leading-relaxed">
-              No ads. No packaging. Just food made the way it always should be — with the same hands, the same recipes, the same care that has lived in Gujarati kitchens for generations.
+              No ads. No packaging. Just food made the way it always should be, with the same hands, the same recipes, the same care that has lived in Gujarati kitchens for generations.
             </p>
             <p className="text-xl text-[#4A3728]/70 leading-relaxed">
-              Five years later, Amie's has become a name that hundreds of Ahmedabad homes now know by heart. And through every batch, every season, every festive box carefully packed — nothing has changed. Same hands. Same recipes. Same love.
+              Five years later, Amie's has become a name that hundreds of Ahmedabad homes now know by heart. And through every batch, every season, every festive box carefully packed, nothing has changed. Same hands. Same recipes. Same love.
             </p>
             
             <div className="grid grid-cols-2 gap-8 pt-8">
