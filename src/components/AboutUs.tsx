@@ -40,7 +40,7 @@ const AboutUs: React.FC = () => {
               No ads. No packaging. Just food made the way it always should be — with the same hands, the same recipes, the same care that has lived in Gujarati kitchens for generations.
             </p>
             <p className="text-xl text-[#4A3728]/70 leading-relaxed">
-              Five years later, Amie's has become a name that thousands of Ahmedabad homes now know by heart. And through every batch, every season, every festive box carefully packed — nothing has changed. Same hands. Same recipes. Same love.
+              Five years later, Amie's has become a name that hundreds of Ahmedabad homes now know by heart. And through every batch, every season, every festive box carefully packed — nothing has changed. Same hands. Same recipes. Same love.
             </p>
             
             <div className="grid grid-cols-2 gap-8 pt-8">
