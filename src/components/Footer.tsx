@@ -142,6 +142,18 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <a href="https://razorpay.com/" target="_blank" rel="noopener noreferrer">
               <img referrerPolicy="origin" src="https://badges.razorpay.com/badge-light.png" style={{ height: '45px', width: '113px' }} alt="Razorpay | Payment Gateway | Neobank" />
             </a>
+            {/* FSSAI Badge */}
+            <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-4 py-2">
+              <div className="flex flex-col items-center leading-none">
+                <span className="text-[#FF6B00] font-black text-[13px] tracking-widest">FSSAI</span>
+                <span className="text-[#4CAF50] font-black text-[7px] tracking-[0.15em] uppercase">Licensed</span>
+              </div>
+              <div className="w-px h-7 bg-white/10" />
+              <div className="flex flex-col">
+                <span className="text-white/40 text-[8px] uppercase tracking-widest font-bold leading-none">Lic. No.</span>
+                <span className="text-white/70 text-[11px] font-bold tracking-wider leading-tight">20726034001023</span>
+              </div>
+            </div>
           </div>
         </div>
 
