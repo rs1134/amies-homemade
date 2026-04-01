@@ -46,7 +46,7 @@ const Hero: React.FC<HeroProps> = ({ onShopClick, onAboutClick }) => {
             &amp; Sweets.
           </h1>
           <p className="text-[#4A3728]/70 text-sm sm:text-lg mb-5 sm:mb-10 font-medium leading-relaxed max-w-md">
-            Handcrafted Indian mukhwas, snacks &amp; sweets made in small batches with pure ingredients — the heartfelt care only a home kitchen can offer.
+            Handcrafted Indian mukhwas, snacks &amp; sweets made in small batches with pure ingredients, the heartfelt care only a home kitchen can offer.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
