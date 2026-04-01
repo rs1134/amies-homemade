@@ -17,7 +17,7 @@ const AboutUs: React.FC = () => {
             <div className="relative w-full max-w-md">
               <div className="absolute inset-0 bg-coral/10 custom-curve transform -rotate-6 scale-110"></div>
               <img 
-                src="https://i.postimg.cc/q7hjrFPY/Whats-App-Image-2026-02-19-at-17-35-38.jpg" 
+                src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1775029612/WhatsApp_Image_2026-02-19_at_17.35.38_1_idx4dv.jpg" 
                 className="relative rounded-[3rem] shadow-2xl z-10 w-full aspect-[4/5] object-cover object-top border-[12px] border-white" 
                 alt="Ami Shah - Founder" 
               />
