@@ -899,7 +899,7 @@ const App: React.FC = () => {
               <a href="mailto:hello@amieshomemade.com" className="text-coral hover:underline">hello@amieshomemade.com</a>
             </address>
             <p className="text-xs text-[#4A3728]/60 mt-4 leading-relaxed max-w-md mx-auto">
-              From our kitchen in Ahmedabad, we deliver fresh homemade mukhwas, snacks &amp; sweets daily across <strong className="text-[#4A3728]/80">Satellite, Navrangpura, Bopal, Prahlad Nagar, Vastrapur, Thaltej, Maninagar, Paldi, Jodhpur, Ambawadi, Bodakdev, Chandkheda, Gota, SG Highway, Motera, Naranpura, Memnagar, Isanpur, Nikol, Vastral</strong> — and every corner of India.
+              From our kitchen in Ahmedabad, we deliver fresh homemade mukhwas, snacks &amp; sweets across Ahmedabad and every corner of India.
             </p>
           </div>
         </div>
