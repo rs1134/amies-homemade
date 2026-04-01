@@ -25,7 +25,7 @@ import { Sparkles, ArrowRight, MessageCircle, CheckCircle, Heart, ShieldCheck, H
 const PAGE_SEO: Record<string, { title: string; description: string; canonical: string; ogTitle: string; ogDescription: string }> = {
   home: {
     title: "Amie's Homemade | Mukhwas, Snacks & Sweets in Ahmedabad",
-    description: "Best homemade mukhwas, snacks & gift hampers in Ahmedabad. Made fresh in small batches by Ami Shah. No preservatives. Pan-India delivery.",
+    description: "Best homemade mukhwas, snacks & gift hampers in Ahmedabad. Made fresh in small batches with pure ingredients. No preservatives. Pan-India delivery.",
     canonical: "https://amieshomemade.com",
     ogTitle: "Amie's Homemade | Best Mukhwas & Homemade Snacks in Ahmedabad",
     ogDescription: "Ahmedabad's finest homemade mukhwas, snacks, sweets & gift hampers. Made fresh in small batches with no preservatives. Pan-India delivery.",
