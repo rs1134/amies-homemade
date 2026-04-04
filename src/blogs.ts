@@ -399,7 +399,7 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: 'homemade-chakli-why-it-tastes-different',
     title: 'Homemade Chakli: Why It Tastes Completely Different from the Packet',
     excerpt: 'The chakli you grew up eating at your grandmother\'s house had a flavor that no branded version has ever matched. There\'s a reason for that, and it starts long before the dough is shaped.',
-    coverImage: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?q=80&w=1600&auto=format&fit=crop',
+    coverImage: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1775232432/81YCSnJoCgL._AC_UF894_1000_QL80__f1jird.jpg',
     publishedAt: '2026-04-03',
     readTime: 5,
     category: 'Homemade Snacks',

@@ -307,7 +307,7 @@ export const PRODUCTS: Product[] = [
     price: 175,
     weight: '250 G',
     description: 'Classic crunchy spiral snack made with rice flour and spices.',
-    image: 'https://i.postimg.cc/CxxMjswB/Chakli-in-a-bowl.jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1775232432/81YCSnJoCgL._AC_UF894_1000_QL80__f1jird.jpg',
     ingredients: ['Rice Flour', 'Sesame', 'Mixed Spices', 'Butter', 'Curd'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 175, '500 G': 350, '1 KG': 700 }
