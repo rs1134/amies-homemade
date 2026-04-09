@@ -592,6 +592,13 @@ const App: React.FC = () => {
     }
   }, [currentPage, currentArea, currentCity, currentBlogSlug]);
 
+  // Fire Meta Pixel PageView on every SPA route change
+  useEffect(() => {
+    if (typeof (window as any).fbq === 'function') {
+      (window as any).fbq('track', 'PageView');
+    }
+  }, [currentPage, currentArea, currentCity, currentBlogSlug]);
+
   useEffect(() => {
     if (currentPage === 'shop') {
       const today = new Date().toDateString();

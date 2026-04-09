@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, ShoppingCart, ImageOff } from 'lucide-react';
+import { Plus, ImageOff } from 'lucide-react';
 import { Product } from '../types.ts';
 
 interface ProductCardProps {
@@ -81,10 +81,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
 
         <button
           onClick={() => onAddToCart(product)}
-          className="w-full py-2 sm:py-4 border-2 border-[#F14E4E] text-[#F14E4E] rounded-xl sm:rounded-2xl text-[10px] sm:text-xs font-bold uppercase tracking-widest hover:bg-[#F14E4E] hover:text-white transition-all duration-300 flex items-center justify-center gap-1 sm:gap-2"
+          className="w-full py-2.5 sm:py-3.5 border border-gray-200 text-gray-700 rounded-full text-[11px] sm:text-sm font-medium hover:bg-[#F14E4E] hover:text-white hover:border-[#F14E4E] transition-all duration-300 flex items-center justify-center gap-1.5"
         >
-          <ShoppingCart size={12} className="shrink-0" />
-          <span className="hidden xs:inline">View Details & </span>Weights
+          + Add to Cart
         </button>
       </div>
     </div>
