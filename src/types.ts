@@ -25,6 +25,8 @@ export interface Product {
   ingredients: string[];
   weights?: string[];
   prices?: Record<string, number>; // Mapping weight string to price
+  rating?: number;
+  reviewCount?: number;
   isGift?: boolean;
   subOptions?: {
     name: string;

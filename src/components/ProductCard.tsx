@@ -10,9 +10,21 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
   const [imageError, setImageError] = useState(false);
   const availableWeights = product.weights || [product.weight];
-  
+
   // Calculate display price: Prefer 250g price for the ticker, fallback to base product.price
   const displayPrice = product.prices?.['250 G'] ?? product.price;
+  // MRP = price before 10% discount, rounded to nearest ₹5
+  const mrp = Math.ceil(displayPrice / 0.9 / 5) * 5;
+
+  const renderStars = (rating: number) => {
+    return [1, 2, 3, 4, 5].map(i => {
+      const filled = i <= Math.floor(rating);
+      const half = !filled && i === Math.ceil(rating) && rating % 1 !== 0;
+      return (
+        <span key={i} className={`text-xs ${filled || half ? 'text-amber-400' : 'text-gray-200'}`}>★</span>
+      );
+    });
+  };
 
   return (
     <div onClick={() => onAddToCart(product)} className="group bg-white rounded-3xl overflow-hidden border border-[#4A3728]/5 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 cursor-pointer">
@@ -55,16 +67,22 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
       </div>
       
       <div className="p-3 sm:p-6">
-        <div className="flex justify-between items-start mb-1.5 sm:mb-2">
-          <h3 className="text-sm sm:text-xl font-bold text-[#4A3728] serif group-hover:text-[#F14E4E] transition-colors leading-tight">
-            {product.name}
-          </h3>
-          <div className="text-right ml-1">
-            <span className="text-xs sm:text-sm font-bold text-[#F14E4E] whitespace-nowrap">
-              ₹{displayPrice}
-            </span>
-          </div>
+        <h3 className="text-sm sm:text-xl font-bold text-[#4A3728] serif group-hover:text-[#F14E4E] transition-colors leading-tight mb-1.5">
+          {product.name}
+        </h3>
+
+        <div className="flex flex-wrap items-center gap-1.5 mb-1.5">
+          <span className="text-sm sm:text-base font-bold text-[#F14E4E]">₹{displayPrice}</span>
+          <span className="text-xs text-gray-400 line-through">₹{mrp}</span>
+          <span className="text-[9px] sm:text-[10px] font-bold bg-[#F14E4E] text-white px-1.5 py-0.5 rounded-full uppercase tracking-wide">SAVE 10%</span>
         </div>
+
+        {product.rating && product.reviewCount && (
+          <div className="flex items-center gap-1 mb-2">
+            <div className="flex">{renderStars(product.rating)}</div>
+            <span className="text-[10px] text-gray-500">{product.reviewCount} reviews</span>
+          </div>
+        )}
 
         {/* Available Weights Section */}
         <div className="flex flex-wrap gap-1 sm:gap-1.5 mb-2 sm:mb-4">

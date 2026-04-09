@@ -67,7 +67,8 @@ export const PRODUCTS: Product[] = [
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.58_2_qlbxrc.jpg',
     ingredients: ['Amla', 'Ginger', 'Black Salt'],
     weights: ['250 G', '500 G', '1 KG'],
-    prices: { '250 G': 300, '500 G': 600, '1 KG': 1200 }
+    prices: { '250 G': 300, '500 G': 600, '1 KG': 1200 },
+    rating: 4.5, reviewCount: 42
   },
   {
     id: 'm11',
@@ -79,7 +80,8 @@ export const PRODUCTS: Product[] = [
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543465/WhatsApp_Image_2026-02-15_at_17.53.58_tnzte2.jpg',
     ingredients: ['Amla', 'Ginger', 'Beetroot'],
     weights: ['250 G', '500 G', '1 KG'],
-    prices: { '250 G': 350, '500 G': 700, '1 KG': 1400 }
+    prices: { '250 G': 350, '500 G': 700, '1 KG': 1400 },
+    rating: 4.5, reviewCount: 28
   },
   {
     id: 'm2',
@@ -91,7 +93,8 @@ export const PRODUCTS: Product[] = [
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.57_2_g3kejf.jpg',
     ingredients: ['Raw Mango', 'Secret Churan'],
     weights: ['250 G', '500 G', '1 KG'],
-    prices: { '250 G': 300, '500 G': 600, '1 KG': 1200 }
+    prices: { '250 G': 300, '500 G': 600, '1 KG': 1200 },
+    rating: 5, reviewCount: 67
   },
   {
     id: 'm3',
@@ -103,7 +106,8 @@ export const PRODUCTS: Product[] = [
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.55_2_zsdkam.jpg',
     ingredients: ['Black Grapes', 'Black Til'],
     weights: ['250 G', '500 G', '1 KG'],
-    prices: { '250 G': 300, '500 G': 600, '1 KG': 1200 }
+    prices: { '250 G': 300, '500 G': 600, '1 KG': 1200 },
+    rating: 4.5, reviewCount: 35
   },
   {
     id: 'm4',
@@ -115,7 +119,8 @@ export const PRODUCTS: Product[] = [
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.57_1_mp1guy.jpg',
     ingredients: ['Coconut', 'Natural Sugar'],
     weights: ['250 G', '500 G', '1 KG'],
-    prices: { '250 G': 375, '500 G': 750, '1 KG': 1500 }
+    prices: { '250 G': 375, '500 G': 750, '1 KG': 1500 },
+    rating: 5, reviewCount: 53
   },
   {
     id: 'm9',
@@ -127,7 +132,8 @@ export const PRODUCTS: Product[] = [
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543462/WhatsApp_Image_2026-01-28_at_20.21.40_sgnmbl.jpg',
     ingredients: ['Coconut', 'Cocoa', 'Sugar'],
     weights: ['250 G', '500 G', '1 KG'],
-    prices: { '250 G': 450, '500 G': 900, '1 KG': 1800 }
+    prices: { '250 G': 450, '500 G': 900, '1 KG': 1800 },
+    rating: 4.5, reviewCount: 31
   },
   {
     id: 'm10',
@@ -139,7 +145,8 @@ export const PRODUCTS: Product[] = [
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.55_x6btgg.jpg',
     ingredients: ['Almonds', 'Cashews', 'Pumpkin Seeds'],
     weights: ['250 G', '500 G', '1 KG'],
-    prices: { '250 G': 350, '500 G': 700, '1 KG': 1400 }
+    prices: { '250 G': 350, '500 G': 700, '1 KG': 1400 },
+    rating: 4.5, reviewCount: 24
   },
   {
     id: 'm5',
@@ -151,7 +158,8 @@ export const PRODUCTS: Product[] = [
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543456/WhatsApp_Image_2026-02-12_at_18.57.56_3_xwxf5y.jpg',
     ingredients: ['Cranberries', 'Roasted Nuts'],
     weights: ['250 G', '500 G', '1 KG'],
-    prices: { '250 G': 400, '500 G': 800, '1 KG': 1600 }
+    prices: { '250 G': 400, '500 G': 800, '1 KG': 1600 },
+    rating: 4.5, reviewCount: 19
   },
   {
     id: 'm8',
@@ -163,7 +171,8 @@ export const PRODUCTS: Product[] = [
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543463/WhatsApp_Image_2026-02-12_at_18.57.41_rkhf9z.jpg',
     ingredients: ['Dates', 'Almonds'],
     weights: ['250 G', '500 G', '1 KG'],
-    prices: { '250 G': 350, '500 G': 700, '1 KG': 1400 }
+    prices: { '250 G': 350, '500 G': 700, '1 KG': 1400 },
+    rating: 4, reviewCount: 22
   },
   {
     id: 'm12',
@@ -175,7 +184,8 @@ export const PRODUCTS: Product[] = [
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543469/WhatsApp_Image_2026-03-14_at_21.37.48_knoien.jpg',
     ingredients: ['Ginger', 'Chaat Masala', 'Black Salt'],
     weights: ['250 G', '500 G', '1 KG'],
-    prices: { '250 G': 300, '500 G': 600, '1 KG': 1200 }
+    prices: { '250 G': 300, '500 G': 600, '1 KG': 1200 },
+    rating: 4.5, reviewCount: 37
   },
   {
     id: 'sf3',
@@ -187,7 +197,8 @@ export const PRODUCTS: Product[] = [
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543464/WhatsApp_Image_2026-02-15_at_17.06.18_qsid6v.jpg',
     ingredients: ['Dried Dates', 'Coconut', 'Almonds'],
     weights: ['250 G', '500 G', '1 KG'],
-    prices: { '250 G': 375, '500 G': 750, '1 KG': 1500 }
+    prices: { '250 G': 375, '500 G': 750, '1 KG': 1500 },
+    rating: 5, reviewCount: 29
   },
 
   // --- SWEETS ---
@@ -200,6 +211,7 @@ export const PRODUCTS: Product[] = [
     description: 'Decadent sweet dumplings. Choose between premium Pista-filled or classic Rava Dryfruit filling.',
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543466/WhatsApp_Image_2026-02-15_at_20.10.12_jvzm16.jpg',
     ingredients: ['Pistachios', 'Elaichi', 'Pure Ghee', 'White Flour'],
+    rating: 5, reviewCount: 48,
     weights: ['250 G', '500 G', '1 KG'],
     subOptions: [
       { 
@@ -221,9 +233,10 @@ export const PRODUCTS: Product[] = [
     description: 'Rich, fudge-like traditional sweet prepared with your choice of Cashews, Almonds or Pistachios.',
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543462/vj17zw61fxrmr0cwejfr4h0s5w_waghxx.png',
     ingredients: ['Cashews', 'Almonds', 'Pure Ghee', 'Pistachios', 'Elaichi','Saffron'],
+    rating: 4.5, reviewCount: 33,
     weights: ['250 G', '500 G', '1 KG'],
     subOptions: [
-      { 
+      {
         name: 'Kaju Rotla', 
         prices: { '250 G': 470, '500 G': 940, '1 KG': 1875 } 
       },
@@ -246,9 +259,10 @@ export const PRODUCTS: Product[] = [
     description: 'Delicate flaky discs soaked in saffron syrup. Pick your favorite base of Cashews, Almonds, or Pistachios.',
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/Kajupuri2PS-_5-of-7_blmxyn.jpg',
     ingredients: ['Almonds', 'Cashews', 'Saffron', 'Pure Ghee', 'Pistachios', 'Elaichi'],
+    rating: 4.5, reviewCount: 26,
     weights: ['250 G', '500 G', '1 KG'],
     subOptions: [
-      { 
+      {
         name: 'Kaju Puri', 
         prices: { '250 G': 400, '500 G': 800, '1 KG': 1600 } 
       },
@@ -272,7 +286,8 @@ export const PRODUCTS: Product[] = [
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543467/WhatsApp_Image_2026-02-15_at_20.10.14_2_rnbqyr.jpg',
     ingredients: ['Besan', 'Pure Ghee', 'Almonds', 'Elaichi'],
     weights: ['250 G', '500 G', '1 KG'],
-    prices: { '250 G': 400, '500 G': 800, '1 KG': 1600 }
+    prices: { '250 G': 400, '500 G': 800, '1 KG': 1600 },
+    rating: 5, reviewCount: 41
   },
   {
     id: 'sw10',
@@ -284,7 +299,8 @@ export const PRODUCTS: Product[] = [
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543461/magas-recipe-2_svofa6.jpg',
     ingredients: ['Gram Flour', 'Pure Ghee', 'Nuts', 'Elaichi'],
     weights: ['250 G', '500 G', '1 KG'],
-    prices: { '250 G': 250, '500 G': 500, '1 KG': 1000 }
+    prices: { '250 G': 250, '500 G': 500, '1 KG': 1000 },
+    rating: 4.5, reviewCount: 18
   },
   {
     id: 'sw11',
@@ -296,7 +312,8 @@ export const PRODUCTS: Product[] = [
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543469/WhatsApp_Image_2026-02-15_at_20.10.16_mx3fnn.jpg',
     ingredients: ['White Flour', 'Mixed Nuts', 'Pure Ghee'],
     weights: ['250 G', '500 G', '1 KG'],
-    prices: { '250 G': 300, '500 G': 600, '1 KG': 1200 }
+    prices: { '250 G': 300, '500 G': 600, '1 KG': 1200 },
+    rating: 4, reviewCount: 21
   },
 
   // --- SNACKS ---
@@ -310,7 +327,8 @@ export const PRODUCTS: Product[] = [
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1775232432/81YCSnJoCgL._AC_UF894_1000_QL80__f1jird.jpg',
     ingredients: ['Rice Flour', 'Sesame', 'Mixed Spices', 'Butter', 'Curd'],
     weights: ['250 G', '500 G', '1 KG'],
-    prices: { '250 G': 175, '500 G': 350, '1 KG': 700 }
+    prices: { '250 G': 175, '500 G': 350, '1 KG': 700 },
+    rating: 4.5, reviewCount: 56
   },
   {
     id: 's3',
@@ -322,7 +340,8 @@ export const PRODUCTS: Product[] = [
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/4540cc6d6d0f0a3f4c9e1f612e7f0b73_1_lgqb4z.jpg',
     ingredients: ['White Flour', 'Black Pepper', 'Cumin Seeds', 'Pure Ghee'],
     weights: ['250 G', '500 G', '1 KG'],
-    prices: { '250 G': 150, '500 G': 300, '1 KG': 600 }
+    prices: { '250 G': 150, '500 G': 300, '1 KG': 600 },
+    rating: 4.5, reviewCount: 38
   },
   {
     id: 's4',
@@ -333,6 +352,7 @@ export const PRODUCTS: Product[] = [
     description: 'Spicy crunchy wheat discs, a perfect tea-time companion. Pick your favorite blend.',
     image: 'https://i.postimg.cc/mgK8Jcnz/મસલ_કડક_પર_masala_kadak_puri_recipe_in_gujarati_રસપ_મખય_ફટ.jpg',
     ingredients: ['Wheat Flour', 'Spices', 'Coriander', 'Green Chilli'],
+    rating: 4.5, reviewCount: 44,
     weights: ['250 G', '500 G', '1 KG'],
     subOptions: [
       { 
@@ -355,7 +375,8 @@ export const PRODUCTS: Product[] = [
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543459/istockphoto-1149101234-1024x1024_ipuvuy.jpg',
     ingredients: ['Raw Banana', 'Oil', 'Salt Pepper'],
     weights: ['250 G', '500 G', '1 KG'],
-    prices: { '250 G': 165, '500 G': 325, '1 KG': 650 }
+    prices: { '250 G': 165, '500 G': 325, '1 KG': 650 },
+    rating: 5, reviewCount: 32
   },
   {
     id: 's7',
@@ -367,7 +388,8 @@ export const PRODUCTS: Product[] = [
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774544872/istockphoto-1360236832-612x612_jb7lgc.jpg',
     ingredients: ['Purple Yam', 'Oil', 'Salt and Pepper'],
     weights: ['250 G', '500 G', '1 KG'],
-    prices: { '250 G': 215, '500 G': 425, '1 KG': 850 }
+    prices: { '250 G': 215, '500 G': 425, '1 KG': 850 },
+    rating: 4, reviewCount: 17
   },
   {
     id: 's8',
@@ -379,7 +401,8 @@ export const PRODUCTS: Product[] = [
     image: 'https://i.postimg.cc/2SH7N1X8/cjpjdzmbyhrmw0cwc6783pqgdg.png',
     ingredients: ['Wheat Flour', 'Jaggery', 'Seasame seeds'],
     weights: ['250 G', '500 G', '1 KG'],
-    prices: { '250 G': 150, '500 G': 300, '1 KG': 600 }
+    prices: { '250 G': 150, '500 G': 300, '1 KG': 600 },
+    rating: 4.5, reviewCount: 23
   },
   {
     id: 's9',
@@ -391,7 +414,8 @@ export const PRODUCTS: Product[] = [
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543460/istockphoto-2196882416-1024x1024_ojyojd.jpg',
     ingredients: ['Gram Flour', 'Red Chilli', 'Carrum Seeds'],
     weights: ['250 G', '500 G', '1 KG'],
-    prices: { '250 G': 150, '500 G': 300, '1 KG': 600 }
+    prices: { '250 G': 150, '500 G': 300, '1 KG': 600 },
+    rating: 4.5, reviewCount: 29
   },
   {
     id: 's10',
@@ -403,7 +427,8 @@ export const PRODUCTS: Product[] = [
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543459/istockphoto-1080623274-1024x1024_ddkbga.jpg',
     ingredients: ['White Flour', 'Spices'],
     weights: ['250 G', '500 G', '1 KG'],
-    prices: { '250 G': 210, '500 G': 420, '1 KG': 840 }
+    prices: { '250 G': 210, '500 G': 420, '1 KG': 840 },
+    rating: 4.5, reviewCount: 35
   },
   {
     id: 's2',
@@ -415,7 +440,8 @@ export const PRODUCTS: Product[] = [
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543458/bv8arqx6axrmw0cwc5hbxzzzy0_xxqz73.png',
     ingredients: ['Poha', 'Peanuts', 'Mixed Spices'],
     weights: ['250 G', '500 G', '1 KG'],
-    prices: { '250 G': 150, '500 G': 300, '1 KG': 600 }
+    prices: { '250 G': 150, '500 G': 300, '1 KG': 600 },
+    rating: 4.5, reviewCount: 43
   },
   {
     id: 's12',
@@ -427,7 +453,8 @@ export const PRODUCTS: Product[] = [
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543469/WhatsApp_Image_2026-02-19_at_11.57.05_hiqois.jpg',
     ingredients: ['Wheat Flour', 'Methi Leaves', 'Mixed Spices'],
     weights: ['250 G', '500 G', '1 KG'],
-    prices: { '250 G': 150, '500 G': 300, '1 KG': 600 }
+    prices: { '250 G': 150, '500 G': 300, '1 KG': 600 },
+    rating: 4.5, reviewCount: 27
   },
 
   // --- HEALTH & WELLNESS ---
@@ -445,7 +472,8 @@ export const PRODUCTS: Product[] = [
     ],
     ingredients: ['Rolled Oats', 'Mixed Nuts', 'Seeds', 'Dried Cranberries', 'Dates'],
     weights: ['250 G', '500 G', '1 KG'],
-    prices: { '250 G': 450, '500 G': 900, '1 KG': 1800 }
+    prices: { '250 G': 450, '500 G': 900, '1 KG': 1800 },
+    rating: 5, reviewCount: 38
   },
   {
     id: 'sm1',
@@ -457,7 +485,8 @@ export const PRODUCTS: Product[] = [
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543464/WhatsApp_Image_2026-02-15_at_17.09.52_nouzpm.jpg',
     ingredients: ['Saffron', 'Pistachios', 'Almonds'],
     weights: ['100 G', '250 G'],
-    prices: { '100 G': 400, '250 G': 800 }
+    prices: { '100 G': 400, '250 G': 800 },
+    rating: 4.5, reviewCount: 22
   },
   {
     id: 'sm2',
@@ -469,7 +498,8 @@ export const PRODUCTS: Product[] = [
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543464/WhatsApp_Image_2026-02-15_at_17.15.19_tovhut.jpg',
     ingredients: ['Cardamom', 'Ginger', 'Cinnamon'],
     weights: ['100 G', '250 G'],
-    prices: { '100 G': 160, '250 G': 320 }
+    prices: { '100 G': 160, '250 G': 320 },
+    rating: 4.5, reviewCount: 31
   }
 ];
 
