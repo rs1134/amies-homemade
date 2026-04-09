@@ -81,7 +81,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
 
         <button
           onClick={() => onAddToCart(product)}
-          className="w-full py-2.5 sm:py-3.5 border border-gray-200 text-gray-700 rounded-full text-[11px] sm:text-sm font-medium hover:bg-[#F14E4E] hover:text-white hover:border-[#F14E4E] transition-all duration-300 flex items-center justify-center gap-1.5"
+          className="w-full py-2.5 sm:py-3.5 border border-[#F14E4E] text-[#F14E4E] rounded-full text-[11px] sm:text-sm font-medium hover:bg-[#F14E4E] hover:text-white transition-all duration-300 flex items-center justify-center gap-1.5"
         >
           + Add to Cart
         </button>
