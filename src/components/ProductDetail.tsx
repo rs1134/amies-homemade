@@ -119,15 +119,49 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose, onAddTo
           </div>
 
           {/* Price + heart */}
-          <div className="flex items-center justify-between mb-5 sm:mb-8">
-            <span className="text-2xl sm:text-3xl font-bold text-coral">₹{currentPrice}</span>
+          <div className="flex items-center justify-between mb-3 sm:mb-5">
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-2xl sm:text-3xl font-bold text-coral">₹{currentPrice}</span>
+                <span className="text-sm text-gray-400 line-through">₹{Math.ceil(currentPrice / 0.9 / 5) * 5}</span>
+                <span className="text-[10px] font-bold bg-[#F14E4E] text-white px-2 py-0.5 rounded-full uppercase tracking-wide">SAVE 10%</span>
+              </div>
+              {product.rating && product.reviewCount && (
+                <div className="flex items-center gap-1.5">
+                  <div className="flex">
+                    {[1,2,3,4,5].map(i => {
+                      const filled = i <= Math.floor(product.rating!);
+                      const half = !filled && i === Math.ceil(product.rating!) && product.rating! % 1 !== 0;
+                      return (
+                        <span key={i} style={{ position: 'relative', display: 'inline-block', fontSize: '14px', lineHeight: 1 }}>
+                          <span style={{ color: '#e5e7eb' }}>★</span>
+                          {(filled || half) && (
+                            <span style={{ position: 'absolute', left: 0, top: 0, overflow: 'hidden', width: filled ? '100%' : '50%', color: '#fbbf24' }}>★</span>
+                          )}
+                        </span>
+                      );
+                    })}
+                  </div>
+                  <span className="text-xs text-gray-500">{product.reviewCount} reviews</span>
+                </div>
+              )}
+            </div>
             <button className="p-2.5 bg-pink-100 text-coral rounded-full hover:scale-110 transition-transform">
               <Heart size={18} fill="#F04E4E" />
             </button>
           </div>
 
           <button
-            onClick={() => onAddToCart(product, selectedWeight, selectedSubOption)}
+            onClick={() => {
+              onAddToCart(product, selectedWeight, selectedSubOption);
+              (window as any).fbq?.('track', 'AddToCart', {
+                value: currentPrice,
+                currency: 'INR',
+                content_name: product.name,
+                content_ids: [product.id],
+                content_type: 'product',
+              });
+            }}
             className="w-full py-4 bg-coral text-white rounded-2xl font-bold brand-rounded uppercase tracking-widest text-sm hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-coral/30"
           >
             Add to Bag

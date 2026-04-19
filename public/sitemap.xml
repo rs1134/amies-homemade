@@ -103,14 +103,14 @@
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://amieshomemade.com/shop/tender-coconut-chips</loc>
-    <lastmod>2026-03-31</lastmod>
+    <loc>https://amieshomemade.com/shop/tender-coconut-vanilla-chips</loc>
+    <lastmod>2026-04-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://amieshomemade.com/shop/chocolate-coconut-chips</loc>
-    <lastmod>2026-03-31</lastmod>
+    <loc>https://amieshomemade.com/shop/tender-coconut-chocolate-chips</loc>
+    <lastmod>2026-04-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -327,8 +327,8 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://amieshomemade.com/blog/homemade-chakli-why-it-tastes-different</loc>
-    <lastmod>2026-04-01</lastmod>
+    <loc>https://amieshomemade.com/blog/homemade-chakri-why-it-tastes-different</loc>
+    <lastmod>2026-04-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -346,12 +346,6 @@
   </url>
   <url>
     <loc>https://amieshomemade.com/blog/raksha-bandhan-gifts-beyond-mithai-box</loc>
-    <lastmod>2026-04-01</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://amieshomemade.com/blog/homemade-barfi-guide-varieties</loc>
     <lastmod>2026-04-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -383,6 +377,42 @@
   <url>
     <loc>https://amieshomemade.com/blog/gift-hampers-for-every-occasion-year-round</loc>
     <lastmod>2026-04-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://amieshomemade.com/blog/healthy-homemade-granola-guide</loc>
+    <lastmod>2026-04-25</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://amieshomemade.com/blog/ghughras-traditional-gujarati-sweet-guide</loc>
+    <lastmod>2026-05-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://amieshomemade.com/blog/is-mukhwas-good-for-you-health-benefits</loc>
+    <lastmod>2026-05-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://amieshomemade.com/blog/art-of-making-mukhwas-at-home</loc>
+    <lastmod>2026-07-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://amieshomemade.com/blog/coconut-in-indian-snacking-chips-to-mithai</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://amieshomemade.com/blog/5-types-of-mukhwas-when-to-eat-them</loc>
+    <lastmod>2026-07-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>

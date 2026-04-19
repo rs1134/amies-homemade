@@ -68,7 +68,7 @@ export const PRODUCTS: Product[] = [
     ingredients: ['Amla', 'Ginger', 'Black Salt'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 300, '500 G': 600, '1 KG': 1200 },
-    rating: 4.5, reviewCount: 42
+    rating: 4.5, reviewCount: 38
   },
   {
     id: 'm11',
@@ -94,7 +94,7 @@ export const PRODUCTS: Product[] = [
     ingredients: ['Raw Mango', 'Secret Churan'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 300, '500 G': 600, '1 KG': 1200 },
-    rating: 5, reviewCount: 67
+    rating: 5, reviewCount: 39
   },
   {
     id: 'm3',
@@ -111,7 +111,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'm4',
-    name: 'Tender Coconut Chips',
+    name: 'Tender Coconut Vanilla Chips',
     category: Category.MUKHWAS,
     price: 375,
     weight: '250 G',
@@ -120,11 +120,11 @@ export const PRODUCTS: Product[] = [
     ingredients: ['Coconut', 'Natural Sugar'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 375, '500 G': 750, '1 KG': 1500 },
-    rating: 5, reviewCount: 53
+    rating: 5, reviewCount: 37
   },
   {
     id: 'm9',
-    name: 'Chocolate Coconut Chips',
+    name: 'Tender Coconut Chocolate Chips',
     category: Category.MUKHWAS,
     price: 450,
     weight: '250 G',
@@ -211,7 +211,7 @@ export const PRODUCTS: Product[] = [
     description: 'Decadent sweet dumplings. Choose between premium Pista-filled or classic Rava Dryfruit filling.',
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543466/WhatsApp_Image_2026-02-15_at_20.10.12_jvzm16.jpg',
     ingredients: ['Pistachios', 'Elaichi', 'Pure Ghee', 'White Flour'],
-    rating: 5, reviewCount: 48,
+    rating: 5, reviewCount: 36,
     weights: ['250 G', '500 G', '1 KG'],
     subOptions: [
       { 
@@ -287,7 +287,7 @@ export const PRODUCTS: Product[] = [
     ingredients: ['Besan', 'Pure Ghee', 'Almonds', 'Elaichi'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 400, '500 G': 800, '1 KG': 1600 },
-    rating: 5, reviewCount: 41
+    rating: 5, reviewCount: 40
   },
   {
     id: 'sw10',
@@ -328,7 +328,7 @@ export const PRODUCTS: Product[] = [
     ingredients: ['Rice Flour', 'Sesame', 'Mixed Spices', 'Butter', 'Curd'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 175, '500 G': 350, '1 KG': 700 },
-    rating: 4.5, reviewCount: 56
+    rating: 4.5, reviewCount: 34
   },
   {
     id: 's3',
@@ -352,7 +352,7 @@ export const PRODUCTS: Product[] = [
     description: 'Spicy crunchy wheat discs, a perfect tea-time companion. Pick your favorite blend.',
     image: 'https://i.postimg.cc/mgK8Jcnz/મસલ_કડક_પર_masala_kadak_puri_recipe_in_gujarati_રસપ_મખય_ફટ.jpg',
     ingredients: ['Wheat Flour', 'Spices', 'Coriander', 'Green Chilli'],
-    rating: 4.5, reviewCount: 44,
+    rating: 4.5, reviewCount: 33,
     weights: ['250 G', '500 G', '1 KG'],
     subOptions: [
       { 
@@ -441,7 +441,7 @@ export const PRODUCTS: Product[] = [
     ingredients: ['Poha', 'Peanuts', 'Mixed Spices'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 150, '500 G': 300, '1 KG': 600 },
-    rating: 4.5, reviewCount: 43
+    rating: 4.5, reviewCount: 31
   },
   {
     id: 's12',

@@ -16,6 +16,7 @@ export default async function handler(req: any, res: any) {
     shippingFee,
     grandTotal,
     paymentId,
+    couponDiscount,
   } = req.body;
 
   const message = [
@@ -32,6 +33,7 @@ export default async function handler(req: any, res: any) {
     itemsSummary,
     ``,
     `Subtotal: Rs.${subtotal}`,
+    ...(couponDiscount > 0 ? [`Coupon (Thanks10): -Rs.${couponDiscount}`] : []),
     `Delivery: Rs.${shippingFee}`,
     `GRAND TOTAL: Rs.${grandTotal}`,
     `Payment Method: RAZORPAY`,

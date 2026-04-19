@@ -3,17 +3,20 @@ import { Truck, Wallet, ChevronRight, X, Copy, Check, QrCode, Smartphone, AlertC
 import { CartItem } from '../types.ts';
 import { STORE_UPI_ID, MERCHANT_NAME, WHATSAPP_NUMBER } from '../constants.ts';
 
+const COUPON_STORAGE_KEY = 'thanks10_used_phones';
+
 interface CheckoutViewProps {
   items: CartItem[];
   onComplete: () => void;
   onUpdateQuantity: (id: string, delta: number) => void;
   onRemove: (id: string) => void;
   total: number; // Subtotal
+  couponDiscount?: number;
 }
 
 type FieldName = 'name' | 'phone' | 'email' | 'city' | 'address';
 
-const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdateQuantity, onRemove, total }) => {
+const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdateQuantity, onRemove, total, couponDiscount = 0 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [paymentId, setPaymentId] = useState('');
@@ -121,7 +124,7 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
     return 250;
   }, [formData.city, totalWeight]);
 
-  const grandTotal = total + (shippingFee || 0);
+  const grandTotal = total - couponDiscount + (shippingFee || 0);
 
   const submitOrderSilently = async (razorpayPaymentId: string) => {
     setIsSubmitting(true);
@@ -148,7 +151,7 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
 *Items:*
 ${itemsSummary}
 
-*Total Amount:* Rs.${grandTotal}
+*Total Amount:* Rs.${grandTotal}${couponDiscount > 0 ? `\n*Coupon Applied:* Thanks10 (− Rs.${couponDiscount})` : ''}
 *Payment:* ONLINE (RAZORPAY)
 ---------------------------
 _Please confirm my order and share delivery details._
@@ -186,6 +189,16 @@ _Please confirm my order and share delivery details._
       console.error('[notify-order] Request failed:', err);
     }
 
+    // Mark coupon as used for this phone number
+    if (couponDiscount > 0) {
+      const usedPhones: string[] = JSON.parse(localStorage.getItem(COUPON_STORAGE_KEY) || '[]');
+      const cleanPhone = formData.phone.trim().replace(/[\s\-+]/g, '').replace(/^91/, '');
+      if (!usedPhones.includes(cleanPhone)) {
+        usedPhones.push(cleanPhone);
+        localStorage.setItem(COUPON_STORAGE_KEY, JSON.stringify(usedPhones));
+      }
+    }
+
     // Always complete the order regardless of notification result
     (window as any).lastOrderWhatsappUrl = whatsappUrl;
     setPaymentId(razorpayPaymentId);
@@ -219,6 +232,19 @@ _Please confirm my order and share delivery details._
       return;
     }
 
+    // Check if this phone has already used the THANKS10 coupon
+    if (couponDiscount > 0) {
+      const usedPhones: string[] = JSON.parse(localStorage.getItem(COUPON_STORAGE_KEY) || '[]');
+      const cleanPhone = formData.phone.trim().replace(/[\s\-+]/g, '').replace(/^91/, '');
+      if (usedPhones.includes(cleanPhone)) {
+        setFieldErrors(prev => ({ ...prev, phone: 'This phone number has already used the THANKS10 coupon.' }));
+        setTouched(prev => ({ ...prev, phone: true }));
+        const element = document.getElementById('field-phone');
+        element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -245,6 +271,13 @@ _Please confirm my order and share delivery details._
         order_id: order.id,
         handler: function (response: any) {
           submitOrderSilently(response.razorpay_payment_id);
+          (window as any).fbq?.('track', 'Purchase', {
+            value: grandTotal,
+            currency: 'INR',
+            content_ids: items.map(i => i.id),
+            content_type: 'product',
+            num_items: items.reduce((sum, i) => sum + i.quantity, 0),
+          });
         },
         prefill: {
           name: formData.name,
@@ -330,6 +363,12 @@ _Please confirm my order and share delivery details._
                   <span>Subtotal</span>
                   <span>₹{total}</span>
                 </div>
+                {couponDiscount > 0 && (
+                  <div className="flex justify-between items-center text-sm font-bold text-green-600">
+                    <span>Coupon Discount (Thanks10)</span>
+                    <span>− ₹{couponDiscount}</span>
+                  </div>
+                )}
                 <div className="flex justify-between items-center text-sm font-bold text-[#4A3728]/50">
                   <span>Delivery Fee</span>
                   <span>{shippingFee === 0 ? 'FREE' : `₹${shippingFee ?? 0}`}</span>
@@ -352,7 +391,7 @@ _Please confirm my order and share delivery details._
                  <Calendar className="text-[#F04E4E] flex-shrink-0" size={20} />
                  <div>
                    <p className="text-[9px] font-black brand-rounded uppercase text-[#4A3728]/40 tracking-widest mb-1">Estimated Arrival</p>
-                   <p className="text-[12px] font-bold text-[#4A3728]">{formData.city.toLowerCase() === 'ahmedabad' ? '1 Working Day' : '3-5 Business Days'}</p>
+                   <p className="text-[12px] font-bold text-[#4A3728]">{formData.city.toLowerCase() === 'ahmedabad' ? '2-3 Working Days' : '3-5 Business Days'}</p>
                  </div>
               </div>
             </div>

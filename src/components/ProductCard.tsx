@@ -21,7 +21,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
       const filled = i <= Math.floor(rating);
       const half = !filled && i === Math.ceil(rating) && rating % 1 !== 0;
       return (
-        <span key={i} className={`text-xs ${filled || half ? 'text-amber-400' : 'text-gray-200'}`}>★</span>
+        <span key={i} style={{ position: 'relative', display: 'inline-block', fontSize: '12px', lineHeight: 1 }}>
+          <span style={{ color: '#e5e7eb' }}>★</span>
+          {(filled || half) && (
+            <span style={{
+              position: 'absolute',
+              left: 0,
+              top: 0,
+              overflow: 'hidden',
+              width: filled ? '100%' : '50%',
+              color: '#fbbf24'
+            }}>★</span>
+          )}
+        </span>
       );
     });
   };
@@ -48,7 +60,17 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
         
         <div className="absolute top-4 right-4 flex flex-col gap-2 translate-x-12 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300">
           <button
-            onClick={(e) => { e.stopPropagation(); onAddToCart(product); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              onAddToCart(product);
+              (window as any).fbq?.('track', 'AddToCart', {
+                value: displayPrice,
+                currency: 'INR',
+                content_name: product.name,
+                content_ids: [product.id],
+                content_type: 'product',
+              });
+            }}
             className="p-3 bg-[#F14E4E] text-white rounded-full shadow-lg hover:bg-[#d43d3d] transition-colors"
           >
             <Plus size={20} />
@@ -98,7 +120,16 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
         </p>
 
         <button
-          onClick={() => onAddToCart(product)}
+          onClick={() => {
+            onAddToCart(product);
+            (window as any).fbq?.('track', 'AddToCart', {
+              value: displayPrice,
+              currency: 'INR',
+              content_name: product.name,
+              content_ids: [product.id],
+              content_type: 'product',
+            });
+          }}
           className="w-full py-2.5 sm:py-3.5 border border-[#F14E4E] text-[#F14E4E] rounded-full text-[11px] sm:text-sm font-medium hover:bg-[#F14E4E] hover:text-white transition-all duration-300 flex items-center justify-center gap-1.5"
         >
           + Add to Cart

@@ -16,7 +16,7 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount, onCartClick, onNavigate, onS
 
 
   return (
-    <nav className="fixed w-full bg-[#FFF8EE]/90 backdrop-blur-md z-50 border-b border-[#F04E4E]/10">
+    <nav className="fixed w-full bg-[#FFF8EE]/90 backdrop-blur-md z-50 border-b border-[#F04E4E]/10 top-[40px]">
 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
           <div className="flex items-center gap-6">

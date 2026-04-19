@@ -51,7 +51,22 @@ const PolicyModal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, i
 };
 
 const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
-  const [activeModal, setActiveModal] = useState<'privacy' | 'shipping' | null>(null);
+  const [activeModal, setActiveModal] = useState<'privacy' | 'shipping' | null>(() => {
+    const hash = window.location.hash;
+    if (hash === '#shipping') return 'shipping';
+    if (hash === '#privacy') return 'privacy';
+    return null;
+  });
+
+  const openModal = (modal: 'privacy' | 'shipping') => {
+    setActiveModal(modal);
+    window.history.pushState(null, '', `#${modal}`);
+  };
+
+  const closeModal = () => {
+    setActiveModal(null);
+    window.history.pushState(null, '', window.location.pathname);
+  };
 
   const handleNav = (page: string) => {
     if (onNavigate) {
@@ -160,13 +175,13 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           <p>© 2026 Amie's Homemade. All rights reserved.</p>
           <div className="flex gap-8">
             <button 
-              onClick={() => setActiveModal('privacy')}
+              onClick={() => openModal('privacy')}
               className="hover:text-white transition-colors cursor-pointer"
             >
               Privacy Policy
             </button>
             <button 
-              onClick={() => setActiveModal('shipping')}
+              onClick={() => openModal('shipping')}
               className="hover:text-white transition-colors cursor-pointer"
             >
               Shipping Terms
@@ -177,8 +192,8 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
       {/* Shipping Terms Modal */}
       <PolicyModal 
-        isOpen={activeModal === 'shipping'} 
-        onClose={() => setActiveModal(null)} 
+        isOpen={activeModal === 'shipping'}
+        onClose={closeModal}
         title="Shipping & Delivery"
         icon={<Truck size={24} />}
       >
@@ -236,13 +251,35 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               <span>If you receive a damaged order, contact us within <span className="font-bold">24 hours</span> on WhatsApp with a photo for resolution.</span>
             </li>
           </ul>
+
+          {/* Returns & Exchanges Policy */}
+          <div className="space-y-4">
+            <div className="flex items-center gap-3 px-2">
+              <ShieldCheck size={18} className="text-coral" />
+              <h4 className="text-[10px] brand-rounded font-black uppercase tracking-widest text-[#4A3728]/40">Returns & Exchanges Policy</h4>
+            </div>
+            <div className="bg-white rounded-3xl border border-coral/5 overflow-hidden shadow-sm divide-y divide-coral/5">
+              <div className="p-5">
+                <p className="text-xs font-black brand-rounded uppercase tracking-widest text-[#4A3728] mb-2">Returns</p>
+                <p className="text-xs text-[#4A3728]/70 leading-relaxed">We accept returns <span className="font-bold">only for defective or damaged products</span>. If your order arrives in an unsatisfactory condition, please contact us within <span className="font-bold">24 hours of delivery</span> on WhatsApp with clear photos of the issue. Once verified, we will arrange a replacement or refund at our discretion. Returns for change of mind, incorrect orders placed by the customer, or personal taste preferences are not accepted.</p>
+              </div>
+              <div className="p-5">
+                <p className="text-xs font-black brand-rounded uppercase tracking-widest text-[#4A3728] mb-2">Exchanges</p>
+                <p className="text-xs text-[#4A3728]/70 leading-relaxed">We do <span className="font-bold">not accept exchanges</span> on any orders. Since all our products are freshly prepared in small batches and are perishable in nature, we are unable to facilitate product swaps once an order has been dispatched. Please review your order carefully before confirming payment.</p>
+              </div>
+              <div className="p-5 bg-[#FFF8EE]">
+                <p className="text-xs font-black brand-rounded uppercase tracking-widest text-[#4A3728] mb-2">How to raise a concern</p>
+                <p className="text-xs text-[#4A3728]/70 leading-relaxed">Message us on <span className="font-bold">WhatsApp at +91 91575 37842</span> within 24 hours of receiving your order. Include your Order ID, a description of the issue, and at least one clear photo. We will respond within 1 business day.</p>
+              </div>
+            </div>
+          </div>
         </div>
       </PolicyModal>
 
       {/* Privacy Policy Modal */}
       <PolicyModal 
-        isOpen={activeModal === 'privacy'} 
-        onClose={() => setActiveModal(null)} 
+        isOpen={activeModal === 'privacy'}
+        onClose={closeModal}
         title="Privacy Policy"
         icon={<ShieldCheck size={24} />}
       >

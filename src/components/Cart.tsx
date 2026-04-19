@@ -1,6 +1,9 @@
 import React from 'react';
-import { X, Minus, Plus, Trash2, ArrowRight, ShoppingCart } from 'lucide-react';
+import { X, Minus, Plus, Trash2, ArrowRight, ShoppingCart, Tag, CheckCircle } from 'lucide-react';
 import { CartItem } from '../types.ts';
+
+const COUPON_CODE = 'Thanks10';
+const COUPON_STORAGE_KEY = 'thanks10_used_phones';
 
 interface CartProps {
   isOpen: boolean;
@@ -8,11 +11,35 @@ interface CartProps {
   items: CartItem[];
   onUpdateQuantity: (id: string, delta: number) => void;
   onRemove: (id: string) => void;
-  onCheckout: () => void;
+  onCheckout: (couponDiscount: number) => void;
 }
 
 const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, onRemove, onCheckout }) => {
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const [couponInput, setCouponInput] = React.useState('');
+  const [couponApplied, setCouponApplied] = React.useState(false);
+  const [couponError, setCouponError] = React.useState('');
+
+  const couponDiscount = couponApplied ? Math.round(subtotal * 0.1) : 0;
+  const orderTotal = subtotal - couponDiscount;
+
+  const handleApplyCoupon = () => {
+    const code = couponInput.trim();
+    if (code !== COUPON_CODE) {
+      setCouponError('Invalid coupon code.');
+      return;
+    }
+    const usedPhones: string[] = JSON.parse(localStorage.getItem(COUPON_STORAGE_KEY) || '[]');
+    // We check at checkout time if the phone was already used; here just validate the code
+    setCouponApplied(true);
+    setCouponError('');
+  };
+
+  const handleRemoveCoupon = () => {
+    setCouponApplied(false);
+    setCouponInput('');
+    setCouponError('');
+  };
 
   // Lock body scroll when cart is open
   React.useEffect(() => {
@@ -101,24 +128,64 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, o
         </div>
 
         {items.length > 0 && (
-          <div className="p-10 bg-white rounded-t-[4rem] border-t border-[#F04E4E]/10 space-y-8 shadow-[0_-20px_50px_rgba(240,78,78,0.05)]">
-            <div className="space-y-4">
+          <div className="p-8 bg-white rounded-t-[4rem] border-t border-[#F04E4E]/10 space-y-6 shadow-[0_-20px_50px_rgba(240,78,78,0.05)]">
+            {/* Coupon input */}
+            {!couponApplied ? (
+              <div>
+                <div className="flex gap-2">
+                  <div className="flex-1 flex items-center gap-2 border-2 border-[#4A3728]/10 rounded-2xl px-4 py-3 bg-[#FFF8EE] focus-within:border-coral/40 transition-colors">
+                    <Tag size={14} className="text-coral/50 flex-shrink-0" />
+                    <input
+                      type="text"
+                      value={couponInput}
+                      onChange={e => { setCouponInput(e.target.value); setCouponError(''); }}
+                      onKeyDown={e => e.key === 'Enter' && handleApplyCoupon()}
+                      placeholder="Have a coupon code?"
+                      className="flex-1 bg-transparent text-xs font-bold brand-rounded tracking-widest outline-none text-[#4A3728] placeholder-[#4A3728]/30"
+                    />
+                  </div>
+                  <button
+                    onClick={handleApplyCoupon}
+                    className="px-4 py-3 bg-[#4A3728] text-white rounded-2xl text-[10px] font-black brand-rounded uppercase tracking-widest hover:bg-coral transition-colors"
+                  >
+                    Apply
+                  </button>
+                </div>
+                {couponError && <p className="text-[10px] text-red-500 font-bold brand-rounded mt-1.5 pl-1">{couponError}</p>}
+              </div>
+            ) : (
+              <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-2xl px-4 py-3">
+                <div className="flex items-center gap-2">
+                  <CheckCircle size={16} className="text-green-500" />
+                  <span className="text-xs font-black brand-rounded uppercase tracking-widest text-green-700">THANKS10 Applied!</span>
+                </div>
+                <button onClick={handleRemoveCoupon} className="text-[10px] text-green-600 hover:text-red-500 font-bold transition-colors">Remove</button>
+              </div>
+            )}
+
+            <div className="space-y-3">
               <div className="flex justify-between text-sm">
                 <span className="text-[#4A3728]/50 brand-rounded uppercase font-bold text-[10px] tracking-widest">Subtotal</span>
                 <span className="font-bold">₹{subtotal}</span>
               </div>
+              {couponApplied && (
+                <div className="flex justify-between text-sm">
+                  <span className="text-green-600 brand-rounded uppercase font-bold text-[10px] tracking-widest">Coupon Discount (10%)</span>
+                  <span className="font-bold text-green-600">− ₹{couponDiscount}</span>
+                </div>
+              )}
               <div className="flex justify-between text-sm items-center">
                 <span className="text-[#4A3728]/50 brand-rounded uppercase font-bold text-[10px] tracking-widest">Delivery</span>
                 <span className="text-[9px] text-coral font-black brand-rounded uppercase tracking-widest">Calculated at Checkout</span>
               </div>
-              <div className="pt-6 border-t border-[#4A3728]/5 flex justify-between items-center">
+              <div className="pt-4 border-t border-[#4A3728]/5 flex justify-between items-center">
                 <span className="text-xl font-bold serif">Order Value</span>
-                <span className="text-4xl font-black text-[#4A3728]">₹{subtotal}</span>
+                <span className="text-4xl font-black text-[#4A3728]">₹{orderTotal}</span>
               </div>
             </div>
-            
-            <button 
-              onClick={onCheckout}
+
+            <button
+              onClick={() => onCheckout(couponDiscount)}
               className="w-full py-6 bg-coral text-white rounded-[2rem] font-bold tracking-[0.2em] uppercase text-xs hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 shadow-2xl shadow-coral/30"
             >
               Set Delivery Info <ArrowRight size={18} />

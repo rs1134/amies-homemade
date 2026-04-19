@@ -154,6 +154,7 @@ const App: React.FC = () => {
   const [currentBlogSlug, setCurrentBlogSlug] = useState(() => getBlogSlugFromPath(window.location.pathname));
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [couponDiscount, setCouponDiscount] = useState(0);
   const [activeCategory, setActiveCategory] = useState<Category | 'All'>('All');
   const [showMangoToast, setShowMangoToast] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(() => {
@@ -434,6 +435,7 @@ const App: React.FC = () => {
       injectSchema('product-schema', {
         '@context': 'https://schema.org',
         '@type': 'Product',
+        sku: selectedProduct.id,
         name: selectedProduct.name,
         description: selectedProduct.description,
         image: selectedProduct.image,
@@ -602,8 +604,8 @@ const App: React.FC = () => {
   useEffect(() => {
     if (currentPage === 'shop') {
       const today = new Date().toDateString();
-      const lastSeen = localStorage.getItem('mangoPopupDate');
-      if (lastSeen !== today) {
+      const lastSeen = sessionStorage.getItem('offerPopupSeen');
+      if (!lastSeen) {
         const timer = setTimeout(() => setShowMangoToast(true), 600);
         return () => clearTimeout(timer);
       }
@@ -734,51 +736,79 @@ const App: React.FC = () => {
       case 'gifting': return <GiftingView onAddToCart={(p) => addToCart(p)} onSelectProduct={(p) => openProduct(p)} />;
       case 'shop': return (
         <section id="shop" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 sm:pt-32 sm:pb-32 relative z-10">
-          {/* Chatpati Mango spotlight popup */}
+          {/* 10% Off Limited Offer popup */}
           {showMangoToast && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" onClick={() => { localStorage.setItem('mangoPopupDate', new Date().toDateString()); setShowMangoToast(false); }}>
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={() => { sessionStorage.setItem('offerPopupSeen', '1'); setShowMangoToast(false); }}>
               <div
-                className="relative bg-white rounded-3xl overflow-hidden shadow-2xl max-w-[85vw] sm:max-w-sm w-full animate-in zoom-in-95 duration-300 cursor-pointer"
-                onClick={(e) => { e.stopPropagation(); localStorage.setItem('mangoPopupDate', new Date().toDateString()); setShowMangoToast(false); openProduct(PRODUCTS.find(p => p.id === 'm2')!); }}
+                className="relative rounded-3xl overflow-hidden shadow-2xl max-w-[85vw] sm:max-w-sm w-full animate-in zoom-in-95 duration-300"
+                style={{ background: '#2A1E14' }}
+                onClick={(e) => e.stopPropagation()}
               >
+                {/* Geometric triangle decorations */}
+                <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 400 520" preserveAspectRatio="xMidYMid slice">
+                  {/* Top-left cluster */}
+                  <polygon points="0,0 90,0 0,90" fill="#F04E4E" opacity="0.9"/>
+                  <polygon points="0,60 50,0 90,60" fill="#F6C94C" opacity="0.85"/>
+                  <polygon points="55,0 110,0 55,55" fill="#4A9B8E" opacity="0.8"/>
+                  <polygon points="20,90 70,40 90,100" fill="#F04E4E" opacity="0.6"/>
+                  <polygon points="100,10 130,10 115,40" fill="#F6C94C" opacity="0.7"/>
+                  <polygon points="140,0 175,0 140,35" fill="#E8856A" opacity="0.75"/>
+                  {/* Top-right cluster */}
+                  <polygon points="400,0 310,0 400,90" fill="#F6C94C" opacity="0.9"/>
+                  <polygon points="350,0 400,0 400,60" fill="#4A9B8E" opacity="0.8"/>
+                  <polygon points="300,0 350,50 280,50" fill="#F04E4E" opacity="0.7"/>
+                  <polygon points="370,65 400,40 400,100" fill="#E8856A" opacity="0.65"/>
+                  <polygon points="250,0 285,0 265,30" fill="#F6C94C" opacity="0.6"/>
+                  {/* Scattered mid decorations */}
+                  <polygon points="10,200 35,165 60,200" fill="#F04E4E" opacity="0.5"/>
+                  <polygon points="370,180 400,155 400,210" fill="#4A9B8E" opacity="0.55"/>
+                  <polygon points="15,300 40,270 60,310" fill="#F6C94C" opacity="0.45"/>
+                  <polygon points="360,290 390,260 400,300" fill="#F04E4E" opacity="0.4"/>
+                  {/* Bottom-left cluster */}
+                  <polygon points="0,520 0,430 90,520" fill="#F6C94C" opacity="0.9"/>
+                  <polygon points="0,460 60,520 0,520" fill="#E8856A" opacity="0.8"/>
+                  <polygon points="60,520 130,460 160,520" fill="#F04E4E" opacity="0.7"/>
+                  <polygon points="20,430 70,480 10,490" fill="#4A9B8E" opacity="0.6"/>
+                  <polygon points="100,510 140,470 170,510" fill="#F6C94C" opacity="0.55"/>
+                  {/* Bottom-right cluster */}
+                  <polygon points="400,520 310,520 400,430" fill="#4A9B8E" opacity="0.9"/>
+                  <polygon points="340,520 400,460 400,520" fill="#F04E4E" opacity="0.8"/>
+                  <polygon points="240,520 290,470 330,520" fill="#F6C94C" opacity="0.75"/>
+                  <polygon points="350,440 390,480 340,490" fill="#E8856A" opacity="0.65"/>
+                  <polygon points="220,500 255,465 270,505" fill="#F04E4E" opacity="0.5"/>
+                  {/* Small scattered dots */}
+                  <polygon points="185,15 195,0 205,15" fill="#F04E4E" opacity="0.7"/>
+                  <polygon points="210,25 225,10 235,28" fill="#4A9B8E" opacity="0.65"/>
+                  <polygon points="50,140 65,120 75,145" fill="#F6C94C" opacity="0.5"/>
+                  <polygon points="340,140 355,120 365,145" fill="#F04E4E" opacity="0.5"/>
+                </svg>
+
                 {/* Close */}
                 <button
-                  onClick={(e) => { e.stopPropagation(); localStorage.setItem('mangoPopupDate', new Date().toDateString()); setShowMangoToast(false); }}
-                  className="absolute top-3 right-3 z-10 w-8 h-8 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center text-[#4A3728]/50 hover:text-[#4A3728] transition-colors shadow"
+                  onClick={(e) => { e.stopPropagation(); sessionStorage.setItem('offerPopupSeen', '1'); setShowMangoToast(false); }}
+                  className="absolute top-3 right-3 w-9 h-9 bg-white/15 backdrop-blur-sm rounded-full flex items-center justify-center text-white/70 hover:text-white hover:bg-white/25 transition-colors"
+                  style={{ zIndex: 9999 }}
                 >✕</button>
 
-                {/* Badges */}
-                <div className="absolute top-4 left-4 z-10 flex flex-col gap-1.5">
-                  <span className="px-3 py-1 bg-[#F04E4E] rounded-full text-[9px] font-black uppercase tracking-widest text-white shadow-lg animate-pulse">
-                    🔥 Limited Batch
-                  </span>
-                  <span className="px-3 py-1 bg-[#D4AF37] rounded-full text-[9px] font-black uppercase tracking-widest text-white shadow-lg">
-                    ☀️ Summer Special
-                  </span>
-                </div>
-
-                {/* Image */}
-                <div className="relative h-44 sm:h-60 overflow-hidden bg-[#FFF8EE]">
-                  <img
-                    src={PRODUCTS.find(p => p.id === 'm2')!.image}
-                    alt="Chatpati Mango Mukhwas"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#2A1E14]/60 via-transparent to-transparent" />
-                  <p className="absolute bottom-4 left-4 right-4 text-white font-black serif text-2xl leading-tight drop-shadow-lg">
-                    Mango Season<br/>is Here. 🥭
-                  </p>
-                </div>
-
                 {/* Content */}
-                <div className="p-4 sm:p-6">
-                  <h3 className="text-base sm:text-xl font-bold serif text-[#4A3728] mb-1">Chatpati Mango Mukhwas</h3>
-                  <p className="text-xs sm:text-sm text-[#4A3728]/60 brand-rounded mb-1 leading-relaxed">
-                    Our summer special is back — tangy raw mango tossed in a secret homemade spice blend, made fresh in a <span className="font-bold text-[#F04E4E]">limited seasonal batch</span> only.
+                <div className="relative z-10 px-6 sm:px-8 pt-8 sm:pt-12 pb-7 sm:pb-10 text-center">
+                  <div className="inline-flex items-center gap-2 bg-white/10 text-white/80 text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full mb-4 sm:mb-6">
+                    🎉 Limited Time Offer
+                  </div>
+                  <div className="text-white font-black leading-none mb-1" style={{ fontSize: 'clamp(3rem, 18vw, 5.5rem)', fontFamily: 'serif' }}>10%</div>
+                  <div className="text-white font-black brand-rounded uppercase tracking-[0.25em] text-base sm:text-lg mb-1">OFF on Everything</div>
+                  <div className="text-white/60 text-xs brand-rounded mb-4 sm:mb-8">Mukhwas · Sweets · Snacks · Hampers</div>
+
+                  <p className="text-xs sm:text-sm text-white/70 brand-rounded leading-relaxed mb-1">
+                    All prices already include your <span className="font-bold text-[#F6C94C]">10% discount</span> — no coupon needed. Grab your favourites while the offer lasts!
                   </p>
-                  <p className="text-[10px] sm:text-xs text-[#4A3728]/40 brand-rounded font-bold uppercase tracking-widest mb-4">Once it's gone, it's gone until next season.</p>
-                  <button className="w-full py-3 sm:py-4 bg-[#F04E4E] text-white rounded-2xl font-black brand-rounded uppercase tracking-[0.2em] text-xs hover:bg-[#d43d3d] transition-colors shadow-lg shadow-[#F04E4E]/30">
-                    Order Now — Before It's Gone →
+                  <p className="text-[10px] text-white/40 brand-rounded font-bold uppercase tracking-widest mb-4 sm:mb-7">Handcrafted fresh · Pan-India delivery</p>
+
+                  <button
+                    onClick={() => { sessionStorage.setItem('offerPopupSeen', '1'); setShowMangoToast(false); }}
+                    className="w-full py-3 sm:py-3.5 bg-[#F04E4E] text-white rounded-2xl font-black brand-rounded uppercase tracking-[0.2em] text-xs hover:bg-[#d43d3d] transition-colors shadow-lg shadow-[#F04E4E]/40"
+                  >
+                    Shop Now →
                   </button>
                 </div>
               </div>
@@ -818,12 +848,13 @@ const App: React.FC = () => {
         </section>
       );
       case 'checkout': return (
-        <CheckoutView 
-          items={cart} 
-          total={cartTotal} 
+        <CheckoutView
+          items={cart}
+          total={cartTotal}
+          couponDiscount={couponDiscount}
           onUpdateQuantity={updateQuantity}
           onRemove={removeFromCart}
-          onComplete={() => setOrderComplete(true)} 
+          onComplete={() => { setOrderComplete(true); setCouponDiscount(0); }}
         />
       );
       case 'contact': return (
@@ -979,7 +1010,36 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen pt-10">
+      {/* Announcement banner */}
+      <div className="fixed top-0 left-0 right-0 z-[60] w-full overflow-hidden" style={{ background: '#2A1E14', height: '40px' }}>
+        {/* Left triangles */}
+        <svg className="absolute left-0 top-0 h-full" style={{ width: '120px' }} viewBox="0 0 120 40" preserveAspectRatio="xMinYMid meet">
+          <polygon points="0,0 45,0 0,36" fill="#F04E4E" opacity="0.9"/>
+          <polygon points="0,0 25,0 0,20" fill="#F6C94C" opacity="0.85"/>
+          <polygon points="40,0 75,0 40,36" fill="#4A9B8E" opacity="0.8"/>
+          <polygon points="65,0 95,0 65,30" fill="#E8856A" opacity="0.75"/>
+          <polygon points="85,0 110,0 85,28" fill="#F6C94C" opacity="0.6"/>
+          <polygon points="0,20 20,36 0,36" fill="#F6C94C" opacity="0.7"/>
+          <polygon points="15,36 45,36 30,18" fill="#F04E4E" opacity="0.5"/>
+        </svg>
+        {/* Right triangles */}
+        <svg className="absolute right-0 top-0 h-full" style={{ width: '120px' }} viewBox="0 0 120 40" preserveAspectRatio="xMaxYMid meet">
+          <polygon points="120,0 75,0 120,36" fill="#F6C94C" opacity="0.9"/>
+          <polygon points="120,0 95,0 120,20" fill="#4A9B8E" opacity="0.85"/>
+          <polygon points="80,0 45,0 80,36" fill="#F04E4E" opacity="0.8"/>
+          <polygon points="55,0 25,0 55,30" fill="#F6C94C" opacity="0.7"/>
+          <polygon points="35,0 10,0 35,28" fill="#E8856A" opacity="0.6"/>
+          <polygon points="120,20 100,36 120,36" fill="#F04E4E" opacity="0.7"/>
+          <polygon points="105,36 75,36 90,18" fill="#4A9B8E" opacity="0.5"/>
+        </svg>
+        {/* Text */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <span className="text-white font-bold brand-rounded uppercase tracking-[0.15em] sm:tracking-[0.2em] text-[10px] sm:text-xs whitespace-nowrap px-28">
+            ✨ Limited Offer &nbsp;·&nbsp; 10% Off on All Products
+          </span>
+        </div>
+      </div>
       <Navbar
         cartCount={cartCount}
         onCartClick={() => setIsCartOpen(true)}
@@ -1032,7 +1092,7 @@ const App: React.FC = () => {
         items={cart}
         onUpdateQuantity={updateQuantity}
         onRemove={removeFromCart}
-        onCheckout={() => { setIsCartOpen(false); navigate('checkout'); }}
+        onCheckout={(discount) => { setCouponDiscount(discount); setIsCartOpen(false); navigate('checkout'); }}
       />
     </div>
   );
