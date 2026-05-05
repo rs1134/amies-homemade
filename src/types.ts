@@ -28,6 +28,7 @@ export interface Product {
   rating?: number;
   reviewCount?: number;
   isGift?: boolean;
+  isNew?: boolean;
   subOptions?: {
     name: string;
     prices: Record<string, number>;

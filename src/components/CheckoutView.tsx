@@ -203,6 +203,7 @@ _Please confirm my order and share delivery details._
     (window as any).lastOrderWhatsappUrl = whatsappUrl;
     setPaymentId(razorpayPaymentId);
     setIsSuccess(true);
+    window.history.pushState(null, '', '/order-confirmed');
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setIsSubmitting(false);
   };
@@ -336,7 +337,7 @@ _Please confirm my order and share delivery details._
                 <MessageCircle size={28} />
               </div>
               <div className="space-y-1">
-                <p className="text-[13px] font-bold text-[#4A3728]">Ami Shah has received your order details.</p>
+                <p className="text-[13px] font-bold text-[#4A3728]">We have received your order details.</p>
                 <p className="text-[13px] font-bold text-[#F04E4E]">We'll confirm your order shortly via WhatsApp.</p>
               </div>
             </div>
@@ -391,7 +392,7 @@ _Please confirm my order and share delivery details._
                  <Calendar className="text-[#F04E4E] flex-shrink-0" size={20} />
                  <div>
                    <p className="text-[9px] font-black brand-rounded uppercase text-[#4A3728]/40 tracking-widest mb-1">Estimated Arrival</p>
-                   <p className="text-[12px] font-bold text-[#4A3728]">{formData.city.toLowerCase() === 'ahmedabad' ? '2-3 Working Days' : '3-5 Business Days'}</p>
+                   <p className="text-[12px] font-bold text-[#4A3728]">{formData.city.toLowerCase() === 'ahmedabad' ? '2 Working Days' : '3-5 Working Days'}</p>
                  </div>
               </div>
             </div>

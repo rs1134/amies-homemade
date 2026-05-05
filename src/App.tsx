@@ -122,6 +122,25 @@ const getProductSlugFromPath = (path: string): string => {
   return m ? m[1] : '';
 };
 
+// Category ↔ URL slug mapping
+const CATEGORY_SLUG: Partial<Record<Category | 'All', string>> = {
+  [Category.MUKHWAS]:  'mukhwas',
+  [Category.WELLNESS]: 'health-wellness',
+  [Category.SNACKS]:   'snacks',
+  [Category.SWEETS]:   'traditional-sweets',
+};
+const SLUG_TO_CATEGORY: Record<string, Category | 'All'> = {
+  'mukhwas':           Category.MUKHWAS,
+  'health-wellness':   Category.WELLNESS,
+  'snacks':            Category.SNACKS,
+  'traditional-sweets': Category.SWEETS,
+};
+const getCategoryFromPath = (path: string): Category | 'All' => {
+  const m = path.match(/^\/shop\/([^/]+)$/);
+  if (!m) return 'All';
+  return SLUG_TO_CATEGORY[m[1]] ?? 'All';
+};
+
 const getAreaFromPath = (path: string): string => {
   const m = path.match(/^\/delivery\/(.+)$/);
   return m ? m[1] : '';
@@ -144,6 +163,7 @@ const getPageFromPath = (path: string): string => {
   if (path.startsWith('/gifting')) return 'gifting';
   if (path.startsWith('/blog')) return 'blog';
   if (path.startsWith('/faq')) return 'faq';
+  if (path === '/order-confirmed') return 'checkout';
   return PATH_TO_PAGE[path] || 'home';
 };
 
@@ -155,7 +175,7 @@ const App: React.FC = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [couponDiscount, setCouponDiscount] = useState(0);
-  const [activeCategory, setActiveCategory] = useState<Category | 'All'>('All');
+  const [activeCategory, setActiveCategory] = useState<Category | 'All'>(() => getCategoryFromPath(window.location.pathname));
   const [showMangoToast, setShowMangoToast] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(() => {
     const slug = getProductSlugFromPath(window.location.pathname);
@@ -164,6 +184,25 @@ const App: React.FC = () => {
   const [orderComplete, setOrderComplete] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
+  // Rotating announcement bar
+  const BANNERS = [
+    { icon: '✦', text: 'Free delivery across Ahmedabad' },
+    { icon: '◷', text: 'Delivered within 2 working days' },
+    { icon: '✦', text: '10% off on all products — limited time' },
+  ];
+  const [bannerIdx, setBannerIdx] = useState(0);
+  const [bannerFade, setBannerFade] = useState(true);
+  useEffect(() => {
+    const t = setInterval(() => {
+      setBannerFade(false);
+      setTimeout(() => {
+        setBannerIdx(i => (i + 1) % BANNERS.length);
+        setBannerFade(true);
+      }, 350);
+    }, 4000);
+    return () => clearInterval(t);
+  }, []);
+
   const navigate = useCallback((page: string) => {
     const path = PAGE_TO_PATH[page] || '/';
     window.history.pushState(null, '', path);
@@ -171,6 +210,7 @@ const App: React.FC = () => {
     setCurrentArea('');
     setCurrentCity('');
     setCurrentBlogSlug('');
+    if (page === 'shop') setActiveCategory('All');
   }, []);
 
   const navigateToBlog = useCallback((slug?: string) => {
@@ -223,6 +263,9 @@ const App: React.FC = () => {
       setCurrentBlogSlug(getBlogSlugFromPath(path));
       const slug = getProductSlugFromPath(path);
       setSelectedProduct(slug ? (PRODUCT_SLUG_MAP[slug] ?? null) : null);
+      setActiveCategory(getCategoryFromPath(path));
+      // Reset order confirmation if navigating away from /order-confirmed
+      if (path !== '/order-confirmed') setOrderComplete(false);
     };
     window.addEventListener('popstate', onPopState);
     return () => window.removeEventListener('popstate', onPopState);
@@ -393,7 +436,7 @@ const App: React.FC = () => {
           { '@type': 'Question', name: 'What ingredients do you use? Are there any preservatives?', acceptedAnswer: { '@type': 'Answer', text: "Every product at Amie's Homemade is made with 100% natural ingredients — fennel seeds, coriander seeds, sesame seeds, dried rose petals, cardamom, and carom seeds. No artificial colors, no synthetic flavors, and absolutely no preservatives of any kind." } },
           { '@type': 'Question', name: "Do you offer sugar-free options for diabetics?", acceptedAnswer: { '@type': 'Answer', text: 'Yes. Our plain mukhwas blends have no added sugar, no sugar coating, and no glucose syrup. They are genuinely safe for diabetics. Traditional mukhwas ingredients (fennel, coriander, sesame, carom, cardamom) are naturally low-GI.' } },
           { '@type': 'Question', name: 'How do I place an order?', acceptedAnswer: { '@type': 'Answer', text: 'The easiest way is to WhatsApp us at +91 91575 37842. You can also browse products on the website, add items to your cart, and complete checkout online.' } },
-          { '@type': 'Question', name: 'Do you deliver pan-India?', acceptedAnswer: { '@type': 'Answer', text: 'Yes — we deliver pan-India. Ahmedabad orders arrive in 1 working day. For the rest of India, orders typically arrive within 3 to 5 business days via courier.' } },
+          { '@type': 'Question', name: 'Do you deliver pan-India?', acceptedAnswer: { '@type': 'Answer', text: 'Yes — we deliver pan-India. Ahmedabad orders arrive in 2 working days. For the rest of India, orders typically arrive within 3 to 5 working days via courier.' } },
           { '@type': 'Question', name: 'What are the delivery charges?', acceptedAnswer: { '@type': 'Answer', text: 'Delivery within Ahmedabad is free. For orders outside Ahmedabad: up to 500g — ₹60; 500g to 1kg — ₹100; 1kg to 2kg — ₹150; 2kg to 5kg — ₹200; above 5kg — ₹250.' } },
           { '@type': 'Question', name: 'What is the shelf life of your products?', acceptedAnswer: { '@type': 'Answer', text: 'Mukhwas stays fresh for 3 to 4 months. Snacks stay fresh for up to 60 days. Sweets are best consumed within 30 days.' } },
           { '@type': 'Question', name: 'Can I customize the contents of a gift hamper?', acceptedAnswer: { '@type': 'Answer', text: 'Absolutely. You can choose which mukhwas varieties go in, adjust quantities, add or remove products, and specify dietary requirements. Just tell us who it is for and what they love.' } },
@@ -698,7 +741,7 @@ const App: React.FC = () => {
               <CheckCircle size={40} />
             </div>
             <h2 className="text-4xl font-bold serif text-[#4A3728] mb-4">Order Received!</h2>
-            <p className="text-[#4A3728]/60 mb-8 brand-rounded font-bold uppercase text-xs tracking-widest">Ami Shah is preparing your treats right now with love.</p>
+            <p className="text-[#4A3728]/60 mb-8 brand-rounded font-bold uppercase text-xs tracking-widest">We're preparing your treats right now with love.</p>
             <button 
               onClick={() => { setOrderComplete(false); navigate('home'); setCart([]); }}
               className="px-10 py-4 bg-coral text-white rounded-full font-bold uppercase brand-rounded text-xs tracking-widest hover:scale-105 transition-all"
@@ -824,7 +867,12 @@ const App: React.FC = () => {
               {['All', ...Object.values(Category).filter(c => c !== Category.GIFTING)].map(cat => (
                 <button
                   key={cat}
-                  onClick={() => setActiveCategory(cat as any)}
+                  onClick={() => {
+                    const c = cat as Category | 'All';
+                    setActiveCategory(c);
+                    const slug = CATEGORY_SLUG[c as Category];
+                    window.history.pushState(null, '', slug ? `/shop/${slug}` : '/shop');
+                  }}
                   className={`brand-rounded text-[10px] uppercase tracking-[0.2em] font-bold transition-all px-8 py-3 rounded-full border-2 ${
                     activeCategory === cat 
                       ? 'bg-[#F04E4E] border-[#F04E4E] text-white shadow-xl shadow-[#F04E4E]/30 scale-105' 
@@ -948,6 +996,61 @@ const App: React.FC = () => {
             onShopClick={() => navigate('shop')}
             onAboutClick={() => navigate('about')}
           />
+          {/* ── Featured Products ───────────────────────────────────────────── */}
+          <section className="py-16 sm:py-24 px-4 bg-white">
+            <div className="max-w-7xl mx-auto">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-10 sm:mb-16 gap-4">
+                <div>
+                  <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em] mb-4 block">Customer Favourites</span>
+                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold serif text-[#4A3728]">Our Bestsellers</h2>
+                  <div className="w-16 h-1 bg-coral rounded-full mt-6"></div>
+                </div>
+                <button
+                  onClick={() => navigate('shop')}
+                  className="flex items-center gap-2 text-coral font-bold brand-rounded uppercase tracking-[0.2em] text-xs hover:gap-4 transition-all duration-300 group whitespace-nowrap"
+                >
+                  Shop All Products <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+                {(['sf3', 'm2', 'hw1', 's7', 'sw5', 'sm1', 'sw1', 'm4'] as const).map(id => {
+                  const product = PRODUCTS.find(p => p.id === id);
+                  if (!product) return null;
+                  return (
+                    <div
+                      key={product.id}
+                      onClick={() => openProduct(product)}
+                      className="group cursor-pointer bg-white rounded-[2rem] overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-[#4A3728]/8 flex flex-col"
+                    >
+                      <div className="relative overflow-hidden bg-[#FFF9F0] aspect-square">
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                          loading="lazy"
+                        />
+                      </div>
+                      <div className="p-4 flex flex-col gap-3 flex-1">
+                        <div>
+                          <h3 className="font-bold serif text-[#4A3728] text-sm leading-tight">{product.name}</h3>
+                        </div>
+                        <div className="mt-auto flex flex-col gap-2">
+                          <p className="text-coral font-black text-base">₹{product.price} <span className="text-[#4A3728]/40 font-medium text-xs">/ {product.weight}</span></p>
+                          <button
+                            onClick={e => { e.stopPropagation(); openProduct(product); }}
+                            className="w-full py-2.5 bg-[#F04E4E] text-white text-[10px] font-black brand-rounded uppercase tracking-[0.2em] rounded-2xl hover:bg-[#d43c3c] transition-colors active:scale-95"
+                          >
+                            Add to Bag
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
+
           <section className="pt-12 pb-14 sm:pt-20 sm:pb-24 px-4 max-w-7xl mx-auto">
             <div className="text-center mb-10 sm:mb-16">
               <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em] mb-4 block">The Amie's Difference</span>
@@ -956,37 +1059,37 @@ const App: React.FC = () => {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
               {[
-                { 
-                  title: "100% Homemade", 
+                {
+                  title: "100% Homemade",
                   desc: "Every treat is personally crafted in our home kitchen, ensuring the same authentic warmth and care you'd find in a mother's cooking.",
                   color: "bg-[#FFF1F1]",
                   textColor: "text-[#F04E4E]",
                   icon: <Heart size={20} />
                 },
-                { 
-                  title: "No Preservatives", 
-                  desc: "We believe in the purity of nature. Our products contain zero artificial colors or chemicals, preserving the genuine goodness of real ingredients.", 
+                {
+                  title: "No Preservatives",
+                  desc: "We believe in the purity of nature. Our products contain zero artificial colors or chemicals, preserving the genuine goodness of real ingredients.",
                   color: "bg-[#FFF8E7]",
                   textColor: "text-[#D97706]",
                   icon: <ShieldCheck size={20} />
                 },
-                { 
-                  title: "Family Recipes", 
-                  desc: "Rooted in generations of culinary wisdom, our recipes are kept secret to preserve the nostalgic flavors of traditional Indian households.", 
+                {
+                  title: "Family Recipes",
+                  desc: "Rooted in generations of culinary wisdom, our recipes are kept secret to preserve the nostalgic flavors of traditional Indian households.",
                   color: "bg-[#FFF0F7]",
                   textColor: "text-[#DB2777]",
                   icon: <History size={20} />
                 },
-                { 
-                  title: "Small Batches", 
-                  desc: "By cooking in limited quantities, we maintain rigorous hygiene standards and ensure that every single jar delivers the highest level of freshness.", 
+                {
+                  title: "Small Batches",
+                  desc: "By cooking in limited quantities, we maintain rigorous hygiene standards and ensure that every single jar delivers the highest level of freshness.",
                   color: "bg-[#F0FFF4]",
                   textColor: "text-[#059669]",
                   icon: <Package size={20} />
                 }
               ].map((item, i) => (
-                <div 
-                  key={i} 
+                <div
+                  key={i}
                   className={`${item.color} p-6 sm:p-12 rounded-[2rem] sm:rounded-[4rem] text-center hover:shadow-2xl hover:shadow-[#4A3728]/5 hover:-translate-y-2 transition-all duration-500 flex flex-col items-center group`}
                 >
                   <div className={`mb-6 p-4 rounded-3xl bg-white shadow-sm ${item.textColor} group-hover:scale-110 transition-transform duration-300`}>
@@ -1002,7 +1105,7 @@ const App: React.FC = () => {
               ))}
             </div>
           </section>
-          
+
           <Reviews />
         </>
       );
@@ -1034,9 +1137,13 @@ const App: React.FC = () => {
           <polygon points="105,36 75,36 90,18" fill="#4A9B8E" opacity="0.5"/>
         </svg>
         {/* Text */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-white font-bold brand-rounded uppercase tracking-[0.15em] sm:tracking-[0.2em] text-[10px] sm:text-xs whitespace-nowrap px-28">
-            ✨ Limited Offer &nbsp;·&nbsp; 10% Off on All Products
+        <div className="absolute inset-0 flex items-center justify-center px-28">
+          <span
+            className="text-white brand-rounded font-semibold tracking-[0.18em] text-[10px] sm:text-[11px] uppercase whitespace-nowrap transition-opacity duration-300"
+            style={{ opacity: bannerFade ? 1 : 0 }}
+          >
+            <span className="opacity-60 mr-2.5">{BANNERS[bannerIdx].icon}</span>
+            {BANNERS[bannerIdx].text}
           </span>
         </div>
       </div>

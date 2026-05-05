@@ -77,9 +77,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
           </button>
         </div>
         <div className="absolute top-4 left-4 flex flex-col gap-1.5">
-          <span className="px-3 py-1 bg-white rounded-full text-[10px] font-bold uppercase tracking-widest text-[#4A3728]">
-            {product.category}
-          </span>
+          {product.isNew && (
+            <span className="px-2.5 py-1 bg-white/80 backdrop-blur-sm border border-emerald-400/40 rounded-full text-[9px] font-bold uppercase tracking-widest text-emerald-600 shadow-sm">
+              ✦ Newly Launched
+            </span>
+          )}
           {product.id === 'm2' && (
             <span className="px-3 py-1 bg-[#F04E4E] rounded-full text-[9px] font-black uppercase tracking-widest text-white animate-pulse shadow-lg">
               🥭 Limited Stock
@@ -99,7 +101,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
           <span className="text-[9px] sm:text-[10px] font-bold bg-[#F14E4E] text-white px-1.5 py-0.5 rounded-full uppercase tracking-wide">SAVE 10%</span>
         </div>
 
-        {product.rating && product.reviewCount && (
+        {!product.isNew && product.rating && product.reviewCount && (
           <div className="flex items-center gap-1 mb-2">
             <div className="flex">{renderStars(product.rating)}</div>
             <span className="text-[10px] text-gray-500">{product.reviewCount} reviews</span>

@@ -102,7 +102,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                   <Instagram size={20} />
                 </a>
                 <a 
-                  href="https://www.facebook.com/ami.shah.7161953/" 
+                  href="https://www.facebook.com/profile.php?id=61577122515091" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="w-12 h-12 bg-white/5 flex items-center justify-center rounded-full hover:bg-[#F14E4E] transition-colors"
@@ -204,7 +204,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </div>
             <div>
               <h4 className="font-bold text-green-800 text-sm brand-rounded uppercase tracking-widest mb-1">Ahmedabad Delivery</h4>
-              <p className="text-green-700/80 text-xs">Enjoy <span className="font-bold">FREE Home Delivery</span> within Ahmedabad city limits. Typical arrival: 1 working day.</p>
+              <p className="text-green-700/80 text-xs">Enjoy <span className="font-bold">FREE Home Delivery</span> within Ahmedabad city limits. Typical arrival: 2 working days.</p>
             </div>
           </div>
 

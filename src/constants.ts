@@ -296,7 +296,7 @@ export const PRODUCTS: Product[] = [
     price: 250,
     weight: '250 G',
     description: 'Beloved Gujarati classic made with coarse gram flour and pure ghee.',
-    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543461/magas-recipe-2_svofa6.jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1777464487/ChatGPT_Image_Apr_29_2026_05_37_54_PM_jzufxw.png',
     ingredients: ['Gram Flour', 'Pure Ghee', 'Nuts', 'Elaichi'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 250, '500 G': 500, '1 KG': 1000 },
@@ -324,7 +324,7 @@ export const PRODUCTS: Product[] = [
     price: 175,
     weight: '250 G',
     description: 'Classic crunchy spiral snack made with rice flour and spices.',
-    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1775232432/81YCSnJoCgL._AC_UF894_1000_QL80__f1jird.jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1777464237/ChatGPT_Image_Apr_29_2026_05_33_06_PM_xa6o1x.png',
     ingredients: ['Rice Flour', 'Sesame', 'Mixed Spices', 'Butter', 'Curd'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 175, '500 G': 350, '1 KG': 700 },
@@ -419,12 +419,12 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 's10',
-    name: 'Khasta Kachori',
+    name: 'Mini Khasta Kachori',
     category: Category.SNACKS,
     price: 210,
     weight: '250 G',
-    description: 'Flaky deep-fried pastry filled with spiced moong dal.',
-    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543459/istockphoto-1080623274-1024x1024_ddkbga.jpg',
+    description: 'Flaky deep-fried mini pastry bites filled with spiced moong dal.',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1777795607/ChatGPT_Image_May_3_2026_01_34_45_PM_xmj8lm.png',
     ingredients: ['White Flour', 'Spices'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 210, '500 G': 420, '1 KG': 840 },
@@ -445,16 +445,39 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 's12',
-    name: 'Methi Masala Stick',
+    name: 'Methi Masala Stick / Cheese Stick',
     category: Category.SNACKS,
-    price: 150,
+    price: 175,
     weight: '250 G',
-    description: 'Crunchy wheat sticks flavored with dried fenugreek leaves.',
+    description: 'Crunchy wheat sticks in two bold flavors — classic dried fenugreek or rich cheesy. Pick your favorite.',
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543469/WhatsApp_Image_2026-02-19_at_11.57.05_hiqois.jpg',
-    ingredients: ['Wheat Flour', 'Methi Leaves', 'Mixed Spices'],
+    ingredients: ['Wheat Flour', 'Methi Leaves', 'Cheese', 'Mixed Spices'],
     weights: ['250 G', '500 G', '1 KG'],
-    prices: { '250 G': 150, '500 G': 300, '1 KG': 600 },
-    rating: 4.5, reviewCount: 27
+    rating: 4.5, reviewCount: 27,
+    subOptions: [
+      {
+        name: 'Methi Masala Stick',
+        prices: { '250 G': 175, '500 G': 350, '1 KG': 700 }
+      },
+      {
+        name: 'Cheese Stick',
+        prices: { '250 G': 190, '500 G': 375, '1 KG': 750 }
+      }
+    ]
+  },
+
+  {
+    id: 's13',
+    name: 'Peri-Peri Makhana',
+    category: Category.SNACKS,
+    price: 125,
+    weight: '50 G',
+    description: 'Light and crispy fox nuts tossed in a bold peri-peri spice blend. A guilt-free snack with a fiery kick.',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/v1777633088/Crunchy_crispy_and_full_of_flavor_HealthyCravings_-_Gourav_Ojha_ds2p10.jpg',
+    ingredients: ['Fox Nuts (Makhana)', 'Peri-Peri Spice', 'Oil', 'Salt'],
+    weights: ['50 G', '100 G'],
+    prices: { '50 G': 125, '100 G': 250 },
+    isNew: true
   },
 
   // --- HEALTH & WELLNESS ---
@@ -485,7 +508,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543464/WhatsApp_Image_2026-02-15_at_17.09.52_nouzpm.jpg',
     ingredients: ['Saffron', 'Pistachios', 'Almonds'],
     weights: ['100 G', '250 G'],
-    prices: { '100 G': 400, '250 G': 800 },
+    prices: { '100 G': 400, '250 G': 1000 },
     rating: 4.5, reviewCount: 22
   },
   {
