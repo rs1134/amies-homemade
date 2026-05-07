@@ -43,14 +43,20 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
 
     const initAutocomplete = () => {
       if (!addressSearchRef.current || !(window as any).google) return;
-      // Bias results towards Ahmedabad
+      // Strong bias towards Ahmedabad (tighter circle around city center)
       const ahmedabadBounds = new (window as any).google.maps.LatLngBounds(
-        new (window as any).google.maps.LatLng(22.87, 72.43),
-        new (window as any).google.maps.LatLng(23.13, 72.72)
+        new (window as any).google.maps.LatLng(22.95, 72.50),
+        new (window as any).google.maps.LatLng(23.10, 72.65)
       );
       const autocomplete = new (window as any).google.maps.places.Autocomplete(
         addressSearchRef.current,
-        { componentRestrictions: { country: 'in' }, fields: ['address_components', 'formatted_address'], types: ['address'], bounds: ahmedabadBounds, strictBounds: false }
+        {
+          componentRestrictions: { country: 'in' },
+          fields: ['address_components', 'formatted_address', 'name'],
+          // No `types` restriction → finds apartments, societies, landmarks AND street addresses
+          bounds: ahmedabadBounds,
+          strictBounds: false,
+        }
       );
       autocompleteRef.current = autocomplete;
       autocomplete.addListener('place_changed', () => {
@@ -63,7 +69,10 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
           if (c.types.includes('sublocality_level_1')) sublocality = c.long_name;
           if (c.types.includes('locality'))            city = c.long_name;
         });
-        const address = [streetNumber, route, sublocality].filter(Boolean).join(', ') || place.formatted_address || '';
+        // Build address: prefer apartment/establishment name + sublocality if present
+        const namePart = place.name && !route.includes(place.name) ? place.name : '';
+        const addressParts = [namePart, streetNumber, route, sublocality].filter(Boolean);
+        const address = addressParts.length > 0 ? addressParts.join(', ') : (place.formatted_address || '');
         setFormData(prev => ({ ...prev, address, city: city || prev.city }));
         setTouched(prev => ({ ...prev, address: true, city: true }));
         setFieldErrors(prev => ({ ...prev, address: '', city: '' }));
