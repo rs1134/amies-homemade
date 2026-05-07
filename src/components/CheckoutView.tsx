@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
-import { Truck, Wallet, ChevronRight, Smartphone, Loader2, MessageCircle, CheckCircle, MapPin, Calendar, Building2, Minus, Plus, Trash2, Scale, Banknote, Package, Search } from 'lucide-react';
+import { Truck, Wallet, ChevronRight, Smartphone, Loader2, MessageCircle, CheckCircle, MapPin, Calendar, Building2, Minus, Plus, Trash2, Scale, Search } from 'lucide-react';
 import { CartItem } from '../types.ts';
 import { WHATSAPP_NUMBER } from '../constants.ts';
 
@@ -10,18 +10,16 @@ interface CheckoutViewProps {
   onComplete: () => void;
   onUpdateQuantity: (id: string, delta: number) => void;
   onRemove: (id: string) => void;
-  total: number; // Subtotal
+  total: number;
   couponDiscount?: number;
 }
 
-type FieldName = 'name' | 'phone' | 'email' | 'city' | 'address' | 'pincode';
+type FieldName = 'name' | 'phone' | 'email' | 'city' | 'address';
 
 const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdateQuantity, onRemove, total, couponDiscount = 0 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [paymentId, setPaymentId] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState<'online' | 'cod'>('online');
-  const [codOrderData, setCodOrderData] = useState<{ awb: string; shiprocketOrderId: number } | null>(null);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -29,7 +27,6 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
     email: '',
     city: '',
     address: '',
-    pincode: '',
   });
 
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<FieldName, string>>>({});
@@ -54,23 +51,17 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
       autocomplete.addListener('place_changed', () => {
         const place = autocomplete.getPlace();
         if (!place.address_components) return;
-        let streetNumber = '', route = '', sublocality = '', city = '', pincode = '';
+        let streetNumber = '', route = '', sublocality = '', city = '';
         place.address_components.forEach((c: any) => {
-          if (c.types.includes('street_number'))               streetNumber = c.long_name;
-          if (c.types.includes('route'))                       route = c.long_name;
-          if (c.types.includes('sublocality_level_1'))         sublocality = c.long_name;
-          if (c.types.includes('locality'))                    city = c.long_name;
-          if (c.types.includes('postal_code'))                 pincode = c.long_name;
+          if (c.types.includes('street_number'))       streetNumber = c.long_name;
+          if (c.types.includes('route'))               route = c.long_name;
+          if (c.types.includes('sublocality_level_1')) sublocality = c.long_name;
+          if (c.types.includes('locality'))            city = c.long_name;
         });
         const address = [streetNumber, route, sublocality].filter(Boolean).join(', ') || place.formatted_address || '';
-        setFormData(prev => ({
-          ...prev,
-          address,
-          city: city || prev.city,
-          pincode: pincode || prev.pincode,
-        }));
-        setTouched(prev => ({ ...prev, address: true, city: true, pincode: true }));
-        setFieldErrors(prev => ({ ...prev, address: '', city: '', pincode: '' }));
+        setFormData(prev => ({ ...prev, address, city: city || prev.city }));
+        setTouched(prev => ({ ...prev, address: true, city: true }));
+        setFieldErrors(prev => ({ ...prev, address: '', city: '' }));
       });
     };
 
@@ -92,39 +83,29 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   }, []);
 
   const isAhmedabad = formData.city.trim().toLowerCase() === 'ahmedabad';
-  const isCod = isAhmedabad && paymentMethod === 'cod';
 
   const validateField = (name: string, value: string): string => {
     switch (name) {
       case 'name':
-        if (!value.trim() || value.trim().length < 3 || !/^[a-zA-Z\s]+$/.test(value)) {
+        if (!value.trim() || value.trim().length < 3 || !/^[a-zA-Z\s]+$/.test(value))
           return "Please enter a valid full name";
-        }
         return "";
       case 'phone': {
         const sanitized = value.trim().replace(/[\s-]/g, '');
-        if (!/^(?:\+91|91)?[6-9]\d{9}$/.test(sanitized)) {
+        if (!/^(?:\+91|91)?[6-9]\d{9}$/.test(sanitized))
           return "Please enter a valid 10-digit Indian mobile number";
-        }
         return "";
       }
       case 'city':
-        if (value.trim().length < 3 || !/^[a-zA-Z\s]+$/.test(value)) {
+        if (value.trim().length < 3 || !/^[a-zA-Z\s]+$/.test(value))
           return "Please enter a valid city name";
-        }
         return "";
       case 'email':
-        if (value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        if (value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
           return "Please enter a valid email address";
-        }
         return "";
       case 'address':
         if (!value.trim()) return "Full address is required";
-        return "";
-      case 'pincode':
-        if (isCod && !/^\d{6}$/.test(value.trim())) {
-          return "Please enter a valid 6-digit pincode";
-        }
         return "";
       default:
         return "";
@@ -135,16 +116,14 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     if (touched[name as FieldName]) {
-      const error = validateField(name, value);
-      setFieldErrors(prev => ({ ...prev, [name]: error }));
+      setFieldErrors(prev => ({ ...prev, [name]: validateField(name, value) }));
     }
   };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setTouched(prev => ({ ...prev, [name]: true }));
-    const error = validateField(name, value);
-    setFieldErrors(prev => ({ ...prev, [name]: error }));
+    setFieldErrors(prev => ({ ...prev, [name]: validateField(name, value) }));
   };
 
   // Calculate total weight in grams
@@ -161,7 +140,7 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
     }, 0);
   }, [items]);
 
-  // Dynamic Shipping Fee Logic
+  // Dynamic Shipping Fee
   const shippingFee = useMemo(() => {
     if (!formData.city || validateField('city', formData.city)) return null;
     if (formData.city.trim().toLowerCase() === 'ahmedabad') return 0;
@@ -174,38 +153,6 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
 
   const grandTotal = total - couponDiscount + (shippingFee || 0);
 
-  // Build WhatsApp URL helper
-  const buildWhatsappUrl = (orderId: string, payId: string, paymentType: 'ONLINE (RAZORPAY)' | 'CASH ON DELIVERY', extra = '') => {
-    const itemsSummary = items.map(i => {
-      const basicInfo = `${i.quantity}x ${i.name} (${i.selectedWeight || i.weight})`;
-      const choices = (i.ingredients && i.ingredients.length > 0)
-        ? `\n   - Choices: ${i.ingredients.join(', ')}`
-        : '';
-      return `${basicInfo}${choices}`;
-    }).join('\n');
-
-    const message = encodeURIComponent(`
-*New Order from Amie's Homemade*
----------------------------
-*Order ID:* ${orderId}
-*Payment ID:* ${payId}
-*Customer:* ${formData.name}
-*Phone:* ${formData.phone}
-*City:* ${formData.city}${isCod ? `\n*Pincode:* ${formData.pincode}` : ''}
-*Address:* ${formData.address}
-
-*Items:*
-${itemsSummary}
-
-*Total Amount:* Rs.${grandTotal}${couponDiscount > 0 ? `\n*Coupon Applied:* Thanks10 (− Rs.${couponDiscount})` : ''}
-*Payment:* ${paymentType}${extra}
----------------------------
-_Please confirm my order and share delivery details._
-    `.trim());
-    return `https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=${message}`;
-  };
-
-  // ── Online payment (Razorpay) flow ──────────────────────────────────────────
   const submitOrderSilently = async (razorpayPaymentId: string) => {
     setIsSubmitting(true);
     const orderId = `AM-${Math.floor(Math.random() * 90000 + 10000)}`;
@@ -213,30 +160,40 @@ _Please confirm my order and share delivery details._
     const itemsSummary = items.map(i => {
       const basicInfo = `${i.quantity}x ${i.name} (${i.selectedWeight || i.weight})`;
       const choices = (i.ingredients && i.ingredients.length > 0)
-        ? `\n   - Choices: ${i.ingredients.join(', ')}`
-        : '';
+        ? `\n   - Choices: ${i.ingredients.join(', ')}` : '';
       return `${basicInfo}${choices}`;
     }).join('\n');
 
-    const whatsappUrl = buildWhatsappUrl(orderId, razorpayPaymentId, 'ONLINE (RAZORPAY)');
+    const whatsappMessage = encodeURIComponent(`
+*New Order from Amie's Homemade*
+---------------------------
+*Order ID:* ${orderId}
+*Payment ID:* ${razorpayPaymentId}
+*Customer:* ${formData.name}
+*Phone:* ${formData.phone}
+*City:* ${formData.city}
+*Address:* ${formData.address}
+
+*Items:*
+${itemsSummary}
+
+*Total Amount:* Rs.${grandTotal}${couponDiscount > 0 ? `\n*Coupon Applied:* Thanks10 (− Rs.${couponDiscount})` : ''}
+*Payment:* ONLINE (RAZORPAY)
+---------------------------
+_Please confirm my order and share delivery details._
+    `.trim());
+
+    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=${whatsappMessage}`;
 
     try {
       const res = await fetch('/api/notify-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          orderId,
-          name: formData.name,
-          phone: formData.phone,
-          city: formData.city,
-          address: formData.address,
-          email: formData.email,
-          itemsSummary,
-          totalWeight,
-          subtotal: total,
-          shippingFee: shippingFee ?? 0,
-          grandTotal,
-          paymentId: razorpayPaymentId,
+          orderId, name: formData.name, phone: formData.phone,
+          city: formData.city, address: formData.address, email: formData.email,
+          itemsSummary, totalWeight, subtotal: total,
+          shippingFee: shippingFee ?? 0, grandTotal, paymentId: razorpayPaymentId,
         }),
       });
       if (!res.ok) console.error('[notify-order] Failed:', await res.json().catch(() => ({})));
@@ -255,122 +212,30 @@ _Please confirm my order and share delivery details._
 
     (window as any).lastOrderWhatsappUrl = whatsappUrl;
     setPaymentId(razorpayPaymentId);
-    setCodOrderData(null);
     setIsSuccess(true);
     window.history.pushState(null, '', '/order-confirmed');
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setIsSubmitting(false);
   };
 
-  // ── COD flow (Shiprocket) ───────────────────────────────────────────────────
-  const handleCodOrder = async () => {
-    setIsSubmitting(true);
-    const orderId = `AM-${Math.floor(Math.random() * 90000 + 10000)}`;
-
-    try {
-      const res = await fetch('/api/shiprocket-order', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          orderId,
-          name: formData.name,
-          phone: formData.phone,
-          email: formData.email,
-          address: formData.address,
-          city: formData.city,
-          pincode: formData.pincode,
-          state: 'Gujarat',
-          items,
-          grandTotal,
-          totalWeight,
-        }),
-      });
-
-      const data = await res.json();
-      if (!data.success) throw new Error(data.error || 'Shiprocket order failed');
-
-      const awb = data.awb || '';
-      const shiprocketOrderId = data.shiprocketOrderId;
-
-      const whatsappUrl = buildWhatsappUrl(
-        orderId,
-        `COD-${shiprocketOrderId}`,
-        'CASH ON DELIVERY',
-        awb ? `\n*AWB:* ${awb}` : ''
-      );
-
-      // Also notify via existing notify-order endpoint
-      try {
-        const itemsSummary = items.map(i => {
-          const basicInfo = `${i.quantity}x ${i.name} (${i.selectedWeight || i.weight})`;
-          const choices = (i.ingredients && i.ingredients.length > 0)
-            ? `\n   - Choices: ${i.ingredients.join(', ')}`
-            : '';
-          return `${basicInfo}${choices}`;
-        }).join('\n');
-        await fetch('/api/notify-order', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            orderId,
-            name: formData.name,
-            phone: formData.phone,
-            city: formData.city,
-            address: formData.address,
-            email: formData.email,
-            itemsSummary,
-            totalWeight,
-            subtotal: total,
-            shippingFee: 0,
-            grandTotal,
-            paymentId: `COD-${shiprocketOrderId}`,
-          }),
-        });
-      } catch (e) {
-        console.error('[notify-order] COD notification failed:', e);
-      }
-
-      (window as any).lastOrderWhatsappUrl = whatsappUrl;
-      setPaymentId(`COD-${orderId}`);
-      setCodOrderData({ awb, shiprocketOrderId });
-      setIsSuccess(true);
-      window.history.pushState(null, '', '/order-confirmed');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } catch (error: any) {
-      console.error('[COD Order] Error:', error);
-      alert('Something went wrong placing your COD order. Please try again or switch to online payment.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   const handleProceed = async () => {
     const fieldNames: FieldName[] = ['name', 'phone', 'city', 'email', 'address'];
-    if (isCod) fieldNames.push('pincode');
-
     const newErrors: Partial<Record<FieldName, string>> = {};
     let firstErrorField: FieldName | null = null;
 
     fieldNames.forEach(name => {
       const error = validateField(name, formData[name as keyof typeof formData]);
-      if (error) {
-        newErrors[name] = error;
-        if (!firstErrorField) firstErrorField = name;
-      }
+      if (error) { newErrors[name] = error; if (!firstErrorField) firstErrorField = name; }
     });
 
     setFieldErrors(newErrors);
     setTouched(fieldNames.reduce((acc, name) => ({ ...acc, [name]: true }), {}));
 
     if (Object.keys(newErrors).length > 0) {
-      if (firstErrorField) {
-        const element = document.getElementById(`field-${firstErrorField}`);
-        element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }
+      if (firstErrorField) document.getElementById(`field-${firstErrorField}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
     }
 
-    // Check if this phone has already used the THANKS10 coupon
     if (couponDiscount > 0) {
       const usedPhones: string[] = JSON.parse(localStorage.getItem(COUPON_STORAGE_KEY) || '[]');
       const cleanPhone = formData.phone.trim().replace(/[\s\-+]/g, '').replace(/^91/, '');
@@ -382,12 +247,6 @@ _Please confirm my order and share delivery details._
       }
     }
 
-    if (isCod) {
-      await handleCodOrder();
-      return;
-    }
-
-    // Online Razorpay flow
     setIsSubmitting(true);
     try {
       const response = await fetch('/api/create-order', {
@@ -400,34 +259,25 @@ _Please confirm my order and share delivery details._
 
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_SJFLrXT62pYAGB',
-        amount: order.amount,
-        currency: order.currency,
-        name: "Amie's Homemade",
-        description: "Order Payment",
+        amount: order.amount, currency: order.currency,
+        name: "Amie's Homemade", description: "Order Payment",
         image: "https://i.postimg.cc/8Cy68DD6/Whats-App-Image-2026-02-12-at-18-57-42-(1).jpg",
         order_id: order.id,
         handler: function (response: any) {
           submitOrderSilently(response.razorpay_payment_id);
           (window as any).fbq?.('track', 'Purchase', {
-            value: grandTotal,
-            currency: 'INR',
-            content_ids: items.map(i => i.id),
-            content_type: 'product',
+            value: grandTotal, currency: 'INR',
+            content_ids: items.map(i => i.id), content_type: 'product',
             num_items: items.reduce((sum, i) => sum + i.quantity, 0),
           });
         },
         prefill: { name: formData.name, email: formData.email, contact: formData.phone },
         notes: {
-          customer_name: formData.name,
-          phone: formData.phone,
-          city: formData.city,
-          address: formData.address,
-          email: formData.email || 'N/A',
+          customer_name: formData.name, phone: formData.phone,
+          city: formData.city, address: formData.address, email: formData.email || 'N/A',
           items: items.map(i => `${i.quantity}x ${i.name} (${i.selectedWeight || i.weight})`).join(', ').slice(0, 250),
-          subtotal: `Rs.${total}`,
-          shipping: `Rs.${shippingFee ?? 0}`,
-          grand_total: `Rs.${grandTotal}`,
-          total_weight: `${totalWeight}g`,
+          subtotal: `Rs.${total}`, shipping: `Rs.${shippingFee ?? 0}`,
+          grand_total: `Rs.${grandTotal}`, total_weight: `${totalWeight}g`,
         },
         theme: { color: "#F04E4E" },
         modal: { ondismiss: function() { setIsSubmitting(false); } }
@@ -447,38 +297,19 @@ _Please confirm my order and share delivery details._
     return (
       <div className="pt-32 pb-24 px-4 sm:px-6 lg:px-8 bg-cream min-h-screen flex items-center justify-center">
         <div className="max-w-3xl w-full bg-white rounded-[4rem] shadow-2xl overflow-hidden border border-[#4A3728]/5 animate-in zoom-in fade-in duration-500">
-          <div className={`${codOrderData ? 'bg-[#22C55E]' : 'bg-[#F04E4E]'} p-16 text-center text-white relative`}>
+          <div className="bg-[#F04E4E] p-16 text-center text-white relative">
             <div className="relative z-10 flex flex-col items-center">
-              <div className={`w-20 h-20 bg-white rounded-full flex items-center justify-center mb-6 shadow-xl ${codOrderData ? 'text-[#22C55E]' : 'text-[#F04E4E]'}`}>
+              <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center text-[#F04E4E] mb-6 shadow-xl">
                 <CheckCircle size={44} strokeWidth={2.5} />
               </div>
               <h2 className="text-5xl font-bold serif mb-3">Order Placed!</h2>
               <p className="text-white/80 brand-rounded font-bold uppercase text-[11px] tracking-[0.3em]">
-                {codOrderData ? 'Cash on Delivery · Ahmedabad' : `Payment ID: ${paymentId}`}
+                Payment ID: {paymentId}
               </p>
             </div>
           </div>
 
           <div className="p-10 sm:p-14 space-y-12">
-            {/* COD info banner */}
-            {codOrderData && (
-              <div className="flex items-start gap-5 p-7 bg-green-50 rounded-[2.5rem] border border-green-200">
-                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-green-600 shadow-sm border border-green-100 flex-shrink-0">
-                  <Banknote size={28} />
-                </div>
-                <div className="space-y-1.5">
-                  <p className="text-[13px] font-black text-green-800 uppercase brand-rounded tracking-wide">Cash on Delivery</p>
-                  <p className="text-[13px] text-green-700 font-bold">Our courier partner will collect <span className="text-green-800">₹{grandTotal}</span> in cash when your order arrives.</p>
-                  {codOrderData.awb && (
-                    <p className="text-[11px] text-green-600 font-bold brand-rounded mt-2 flex items-center gap-2">
-                      <Package size={14} /> AWB: {codOrderData.awb}
-                    </p>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {/* WhatsApp / online payment info */}
             <div className="flex items-center gap-6 p-8 bg-white rounded-[2.5rem] border border-[#4A3728]/5 shadow-[0_10px_40px_rgba(0,0,0,0.03)]">
               <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-[#F04E4E] shadow-sm border border-[#F04E4E]/10 flex-shrink-0">
                 <MessageCircle size={28} />
@@ -489,7 +320,6 @@ _Please confirm my order and share delivery details._
               </div>
             </div>
 
-            {/* Order Summary */}
             <div className="space-y-6">
               <h3 className="text-xs font-black brand-rounded uppercase tracking-widest text-[#4A3728]/40 border-b border-[#4A3728]/5 pb-4">Order Summary</h3>
               <div className="space-y-6 max-h-[300px] overflow-y-auto pr-2 no-scrollbar">
@@ -521,13 +351,12 @@ _Please confirm my order and share delivery details._
                   <span>Delivery Fee</span><span>{shippingFee === 0 ? 'FREE' : `₹${shippingFee ?? 0}`}</span>
                 </div>
                 <div className="flex justify-between items-center pt-4 border-t border-[#4A3728]/5">
-                  <span className="text-2xl font-bold serif text-[#4A3728]">{codOrderData ? 'Amount to Pay at Door' : 'Grand Total Paid'}</span>
+                  <span className="text-2xl font-bold serif text-[#4A3728]">Grand Total Paid</span>
                   <span className="text-3xl font-black text-[#F04E4E]">₹{grandTotal}</span>
                 </div>
               </div>
             </div>
 
-            {/* Delivery info cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div className="p-6 bg-white rounded-[2rem] border border-[#4A3728]/5 flex items-start gap-4 shadow-sm">
                 <MapPin className="text-[#F04E4E] flex-shrink-0" size={20} />
@@ -540,17 +369,15 @@ _Please confirm my order and share delivery details._
                 <Calendar className="text-[#F04E4E] flex-shrink-0" size={20} />
                 <div>
                   <p className="text-[9px] font-black brand-rounded uppercase text-[#4A3728]/40 tracking-widest mb-1">Estimated Arrival</p>
-                  <p className="text-[12px] font-bold text-[#4A3728]">{formData.city.toLowerCase() === 'ahmedabad' ? '2 Working Days' : '3-5 Working Days'}</p>
+                  <p className="text-[12px] font-bold text-[#4A3728]">{isAhmedabad ? '2 Working Days' : '3-5 Working Days'}</p>
                 </div>
               </div>
             </div>
 
-            {/* Action buttons */}
             <div className="flex flex-col gap-4">
               <a
                 href={(window as any).lastOrderWhatsappUrl || `https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}`}
-                target="_blank"
-                rel="noopener noreferrer"
+                target="_blank" rel="noopener noreferrer"
                 className="w-full py-6 bg-[#25D366] text-white rounded-[1.5rem] font-bold brand-rounded uppercase tracking-[0.3em] text-[11px] hover:shadow-2xl hover:shadow-[#25D366]/30 transition-all flex items-center justify-center gap-3 active:scale-[0.98]"
               >
                 <MessageCircle size={20} /> Confirm on WhatsApp
@@ -579,6 +406,7 @@ _Please confirm my order and share delivery details._
               <Truck className="text-[#F04E4E]" size={32} /> Delivery Details
             </h2>
             <div className="space-y-6">
+
               {/* Address Search Autocomplete */}
               <div className="space-y-2">
                 <label className="text-[10px] font-black uppercase brand-rounded text-[#4A3728]/40 ml-4 tracking-widest">Search Your Address</label>
@@ -592,7 +420,7 @@ _Please confirm my order and share delivery details._
                   />
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#F04E4E]/60" size={18} />
                 </div>
-                <p className="text-[9px] text-[#4A3728]/40 ml-4 brand-rounded font-bold">Select from suggestions to auto-fill city & pincode</p>
+                <p className="text-[9px] text-[#4A3728]/40 ml-4 brand-rounded font-bold">Select from suggestions to auto-fill city & address</p>
               </div>
 
               <div className="border-t border-[#4A3728]/5" />
@@ -659,28 +487,13 @@ _Please confirm my order and share delivery details._
                 <textarea
                   name="address" disabled={isSubmitting} value={formData.address}
                   onChange={handleInputChange} onBlur={handleBlur}
-                  placeholder="House/Flat No, Apartment, Landmark" rows={3}
+                  placeholder="House/Flat No, Apartment, Landmark & Pin Code" rows={4}
                   className={`w-full p-5 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/20 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none brand-rounded text-sm transition-all resize-none ${touched.address && fieldErrors.address ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                 />
                 {touched.address && fieldErrors.address && (
                   <p className="text-red-500 text-[10px] font-bold ml-4 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.address}</p>
                 )}
               </div>
-
-              {/* Pincode — shown only for Ahmedabad COD */}
-              {isCod && (
-                <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300" id="field-pincode">
-                  <label className="text-[10px] font-black uppercase brand-rounded text-[#4A3728]/40 ml-4 tracking-widest">Pincode <span className="text-[#F04E4E]">*</span></label>
-                  <input
-                    name="pincode" disabled={isSubmitting} value={formData.pincode}
-                    onChange={handleInputChange} onBlur={handleBlur} type="text" maxLength={6} placeholder="e.g. 380015"
-                    className={`w-full p-5 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/20 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none brand-rounded text-sm transition-all ${touched.pincode && fieldErrors.pincode ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
-                  />
-                  {touched.pincode && fieldErrors.pincode && (
-                    <p className="text-red-500 text-[10px] font-bold ml-4 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.pincode}</p>
-                  )}
-                </div>
-              )}
             </div>
           </div>
 
@@ -689,43 +502,10 @@ _Please confirm my order and share delivery details._
             <h2 className="text-2xl font-bold serif mb-8 flex items-center gap-4 text-[#4A3728]">
               <Wallet className="text-[#F04E4E]" size={28} /> Payment Method
             </h2>
-
-            {isAhmedabad ? (
-              /* Toggle: Online vs COD — shown only for Ahmedabad */
-              <div className="grid grid-cols-2 gap-4">
-                <button
-                  type="button"
-                  onClick={() => setPaymentMethod('online')}
-                  className={`p-6 rounded-[2rem] border-2 flex flex-col items-center gap-3 shadow-sm transition-all ${paymentMethod === 'online' ? 'border-[#F04E4E] bg-[#F04E4E]/5' : 'border-[#4A3728]/10 hover:border-[#4A3728]/20'}`}
-                >
-                  <Smartphone size={26} className="text-blue-500" />
-                  <span className="text-[10px] font-black uppercase brand-rounded tracking-widest text-center leading-tight">Online Payment<br /><span className="font-medium normal-case tracking-normal text-[9px] text-[#4A3728]/40">UPI · Cards · Netbanking</span></span>
-                  {paymentMethod === 'online' && <span className="w-2 h-2 rounded-full bg-[#F04E4E]" />}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setPaymentMethod('cod')}
-                  className={`p-6 rounded-[2rem] border-2 flex flex-col items-center gap-3 shadow-sm transition-all ${paymentMethod === 'cod' ? 'border-[#22C55E] bg-green-50' : 'border-[#4A3728]/10 hover:border-[#4A3728]/20'}`}
-                >
-                  <Banknote size={26} className="text-green-600" />
-                  <span className="text-[10px] font-black uppercase brand-rounded tracking-widest text-center leading-tight">Cash on Delivery<br /><span className="font-medium normal-case tracking-normal text-[9px] text-[#4A3728]/40">Ahmedabad Only</span></span>
-                  {paymentMethod === 'cod' && <span className="w-2 h-2 rounded-full bg-[#22C55E]" />}
-                </button>
-              </div>
-            ) : (
-              /* Only online for other cities */
-              <div className="p-6 rounded-[2rem] border-2 border-[#F04E4E] bg-[#F04E4E]/5 flex flex-col items-center gap-3 shadow-sm">
-                <Smartphone size={28} className="text-blue-500" />
-                <span className="text-[10px] font-black uppercase brand-rounded tracking-widest text-center">Secure Online Payment (UPI, Cards, Netbanking)</span>
-              </div>
-            )}
-
-            {isCod && (
-              <p className="mt-5 text-[11px] text-green-700 font-bold brand-rounded bg-green-50 border border-green-200 rounded-2xl px-5 py-4 flex items-start gap-3 animate-in fade-in duration-300">
-                <Banknote size={16} className="flex-shrink-0 mt-0.5" />
-                Pay in cash when your order arrives at your door. Our Shiprocket courier partner will collect the amount.
-              </p>
-            )}
+            <div className="p-6 rounded-[2rem] border-2 border-[#F04E4E] bg-[#F04E4E]/5 flex flex-col items-center gap-3 shadow-sm">
+              <Smartphone size={28} className="text-blue-500" />
+              <span className="text-[10px] font-black uppercase brand-rounded tracking-widest text-center">Secure Online Payment (UPI, Cards, Netbanking)</span>
+            </div>
           </div>
         </div>
 
@@ -745,10 +525,7 @@ _Please confirm my order and share delivery details._
                 <div className="flex items-center gap-5">
                   <div className="w-16 h-16 rounded-2xl overflow-hidden bg-cream shadow-sm flex-shrink-0 border border-[#4A3728]/5 relative">
                     <img src={item.image} className="w-full h-full object-cover" />
-                    <button
-                      onClick={() => onRemove(item.id)}
-                      className="absolute inset-0 bg-red-600/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                    >
+                    <button onClick={() => onRemove(item.id)} className="absolute inset-0 bg-red-600/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                       <Trash2 size={20} />
                     </button>
                   </div>
@@ -756,13 +533,9 @@ _Please confirm my order and share delivery details._
                     <h4 className="text-lg font-bold text-[#4A3728] leading-tight">{item.name}</h4>
                     <p className="text-sm text-[#4A3728]/50 uppercase brand-rounded mt-1 font-bold tracking-wider">{item.selectedWeight || item.weight}</p>
                     <div className="flex items-center gap-3 mt-2 border border-coral/10 bg-white rounded-xl w-fit p-1">
-                      <button onClick={() => onUpdateQuantity(item.id, -1)} className="p-1 hover:bg-coral/5 rounded-lg text-coral transition-colors">
-                        <Minus size={12} />
-                      </button>
+                      <button onClick={() => onUpdateQuantity(item.id, -1)} className="p-1 hover:bg-coral/5 rounded-lg text-coral transition-colors"><Minus size={12} /></button>
                       <span className="text-lg font-black brand-rounded text-[#4A3728] min-w-[20px] text-center">{item.quantity}</span>
-                      <button onClick={() => onUpdateQuantity(item.id, 1)} className="p-1 hover:bg-coral/5 rounded-lg text-coral transition-colors">
-                        <Plus size={12} />
-                      </button>
+                      <button onClick={() => onUpdateQuantity(item.id, 1)} className="p-1 hover:bg-coral/5 rounded-lg text-coral transition-colors"><Plus size={12} /></button>
                     </div>
                   </div>
                 </div>
@@ -806,21 +579,10 @@ _Please confirm my order and share delivery details._
           <button
             disabled={isSubmitting}
             onClick={handleProceed}
-            className={`w-full py-6 ${isCod ? 'bg-[#22C55E] shadow-[#22C55E]/30' : 'bg-[#F04E4E] shadow-[#F04E4E]/30'} text-white rounded-[2rem] font-bold brand-rounded uppercase tracking-[0.3em] text-[11px] transition-all shadow-2xl flex items-center justify-center gap-4 ${isSubmitting ? 'opacity-70 cursor-wait' : 'hover:scale-[1.03] active:scale-[0.97]'}`}
+            className={`w-full py-6 bg-[#F04E4E] shadow-[#F04E4E]/30 text-white rounded-[2rem] font-bold brand-rounded uppercase tracking-[0.3em] text-[11px] transition-all shadow-2xl flex items-center justify-center gap-4 ${isSubmitting ? 'opacity-70 cursor-wait' : 'hover:scale-[1.03] active:scale-[0.97]'}`}
           >
-            {isSubmitting
-              ? <>Processing... <Loader2 className="animate-spin" size={25} /></>
-              : isCod
-                ? <><Banknote size={22} /> Place COD Order</>
-                : <>Complete My Order <ChevronRight size={25} /></>
-            }
+            {isSubmitting ? <>Processing... <Loader2 className="animate-spin" size={25} /></> : <>Complete My Order <ChevronRight size={25} /></>}
           </button>
-
-          {isCod && (
-            <p className="text-center text-[9px] text-[#4A3728]/40 brand-rounded mt-4 font-bold uppercase tracking-widest">
-              No payment needed now · Pay ₹{grandTotal} at delivery
-            </p>
-          )}
         </div>
       </div>
     </div>
