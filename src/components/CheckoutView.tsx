@@ -1,5 +1,5 @@
-import React, { useState, useMemo, useRef } from 'react';
-import { Truck, Wallet, ChevronRight, Smartphone, Loader2, MessageCircle, CheckCircle, MapPin, Calendar, Building2, Minus, Plus, Trash2, Scale, Banknote, Package } from 'lucide-react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { Truck, Wallet, ChevronRight, Smartphone, Loader2, MessageCircle, CheckCircle, MapPin, Calendar, Building2, Minus, Plus, Trash2, Scale, Banknote, Package, Search } from 'lucide-react';
 import { CartItem } from '../types.ts';
 import { WHATSAPP_NUMBER } from '../constants.ts';
 
@@ -36,6 +36,60 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   const [touched, setTouched] = useState<Partial<Record<FieldName, boolean>>>({});
 
   const formRef = useRef<HTMLDivElement>(null);
+  const addressSearchRef = useRef<HTMLInputElement>(null);
+  const autocompleteRef = useRef<any>(null);
+
+  // Load Google Places Autocomplete
+  useEffect(() => {
+    const apiKey = import.meta.env.VITE_GOOGLE_PLACES_API_KEY;
+    if (!apiKey) return;
+
+    const initAutocomplete = () => {
+      if (!addressSearchRef.current || !(window as any).google) return;
+      const autocomplete = new (window as any).google.maps.places.Autocomplete(
+        addressSearchRef.current,
+        { componentRestrictions: { country: 'in' }, fields: ['address_components', 'formatted_address'], types: ['address'] }
+      );
+      autocompleteRef.current = autocomplete;
+      autocomplete.addListener('place_changed', () => {
+        const place = autocomplete.getPlace();
+        if (!place.address_components) return;
+        let streetNumber = '', route = '', sublocality = '', city = '', pincode = '';
+        place.address_components.forEach((c: any) => {
+          if (c.types.includes('street_number'))               streetNumber = c.long_name;
+          if (c.types.includes('route'))                       route = c.long_name;
+          if (c.types.includes('sublocality_level_1'))         sublocality = c.long_name;
+          if (c.types.includes('locality'))                    city = c.long_name;
+          if (c.types.includes('postal_code'))                 pincode = c.long_name;
+        });
+        const address = [streetNumber, route, sublocality].filter(Boolean).join(', ') || place.formatted_address || '';
+        setFormData(prev => ({
+          ...prev,
+          address,
+          city: city || prev.city,
+          pincode: pincode || prev.pincode,
+        }));
+        setTouched(prev => ({ ...prev, address: true, city: true, pincode: true }));
+        setFieldErrors(prev => ({ ...prev, address: '', city: '', pincode: '' }));
+      });
+    };
+
+    if ((window as any).google) {
+      initAutocomplete();
+    } else {
+      const existing = document.getElementById('google-maps-script');
+      if (!existing) {
+        const script = document.createElement('script');
+        script.id = 'google-maps-script';
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+        script.async = true;
+        script.onload = initAutocomplete;
+        document.head.appendChild(script);
+      } else {
+        existing.addEventListener('load', initAutocomplete);
+      }
+    }
+  }, []);
 
   const isAhmedabad = formData.city.trim().toLowerCase() === 'ahmedabad';
   const isCod = isAhmedabad && paymentMethod === 'cod';
@@ -525,6 +579,24 @@ _Please confirm my order and share delivery details._
               <Truck className="text-[#F04E4E]" size={32} /> Delivery Details
             </h2>
             <div className="space-y-6">
+              {/* Address Search Autocomplete */}
+              <div className="space-y-2">
+                <label className="text-[10px] font-black uppercase brand-rounded text-[#4A3728]/40 ml-4 tracking-widest">Search Your Address</label>
+                <div className="relative">
+                  <input
+                    ref={addressSearchRef}
+                    type="text"
+                    placeholder="Start typing your address..."
+                    disabled={isSubmitting}
+                    className="w-full p-5 pl-12 bg-[#F9F5EE] rounded-2xl border-2 border-[#4A3728]/10 text-[#4A3728] font-bold placeholder:text-[#4A3728]/30 focus:ring-4 focus:ring-[#F04E4E]/10 focus:border-[#F04E4E] outline-none brand-rounded text-sm transition-all disabled:opacity-50"
+                  />
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#F04E4E]/60" size={18} />
+                </div>
+                <p className="text-[9px] text-[#4A3728]/40 ml-4 brand-rounded font-bold">Select from suggestions to auto-fill city & pincode</p>
+              </div>
+
+              <div className="border-t border-[#4A3728]/5" />
+
               {/* Full Name */}
               <div className="space-y-2" id="field-name">
                 <label className="text-[10px] font-black uppercase brand-rounded text-[#4A3728]/40 ml-4 tracking-widest">Full Name</label>
