@@ -43,9 +43,14 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
 
     const initAutocomplete = () => {
       if (!addressSearchRef.current || !(window as any).google) return;
+      // Bias results towards Ahmedabad
+      const ahmedabadBounds = new (window as any).google.maps.LatLngBounds(
+        new (window as any).google.maps.LatLng(22.87, 72.43),
+        new (window as any).google.maps.LatLng(23.13, 72.72)
+      );
       const autocomplete = new (window as any).google.maps.places.Autocomplete(
         addressSearchRef.current,
-        { componentRestrictions: { country: 'in' }, fields: ['address_components', 'formatted_address'], types: ['address'] }
+        { componentRestrictions: { country: 'in' }, fields: ['address_components', 'formatted_address'], types: ['address'], bounds: ahmedabadBounds, strictBounds: false }
       );
       autocompleteRef.current = autocomplete;
       autocomplete.addListener('place_changed', () => {
@@ -409,14 +414,14 @@ _Please confirm my order and share delivery details._
 
               {/* Address Search Autocomplete */}
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase brand-rounded text-[#4A3728]/40 ml-4 tracking-widest">Search Your Address</label>
+                <label className="text-xs font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Search Your Address</label>
                 <div className="relative">
                   <input
                     ref={addressSearchRef}
                     type="text"
                     placeholder="Start typing your address..."
                     disabled={isSubmitting}
-                    className="w-full p-5 pl-12 bg-[#F9F5EE] rounded-2xl border-2 border-[#4A3728]/10 text-[#4A3728] font-bold placeholder:text-[#4A3728]/30 focus:ring-4 focus:ring-[#F04E4E]/10 focus:border-[#F04E4E] outline-none brand-rounded text-sm transition-all disabled:opacity-50"
+                    className="w-full p-5 pl-12 bg-[#F9F5EE] rounded-2xl border-2 border-[#4A3728]/10 text-[#4A3728] font-medium placeholder:text-[#4A3728]/40 focus:ring-4 focus:ring-[#F04E4E]/10 focus:border-[#F04E4E] outline-none text-base transition-all disabled:opacity-50"
                   />
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#F04E4E]/60" size={18} />
                 </div>
@@ -427,11 +432,11 @@ _Please confirm my order and share delivery details._
 
               {/* Full Name */}
               <div className="space-y-2" id="field-name">
-                <label className="text-[10px] font-black uppercase brand-rounded text-[#4A3728]/40 ml-4 tracking-widest">Full Name</label>
+                <label className="text-xs font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Full Name</label>
                 <input
                   name="name" disabled={isSubmitting} value={formData.name}
                   onChange={handleInputChange} onBlur={handleBlur} type="text" placeholder="e.g. Ami Shah"
-                  className={`w-full p-5 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/20 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none brand-rounded text-sm transition-all ${touched.name && fieldErrors.name ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                  className={`w-full p-5 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.name && fieldErrors.name ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                 />
                 {touched.name && fieldErrors.name && (
                   <p className="text-red-500 text-[10px] font-bold ml-4 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.name}</p>
@@ -441,11 +446,11 @@ _Please confirm my order and share delivery details._
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Phone */}
                 <div className="space-y-2" id="field-phone">
-                  <label className="text-[10px] font-black uppercase brand-rounded text-[#4A3728]/40 ml-4 tracking-widest">Phone Number</label>
+                  <label className="text-xs font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Phone Number</label>
                   <input
                     name="phone" disabled={isSubmitting} value={formData.phone}
                     onChange={handleInputChange} onBlur={handleBlur} type="text" placeholder="e.g. 91575 37842"
-                    className={`w-full p-5 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/20 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none brand-rounded text-sm transition-all ${touched.phone && fieldErrors.phone ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                    className={`w-full p-5 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.phone && fieldErrors.phone ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                   />
                   {touched.phone && fieldErrors.phone && (
                     <p className="text-red-500 text-[10px] font-bold ml-4 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.phone}</p>
@@ -453,12 +458,12 @@ _Please confirm my order and share delivery details._
                 </div>
                 {/* City */}
                 <div className="space-y-2" id="field-city">
-                  <label className="text-[10px] font-black uppercase brand-rounded text-[#4A3728]/40 ml-4 tracking-widest">City</label>
+                  <label className="text-xs font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">City</label>
                   <div className="relative">
                     <input
                       name="city" disabled={isSubmitting} value={formData.city}
                       onChange={handleInputChange} onBlur={handleBlur} type="text" placeholder="Ahmedabad"
-                      className={`w-full p-5 pl-12 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/20 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none brand-rounded text-sm transition-all ${touched.city && fieldErrors.city ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                      className={`w-full p-5 pl-12 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.city && fieldErrors.city ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                     />
                     <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 text-[#4A3728]/20" size={18} />
                   </div>
@@ -470,11 +475,11 @@ _Please confirm my order and share delivery details._
 
               {/* Email */}
               <div className="space-y-2" id="field-email">
-                <label className="text-[10px] font-black uppercase brand-rounded text-[#4A3728]/40 ml-4 tracking-widest">Email Address (Optional)</label>
+                <label className="text-xs font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Email Address (Optional)</label>
                 <input
                   name="email" disabled={isSubmitting} value={formData.email}
                   onChange={handleInputChange} onBlur={handleBlur} type="email" placeholder="yourname@gmail.com"
-                  className={`w-full p-5 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/20 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none brand-rounded text-sm transition-all ${touched.email && fieldErrors.email ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                  className={`w-full p-5 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.email && fieldErrors.email ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                 />
                 {touched.email && fieldErrors.email && (
                   <p className="text-red-500 text-[10px] font-bold ml-4 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.email}</p>
@@ -483,12 +488,12 @@ _Please confirm my order and share delivery details._
 
               {/* Address */}
               <div className="space-y-2" id="field-address">
-                <label className="text-[10px] font-black uppercase brand-rounded text-[#4A3728]/40 ml-4 tracking-widest">Full Address</label>
+                <label className="text-xs font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Full Address</label>
                 <textarea
                   name="address" disabled={isSubmitting} value={formData.address}
                   onChange={handleInputChange} onBlur={handleBlur}
                   placeholder="House/Flat No, Apartment, Landmark & Pin Code" rows={4}
-                  className={`w-full p-5 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/20 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none brand-rounded text-sm transition-all resize-none ${touched.address && fieldErrors.address ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                  className={`w-full p-5 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none text-base transition-all resize-none ${touched.address && fieldErrors.address ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                 />
                 {touched.address && fieldErrors.address && (
                   <p className="text-red-500 text-[10px] font-bold ml-4 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.address}</p>
