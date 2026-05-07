@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef } from 'react';
-import { Truck, Wallet, ChevronRight, X, Copy, Check, QrCode, Smartphone, AlertCircle, Loader2, MessageCircle, CheckCircle, MapPin, Calendar, Building2, Minus, Plus, Trash2, Scale } from 'lucide-react';
+import { Truck, Wallet, ChevronRight, Smartphone, Loader2, MessageCircle, CheckCircle, MapPin, Calendar, Building2, Minus, Plus, Trash2, Scale, Banknote, Package } from 'lucide-react';
 import { CartItem } from '../types.ts';
-import { STORE_UPI_ID, MERCHANT_NAME, WHATSAPP_NUMBER } from '../constants.ts';
+import { WHATSAPP_NUMBER } from '../constants.ts';
 
 const COUPON_STORAGE_KEY = 'thanks10_used_phones';
 
@@ -14,19 +14,22 @@ interface CheckoutViewProps {
   couponDiscount?: number;
 }
 
-type FieldName = 'name' | 'phone' | 'email' | 'city' | 'address';
+type FieldName = 'name' | 'phone' | 'email' | 'city' | 'address' | 'pincode';
 
 const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdateQuantity, onRemove, total, couponDiscount = 0 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [paymentId, setPaymentId] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState<'online' | 'cod'>('online');
+  const [codOrderData, setCodOrderData] = useState<{ awb: string; shiprocketOrderId: number } | null>(null);
 
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
     email: '',
     city: '',
-    address: ''
+    address: '',
+    pincode: '',
   });
 
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<FieldName, string>>>({});
@@ -34,36 +37,40 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
 
   const formRef = useRef<HTMLDivElement>(null);
 
+  const isAhmedabad = formData.city.trim().toLowerCase() === 'ahmedabad';
+  const isCod = isAhmedabad && paymentMethod === 'cod';
+
   const validateField = (name: string, value: string): string => {
     switch (name) {
       case 'name':
-        // Min 3 chars, letters and spaces only
         if (!value.trim() || value.trim().length < 3 || !/^[a-zA-Z\s]+$/.test(value)) {
           return "Please enter a valid full name";
         }
         return "";
-      case 'phone':
-        // Allow optional +91 or 91 prefix, and spaces/hyphens
+      case 'phone': {
         const sanitized = value.trim().replace(/[\s-]/g, '');
         if (!/^(?:\+91|91)?[6-9]\d{9}$/.test(sanitized)) {
           return "Please enter a valid 10-digit Indian mobile number";
         }
         return "";
+      }
       case 'city':
-        // Min 3 chars, letters and spaces only
         if (value.trim().length < 3 || !/^[a-zA-Z\s]+$/.test(value)) {
           return "Please enter a valid city name";
         }
         return "";
       case 'email':
-        // Optional, but must be valid if filled
         if (value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
           return "Please enter a valid email address";
         }
         return "";
       case 'address':
-        // Required
         if (!value.trim()) return "Full address is required";
+        return "";
+      case 'pincode':
+        if (isCod && !/^\d{6}$/.test(value.trim())) {
+          return "Please enter a valid 6-digit pincode";
+        }
         return "";
       default:
         return "";
@@ -73,8 +80,6 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    
-    // Once user starts correcting a field, clear that field's error in real time
     if (touched[name as FieldName]) {
       const error = validateField(name, value);
       setFieldErrors(prev => ({ ...prev, [name]: error }));
@@ -88,35 +93,24 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
     setFieldErrors(prev => ({ ...prev, [name]: error }));
   };
 
-  // Calculate total weight in grams based on CURRENT item quantities
+  // Calculate total weight in grams
   const totalWeight = useMemo(() => {
     return items.reduce((sum, item) => {
-      let weightInGrams = 250; // Default fallback
+      let weightInGrams = 250;
       const weightStr = (item.selectedWeight || item.weight).toUpperCase();
-
-      if (weightStr.includes('KG')) {
-        weightInGrams = parseFloat(weightStr) * 1000;
-      } else if (weightStr.includes('G')) {
-        weightInGrams = parseFloat(weightStr);
-      } else if (weightStr.includes('LARGE HAMPER')) {
-        weightInGrams = 2500;
-      } else if (weightStr.includes('MEDIUM BOX')) {
-        weightInGrams = 1200;
-      } else if (weightStr.includes('GIFT BOX')) {
-        weightInGrams = 800;
-      }
-      
+      if (weightStr.includes('KG')) weightInGrams = parseFloat(weightStr) * 1000;
+      else if (weightStr.includes('G')) weightInGrams = parseFloat(weightStr);
+      else if (weightStr.includes('LARGE HAMPER')) weightInGrams = 2500;
+      else if (weightStr.includes('MEDIUM BOX')) weightInGrams = 1200;
+      else if (weightStr.includes('GIFT BOX')) weightInGrams = 800;
       return sum + (weightInGrams * item.quantity);
     }, 0);
   }, [items]);
 
   // Dynamic Shipping Fee Logic
   const shippingFee = useMemo(() => {
-    // We only calculate shipping fee if the city is valid
     if (!formData.city || validateField('city', formData.city)) return null;
-    
     if (formData.city.trim().toLowerCase() === 'ahmedabad') return 0;
-
     if (totalWeight <= 500) return 60;
     if (totalWeight <= 1000) return 100;
     if (totalWeight <= 2000) return 150;
@@ -126,6 +120,38 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
 
   const grandTotal = total - couponDiscount + (shippingFee || 0);
 
+  // Build WhatsApp URL helper
+  const buildWhatsappUrl = (orderId: string, payId: string, paymentType: 'ONLINE (RAZORPAY)' | 'CASH ON DELIVERY', extra = '') => {
+    const itemsSummary = items.map(i => {
+      const basicInfo = `${i.quantity}x ${i.name} (${i.selectedWeight || i.weight})`;
+      const choices = (i.ingredients && i.ingredients.length > 0)
+        ? `\n   - Choices: ${i.ingredients.join(', ')}`
+        : '';
+      return `${basicInfo}${choices}`;
+    }).join('\n');
+
+    const message = encodeURIComponent(`
+*New Order from Amie's Homemade*
+---------------------------
+*Order ID:* ${orderId}
+*Payment ID:* ${payId}
+*Customer:* ${formData.name}
+*Phone:* ${formData.phone}
+*City:* ${formData.city}${isCod ? `\n*Pincode:* ${formData.pincode}` : ''}
+*Address:* ${formData.address}
+
+*Items:*
+${itemsSummary}
+
+*Total Amount:* Rs.${grandTotal}${couponDiscount > 0 ? `\n*Coupon Applied:* Thanks10 (− Rs.${couponDiscount})` : ''}
+*Payment:* ${paymentType}${extra}
+---------------------------
+_Please confirm my order and share delivery details._
+    `.trim());
+    return `https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=${message}`;
+  };
+
+  // ── Online payment (Razorpay) flow ──────────────────────────────────────────
   const submitOrderSilently = async (razorpayPaymentId: string) => {
     setIsSubmitting(true);
     const orderId = `AM-${Math.floor(Math.random() * 90000 + 10000)}`;
@@ -138,26 +164,7 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
       return `${basicInfo}${choices}`;
     }).join('\n');
 
-    const whatsappMessage = encodeURIComponent(`
-*New Order from Amie's Homemade*
----------------------------
-*Order ID:* ${orderId}
-*Payment ID:* ${razorpayPaymentId}
-*Customer:* ${formData.name}
-*Phone:* ${formData.phone}
-*City:* ${formData.city}
-*Address:* ${formData.address}
-
-*Items:*
-${itemsSummary}
-
-*Total Amount:* Rs.${grandTotal}${couponDiscount > 0 ? `\n*Coupon Applied:* Thanks10 (− Rs.${couponDiscount})` : ''}
-*Payment:* ONLINE (RAZORPAY)
----------------------------
-_Please confirm my order and share delivery details._
-    `.trim());
-
-    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=${whatsappMessage}`;
+    const whatsappUrl = buildWhatsappUrl(orderId, razorpayPaymentId, 'ONLINE (RAZORPAY)');
 
     try {
       const res = await fetch('/api/notify-order', {
@@ -178,18 +185,11 @@ _Please confirm my order and share delivery details._
           paymentId: razorpayPaymentId,
         }),
       });
-
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        console.error('[notify-order] Server notification failed:', err);
-      } else {
-        console.log('[notify-order] Notification sent successfully');
-      }
+      if (!res.ok) console.error('[notify-order] Failed:', await res.json().catch(() => ({})));
     } catch (err) {
       console.error('[notify-order] Request failed:', err);
     }
 
-    // Mark coupon as used for this phone number
     if (couponDiscount > 0) {
       const usedPhones: string[] = JSON.parse(localStorage.getItem(COUPON_STORAGE_KEY) || '[]');
       const cleanPhone = formData.phone.trim().replace(/[\s\-+]/g, '').replace(/^91/, '');
@@ -199,23 +199,106 @@ _Please confirm my order and share delivery details._
       }
     }
 
-    // Always complete the order regardless of notification result
     (window as any).lastOrderWhatsappUrl = whatsappUrl;
     setPaymentId(razorpayPaymentId);
+    setCodOrderData(null);
     setIsSuccess(true);
     window.history.pushState(null, '', '/order-confirmed');
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setIsSubmitting(false);
   };
 
+  // ── COD flow (Shiprocket) ───────────────────────────────────────────────────
+  const handleCodOrder = async () => {
+    setIsSubmitting(true);
+    const orderId = `AM-${Math.floor(Math.random() * 90000 + 10000)}`;
+
+    try {
+      const res = await fetch('/api/shiprocket-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderId,
+          name: formData.name,
+          phone: formData.phone,
+          email: formData.email,
+          address: formData.address,
+          city: formData.city,
+          pincode: formData.pincode,
+          state: 'Gujarat',
+          items,
+          grandTotal,
+          totalWeight,
+        }),
+      });
+
+      const data = await res.json();
+      if (!data.success) throw new Error(data.error || 'Shiprocket order failed');
+
+      const awb = data.awb || '';
+      const shiprocketOrderId = data.shiprocketOrderId;
+
+      const whatsappUrl = buildWhatsappUrl(
+        orderId,
+        `COD-${shiprocketOrderId}`,
+        'CASH ON DELIVERY',
+        awb ? `\n*AWB:* ${awb}` : ''
+      );
+
+      // Also notify via existing notify-order endpoint
+      try {
+        const itemsSummary = items.map(i => {
+          const basicInfo = `${i.quantity}x ${i.name} (${i.selectedWeight || i.weight})`;
+          const choices = (i.ingredients && i.ingredients.length > 0)
+            ? `\n   - Choices: ${i.ingredients.join(', ')}`
+            : '';
+          return `${basicInfo}${choices}`;
+        }).join('\n');
+        await fetch('/api/notify-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            orderId,
+            name: formData.name,
+            phone: formData.phone,
+            city: formData.city,
+            address: formData.address,
+            email: formData.email,
+            itemsSummary,
+            totalWeight,
+            subtotal: total,
+            shippingFee: 0,
+            grandTotal,
+            paymentId: `COD-${shiprocketOrderId}`,
+          }),
+        });
+      } catch (e) {
+        console.error('[notify-order] COD notification failed:', e);
+      }
+
+      (window as any).lastOrderWhatsappUrl = whatsappUrl;
+      setPaymentId(`COD-${orderId}`);
+      setCodOrderData({ awb, shiprocketOrderId });
+      setIsSuccess(true);
+      window.history.pushState(null, '', '/order-confirmed');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (error: any) {
+      console.error('[COD Order] Error:', error);
+      alert('Something went wrong placing your COD order. Please try again or switch to online payment.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const handleProceed = async () => {
-    const newErrors: Partial<Record<FieldName, string>> = {};
     const fieldNames: FieldName[] = ['name', 'phone', 'city', 'email', 'address'];
-    
+    if (isCod) fieldNames.push('pincode');
+
+    const newErrors: Partial<Record<FieldName, string>> = {};
     let firstErrorField: FieldName | null = null;
 
     fieldNames.forEach(name => {
-      const error = validateField(name, formData[name]);
+      const error = validateField(name, formData[name as keyof typeof formData]);
       if (error) {
         newErrors[name] = error;
         if (!firstErrorField) firstErrorField = name;
@@ -240,25 +323,24 @@ _Please confirm my order and share delivery details._
       if (usedPhones.includes(cleanPhone)) {
         setFieldErrors(prev => ({ ...prev, phone: 'This phone number has already used the THANKS10 coupon.' }));
         setTouched(prev => ({ ...prev, phone: true }));
-        const element = document.getElementById('field-phone');
-        element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        document.getElementById('field-phone')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
       }
     }
 
-    setIsSubmitting(true);
+    if (isCod) {
+      await handleCodOrder();
+      return;
+    }
 
+    // Online Razorpay flow
+    setIsSubmitting(true);
     try {
       const response = await fetch('/api/create-order', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          amount: grandTotal,
-          currency: 'INR',
-          receipt: `order_rcptid_${Date.now()}`
-        })
+        body: JSON.stringify({ amount: grandTotal, currency: 'INR', receipt: `order_rcptid_${Date.now()}` })
       });
-
       if (!response.ok) throw new Error('Failed to create Razorpay order');
       const order = await response.json();
 
@@ -280,11 +362,7 @@ _Please confirm my order and share delivery details._
             num_items: items.reduce((sum, i) => sum + i.quantity, 0),
           });
         },
-        prefill: {
-          name: formData.name,
-          email: formData.email,
-          contact: formData.phone
-        },
+        prefill: { name: formData.name, email: formData.email, contact: formData.phone },
         notes: {
           customer_name: formData.name,
           phone: formData.phone,
@@ -297,14 +375,8 @@ _Please confirm my order and share delivery details._
           grand_total: `Rs.${grandTotal}`,
           total_weight: `${totalWeight}g`,
         },
-        theme: {
-          color: "#F04E4E"
-        },
-        modal: {
-          ondismiss: function() {
-            setIsSubmitting(false);
-          }
-        }
+        theme: { color: "#F04E4E" },
+        modal: { ondismiss: function() { setIsSubmitting(false); } }
       };
 
       const rzp = new (window as any).Razorpay(options);
@@ -316,22 +388,43 @@ _Please confirm my order and share delivery details._
     }
   };
 
+  // ── Success Screen ──────────────────────────────────────────────────────────
   if (isSuccess) {
     return (
       <div className="pt-32 pb-24 px-4 sm:px-6 lg:px-8 bg-cream min-h-screen flex items-center justify-center">
         <div className="max-w-3xl w-full bg-white rounded-[4rem] shadow-2xl overflow-hidden border border-[#4A3728]/5 animate-in zoom-in fade-in duration-500">
-          <div className="bg-[#F04E4E] p-16 text-center text-white relative">
+          <div className={`${codOrderData ? 'bg-[#22C55E]' : 'bg-[#F04E4E]'} p-16 text-center text-white relative`}>
             <div className="relative z-10 flex flex-col items-center">
-              <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center text-[#F04E4E] mb-6 shadow-xl">
+              <div className={`w-20 h-20 bg-white rounded-full flex items-center justify-center mb-6 shadow-xl ${codOrderData ? 'text-[#22C55E]' : 'text-[#F04E4E]'}`}>
                 <CheckCircle size={44} strokeWidth={2.5} />
               </div>
               <h2 className="text-5xl font-bold serif mb-3">Order Placed!</h2>
               <p className="text-white/80 brand-rounded font-bold uppercase text-[11px] tracking-[0.3em]">
-                Payment ID: {paymentId}
+                {codOrderData ? 'Cash on Delivery · Ahmedabad' : `Payment ID: ${paymentId}`}
               </p>
             </div>
           </div>
+
           <div className="p-10 sm:p-14 space-y-12">
+            {/* COD info banner */}
+            {codOrderData && (
+              <div className="flex items-start gap-5 p-7 bg-green-50 rounded-[2.5rem] border border-green-200">
+                <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-green-600 shadow-sm border border-green-100 flex-shrink-0">
+                  <Banknote size={28} />
+                </div>
+                <div className="space-y-1.5">
+                  <p className="text-[13px] font-black text-green-800 uppercase brand-rounded tracking-wide">Cash on Delivery</p>
+                  <p className="text-[13px] text-green-700 font-bold">Our courier partner will collect <span className="text-green-800">₹{grandTotal}</span> in cash when your order arrives.</p>
+                  {codOrderData.awb && (
+                    <p className="text-[11px] text-green-600 font-bold brand-rounded mt-2 flex items-center gap-2">
+                      <Package size={14} /> AWB: {codOrderData.awb}
+                    </p>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* WhatsApp / online payment info */}
             <div className="flex items-center gap-6 p-8 bg-white rounded-[2.5rem] border border-[#4A3728]/5 shadow-[0_10px_40px_rgba(0,0,0,0.03)]">
               <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-[#F04E4E] shadow-sm border border-[#F04E4E]/10 flex-shrink-0">
                 <MessageCircle size={28} />
@@ -341,6 +434,8 @@ _Please confirm my order and share delivery details._
                 <p className="text-[13px] font-bold text-[#F04E4E]">We'll confirm your order shortly via WhatsApp.</p>
               </div>
             </div>
+
+            {/* Order Summary */}
             <div className="space-y-6">
               <h3 className="text-xs font-black brand-rounded uppercase tracking-widest text-[#4A3728]/40 border-b border-[#4A3728]/5 pb-4">Order Summary</h3>
               <div className="space-y-6 max-h-[300px] overflow-y-auto pr-2 no-scrollbar">
@@ -361,43 +456,44 @@ _Please confirm my order and share delivery details._
               </div>
               <div className="pt-8 border-t border-[#4A3728]/5 flex flex-col gap-2">
                 <div className="flex justify-between items-center text-sm font-bold text-[#4A3728]/50">
-                  <span>Subtotal</span>
-                  <span>₹{total}</span>
+                  <span>Subtotal</span><span>₹{total}</span>
                 </div>
                 {couponDiscount > 0 && (
                   <div className="flex justify-between items-center text-sm font-bold text-green-600">
-                    <span>Coupon Discount (Thanks10)</span>
-                    <span>− ₹{couponDiscount}</span>
+                    <span>Coupon Discount (Thanks10)</span><span>− ₹{couponDiscount}</span>
                   </div>
                 )}
                 <div className="flex justify-between items-center text-sm font-bold text-[#4A3728]/50">
-                  <span>Delivery Fee</span>
-                  <span>{shippingFee === 0 ? 'FREE' : `₹${shippingFee ?? 0}`}</span>
+                  <span>Delivery Fee</span><span>{shippingFee === 0 ? 'FREE' : `₹${shippingFee ?? 0}`}</span>
                 </div>
                 <div className="flex justify-between items-center pt-4 border-t border-[#4A3728]/5">
-                  <span className="text-2xl font-bold serif text-[#4A3728]">Grand Total Paid</span>
+                  <span className="text-2xl font-bold serif text-[#4A3728]">{codOrderData ? 'Amount to Pay at Door' : 'Grand Total Paid'}</span>
                   <span className="text-3xl font-black text-[#F04E4E]">₹{grandTotal}</span>
                 </div>
               </div>
             </div>
+
+            {/* Delivery info cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div className="p-6 bg-white rounded-[2rem] border border-[#4A3728]/5 flex items-start gap-4 shadow-sm">
-                 <MapPin className="text-[#F04E4E] flex-shrink-0" size={20} />
-                 <div>
-                   <p className="text-[9px] font-black brand-rounded uppercase text-[#4A3728]/40 tracking-widest mb-1">Delivering To</p>
-                   <p className="text-[12px] font-bold text-[#4A3728] leading-relaxed">{formData.city}, {formData.address}</p>
-                 </div>
+                <MapPin className="text-[#F04E4E] flex-shrink-0" size={20} />
+                <div>
+                  <p className="text-[9px] font-black brand-rounded uppercase text-[#4A3728]/40 tracking-widest mb-1">Delivering To</p>
+                  <p className="text-[12px] font-bold text-[#4A3728] leading-relaxed">{formData.city}, {formData.address}</p>
+                </div>
               </div>
               <div className="p-6 bg-white rounded-[2rem] border border-[#4A3728]/5 flex items-start gap-4 shadow-sm">
-                 <Calendar className="text-[#F04E4E] flex-shrink-0" size={20} />
-                 <div>
-                   <p className="text-[9px] font-black brand-rounded uppercase text-[#4A3728]/40 tracking-widest mb-1">Estimated Arrival</p>
-                   <p className="text-[12px] font-bold text-[#4A3728]">{formData.city.toLowerCase() === 'ahmedabad' ? '2 Working Days' : '3-5 Working Days'}</p>
-                 </div>
+                <Calendar className="text-[#F04E4E] flex-shrink-0" size={20} />
+                <div>
+                  <p className="text-[9px] font-black brand-rounded uppercase text-[#4A3728]/40 tracking-widest mb-1">Estimated Arrival</p>
+                  <p className="text-[12px] font-bold text-[#4A3728]">{formData.city.toLowerCase() === 'ahmedabad' ? '2 Working Days' : '3-5 Working Days'}</p>
+                </div>
               </div>
             </div>
+
+            {/* Action buttons */}
             <div className="flex flex-col gap-4">
-              <a 
+              <a
                 href={(window as any).lastOrderWhatsappUrl || `https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -405,7 +501,7 @@ _Please confirm my order and share delivery details._
               >
                 <MessageCircle size={20} /> Confirm on WhatsApp
               </a>
-              <button 
+              <button
                 onClick={() => onComplete()}
                 className="w-full py-6 bg-[#4A3728] text-white rounded-[1.5rem] font-bold brand-rounded uppercase tracking-[0.3em] text-[11px] hover:bg-black transition-all shadow-xl active:scale-[0.98]"
               >
@@ -418,64 +514,51 @@ _Please confirm my order and share delivery details._
     );
   }
 
+  // ── Checkout Form ───────────────────────────────────────────────────────────
   return (
     <div className="pt-32 pb-24 px-4 sm:px-6 lg:px-8 bg-cream min-h-screen">
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12" ref={formRef}>
         <div className="space-y-8">
+          {/* Delivery Details */}
           <div className="bg-white p-10 rounded-[3.5rem] shadow-xl border border-[#F04E4E]/5">
             <h2 className="text-3xl font-bold serif mb-10 flex items-center gap-4 text-[#4A3728]">
               <Truck className="text-[#F04E4E]" size={32} /> Delivery Details
             </h2>
             <div className="space-y-6">
-              {/* Full Name Field */}
+              {/* Full Name */}
               <div className="space-y-2" id="field-name">
                 <label className="text-[10px] font-black uppercase brand-rounded text-[#4A3728]/40 ml-4 tracking-widest">Full Name</label>
-                <input 
-                  name="name" 
-                  disabled={isSubmitting} 
-                  value={formData.name} 
-                  onChange={handleInputChange} 
-                  onBlur={handleBlur}
-                  type="text" 
-                  placeholder="e.g. Ami Shah" 
-                  className={`w-full p-5 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/20 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none brand-rounded text-sm transition-all ${touched.name && fieldErrors.name ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`} 
+                <input
+                  name="name" disabled={isSubmitting} value={formData.name}
+                  onChange={handleInputChange} onBlur={handleBlur} type="text" placeholder="e.g. Ami Shah"
+                  className={`w-full p-5 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/20 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none brand-rounded text-sm transition-all ${touched.name && fieldErrors.name ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                 />
                 {touched.name && fieldErrors.name && (
                   <p className="text-red-500 text-[10px] font-bold ml-4 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.name}</p>
                 )}
               </div>
-              
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Phone Number Field */}
+                {/* Phone */}
                 <div className="space-y-2" id="field-phone">
                   <label className="text-[10px] font-black uppercase brand-rounded text-[#4A3728]/40 ml-4 tracking-widest">Phone Number</label>
-                  <input 
-                    name="phone" 
-                    disabled={isSubmitting} 
-                    value={formData.phone} 
-                    onChange={handleInputChange} 
-                    onBlur={handleBlur}
-                    type="text" 
-                    placeholder="e.g. 91575 37842" 
-                    className={`w-full p-5 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/20 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none brand-rounded text-sm transition-all ${touched.phone && fieldErrors.phone ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`} 
+                  <input
+                    name="phone" disabled={isSubmitting} value={formData.phone}
+                    onChange={handleInputChange} onBlur={handleBlur} type="text" placeholder="e.g. 91575 37842"
+                    className={`w-full p-5 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/20 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none brand-rounded text-sm transition-all ${touched.phone && fieldErrors.phone ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                   />
                   {touched.phone && fieldErrors.phone && (
                     <p className="text-red-500 text-[10px] font-bold ml-4 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.phone}</p>
                   )}
                 </div>
-                {/* City Field */}
+                {/* City */}
                 <div className="space-y-2" id="field-city">
                   <label className="text-[10px] font-black uppercase brand-rounded text-[#4A3728]/40 ml-4 tracking-widest">City</label>
                   <div className="relative">
-                    <input 
-                      name="city" 
-                      disabled={isSubmitting} 
-                      value={formData.city} 
-                      onChange={handleInputChange} 
-                      onBlur={handleBlur}
-                      type="text" 
-                      placeholder="Ahmedabad" 
-                      className={`w-full p-5 pl-12 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/20 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none brand-rounded text-sm transition-all ${touched.city && fieldErrors.city ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`} 
+                    <input
+                      name="city" disabled={isSubmitting} value={formData.city}
+                      onChange={handleInputChange} onBlur={handleBlur} type="text" placeholder="Ahmedabad"
+                      className={`w-full p-5 pl-12 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/20 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none brand-rounded text-sm transition-all ${touched.city && fieldErrors.city ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                     />
                     <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 text-[#4A3728]/20" size={18} />
                   </div>
@@ -485,55 +568,92 @@ _Please confirm my order and share delivery details._
                 </div>
               </div>
 
-              {/* Email Field */}
+              {/* Email */}
               <div className="space-y-2" id="field-email">
                 <label className="text-[10px] font-black uppercase brand-rounded text-[#4A3728]/40 ml-4 tracking-widest">Email Address (Optional)</label>
-                <input 
-                  name="email" 
-                  disabled={isSubmitting} 
-                  value={formData.email} 
-                  onChange={handleInputChange} 
-                  onBlur={handleBlur}
-                  type="email" 
-                  placeholder="yourname@gmail.com" 
-                  className={`w-full p-5 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/20 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none brand-rounded text-sm transition-all ${touched.email && fieldErrors.email ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`} 
+                <input
+                  name="email" disabled={isSubmitting} value={formData.email}
+                  onChange={handleInputChange} onBlur={handleBlur} type="email" placeholder="yourname@gmail.com"
+                  className={`w-full p-5 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/20 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none brand-rounded text-sm transition-all ${touched.email && fieldErrors.email ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                 />
                 {touched.email && fieldErrors.email && (
                   <p className="text-red-500 text-[10px] font-bold ml-4 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.email}</p>
                 )}
               </div>
 
-              {/* Address Field */}
+              {/* Address */}
               <div className="space-y-2" id="field-address">
                 <label className="text-[10px] font-black uppercase brand-rounded text-[#4A3728]/40 ml-4 tracking-widest">Full Address</label>
-                <textarea 
-                  name="address" 
-                  disabled={isSubmitting} 
-                  value={formData.address} 
-                  onChange={handleInputChange} 
-                  onBlur={handleBlur}
-                  placeholder="House/Flat No, Apartment, Landmark & Pin Code" 
-                  rows={4} 
+                <textarea
+                  name="address" disabled={isSubmitting} value={formData.address}
+                  onChange={handleInputChange} onBlur={handleBlur}
+                  placeholder="House/Flat No, Apartment, Landmark" rows={3}
                   className={`w-full p-5 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/20 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none brand-rounded text-sm transition-all resize-none ${touched.address && fieldErrors.address ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
-                ></textarea>
+                />
                 {touched.address && fieldErrors.address && (
                   <p className="text-red-500 text-[10px] font-bold ml-4 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.address}</p>
                 )}
               </div>
+
+              {/* Pincode — shown only for Ahmedabad COD */}
+              {isCod && (
+                <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300" id="field-pincode">
+                  <label className="text-[10px] font-black uppercase brand-rounded text-[#4A3728]/40 ml-4 tracking-widest">Pincode <span className="text-[#F04E4E]">*</span></label>
+                  <input
+                    name="pincode" disabled={isSubmitting} value={formData.pincode}
+                    onChange={handleInputChange} onBlur={handleBlur} type="text" maxLength={6} placeholder="e.g. 380015"
+                    className={`w-full p-5 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/20 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none brand-rounded text-sm transition-all ${touched.pincode && fieldErrors.pincode ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                  />
+                  {touched.pincode && fieldErrors.pincode && (
+                    <p className="text-red-500 text-[10px] font-bold ml-4 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.pincode}</p>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Payment Method Section */}
+          {/* Payment Method */}
           <div className="bg-white p-10 rounded-[3.5rem] shadow-xl border border-[#F04E4E]/5">
             <h2 className="text-2xl font-bold serif mb-8 flex items-center gap-4 text-[#4A3728]">
               <Wallet className="text-[#F04E4E]" size={28} /> Payment Method
             </h2>
-            <div className="grid grid-cols-1 gap-4">
+
+            {isAhmedabad ? (
+              /* Toggle: Online vs COD — shown only for Ahmedabad */
+              <div className="grid grid-cols-2 gap-4">
+                <button
+                  type="button"
+                  onClick={() => setPaymentMethod('online')}
+                  className={`p-6 rounded-[2rem] border-2 flex flex-col items-center gap-3 shadow-sm transition-all ${paymentMethod === 'online' ? 'border-[#F04E4E] bg-[#F04E4E]/5' : 'border-[#4A3728]/10 hover:border-[#4A3728]/20'}`}
+                >
+                  <Smartphone size={26} className="text-blue-500" />
+                  <span className="text-[10px] font-black uppercase brand-rounded tracking-widest text-center leading-tight">Online Payment<br /><span className="font-medium normal-case tracking-normal text-[9px] text-[#4A3728]/40">UPI · Cards · Netbanking</span></span>
+                  {paymentMethod === 'online' && <span className="w-2 h-2 rounded-full bg-[#F04E4E]" />}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPaymentMethod('cod')}
+                  className={`p-6 rounded-[2rem] border-2 flex flex-col items-center gap-3 shadow-sm transition-all ${paymentMethod === 'cod' ? 'border-[#22C55E] bg-green-50' : 'border-[#4A3728]/10 hover:border-[#4A3728]/20'}`}
+                >
+                  <Banknote size={26} className="text-green-600" />
+                  <span className="text-[10px] font-black uppercase brand-rounded tracking-widest text-center leading-tight">Cash on Delivery<br /><span className="font-medium normal-case tracking-normal text-[9px] text-[#4A3728]/40">Ahmedabad Only</span></span>
+                  {paymentMethod === 'cod' && <span className="w-2 h-2 rounded-full bg-[#22C55E]" />}
+                </button>
+              </div>
+            ) : (
+              /* Only online for other cities */
               <div className="p-6 rounded-[2rem] border-2 border-[#F04E4E] bg-[#F04E4E]/5 flex flex-col items-center gap-3 shadow-sm">
                 <Smartphone size={28} className="text-blue-500" />
                 <span className="text-[10px] font-black uppercase brand-rounded tracking-widest text-center">Secure Online Payment (UPI, Cards, Netbanking)</span>
               </div>
-            </div>
+            )}
+
+            {isCod && (
+              <p className="mt-5 text-[11px] text-green-700 font-bold brand-rounded bg-green-50 border border-green-200 rounded-2xl px-5 py-4 flex items-start gap-3 animate-in fade-in duration-300">
+                <Banknote size={16} className="flex-shrink-0 mt-0.5" />
+                Pay in cash when your order arrives at your door. Our Shiprocket courier partner will collect the amount.
+              </p>
+            )}
           </div>
         </div>
 
@@ -546,14 +666,14 @@ _Please confirm my order and share delivery details._
               <span className="text-[11px] font-black uppercase brand-rounded tracking-[0.1em] text-[#F04E4E]">{totalWeight}G TOTAL</span>
             </div>
           </div>
-          
+
           <div className="space-y-8 mb-10 max-h-[350px] overflow-y-auto no-scrollbar pr-2">
             {items.map((item, idx) => (
               <div key={`${item.id}-${idx}`} className="flex justify-between items-center group">
                 <div className="flex items-center gap-5">
                   <div className="w-16 h-16 rounded-2xl overflow-hidden bg-cream shadow-sm flex-shrink-0 border border-[#4A3728]/5 relative">
                     <img src={item.image} className="w-full h-full object-cover" />
-                    <button 
+                    <button
                       onClick={() => onRemove(item.id)}
                       className="absolute inset-0 bg-red-600/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                     >
@@ -563,19 +683,12 @@ _Please confirm my order and share delivery details._
                   <div>
                     <h4 className="text-lg font-bold text-[#4A3728] leading-tight">{item.name}</h4>
                     <p className="text-sm text-[#4A3728]/50 uppercase brand-rounded mt-1 font-bold tracking-wider">{item.selectedWeight || item.weight}</p>
-                    
                     <div className="flex items-center gap-3 mt-2 border border-coral/10 bg-white rounded-xl w-fit p-1">
-                      <button 
-                        onClick={() => onUpdateQuantity(item.id, -1)}
-                        className="p-1 hover:bg-coral/5 rounded-lg text-coral transition-colors"
-                      >
+                      <button onClick={() => onUpdateQuantity(item.id, -1)} className="p-1 hover:bg-coral/5 rounded-lg text-coral transition-colors">
                         <Minus size={12} />
                       </button>
                       <span className="text-lg font-black brand-rounded text-[#4A3728] min-w-[20px] text-center">{item.quantity}</span>
-                      <button 
-                        onClick={() => onUpdateQuantity(item.id, 1)}
-                        className="p-1 hover:bg-coral/5 rounded-lg text-coral transition-colors"
-                      >
+                      <button onClick={() => onUpdateQuantity(item.id, 1)} className="p-1 hover:bg-coral/5 rounded-lg text-coral transition-colors">
                         <Plus size={12} />
                       </button>
                     </div>
@@ -591,9 +704,15 @@ _Please confirm my order and share delivery details._
               <span className="text-[#4A3728]/40 brand-rounded uppercase font-black text-[10px] tracking-widest">Subtotal</span>
               <span className="font-bold text-[#4A3728]">₹{total}</span>
             </div>
+            {couponDiscount > 0 && (
+              <div className="flex justify-between text-sm">
+                <span className="text-[#4A3728]/40 brand-rounded uppercase font-black text-[10px] tracking-widest">Coupon (Thanks10)</span>
+                <span className="font-bold text-green-600">− ₹{couponDiscount}</span>
+              </div>
+            )}
             <div className="flex justify-between text-sm items-center">
               <span className="text-[#4A3728]/40 brand-rounded uppercase font-black text-[10px] tracking-widest">Delivery Fee</span>
-              {shippingFee === 0 && formData.city.trim().toLowerCase() === 'ahmedabad' ? (
+              {shippingFee === 0 && isAhmedabad ? (
                 <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-[10px] font-black tracking-widest brand-rounded">FREE</span>
               ) : shippingFee !== null ? (
                 <span className="font-bold text-[#4A3728]">₹{shippingFee}</span>
@@ -612,13 +731,24 @@ _Please confirm my order and share delivery details._
             </div>
           </div>
 
-          <button 
-            disabled={isSubmitting} 
-            onClick={handleProceed} 
-            className={`w-full py-6 bg-[#F04E4E] text-white rounded-[2rem] font-bold brand-rounded uppercase tracking-[0.3em] text-[11px] transition-all shadow-2xl shadow-[#F04E4E]/30 flex items-center justify-center gap-4 ${isSubmitting ? 'opacity-70 cursor-wait' : 'hover:scale-[1.03] active:scale-[0.97]'}`}
+          <button
+            disabled={isSubmitting}
+            onClick={handleProceed}
+            className={`w-full py-6 ${isCod ? 'bg-[#22C55E] shadow-[#22C55E]/30' : 'bg-[#F04E4E] shadow-[#F04E4E]/30'} text-white rounded-[2rem] font-bold brand-rounded uppercase tracking-[0.3em] text-[11px] transition-all shadow-2xl flex items-center justify-center gap-4 ${isSubmitting ? 'opacity-70 cursor-wait' : 'hover:scale-[1.03] active:scale-[0.97]'}`}
           >
-            {isSubmitting ? <>Submitting... <Loader2 className="animate-spin" size={25} /></> : <>Complete My Order <ChevronRight size={25} /></>}
+            {isSubmitting
+              ? <>Processing... <Loader2 className="animate-spin" size={25} /></>
+              : isCod
+                ? <><Banknote size={22} /> Place COD Order</>
+                : <>Complete My Order <ChevronRight size={25} /></>
+            }
           </button>
+
+          {isCod && (
+            <p className="text-center text-[9px] text-[#4A3728]/40 brand-rounded mt-4 font-bold uppercase tracking-widest">
+              No payment needed now · Pay ₹{grandTotal} at delivery
+            </p>
+          )}
         </div>
       </div>
     </div>
