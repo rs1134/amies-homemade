@@ -14,7 +14,7 @@ interface CheckoutViewProps {
   couponDiscount?: number;
 }
 
-type FieldName = 'name' | 'phone' | 'email' | 'city' | 'address';
+type FieldName = 'name' | 'phone' | 'email' | 'city' | 'address' | 'flat';
 
 const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdateQuantity, onRemove, total, couponDiscount = 0 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -27,6 +27,7 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
     email: '',
     city: '',
     address: '',
+    flat: '',
   });
 
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<FieldName, string>>>({});
@@ -121,6 +122,9 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
       case 'address':
         if (!value.trim()) return "Full address is required";
         return "";
+      case 'flat':
+        if (!value.trim()) return "Flat / House number is required";
+        return "";
       default:
         return "";
     }
@@ -186,7 +190,7 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
 *Customer:* ${formData.name}
 *Phone:* ${formData.phone}
 *City:* ${formData.city}
-*Address:* ${formData.address}
+*Address:* ${fullDeliveryAddress}
 
 *Items:*
 ${itemsSummary}
@@ -205,7 +209,7 @@ _Please confirm my order and share delivery details._
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           orderId, name: formData.name, phone: formData.phone,
-          city: formData.city, address: formData.address, email: formData.email,
+          city: formData.city, address: fullDeliveryAddress, email: formData.email,
           itemsSummary, totalWeight, subtotal: total,
           shippingFee: shippingFee ?? 0, grandTotal, paymentId: razorpayPaymentId,
         }),
@@ -232,8 +236,13 @@ _Please confirm my order and share delivery details._
     setIsSubmitting(false);
   };
 
+  // Combine flat + address for final delivery address
+  const fullDeliveryAddress = formData.flat
+    ? `${formData.flat}, ${formData.address}`
+    : formData.address;
+
   const handleProceed = async () => {
-    const fieldNames: FieldName[] = ['name', 'phone', 'city', 'email', 'address'];
+    const fieldNames: FieldName[] = ['name', 'phone', 'city', 'email', 'address', 'flat'];
     const newErrors: Partial<Record<FieldName, string>> = {};
     let firstErrorField: FieldName | null = null;
 
@@ -288,7 +297,7 @@ _Please confirm my order and share delivery details._
         prefill: { name: formData.name, email: formData.email, contact: formData.phone },
         notes: {
           customer_name: formData.name, phone: formData.phone,
-          city: formData.city, address: formData.address, email: formData.email || 'N/A',
+          city: formData.city, address: fullDeliveryAddress, email: formData.email || 'N/A',
           items: items.map(i => `${i.quantity}x ${i.name} (${i.selectedWeight || i.weight})`).join(', ').slice(0, 250),
           subtotal: `Rs.${total}`, shipping: `Rs.${shippingFee ?? 0}`,
           grand_total: `Rs.${grandTotal}`, total_weight: `${totalWeight}g`,
@@ -376,7 +385,7 @@ _Please confirm my order and share delivery details._
                 <MapPin className="text-[#F04E4E] flex-shrink-0" size={20} />
                 <div>
                   <p className="text-[9px] font-black brand-rounded uppercase text-[#4A3728]/40 tracking-widest mb-1">Delivering To</p>
-                  <p className="text-[12px] font-bold text-[#4A3728] leading-relaxed">{formData.city}, {formData.address}</p>
+                  <p className="text-[12px] font-bold text-[#4A3728] leading-relaxed">{formData.city}, {fullDeliveryAddress}</p>
                 </div>
               </div>
               <div className="p-6 bg-white rounded-[2rem] border border-[#4A3728]/5 flex items-start gap-4 shadow-sm">
@@ -495,13 +504,27 @@ _Please confirm my order and share delivery details._
                 )}
               </div>
 
+              {/* Flat / House No */}
+              <div className="space-y-2" id="field-flat">
+                <label className="text-xs font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Flat / House / Office No. <span className="text-[#F04E4E]">*</span></label>
+                <input
+                  name="flat" disabled={isSubmitting} value={formData.flat}
+                  onChange={handleInputChange} onBlur={handleBlur}
+                  type="text" placeholder="e.g. A-102, Floor 3"
+                  className={`w-full p-5 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.flat && fieldErrors.flat ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                />
+                {touched.flat && fieldErrors.flat && (
+                  <p className="text-red-500 text-[10px] font-bold ml-4 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.flat}</p>
+                )}
+              </div>
+
               {/* Address */}
               <div className="space-y-2" id="field-address">
-                <label className="text-xs font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Full Address</label>
+                <label className="text-xs font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Building / Society / Street Address</label>
                 <textarea
                   name="address" disabled={isSubmitting} value={formData.address}
                   onChange={handleInputChange} onBlur={handleBlur}
-                  placeholder="House/Flat No, Apartment, Landmark & Pin Code" rows={4}
+                  placeholder="Building name, street, landmark, pincode" rows={3}
                   className={`w-full p-5 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none text-base transition-all resize-none ${touched.address && fieldErrors.address ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                 />
                 {touched.address && fieldErrors.address && (
