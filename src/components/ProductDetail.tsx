@@ -152,7 +152,9 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose, onAddTo
           </div>
 
           <button
+            disabled={product.outOfStock}
             onClick={() => {
+              if (product.outOfStock) return;
               onAddToCart(product, selectedWeight, selectedSubOption);
               (window as any).fbq?.('track', 'AddToCart', {
                 value: currentPrice,
@@ -162,9 +164,9 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose, onAddTo
                 content_type: 'product',
               });
             }}
-            className="w-full py-4 bg-coral text-white rounded-2xl font-bold brand-rounded uppercase tracking-widest text-sm hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-coral/30"
+            className={`w-full py-4 rounded-2xl font-bold brand-rounded uppercase tracking-widest text-sm transition-all ${product.outOfStock ? 'bg-[#4A3728]/10 text-[#4A3728]/40 cursor-not-allowed' : 'bg-coral text-white hover:scale-[1.02] active:scale-95 shadow-xl shadow-coral/30'}`}
           >
-            Add to Bag
+            {product.outOfStock ? 'Out of Stock' : 'Add to Bag'}
           </button>
 
           <div className="mt-5 grid grid-cols-2 gap-3">

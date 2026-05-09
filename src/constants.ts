@@ -389,7 +389,8 @@ export const PRODUCTS: Product[] = [
     ingredients: ['Purple Yam', 'Oil', 'Salt and Pepper'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 215, '500 G': 425, '1 KG': 850 },
-    rating: 4, reviewCount: 17
+    rating: 4, reviewCount: 17,
+    outOfStock: true
   },
   {
     id: 's8',

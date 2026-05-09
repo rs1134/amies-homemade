@@ -38,8 +38,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
     });
   };
 
+  const isOOS = product.outOfStock;
+
   return (
-    <div onClick={() => onAddToCart(product)} className="group bg-white rounded-3xl overflow-hidden border border-[#4A3728]/5 hover:shadow-2xl transition-all duration-500 hover:-translate-y-1 cursor-pointer">
+    <div onClick={() => !isOOS && onAddToCart(product)} className={`group bg-white rounded-3xl overflow-hidden border border-[#4A3728]/5 transition-all duration-500 ${isOOS ? 'cursor-not-allowed opacity-90' : 'hover:shadow-2xl hover:-translate-y-1 cursor-pointer'}`}>
       <div className="relative aspect-[4/5] overflow-hidden bg-cream/50">
         {!imageError ? (
           <img
@@ -48,7 +50,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
             onError={() => setImageError(true)}
             loading="lazy"
             decoding="async"
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            className={`w-full h-full object-cover transition-transform duration-700 ${isOOS ? 'grayscale' : 'group-hover:scale-110'}`}
           />
         ) : (
           <div className="w-full h-full flex flex-col items-center justify-center bg-coral/5 text-coral/30 p-8 text-center">
@@ -57,32 +59,43 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
             <p className="brand-rounded text-[10px] font-bold uppercase tracking-widest mt-1">Handmade With Love</p>
           </div>
         )}
-        
-        <div className="absolute top-4 right-4 flex flex-col gap-2 translate-x-12 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onAddToCart(product);
-              (window as any).fbq?.('track', 'AddToCart', {
-                value: displayPrice,
-                currency: 'INR',
-                content_name: product.name,
-                content_ids: [product.id],
-                content_type: 'product',
-              });
-            }}
-            className="p-3 bg-[#F14E4E] text-white rounded-full shadow-lg hover:bg-[#d43d3d] transition-colors"
-          >
-            <Plus size={20} />
-          </button>
-        </div>
+
+        {/* Out of stock overlay */}
+        {isOOS && (
+          <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+            <span className="px-5 py-2 bg-white text-[#4A3728] rounded-full text-[11px] font-black uppercase tracking-widest shadow-lg border-2 border-[#4A3728]/10">
+              Out of Stock
+            </span>
+          </div>
+        )}
+
+        {!isOOS && (
+          <div className="absolute top-4 right-4 flex flex-col gap-2 translate-x-12 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onAddToCart(product);
+                (window as any).fbq?.('track', 'AddToCart', {
+                  value: displayPrice,
+                  currency: 'INR',
+                  content_name: product.name,
+                  content_ids: [product.id],
+                  content_type: 'product',
+                });
+              }}
+              className="p-3 bg-[#F14E4E] text-white rounded-full shadow-lg hover:bg-[#d43d3d] transition-colors"
+            >
+              <Plus size={20} />
+            </button>
+          </div>
+        )}
         <div className="absolute top-4 left-4 flex flex-col gap-1.5">
-          {product.isNew && (
+          {product.isNew && !isOOS && (
             <span className="px-2.5 py-1 bg-white/80 backdrop-blur-sm border border-emerald-400/40 rounded-full text-[9px] font-bold uppercase tracking-widest text-emerald-600 shadow-sm">
               ✦ Newly Launched
             </span>
           )}
-          {product.id === 'm2' && (
+          {product.id === 'm2' && !isOOS && (
             <span className="px-3 py-1 bg-[#F04E4E] rounded-full text-[9px] font-black uppercase tracking-widest text-white animate-pulse shadow-lg">
               🥭 Limited Stock
             </span>
@@ -122,7 +135,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
         </p>
 
         <button
-          onClick={() => {
+          disabled={isOOS}
+          onClick={(e) => {
+            if (isOOS) return;
+            e.stopPropagation();
             onAddToCart(product);
             (window as any).fbq?.('track', 'AddToCart', {
               value: displayPrice,
@@ -132,9 +148,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
               content_type: 'product',
             });
           }}
-          className="w-full py-2.5 sm:py-3.5 border border-[#F14E4E] text-[#F14E4E] rounded-full text-[11px] sm:text-sm font-medium hover:bg-[#F14E4E] hover:text-white transition-all duration-300 flex items-center justify-center gap-1.5"
+          className={`w-full py-2.5 sm:py-3.5 rounded-full text-[11px] sm:text-sm font-medium transition-all duration-300 flex items-center justify-center gap-1.5 ${isOOS ? 'border border-[#4A3728]/15 text-[#4A3728]/40 cursor-not-allowed bg-[#4A3728]/5' : 'border border-[#F14E4E] text-[#F14E4E] hover:bg-[#F14E4E] hover:text-white'}`}
         >
-          + Add to Cart
+          {isOOS ? 'Out of Stock' : '+ Add to Cart'}
         </button>
       </div>
     </div>
