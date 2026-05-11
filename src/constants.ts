@@ -65,7 +65,7 @@ export const PRODUCTS: Product[] = [
     weight: '250 G',
     description: 'A refreshing and digestive blend of dried amla and zesty ginger. Prepared with traditional methods.',
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.58_2_qlbxrc.jpg',
-    ingredients: ['Amla', 'Ginger', 'Black Salt'],
+    ingredients: ['Amla', 'Ginger', 'Salt', 'Sugar', 'Black Pepper', 'Black Salt'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 300, '500 G': 600, '1 KG': 1200 },
     rating: 4.5, reviewCount: 38
@@ -78,7 +78,7 @@ export const PRODUCTS: Product[] = [
     weight: '250 G',
     description: 'Vibrant digestive blend combining amla, ginger, and earthy beetroot.',
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543465/WhatsApp_Image_2026-02-15_at_17.53.58_tnzte2.jpg',
-    ingredients: ['Amla', 'Ginger', 'Beetroot'],
+    ingredients: ['Amla', 'Beet', 'Ginger', 'Salt', 'Sugar', 'Black Pepper', 'Black Salt'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 350, '500 G': 700, '1 KG': 1400 },
     rating: 4.5, reviewCount: 28
@@ -91,7 +91,7 @@ export const PRODUCTS: Product[] = [
     weight: '250 G',
     description: 'Tangy dried raw mango pieces seasoned with a special homemade spice blend.',
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.57_2_g3kejf.jpg',
-    ingredients: ['Raw Mango', 'Secret Churan'],
+    ingredients: ['Raw Mango', 'Homemade Anardana Churan'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 300, '500 G': 600, '1 KG': 1200 },
     rating: 5, reviewCount: 39
@@ -104,7 +104,7 @@ export const PRODUCTS: Product[] = [
     weight: '250 G',
     description: 'Digestive balls made with nutrient-rich black grapes and toasted black sesame.',
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.55_2_zsdkam.jpg',
-    ingredients: ['Black Grapes', 'Black Til'],
+    ingredients: ['Black Grapes', 'Black Sesame Seeds', 'Homemade Anardana Churan'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 300, '500 G': 600, '1 KG': 1200 },
     rating: 4.5, reviewCount: 35
@@ -117,7 +117,7 @@ export const PRODUCTS: Product[] = [
     weight: '250 G',
     description: 'Crispy, natural slices of fresh tender coconut. Light and tropical.',
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.57_1_mp1guy.jpg',
-    ingredients: ['Coconut', 'Natural Sugar'],
+    ingredients: ['Coconut', 'Vanilla Extract', 'Salt', 'Sugar'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 375, '500 G': 750, '1 KG': 1500 },
     rating: 5, reviewCount: 37
@@ -130,7 +130,7 @@ export const PRODUCTS: Product[] = [
     weight: '250 G',
     description: 'Premium coconut slices coated in rich dark chocolate. A perfect fusion.',
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543462/WhatsApp_Image_2026-01-28_at_20.21.40_sgnmbl.jpg',
-    ingredients: ['Coconut', 'Cocoa', 'Sugar'],
+    ingredients: ['Coconut', 'Cocoa Powder', 'Salt', 'Sugar'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 450, '500 G': 900, '1 KG': 1800 },
     rating: 4.5, reviewCount: 31
@@ -143,7 +143,7 @@ export const PRODUCTS: Product[] = [
     weight: '250 G',
     description: 'Nutrient-dense mix of roasted almonds, cashews, and super-seeds.',
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.55_x6btgg.jpg',
-    ingredients: ['Almonds', 'Cashews', 'Pumpkin Seeds'],
+    ingredients: ['Almond', 'Cashews', 'Dry Dates', 'Coconut', 'Pumpkin Seeds', 'Sunflower Seeds', 'Saunf', 'Dhana Dal', 'Rose Petals', 'Natural Flavouring Substance'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 350, '500 G': 700, '1 KG': 1400 },
     rating: 4.5, reviewCount: 24
@@ -156,7 +156,7 @@ export const PRODUCTS: Product[] = [
     weight: '250 G',
     description: 'Vibrant sweet-and-sour mix of premium cranberries and digestive nuts.',
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543456/WhatsApp_Image_2026-02-12_at_18.57.56_3_xwxf5y.jpg',
-    ingredients: ['Cranberries', 'Roasted Nuts'],
+    ingredients: ['Cranberries', 'Black Grapes', 'Kismis', 'Almonds', 'Anardana Churan'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 400, '500 G': 800, '1 KG': 1600 },
     rating: 4.5, reviewCount: 19
@@ -169,7 +169,7 @@ export const PRODUCTS: Product[] = [
     weight: '250 G',
     description: 'Chopped premium dates paired with crunchy almond slivers.',
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543463/WhatsApp_Image_2026-02-12_at_18.57.41_rkhf9z.jpg',
-    ingredients: ['Dates', 'Almonds'],
+    ingredients: ['Dates', 'Almond', 'Anardana Churan'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 350, '500 G': 700, '1 KG': 1400 },
     rating: 4, reviewCount: 22
@@ -195,7 +195,7 @@ export const PRODUCTS: Product[] = [
     weight: '250 G',
     description: 'Sugar-free blend of dried dates, coconut, and almond slivers.',
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543464/WhatsApp_Image_2026-02-15_at_17.06.18_qsid6v.jpg',
-    ingredients: ['Dried Dates', 'Coconut', 'Almonds'],
+    ingredients: ['Kharek', 'Coconut', 'Almond', 'Natural Flavouring Substance'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 375, '500 G': 750, '1 KG': 1500 },
     rating: 5, reviewCount: 29
@@ -496,7 +496,7 @@ export const PRODUCTS: Product[] = [
       'https://res.cloudinary.com/dqs95a7w2/image/upload/v1774697443/Granola_jar_with_colorful_label_and_hand_oiqmtv.png',
       'https://res.cloudinary.com/dqs95a7w2/image/upload/v1774697511/ChatGPT_Image_Mar_27_2026_at_03_46_41_PM_hm2dc5.png'
     ],
-    ingredients: ['Rolled Oats', 'Mixed Nuts', 'Seeds', 'Dried Cranberries', 'Dates'],
+    ingredients: ['Pumpkin Seeds', 'Sunflower Seeds', 'White Sesame Seeds', 'Black Sesame Seeds', 'Walnut', 'Cashew', 'Almond', 'Pistachios', 'Medjool Dates', 'Peanut Butter', 'Vanilla Extract', 'Oats'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 450, '500 G': 900, '1 KG': 1800 },
     rating: 5, reviewCount: 38
@@ -509,7 +509,7 @@ export const PRODUCTS: Product[] = [
     weight: '100 G',
     description: 'Rich aromatic blend of nuts and saffron for milk.',
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543464/WhatsApp_Image_2026-02-15_at_17.09.52_nouzpm.jpg',
-    ingredients: ['Saffron', 'Pistachios', 'Almonds'],
+    ingredients: ['Almonds', 'Cashews', 'Pistachios', 'Cardamom (Elaichi)', 'Saffron (Kesar)', 'Nutmeg'],
     weights: ['100 G', '250 G'],
     prices: { '100 G': 400, '250 G': 1000 },
     rating: 4.5, reviewCount: 22
@@ -522,7 +522,7 @@ export const PRODUCTS: Product[] = [
     weight: '100 G',
     description: 'Hand-ground spices for the perfect authentic Indian chai.',
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543464/WhatsApp_Image_2026-02-15_at_17.15.19_tovhut.jpg',
-    ingredients: ['Cardamom', 'Ginger', 'Cinnamon'],
+    ingredients: ['Dry Ginger', 'Cinnamon', 'Clove', 'Cardamom (Elaichi)', 'Black Pepper'],
     weights: ['100 G', '250 G'],
     prices: { '100 G': 160, '250 G': 320 },
     rating: 4.5, reviewCount: 31
