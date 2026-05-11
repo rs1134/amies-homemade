@@ -108,15 +108,21 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose, onAddTo
             </div>
           </div>
 
-          {/* Ingredients */}
-          <div className="mb-5 sm:mb-8 p-4 sm:p-6 bg-white/50 rounded-3xl border border-coral/5">
-            <h4 className="text-xs font-bold brand-rounded mb-2 text-coral uppercase tracking-widest">Pure Ingredients</h4>
-            <div className="flex flex-wrap gap-1.5">
-              {product.ingredients.map(i => (
-                <span key={i} className="text-xs text-[#4A3728]/80 bg-[#F6C94C]/10 px-2.5 py-1 rounded-full">• {i}</span>
-              ))}
-            </div>
-          </div>
+          {/* Ingredients — variant-specific if available, else product default */}
+          {(() => {
+            const variantIngredients = product.subOptions?.find(o => o.name === selectedSubOption)?.ingredients;
+            const displayIngredients = variantIngredients ?? product.ingredients;
+            return (
+              <div className="mb-5 sm:mb-8 p-4 sm:p-6 bg-white/50 rounded-3xl border border-coral/5">
+                <h4 className="text-xs font-bold brand-rounded mb-2 text-coral uppercase tracking-widest">Pure Ingredients</h4>
+                <div className="flex flex-wrap gap-1.5">
+                  {displayIngredients.map(i => (
+                    <span key={i} className="text-xs text-[#4A3728]/80 bg-[#F6C94C]/10 px-2.5 py-1 rounded-full">• {i}</span>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
 
           {/* Price + heart */}
           <div className="flex items-center justify-between mb-3 sm:mb-5">

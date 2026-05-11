@@ -458,11 +458,13 @@ export const PRODUCTS: Product[] = [
     subOptions: [
       {
         name: 'Methi Masala Stick',
-        prices: { '250 G': 175, '500 G': 350, '1 KG': 700 }
+        prices: { '250 G': 175, '500 G': 350, '1 KG': 700 },
+        ingredients: ['Wheat Flour', 'Methi Leaves', 'Mixed Spices', 'Oil', 'Salt']
       },
       {
         name: 'Cheese Stick',
-        prices: { '250 G': 190, '500 G': 375, '1 KG': 750 }
+        prices: { '250 G': 190, '500 G': 375, '1 KG': 750 },
+        ingredients: ['Wheat Flour', 'Cheese', 'Mixed Spices', 'Oil', 'Salt']
       }
     ]
   },

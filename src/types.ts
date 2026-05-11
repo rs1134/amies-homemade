@@ -33,6 +33,7 @@ export interface Product {
   subOptions?: {
     name: string;
     prices: Record<string, number>;
+    ingredients?: string[];
   }[];
 }
 
