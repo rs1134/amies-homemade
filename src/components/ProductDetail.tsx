@@ -47,7 +47,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose, onAddTo
               src={product.image}
               alt={product.name}
               onError={() => setImageError(true)}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
             />
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center bg-coral/5 text-coral/30 p-12 text-center">
