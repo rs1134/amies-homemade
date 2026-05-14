@@ -472,7 +472,7 @@ export const PRODUCTS: Product[] = [
   {
     id: 's13',
     name: 'Peri-Peri Makhana',
-    category: Category.SNACKS,
+    category: Category.WELLNESS,
     price: 125,
     weight: '50 G',
     description: 'Light and crispy fox nuts tossed in a bold peri-peri spice blend. A guilt-free snack with a fiery kick.',
@@ -480,6 +480,20 @@ export const PRODUCTS: Product[] = [
     ingredients: ['Fox Nuts (Makhana)', 'Peri-Peri Spice', 'Oil', 'Salt'],
     weights: ['50 G', '100 G'],
     prices: { '50 G': 125, '100 G': 250 },
+    isNew: true
+  },
+
+  {
+    id: 's14',
+    name: 'Dry Fruit Makhana',
+    category: Category.WELLNESS,
+    price: 275,
+    weight: '100 G',
+    description: 'Light and nutritious fox nuts slow-roasted with premium almonds and cashews. A wholesome, guilt-free snack packed with protein and crunch.',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/v1778733277/ChatGPT_Image_May_14_2026_10_04_20_AM_ekz7k5.png',
+    ingredients: ['Fox Nuts (Makhana)', 'Almonds', 'Cashews'],
+    weights: ['100 G'],
+    prices: { '100 G': 275 },
     isNew: true
   },
 
