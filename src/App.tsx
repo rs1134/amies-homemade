@@ -1068,23 +1068,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen pt-10">
-      {/* Announcement banner */}
-      {/* Announcement banner */}
-      <div className="fixed top-0 left-0 right-0 z-[60] w-full border-b border-[#4A3728]/10 bg-[#F9F5EE] overflow-hidden" style={{ height: '40px' }}>
-        <div className="h-full flex items-center">
-          <div className="flex animate-marquee-left whitespace-nowrap">
-            {[0, 1].map(i => (
-              <span key={i} className="brand-rounded text-[#4A3728] text-[11px] font-semibold tracking-[0.08em] uppercase whitespace-nowrap flex items-center">
-                <span className="mx-10">{DELIVERY_BANNER.primary}</span>
-                <span className="text-[#4A3728]/30" aria-hidden="true">✦</span>
-                <span className="mx-10 text-[#4A3728]/75">{DELIVERY_BANNER.secondary}</span>
-                <span className="text-[#4A3728]/30" aria-hidden="true">✦</span>
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
+    <div className="min-h-screen">
       <Navbar
         cartCount={cartCount}
         onCartClick={() => setIsCartOpen(true)}
