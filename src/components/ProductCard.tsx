@@ -11,8 +11,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
   const [imageError, setImageError] = useState(false);
   const availableWeights = product.weights || [product.weight];
 
-  // Calculate display price: Prefer 250g price for the ticker, fallback to base product.price
-  const displayPrice = product.prices?.['250 G'] ?? product.price;
+  // Display price: use the default weight's price
+  const displayPrice = product.prices?.[product.weight] ?? product.price;
   // MRP = price before 10% discount, rounded to nearest ₹5
   const mrp = Math.ceil(displayPrice / 0.9 / 5) * 5;
 
@@ -124,7 +124,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
         {/* Available Weights Section */}
         <div className="flex flex-wrap gap-1 sm:gap-1.5 mb-2 sm:mb-4">
           {availableWeights.map((w) => (
-            <span key={w} className={`px-1.5 sm:px-2 py-0.5 text-[8px] sm:text-[9px] font-bold brand-rounded rounded-md uppercase tracking-tighter border ${w === '250 G' ? 'bg-coral/5 text-coral border-coral/20' : 'bg-[#4A3728]/5 text-[#4A3728]/60 border-[#4A3728]/10'}`}>
+            <span key={w} className={`px-1.5 sm:px-2 py-0.5 text-[8px] sm:text-[9px] font-bold brand-rounded rounded-md uppercase tracking-tighter border ${w === product.weight ? 'bg-coral/5 text-coral border-coral/20' : 'bg-[#4A3728]/5 text-[#4A3728]/60 border-[#4A3728]/10'}`}>
               {w}
             </span>
           ))}
