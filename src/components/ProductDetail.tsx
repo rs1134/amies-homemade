@@ -41,13 +41,13 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose, onAddTo
         </button>
 
         {/* Image — constrained height on mobile so it doesn't eat the whole screen */}
-        <div className="md:w-1/2 relative h-48 sm:h-64 md:h-auto md:aspect-square bg-cream/50 flex-shrink-0">
+        <div className="md:w-1/2 relative h-72 sm:h-80 md:h-auto md:aspect-square bg-cream/50 flex-shrink-0">
           {!imageError ? (
             <img
               src={product.image}
               alt={product.name}
               onError={() => setImageError(true)}
-              className="w-full h-full object-contain"
+              className="w-full h-full object-cover"
             />
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center bg-coral/5 text-coral/30 p-12 text-center">
