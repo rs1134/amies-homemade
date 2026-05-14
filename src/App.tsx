@@ -182,6 +182,7 @@ const App: React.FC = () => {
   });
   const [orderComplete, setOrderComplete] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [showDeliveryPopup, setShowDeliveryPopup] = useState(false);
 
   // Delivery announcement bar
   const DELIVERY_BANNER = {
@@ -630,6 +631,13 @@ const App: React.FC = () => {
     }
   }, [currentPage, currentArea, currentCity, currentBlogSlug]);
 
+  useEffect(() => {
+    if (currentPage === 'shop' && !sessionStorage.getItem('deliveryPopupSeen')) {
+      const timer = setTimeout(() => setShowDeliveryPopup(true), 600);
+      return () => clearTimeout(timer);
+    }
+  }, [currentPage]);
+
   const filteredProducts = useMemo(() => {
     // Exclude gifting from the standard shop list to keep it exclusive
     const availableProducts = PRODUCTS.filter(p => p.category !== Category.GIFTING);
@@ -754,6 +762,56 @@ const App: React.FC = () => {
       case 'gifting': return <GiftingView onAddToCart={(p) => addToCart(p)} onSelectProduct={(p) => openProduct(p)} />;
       case 'shop': return (
         <section id="shop" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 sm:pt-32 sm:pb-32 relative z-10">
+
+          {/* Free Delivery popup */}
+          {showDeliveryPopup && (
+            <div
+              className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+              onClick={() => { sessionStorage.setItem('deliveryPopupSeen', '1'); setShowDeliveryPopup(false); }}
+            >
+              <div
+                className="relative rounded-3xl overflow-hidden shadow-2xl max-w-[85vw] sm:max-w-sm w-full animate-in zoom-in-95 duration-300 bg-[#FFF8EE] border border-coral/10"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Close */}
+                <button
+                  onClick={() => { sessionStorage.setItem('deliveryPopupSeen', '1'); setShowDeliveryPopup(false); }}
+                  className="absolute top-3 right-3 w-9 h-9 bg-[#4A3728]/10 rounded-full flex items-center justify-center text-[#4A3728]/50 hover:bg-[#4A3728]/20 transition-colors z-10"
+                >✕</button>
+
+                {/* Content */}
+                <div className="px-7 sm:px-10 pt-10 pb-8 text-center">
+                  {/* Icon */}
+                  <div className="w-16 h-16 bg-coral/10 rounded-full flex items-center justify-center mx-auto mb-5">
+                    <span className="text-3xl">🚚</span>
+                  </div>
+
+                  <p className="brand-rounded text-coral font-black text-[10px] uppercase tracking-[0.3em] mb-2">Delivery Update</p>
+
+                  <h2 className="text-2xl sm:text-3xl font-bold text-[#4A3728] serif leading-tight mb-2">
+                    Free Delivery<br />Across Ahmedabad
+                  </h2>
+
+                  <div className="w-12 h-1 bg-coral rounded-full mx-auto my-4" />
+
+                  <p className="text-sm text-[#4A3728]/70 brand-rounded leading-relaxed mb-2">
+                    We deliver <span className="font-bold text-[#4A3728]">free</span> to all areas in Ahmedabad.
+                  </p>
+                  <p className="text-sm text-[#4A3728]/70 brand-rounded leading-relaxed mb-6">
+                    🇮🇳 <span className="font-bold text-[#4A3728]">Pan-India shipping</span> available — fresh, packed, and delivered to your door.
+                  </p>
+
+                  <button
+                    onClick={() => { sessionStorage.setItem('deliveryPopupSeen', '1'); setShowDeliveryPopup(false); }}
+                    className="w-full py-3.5 bg-coral text-white rounded-2xl font-black brand-rounded uppercase tracking-[0.2em] text-xs hover:bg-[#d43d3d] transition-colors shadow-lg shadow-coral/30"
+                  >
+                    Shop Now →
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 text-center md:text-left">
             <div>
               <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em]">Fresh from Our Kitchen</span>
