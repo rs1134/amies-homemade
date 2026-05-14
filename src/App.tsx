@@ -1068,7 +1068,13 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen pt-10">
+      {/* Top offer banner */}
+      <div className="fixed top-0 left-0 right-0 z-[60] w-full bg-[#F04E4E] flex items-center justify-center" style={{ height: '40px' }}>
+        <p className="text-white text-[13px] sm:text-sm font-medium text-center px-4">
+          10% off on all orders, limited time offer
+        </p>
+      </div>
       <Navbar
         cartCount={cartCount}
         onCartClick={() => setIsCartOpen(true)}
