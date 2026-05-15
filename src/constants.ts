@@ -446,27 +446,16 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 's12',
-    name: 'Methi Masala Stick / Cheese Stick',
+    name: 'Methi Masala Stick',
     category: Category.SNACKS,
     price: 175,
     weight: '250 G',
-    description: 'Crunchy wheat sticks in two bold flavors — classic dried fenugreek or rich cheesy. Pick your favorite.',
+    description: 'Crunchy wheat sticks tossed with classic dried fenugreek and a punchy masala blend. A perfect tea-time crunch.',
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543469/WhatsApp_Image_2026-02-19_at_11.57.05_hiqois.jpg',
-    ingredients: ['Wheat Flour', 'Methi Leaves', 'Cheese', 'Mixed Spices'],
+    ingredients: ['Wheat Flour', 'Methi Leaves', 'Mixed Spices', 'Oil', 'Salt'],
     weights: ['250 G', '500 G', '1 KG'],
-    rating: 4.5, reviewCount: 27,
-    subOptions: [
-      {
-        name: 'Methi Masala Stick',
-        prices: { '250 G': 175, '500 G': 350, '1 KG': 700 },
-        ingredients: ['Wheat Flour', 'Methi Leaves', 'Mixed Spices', 'Oil', 'Salt']
-      },
-      {
-        name: 'Cheese Stick',
-        prices: { '250 G': 190, '500 G': 375, '1 KG': 750 },
-        ingredients: ['Wheat Flour', 'Cheese', 'Mixed Spices', 'Oil', 'Salt']
-      }
-    ]
+    prices: { '250 G': 175, '500 G': 350, '1 KG': 700 },
+    rating: 4.5, reviewCount: 27
   },
 
   {
