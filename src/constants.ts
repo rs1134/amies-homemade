@@ -399,7 +399,7 @@ export const PRODUCTS: Product[] = [
     price: 150,
     weight: '250 G',
     description: 'Sweet crunchy diamond biscuits made with flour and sugar.',
-    image: 'https://i.postimg.cc/2SH7N1X8/cjpjdzmbyhrmw0cwc6783pqgdg.png',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/v1778829602/Namakpare_or_Salty_Shakarpara_cpyl73.jpg',
     ingredients: ['Wheat Flour', 'Jaggery', 'Seasame seeds'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 150, '500 G': 300, '1 KG': 600 },
