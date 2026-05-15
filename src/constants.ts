@@ -532,13 +532,13 @@ export const PRODUCTS: Product[] = [
     id: 'sm2',
     name: 'Chai Masala',
     category: Category.WELLNESS,
-    price: 160,
-    weight: '100 G',
+    price: 320,
+    weight: '250 G',
     description: 'Hand-ground spices for the perfect authentic Indian chai.',
     image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543464/WhatsApp_Image_2026-02-15_at_17.15.19_tovhut.jpg',
     ingredients: ['Dry Ginger', 'Cinnamon', 'Clove', 'Cardamom (Elaichi)', 'Black Pepper'],
-    weights: ['100 G', '250 G'],
-    prices: { '100 G': 160, '250 G': 320 },
+    weights: ['250 G'],
+    prices: { '250 G': 320 },
     rating: 4.5, reviewCount: 31
   }
 ];
