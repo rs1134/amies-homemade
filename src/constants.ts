@@ -451,7 +451,7 @@ export const PRODUCTS: Product[] = [
     price: 175,
     weight: '250 G',
     description: 'Crunchy wheat sticks tossed with classic dried fenugreek and a punchy masala blend. A perfect tea-time crunch.',
-    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/v1778828381/ChatGPT_Image_May_15_2026_12_28_18_PM_aqjl0u.png',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/v1778828648/ChatGPT_Image_May_15_2026_12_33_47_PM_sa79ey.png',
     ingredients: ['Wheat Flour', 'Methi Leaves', 'Mixed Spices', 'Oil', 'Salt'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 175, '500 G': 350, '1 KG': 700 },
