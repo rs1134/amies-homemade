@@ -420,205 +420,205 @@ _Please confirm my order and share delivery details._
 
   // ── Checkout Form ───────────────────────────────────────────────────────────
   return (
-    <div className="pt-32 pb-24 px-4 sm:px-6 lg:px-8 bg-cream min-h-screen">
-      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12" ref={formRef}>
-        <div className="space-y-8">
+    <div className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 bg-cream min-h-screen">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6" ref={formRef}>
+        <div className="space-y-5">
           {/* Delivery Details */}
-          <div className="bg-white p-10 rounded-[3.5rem] shadow-xl border border-[#F04E4E]/5">
-            <h2 className="text-3xl font-bold serif mb-10 flex items-center gap-4 text-[#4A3728]">
-              <Truck className="text-[#F04E4E]" size={32} /> Delivery Details
+          <div className="bg-white p-5 sm:p-7 rounded-[2rem] shadow-xl border border-[#F04E4E]/5">
+            <h2 className="text-xl sm:text-2xl font-bold serif mb-5 flex items-center gap-3 text-[#4A3728]">
+              <Truck className="text-[#F04E4E]" size={24} /> Delivery Details
             </h2>
-            <div className="space-y-6">
+            <div className="space-y-4">
 
               {/* Address Search Autocomplete */}
-              <div className="space-y-2">
-                <label className="text-xs font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Search Your Address</label>
+              <div className="space-y-1.5">
+                <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Search Your Address</label>
                 <div className="relative">
                   <input
                     ref={addressSearchRef}
                     type="text"
                     placeholder="Start typing your address..."
                     disabled={isSubmitting}
-                    className="w-full p-5 pl-12 bg-[#F9F5EE] rounded-2xl border-2 border-[#4A3728]/10 text-[#4A3728] font-medium placeholder:text-[#4A3728]/40 focus:ring-4 focus:ring-[#F04E4E]/10 focus:border-[#F04E4E] outline-none text-base transition-all disabled:opacity-50"
+                    className="w-full p-3.5 pl-11 bg-[#F9F5EE] rounded-xl border-2 border-[#4A3728]/10 text-[#4A3728] font-medium placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 focus:border-[#F04E4E] outline-none text-sm transition-all disabled:opacity-50"
                   />
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#F04E4E]/60" size={18} />
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#F04E4E]/60" size={16} />
                 </div>
-                <p className="text-[9px] text-[#4A3728]/40 ml-4 brand-rounded font-bold">Select from suggestions to auto-fill city & address</p>
+                <p className="text-[9px] text-[#4A3728]/40 ml-3 brand-rounded font-bold">Select from suggestions to auto-fill city & address</p>
               </div>
 
               <div className="border-t border-[#4A3728]/5" />
 
               {/* Full Name */}
-              <div className="space-y-2" id="field-name">
-                <label className="text-xs font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Full Name</label>
+              <div className="space-y-1.5" id="field-name">
+                <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Full Name</label>
                 <input
                   name="name" disabled={isSubmitting} value={formData.name}
                   onChange={handleInputChange} onBlur={handleBlur} type="text" placeholder="e.g. Ami Shah"
-                  className={`w-full p-5 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.name && fieldErrors.name ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                  className={`w-full p-3.5 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-sm transition-all ${touched.name && fieldErrors.name ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                 />
                 {touched.name && fieldErrors.name && (
-                  <p className="text-red-500 text-[10px] font-bold ml-4 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.name}</p>
+                  <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.name}</p>
                 )}
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {/* Phone */}
-                <div className="space-y-2" id="field-phone">
-                  <label className="text-xs font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Phone Number</label>
+                <div className="space-y-1.5" id="field-phone">
+                  <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Phone Number</label>
                   <input
                     name="phone" disabled={isSubmitting} value={formData.phone}
                     onChange={handleInputChange} onBlur={handleBlur} type="text" placeholder="e.g. 91575 37842"
-                    className={`w-full p-5 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.phone && fieldErrors.phone ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                    className={`w-full p-3.5 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-sm transition-all ${touched.phone && fieldErrors.phone ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                   />
                   {touched.phone && fieldErrors.phone && (
-                    <p className="text-red-500 text-[10px] font-bold ml-4 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.phone}</p>
+                    <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.phone}</p>
                   )}
                 </div>
                 {/* City */}
-                <div className="space-y-2" id="field-city">
-                  <label className="text-xs font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">City</label>
+                <div className="space-y-1.5" id="field-city">
+                  <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">City</label>
                   <div className="relative">
                     <input
                       name="city" disabled={isSubmitting} value={formData.city}
                       onChange={handleInputChange} onBlur={handleBlur} type="text" placeholder="Ahmedabad"
-                      className={`w-full p-5 pl-12 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.city && fieldErrors.city ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                      className={`w-full p-3.5 pl-11 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-sm transition-all ${touched.city && fieldErrors.city ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                     />
-                    <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 text-[#4A3728]/20" size={18} />
+                    <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 text-[#4A3728]/20" size={16} />
                   </div>
                   {touched.city && fieldErrors.city && (
-                    <p className="text-red-500 text-[10px] font-bold ml-4 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.city}</p>
+                    <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.city}</p>
                   )}
                 </div>
               </div>
 
               {/* Email */}
-              <div className="space-y-2" id="field-email">
-                <label className="text-xs font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Email Address (Optional)</label>
+              <div className="space-y-1.5" id="field-email">
+                <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Email Address (Optional)</label>
                 <input
                   name="email" disabled={isSubmitting} value={formData.email}
                   onChange={handleInputChange} onBlur={handleBlur} type="email" placeholder="yourname@gmail.com"
-                  className={`w-full p-5 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.email && fieldErrors.email ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                  className={`w-full p-3.5 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-sm transition-all ${touched.email && fieldErrors.email ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                 />
                 {touched.email && fieldErrors.email && (
-                  <p className="text-red-500 text-[10px] font-bold ml-4 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.email}</p>
+                  <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.email}</p>
                 )}
               </div>
 
               {/* Flat / House No */}
-              <div className="space-y-2" id="field-flat">
-                <label className="text-xs font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Flat / House / Office No. <span className="text-[#F04E4E]">*</span></label>
+              <div className="space-y-1.5" id="field-flat">
+                <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Flat / House / Office No. <span className="text-[#F04E4E]">*</span></label>
                 <input
                   name="flat" disabled={isSubmitting} value={formData.flat}
                   onChange={handleInputChange} onBlur={handleBlur}
                   type="text" placeholder="e.g. A-102, Floor 3"
-                  className={`w-full p-5 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.flat && fieldErrors.flat ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                  className={`w-full p-3.5 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-sm transition-all ${touched.flat && fieldErrors.flat ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                 />
                 {touched.flat && fieldErrors.flat && (
-                  <p className="text-red-500 text-[10px] font-bold ml-4 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.flat}</p>
+                  <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.flat}</p>
                 )}
               </div>
 
               {/* Address */}
-              <div className="space-y-2" id="field-address">
-                <label className="text-xs font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Building / Society / Street Address</label>
+              <div className="space-y-1.5" id="field-address">
+                <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Building / Society / Street Address</label>
                 <textarea
                   name="address" disabled={isSubmitting} value={formData.address}
                   onChange={handleInputChange} onBlur={handleBlur}
-                  placeholder="Building name, street, landmark, pincode" rows={3}
-                  className={`w-full p-5 bg-white rounded-2xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-4 focus:ring-[#F04E4E]/10 outline-none text-base transition-all resize-none ${touched.address && fieldErrors.address ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                  placeholder="Building name, street, landmark, pincode" rows={2}
+                  className={`w-full p-3.5 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-sm transition-all resize-none ${touched.address && fieldErrors.address ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                 />
                 {touched.address && fieldErrors.address && (
-                  <p className="text-red-500 text-[10px] font-bold ml-4 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.address}</p>
+                  <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.address}</p>
                 )}
               </div>
             </div>
           </div>
 
           {/* Payment Method */}
-          <div className="bg-white p-10 rounded-[3.5rem] shadow-xl border border-[#F04E4E]/5">
-            <h2 className="text-2xl font-bold serif mb-8 flex items-center gap-4 text-[#4A3728]">
-              <Wallet className="text-[#F04E4E]" size={28} /> Payment Method
+          <div className="bg-white p-5 sm:p-7 rounded-[2rem] shadow-xl border border-[#F04E4E]/5">
+            <h2 className="text-lg font-bold serif mb-4 flex items-center gap-3 text-[#4A3728]">
+              <Wallet className="text-[#F04E4E]" size={22} /> Payment Method
             </h2>
-            <div className="p-6 rounded-[2rem] border-2 border-[#F04E4E] bg-[#F04E4E]/5 flex flex-col items-center gap-3 shadow-sm">
-              <Smartphone size={28} className="text-blue-500" />
-              <span className="text-[10px] font-black uppercase brand-rounded tracking-widest text-center">Secure Online Payment (UPI, Cards, Netbanking)</span>
+            <div className="p-4 rounded-2xl border-2 border-[#F04E4E] bg-[#F04E4E]/5 flex items-center gap-3 shadow-sm">
+              <Smartphone size={22} className="text-blue-500 flex-shrink-0" />
+              <span className="text-[10px] font-black uppercase brand-rounded tracking-widest">Secure Online Payment (UPI, Cards, Netbanking)</span>
             </div>
           </div>
         </div>
 
         {/* Sticky Summary Card */}
-        <div className="bg-white p-10 rounded-[3.5rem] shadow-xl border border-[#F04E4E]/5 h-fit sticky top-32">
-          <div className="flex items-center justify-between mb-10">
-            <h2 className="text-2xl font-bold serif text-[#4A3728]">Order Summary</h2>
-            <div className="flex items-center gap-2.5 bg-white px-4 py-2 rounded-full border border-[#4A3728]/10 shadow-sm">
-              <Scale size={16} className="text-[#F04E4E]" />
-              <span className="text-[11px] font-black uppercase brand-rounded tracking-[0.1em] text-[#F04E4E]">{totalWeight}G TOTAL</span>
+        <div className="bg-white p-5 sm:p-7 rounded-[2rem] shadow-xl border border-[#F04E4E]/5 h-fit lg:sticky lg:top-24">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-xl font-bold serif text-[#4A3728]">Order Summary</h2>
+            <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full border border-[#4A3728]/10 shadow-sm">
+              <Scale size={14} className="text-[#F04E4E]" />
+              <span className="text-[10px] font-black uppercase brand-rounded tracking-[0.1em] text-[#F04E4E]">{totalWeight}G TOTAL</span>
             </div>
           </div>
 
-          <div className="space-y-8 mb-10 max-h-[350px] overflow-y-auto no-scrollbar pr-2">
+          <div className="space-y-4 mb-5 max-h-[280px] overflow-y-auto no-scrollbar pr-2">
             {items.map((item, idx) => (
               <div key={`${item.id}-${idx}`} className="flex justify-between items-center group">
-                <div className="flex items-center gap-5">
-                  <div className="w-16 h-16 rounded-2xl overflow-hidden bg-cream shadow-sm flex-shrink-0 border border-[#4A3728]/5 relative">
+                <div className="flex items-center gap-3">
+                  <div className="w-14 h-14 rounded-xl overflow-hidden bg-cream shadow-sm flex-shrink-0 border border-[#4A3728]/5 relative">
                     <img src={item.image} className="w-full h-full object-cover" />
                     <button onClick={() => onRemove(item.id)} className="absolute inset-0 bg-red-600/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                      <Trash2 size={20} />
+                      <Trash2 size={18} />
                     </button>
                   </div>
                   <div>
-                    <h4 className="text-lg font-bold text-[#4A3728] leading-tight">{item.name}</h4>
-                    <p className="text-sm text-[#4A3728]/50 uppercase brand-rounded mt-1 font-bold tracking-wider">{item.selectedWeight || item.weight}</p>
-                    <div className="flex items-center gap-3 mt-2 border border-coral/10 bg-white rounded-xl w-fit p-1">
-                      <button onClick={() => onUpdateQuantity(item.id, -1)} className="p-1 hover:bg-coral/5 rounded-lg text-coral transition-colors"><Minus size={12} /></button>
-                      <span className="text-lg font-black brand-rounded text-[#4A3728] min-w-[20px] text-center">{item.quantity}</span>
-                      <button onClick={() => onUpdateQuantity(item.id, 1)} className="p-1 hover:bg-coral/5 rounded-lg text-coral transition-colors"><Plus size={12} /></button>
+                    <h4 className="text-sm font-bold text-[#4A3728] leading-tight">{item.name}</h4>
+                    <p className="text-[11px] text-[#4A3728]/50 uppercase brand-rounded mt-0.5 font-bold tracking-wider">{item.selectedWeight || item.weight}</p>
+                    <div className="flex items-center gap-2 mt-1.5 border border-coral/10 bg-white rounded-lg w-fit p-0.5">
+                      <button onClick={() => onUpdateQuantity(item.id, -1)} className="p-1 hover:bg-coral/5 rounded text-coral transition-colors"><Minus size={11} /></button>
+                      <span className="text-sm font-black brand-rounded text-[#4A3728] min-w-[18px] text-center">{item.quantity}</span>
+                      <button onClick={() => onUpdateQuantity(item.id, 1)} className="p-1 hover:bg-coral/5 rounded text-coral transition-colors"><Plus size={11} /></button>
                     </div>
                   </div>
                 </div>
-                <span className="font-bold text-[#4A3728] text-lg">₹{item.price * item.quantity}</span>
+                <span className="font-bold text-[#4A3728] text-sm">₹{item.price * item.quantity}</span>
               </div>
             ))}
           </div>
 
-          <div className="space-y-4 pt-8 border-t border-[#4A3728]/5 mb-10">
+          <div className="space-y-2 pt-4 border-t border-[#4A3728]/5 mb-5">
             <div className="flex justify-between text-sm">
               <span className="text-[#4A3728]/40 brand-rounded uppercase font-black text-[10px] tracking-widest">Subtotal</span>
-              <span className="font-bold text-[#4A3728]">₹{total}</span>
+              <span className="font-bold text-[#4A3728] text-sm">₹{total}</span>
             </div>
             {couponDiscount > 0 && (
               <div className="flex justify-between text-sm">
                 <span className="text-[#4A3728]/40 brand-rounded uppercase font-black text-[10px] tracking-widest">Coupon (Thanks10)</span>
-                <span className="font-bold text-green-600">− ₹{couponDiscount}</span>
+                <span className="font-bold text-green-600 text-sm">− ₹{couponDiscount}</span>
               </div>
             )}
             <div className="flex justify-between text-sm items-center">
               <span className="text-[#4A3728]/40 brand-rounded uppercase font-black text-[10px] tracking-widest">Delivery Fee</span>
               {shippingFee === 0 && isAhmedabad ? (
-                <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-[10px] font-black tracking-widest brand-rounded">FREE</span>
+                <span className="bg-green-100 text-green-700 px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-widest brand-rounded">FREE</span>
               ) : shippingFee !== null ? (
-                <span className="font-bold text-[#4A3728]">₹{shippingFee}</span>
+                <span className="font-bold text-[#4A3728] text-sm">₹{shippingFee}</span>
               ) : (
                 <span className="text-[9px] text-coral font-black brand-rounded uppercase tracking-widest">Calculated on City</span>
               )}
             </div>
             {(!formData.city || fieldErrors.city) && (
-              <p className="text-[9px] text-[#4A3728]/40 italic brand-rounded bg-[#4A3728]/5 p-3 rounded-xl border border-[#4A3728]/5">
+              <p className="text-[9px] text-[#4A3728]/40 italic brand-rounded bg-[#4A3728]/5 p-2.5 rounded-lg border border-[#4A3728]/5">
                 {fieldErrors.city ? "Correct city name to calculate shipping" : "Enter your city to calculate exact weight-based shipping."}
               </p>
             )}
-            <div className="flex justify-between pt-8">
-              <span className="text-2xl font-bold serif text-[#4A3728]">Grand Total</span>
-              <span className="text-4xl font-black text-[#F04E4E]">₹{grandTotal}</span>
+            <div className="flex justify-between items-center pt-4">
+              <span className="text-lg font-bold serif text-[#4A3728]">Grand Total</span>
+              <span className="text-2xl sm:text-3xl font-black text-[#F04E4E]">₹{grandTotal}</span>
             </div>
           </div>
 
           <button
             disabled={isSubmitting}
             onClick={handleProceed}
-            className={`w-full py-6 bg-[#F04E4E] shadow-[#F04E4E]/30 text-white rounded-[2rem] font-bold brand-rounded uppercase tracking-[0.3em] text-[11px] transition-all shadow-2xl flex items-center justify-center gap-4 ${isSubmitting ? 'opacity-70 cursor-wait' : 'hover:scale-[1.03] active:scale-[0.97]'}`}
+            className={`w-full py-4 bg-[#F04E4E] shadow-[#F04E4E]/30 text-white rounded-2xl font-bold brand-rounded uppercase tracking-[0.25em] text-[11px] transition-all shadow-xl flex items-center justify-center gap-3 ${isSubmitting ? 'opacity-70 cursor-wait' : 'hover:scale-[1.02] active:scale-[0.97]'}`}
           >
-            {isSubmitting ? <>Processing... <Loader2 className="animate-spin" size={25} /></> : <>Complete My Order <ChevronRight size={25} /></>}
+            {isSubmitting ? <>Processing... <Loader2 className="animate-spin" size={20} /></> : <>Complete My Order <ChevronRight size={20} /></>}
           </button>
         </div>
       </div>
