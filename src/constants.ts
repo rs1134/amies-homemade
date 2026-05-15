@@ -350,7 +350,7 @@ export const PRODUCTS: Product[] = [
     price: 150,
     weight: '250 G',
     description: 'Spicy crunchy wheat discs, a perfect tea-time companion. Pick your favorite blend.',
-    image: 'https://i.postimg.cc/mgK8Jcnz/મસલ_કડક_પર_masala_kadak_puri_recipe_in_gujarati_રસપ_મખય_ફટ.jpg',
+    image: 'https://res.cloudinary.com/dqs95a7w2/image/upload/v1778829084/ChatGPT_Image_May_15_2026_12_41_02_PM_pvq1bt.png',
     ingredients: ['Wheat Flour', 'Spices', 'Coriander', 'Green Chilli'],
     rating: 4.5, reviewCount: 33,
     weights: ['250 G', '500 G', '1 KG'],
