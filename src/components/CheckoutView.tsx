@@ -281,7 +281,7 @@ _Please confirm my order and share delivery details._
       const order = await response.json();
 
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_SJFLrXT62pYAGB',
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_SpwPwC9cvjewrn',
         amount: order.amount, currency: order.currency,
         name: "Amie's Homemade", description: "Order Payment",
         image: "https://i.postimg.cc/8Cy68DD6/Whats-App-Image-2026-02-12-at-18-57-42-(1).jpg",
