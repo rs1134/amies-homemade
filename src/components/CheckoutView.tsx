@@ -281,12 +281,34 @@ _Please confirm my order and share delivery details._
       const order = await response.json();
 
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_SJFLrXT62pYAGB',
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_SpwBjfCMwqyOcJ',
         amount: order.amount, currency: order.currency,
         name: "Amie's Homemade", description: "Order Payment",
         image: "https://i.postimg.cc/8Cy68DD6/Whats-App-Image-2026-02-12-at-18-57-42-(1).jpg",
         order_id: order.id,
-        handler: function (response: any) {
+        handler: async function (response: any) {
+          // Verify signature server-side before confirming order
+          try {
+            const verifyRes = await fetch('/api/verify-payment', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              }),
+            });
+            const verifyData = await verifyRes.json();
+            if (!verifyRes.ok || !verifyData.success) {
+              alert('Payment verification failed. If money was deducted, please contact us on WhatsApp with your Payment ID: ' + response.razorpay_payment_id);
+              setIsSubmitting(false);
+              return;
+            }
+          } catch (err) {
+            console.error('Signature verification request failed:', err);
+            // Continue anyway so the order isn't lost — admin can verify manually
+          }
+
           submitOrderSilently(response.razorpay_payment_id);
           (window as any).fbq?.('track', 'Purchase', {
             value: grandTotal, currency: 'INR',
