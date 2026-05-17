@@ -97,7 +97,9 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
     }
   }, []);
 
-  const isAhmedabad = formData.city.trim().toLowerCase() === 'ahmedabad';
+  // Accept common spellings/variants of Ahmedabad (Gujarati: Amdavad)
+  const AHMEDABAD_VARIANTS = ['ahmedabad', 'amdavad', 'amdaavad', 'ahmadabad', 'ahemdabad', 'ahembdabad'];
+  const isAhmedabad = AHMEDABAD_VARIANTS.includes(formData.city.trim().toLowerCase());
 
   const validateField = (name: string, value: string): string => {
     switch (name) {
@@ -164,7 +166,7 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   const subtotalAfterDiscount = total - couponDiscount;
   const shippingFee = useMemo(() => {
     if (!formData.city || validateField('city', formData.city)) return null;
-    if (formData.city.trim().toLowerCase() === 'ahmedabad') return 0;
+    if (AHMEDABAD_VARIANTS.includes(formData.city.trim().toLowerCase())) return 0;
     if (subtotalAfterDiscount >= 1500) return 0;
     if (subtotalAfterDiscount >= 500) return 100;
     return 60;
