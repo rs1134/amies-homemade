@@ -610,8 +610,8 @@ _Please confirm my order and share delivery details._
             ))}
           </div>
 
-          {/* Free shipping unlock nudge — only show for non-Ahmedabad below the threshold */}
-          {!isAhmedabad && amountToFreeShipping > 0 && shippingFee !== null && (
+          {/* Free shipping unlock nudge — only after city is fully entered (blurred) and not Ahmedabad */}
+          {touched.city && !fieldErrors.city && !isAhmedabad && amountToFreeShipping > 0 && shippingFee !== null && (
             <div className="mb-4 p-3 rounded-2xl bg-gradient-to-br from-[#FFF1E5] to-[#FFE5D0] border border-[#F04E4E]/15">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-[11px] font-bold text-[#4A3728] brand-rounded">
@@ -627,7 +627,7 @@ _Please confirm my order and share delivery details._
               </div>
             </div>
           )}
-          {!isAhmedabad && amountToFreeShipping === 0 && shippingFee === 0 && formData.city && (
+          {touched.city && !fieldErrors.city && !isAhmedabad && amountToFreeShipping === 0 && shippingFee === 0 && formData.city && (
             <div className="mb-4 p-3 rounded-2xl bg-green-50 border border-green-200 flex items-center gap-2">
               <span className="text-base">🎉</span>
               <span className="text-[12px] font-bold text-green-700 brand-rounded">You've unlocked FREE shipping!</span>
