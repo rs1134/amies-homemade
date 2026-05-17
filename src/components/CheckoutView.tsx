@@ -158,16 +158,23 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
     }, 0);
   }, [items]);
 
-  // Dynamic Shipping Fee
+  // Dynamic Shipping Fee — price-based tiers (incentivises bigger carts)
+  // Ahmedabad: always FREE
+  // Pan-India: < ₹499 → ₹60 | ₹500–1499 → ₹100 | ₹1500+ → FREE
+  const subtotalAfterDiscount = total - couponDiscount;
   const shippingFee = useMemo(() => {
     if (!formData.city || validateField('city', formData.city)) return null;
     if (formData.city.trim().toLowerCase() === 'ahmedabad') return 0;
-    if (totalWeight <= 500) return 60;
-    if (totalWeight <= 1000) return 100;
-    if (totalWeight <= 2000) return 150;
-    if (totalWeight <= 5000) return 200;
-    return 250;
-  }, [formData.city, totalWeight]);
+    if (subtotalAfterDiscount >= 1500) return 0;
+    if (subtotalAfterDiscount >= 500) return 100;
+    return 60;
+  }, [formData.city, subtotalAfterDiscount]);
+
+  // Amount needed to unlock free shipping (pan-India only)
+  const amountToFreeShipping = useMemo(() => {
+    if (isAhmedabad) return 0;
+    return Math.max(0, 1500 - subtotalAfterDiscount);
+  }, [isAhmedabad, subtotalAfterDiscount]);
 
   const grandTotal = total - couponDiscount + (shippingFee || 0);
 
@@ -603,6 +610,30 @@ _Please confirm my order and share delivery details._
             ))}
           </div>
 
+          {/* Free shipping unlock nudge — only show for non-Ahmedabad below the threshold */}
+          {!isAhmedabad && amountToFreeShipping > 0 && shippingFee !== null && (
+            <div className="mb-4 p-3 rounded-2xl bg-gradient-to-br from-[#FFF1E5] to-[#FFE5D0] border border-[#F04E4E]/15">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[11px] font-bold text-[#4A3728] brand-rounded">
+                  🚚 Add <span className="text-[#F04E4E] font-black">₹{amountToFreeShipping}</span> more for FREE shipping
+                </span>
+                <span className="text-[10px] font-black text-[#4A3728]/50 brand-rounded">₹{subtotalAfterDiscount}/₹1500</span>
+              </div>
+              <div className="h-2 bg-white/70 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-[#F04E4E] to-[#F6C94C] rounded-full transition-all duration-500"
+                  style={{ width: `${Math.min(100, (subtotalAfterDiscount / 1500) * 100)}%` }}
+                />
+              </div>
+            </div>
+          )}
+          {!isAhmedabad && amountToFreeShipping === 0 && shippingFee === 0 && formData.city && (
+            <div className="mb-4 p-3 rounded-2xl bg-green-50 border border-green-200 flex items-center gap-2">
+              <span className="text-base">🎉</span>
+              <span className="text-[12px] font-bold text-green-700 brand-rounded">You've unlocked FREE shipping!</span>
+            </div>
+          )}
+
           <div className="space-y-2 pt-4 border-t border-[#4A3728]/5 mb-5">
             <div className="flex justify-between text-sm">
               <span className="text-[#4A3728]/40 brand-rounded uppercase font-black text-[10px] tracking-widest">Subtotal</span>
@@ -626,7 +657,7 @@ _Please confirm my order and share delivery details._
             </div>
             {(!formData.city || fieldErrors.city) && (
               <p className="text-[9px] text-[#4A3728]/40 italic brand-rounded bg-[#4A3728]/5 p-2.5 rounded-lg border border-[#4A3728]/5">
-                {fieldErrors.city ? "Correct city name to calculate shipping" : "Enter your city to calculate exact weight-based shipping."}
+                {fieldErrors.city ? "Correct city name to calculate shipping" : "Enter your city to calculate shipping fee."}
               </p>
             )}
             <div className="flex justify-between items-center pt-4">

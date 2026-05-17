@@ -163,6 +163,31 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, o
               </div>
             )}
 
+            {/* Free shipping unlock nudge (pan-India) */}
+            {orderTotal < 1500 && (
+              <div className="mb-3 p-3 rounded-2xl bg-gradient-to-br from-[#FFF1E5] to-[#FFE5D0] border border-[#F04E4E]/15">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[11px] font-bold text-[#4A3728] brand-rounded">
+                    🚚 Add <span className="text-[#F04E4E] font-black">₹{1500 - orderTotal}</span> for FREE shipping
+                  </span>
+                  <span className="text-[10px] font-black text-[#4A3728]/50 brand-rounded">₹{orderTotal}/₹1500</span>
+                </div>
+                <div className="h-2 bg-white/70 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-[#F04E4E] to-[#F6C94C] rounded-full transition-all duration-500"
+                    style={{ width: `${Math.min(100, (orderTotal / 1500) * 100)}%` }}
+                  />
+                </div>
+                <p className="text-[9px] text-[#4A3728]/50 mt-1.5 brand-rounded font-bold">Pan-India · Ahmedabad always FREE</p>
+              </div>
+            )}
+            {orderTotal >= 1500 && (
+              <div className="mb-3 p-3 rounded-2xl bg-green-50 border border-green-200 flex items-center gap-2">
+                <span className="text-base">🎉</span>
+                <span className="text-[12px] font-bold text-green-700 brand-rounded">You've unlocked FREE shipping!</span>
+              </div>
+            )}
+
             <div className="space-y-3">
               <div className="flex justify-between text-sm">
                 <span className="text-[#4A3728]/50 brand-rounded uppercase font-bold text-[10px] tracking-widest">Subtotal</span>
