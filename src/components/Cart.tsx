@@ -14,21 +14,11 @@ interface CartProps {
   onCheckout: (couponDiscount: number) => void;
 }
 
-const REGION_STORAGE_KEY = 'amies_delivery_region';
-
 const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, onRemove, onCheckout }) => {
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const [couponInput, setCouponInput] = React.useState('');
   const [couponApplied, setCouponApplied] = React.useState(false);
   const [couponError, setCouponError] = React.useState('');
-  const [region, setRegion] = React.useState<'ahmedabad' | 'pan-india'>(() => {
-    if (typeof window === 'undefined') return 'ahmedabad';
-    return (localStorage.getItem(REGION_STORAGE_KEY) as 'ahmedabad' | 'pan-india') || 'ahmedabad';
-  });
-
-  React.useEffect(() => {
-    localStorage.setItem(REGION_STORAGE_KEY, region);
-  }, [region]);
 
   const couponDiscount = couponApplied ? Math.round(subtotal * 0.1) : 0;
   const orderTotal = subtotal - couponDiscount;
@@ -173,56 +163,6 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, o
               </div>
             )}
 
-            {/* Region toggle */}
-            <div className="mb-3 flex items-center gap-2">
-              <span className="text-[10px] font-black uppercase tracking-widest text-[#4A3728]/50 brand-rounded">Delivering to:</span>
-              <div className="flex gap-1 bg-[#4A3728]/5 p-1 rounded-full">
-                <button
-                  onClick={() => setRegion('ahmedabad')}
-                  className={`px-3 py-1 rounded-full text-[10px] font-black brand-rounded uppercase tracking-wider transition-all ${region === 'ahmedabad' ? 'bg-[#F04E4E] text-white shadow-sm' : 'text-[#4A3728]/60 hover:text-[#4A3728]'}`}
-                >
-                  Ahmedabad
-                </button>
-                <button
-                  onClick={() => setRegion('pan-india')}
-                  className={`px-3 py-1 rounded-full text-[10px] font-black brand-rounded uppercase tracking-wider transition-all ${region === 'pan-india' ? 'bg-[#F04E4E] text-white shadow-sm' : 'text-[#4A3728]/60 hover:text-[#4A3728]'}`}
-                >
-                  Pan-India
-                </button>
-              </div>
-            </div>
-
-            {/* Ahmedabad: always free message */}
-            {region === 'ahmedabad' && (
-              <div className="mb-3 p-3 rounded-2xl bg-green-50 border border-green-200 flex items-center gap-2">
-                <span className="text-base">🎉</span>
-                <span className="text-[12px] font-bold text-green-700 brand-rounded">FREE shipping for Ahmedabad orders ❤️</span>
-              </div>
-            )}
-
-            {/* Pan-India: progress bar nudge */}
-            {region === 'pan-india' && orderTotal < 1500 && (
-              <div className="mb-3 p-3 rounded-2xl bg-gradient-to-br from-[#FFF1E5] to-[#FFE5D0] border border-[#F04E4E]/15">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[11px] font-bold text-[#4A3728] brand-rounded">
-                    🚚 Add <span className="text-[#F04E4E] font-black">₹{1500 - orderTotal}</span> for FREE shipping
-                  </span>
-                  <span className="text-[10px] font-black text-[#4A3728]/50 brand-rounded">₹{orderTotal}/₹1500</span>
-                </div>
-                <div className="h-2 bg-white/70 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-gradient-to-r from-[#F04E4E] to-[#F6C94C] rounded-full transition-all duration-500"
-                    style={{ width: `${Math.min(100, (orderTotal / 1500) * 100)}%` }}
-                  />
-                </div>
-              </div>
-            )}
-            {region === 'pan-india' && orderTotal >= 1500 && (
-              <div className="mb-3 p-3 rounded-2xl bg-green-50 border border-green-200 flex items-center gap-2">
-                <span className="text-base">🎉</span>
-                <span className="text-[12px] font-bold text-green-700 brand-rounded">You've unlocked FREE shipping!</span>
-              </div>
-            )}
 
             <div className="space-y-3">
               <div className="flex justify-between text-sm">
