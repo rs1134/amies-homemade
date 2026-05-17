@@ -1074,14 +1074,19 @@ const App: React.FC = () => {
         <div className="h-full flex items-center">
           <div className="flex animate-marquee-left whitespace-nowrap">
             {[0, 1].map(i => (
-              <span key={i} className="text-white text-[13px] sm:text-[14px] font-normal whitespace-nowrap flex items-center" style={{ fontFamily: 'Georgia, "Times New Roman", serif', letterSpacing: '0.01em' }}>
-                <span className="mx-10">Free Delivery across Ahmedabad</span>
-                <span className="text-white/50 mx-2" aria-hidden="true">|</span>
-                <span className="mx-10">Pan-India shipping FREE on orders above ₹1499</span>
-                <span className="text-white/50 mx-2" aria-hidden="true">|</span>
-                <span className="mx-10">Handcrafted Fresh · No Preservatives</span>
-                <span className="text-white/50 mx-2" aria-hidden="true">|</span>
-              </span>
+              <div
+                key={i}
+                className="flex items-center shrink-0 text-white text-[13px] sm:text-[14px] font-normal whitespace-nowrap"
+                style={{ fontFamily: 'Georgia, "Times New Roman", serif', letterSpacing: '0.01em' }}
+                aria-hidden={i === 1}
+              >
+                <span className="px-10">Free Delivery across Ahmedabad</span>
+                <span className="text-white/50">|</span>
+                <span className="px-10">Pan-India shipping FREE on orders above ₹1499</span>
+                <span className="text-white/50">|</span>
+                <span className="px-10">Handcrafted in Small Batches</span>
+                <span className="text-white/50">|</span>
+              </div>
             ))}
           </div>
         </div>
