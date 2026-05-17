@@ -1069,18 +1069,18 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen pt-10">
-      {/* Top scrolling announcement banner */}
-      <div className="fixed top-0 left-0 right-0 z-[60] w-full overflow-hidden" style={{ height: '40px', background: '#3D2218' }}>
+      {/* Top scrolling announcement banner — Cinnamon Kitchen style (serif + pipes), Amie's coral */}
+      <div className="fixed top-0 left-0 right-0 z-[60] w-full overflow-hidden" style={{ height: '40px', background: '#F04E4E' }}>
         <div className="h-full flex items-center">
           <div className="flex animate-marquee-left whitespace-nowrap">
             {[0, 1].map(i => (
               <span key={i} className="text-white text-[13px] sm:text-[14px] font-normal whitespace-nowrap flex items-center" style={{ fontFamily: 'Georgia, "Times New Roman", serif', letterSpacing: '0.01em' }}>
                 <span className="mx-10">Free Delivery across Ahmedabad</span>
-                <span className="text-white/40 mx-2" aria-hidden="true">|</span>
+                <span className="text-white/50 mx-2" aria-hidden="true">|</span>
                 <span className="mx-10">Pan-India shipping FREE on orders above ₹1499</span>
-                <span className="text-white/40 mx-2" aria-hidden="true">|</span>
+                <span className="text-white/50 mx-2" aria-hidden="true">|</span>
                 <span className="mx-10">Handcrafted Fresh · No Preservatives</span>
-                <span className="text-white/40 mx-2" aria-hidden="true">|</span>
+                <span className="text-white/50 mx-2" aria-hidden="true">|</span>
               </span>
             ))}
           </div>
