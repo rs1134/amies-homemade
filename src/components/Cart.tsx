@@ -14,11 +14,21 @@ interface CartProps {
   onCheckout: (couponDiscount: number) => void;
 }
 
+const REGION_STORAGE_KEY = 'amies_delivery_region';
+
 const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, onRemove, onCheckout }) => {
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const [couponInput, setCouponInput] = React.useState('');
   const [couponApplied, setCouponApplied] = React.useState(false);
   const [couponError, setCouponError] = React.useState('');
+  const [region, setRegion] = React.useState<'ahmedabad' | 'pan-india'>(() => {
+    if (typeof window === 'undefined') return 'ahmedabad';
+    return (localStorage.getItem(REGION_STORAGE_KEY) as 'ahmedabad' | 'pan-india') || 'ahmedabad';
+  });
+
+  React.useEffect(() => {
+    localStorage.setItem(REGION_STORAGE_KEY, region);
+  }, [region]);
 
   const couponDiscount = couponApplied ? Math.round(subtotal * 0.1) : 0;
   const orderTotal = subtotal - couponDiscount;
@@ -163,8 +173,35 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, o
               </div>
             )}
 
-            {/* Free shipping unlock nudge (pan-India) */}
-            {orderTotal < 1500 && (
+            {/* Region toggle */}
+            <div className="mb-3 flex items-center gap-2">
+              <span className="text-[10px] font-black uppercase tracking-widest text-[#4A3728]/50 brand-rounded">Delivering to:</span>
+              <div className="flex gap-1 bg-[#4A3728]/5 p-1 rounded-full">
+                <button
+                  onClick={() => setRegion('ahmedabad')}
+                  className={`px-3 py-1 rounded-full text-[10px] font-black brand-rounded uppercase tracking-wider transition-all ${region === 'ahmedabad' ? 'bg-[#F04E4E] text-white shadow-sm' : 'text-[#4A3728]/60 hover:text-[#4A3728]'}`}
+                >
+                  Ahmedabad
+                </button>
+                <button
+                  onClick={() => setRegion('pan-india')}
+                  className={`px-3 py-1 rounded-full text-[10px] font-black brand-rounded uppercase tracking-wider transition-all ${region === 'pan-india' ? 'bg-[#F04E4E] text-white shadow-sm' : 'text-[#4A3728]/60 hover:text-[#4A3728]'}`}
+                >
+                  Pan-India
+                </button>
+              </div>
+            </div>
+
+            {/* Ahmedabad: always free message */}
+            {region === 'ahmedabad' && (
+              <div className="mb-3 p-3 rounded-2xl bg-green-50 border border-green-200 flex items-center gap-2">
+                <span className="text-base">🎉</span>
+                <span className="text-[12px] font-bold text-green-700 brand-rounded">FREE shipping for Ahmedabad orders ❤️</span>
+              </div>
+            )}
+
+            {/* Pan-India: progress bar nudge */}
+            {region === 'pan-india' && orderTotal < 1500 && (
               <div className="mb-3 p-3 rounded-2xl bg-gradient-to-br from-[#FFF1E5] to-[#FFE5D0] border border-[#F04E4E]/15">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-[11px] font-bold text-[#4A3728] brand-rounded">
@@ -178,10 +215,9 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, o
                     style={{ width: `${Math.min(100, (orderTotal / 1500) * 100)}%` }}
                   />
                 </div>
-                <p className="text-[9px] text-[#4A3728]/50 mt-1.5 brand-rounded font-bold">Pan-India · Ahmedabad always FREE</p>
               </div>
             )}
-            {orderTotal >= 1500 && (
+            {region === 'pan-india' && orderTotal >= 1500 && (
               <div className="mb-3 p-3 rounded-2xl bg-green-50 border border-green-200 flex items-center gap-2">
                 <span className="text-base">🎉</span>
                 <span className="text-[12px] font-bold text-green-700 brand-rounded">You've unlocked FREE shipping!</span>
