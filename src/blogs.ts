@@ -244,7 +244,7 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: 'gujarati-snacks-for-corporate-gifting',
     title: 'Gujarati Snacks for Corporate Gifting: Why Authenticity Wins',
     excerpt: 'Every Diwali, offices across India struggle with the same question: what do we give clients that doesn\'t feel generic? The answer is sitting right in Gujarati culinary tradition.',
-    coverImage: 'https://i.postimg.cc/25yHhckZ/Chat-GPT-Image-Apr-29-2026-05-33-06-PM.png',
+    coverImage: 'https://i.postimg.cc/SKRZCTSn/Chat-GPT-Image-May-15-2026-12-33-47-PM.png',
     publishedAt: '2026-04-18',
     readTime: 4,
     category: 'Corporate Gifting',
