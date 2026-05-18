@@ -473,7 +473,7 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: 'navratri-gift-ideas-festive-hampers',
     title: 'Navratri Gift Ideas: Thoughtful Homemade Hampers for the Festival Season',
     excerpt: 'Navratri is nine nights of devotion, dance, and togetherness. It\'s also one of the most meaningful times to gift something handmade. Here\'s how to choose (or build) the perfect Navratri hamper.',
-    coverImage: 'https://images.unsplash.com/photo-1604846886604-9d6cabd2c1ce?q=80&w=1600&auto=format&fit=crop',
+    coverImage: 'https://i.postimg.cc/m28d6f5s/(3).jpg',
     publishedAt: '2026-04-11',
     readTime: 5,
     category: 'Festive Gifting',
