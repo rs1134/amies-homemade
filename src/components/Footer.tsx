@@ -160,7 +160,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             {/* FSSAI Badge */}
             <div className="flex items-center gap-3">
               <img
-                src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1775019843/fssai-logo-fssai-icon-free-free-vector_xhqumj.jpg"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/FSSAI_Logo.png/200px-FSSAI_Logo.png"
                 alt="FSSAI Registered"
                 className="h-8 w-auto object-contain"
               />
