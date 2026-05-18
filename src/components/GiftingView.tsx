@@ -299,7 +299,7 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
                {/* WEDDINGS */}
                <div className="relative overflow-hidden group/img border-r border-b border-[#D4AF37]/10">
                   <img 
-                    src="https://i.postimg.cc/3xwTWHm9/amish-thakkar-7O422y-G-b80-unsplash.jpg" 
+                    src="https://ik.imagekit.io/amieshomemade/amish-thakkar-7O422y-G-b80-unsplash.jpg" 
                     className="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-110" 
                     alt="Weddings at Amie's" 
                   />
@@ -310,7 +310,7 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
                {/* FESTIVALS */}
                <div className="relative overflow-hidden group/img border-b border-[#D4AF37]/10">
                   <img 
-                    src="https://i.postimg.cc/cHcWr19P/bh6cmv93h5rmt0cwehc94w18rr.png" 
+                    src="https://ik.imagekit.io/amieshomemade/bh6cmv93h5rmt0cwehc94w18rr.png" 
                     className="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-110" 
                     alt="Festivals at Amie's" 
                   />
@@ -321,7 +321,7 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
                {/* CORPORATE GIFTS */}
                <div className="relative overflow-hidden group/img border-r border-[#D4AF37]/10">
                   <img 
-                    src="https://i.postimg.cc/bYFML2t9/3mx66mz99srmr0cwehfssqfz10.png" 
+                    src="https://ik.imagekit.io/amieshomemade/3mx66mz99srmr0cwehfssqfz10.png" 
                     className="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-110" 
                     alt="Corporate Gifting" 
                   />
@@ -332,7 +332,7 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
                {/* CELEBRATIONS */}
                <div className="relative overflow-hidden group/img">
                   <img 
-                    src="https://i.postimg.cc/4ytzzMcq/nescmvzyzhrmw0cweh988hsnk0.png" 
+                    src="https://ik.imagekit.io/amieshomemade/nescmvzyzhrmw0cweh988hsnk0.png" 
                     className="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-110" 
                     alt="Celebrations" 
                   />
@@ -408,14 +408,14 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
             <div className="lg:w-1/2 flex flex-col overflow-hidden">
               <div className="relative overflow-hidden flex-1 border-b border-white/10" style={{minHeight: '240px'}}>
                 <img
-                  src="https://i.postimg.cc/9Mc9MPXM/Whats_App_Image_2026_03_10_at_23_09_28.jpg"
+                  src="https://ik.imagekit.io/amieshomemade/Whats_App_Image_2026_03_10_at_23_09_28.jpg"
                   className="w-full h-full object-cover object-center"
                   alt="Mukhwas Bar at Mehndi"
                 />
               </div>
               <div className="relative overflow-hidden flex-1" style={{minHeight: '240px'}}>
                 <img
-                  src="https://i.postimg.cc/26CW6dj3/Whats_App_Image_2026_03_10_at_23_09_28_(1).jpg"
+                  src="https://ik.imagekit.io/amieshomemade/Whats_App_Image_2026_03_10_at_23_09_28_1.jpg"
                   className="w-full h-full object-cover object-center"
                   alt="Mukhwas Bar setup at wedding"
                 />

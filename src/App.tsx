@@ -274,7 +274,7 @@ const App: React.FC = () => {
   useEffect(() => {
     let seo = PAGE_SEO[currentPage] || PAGE_SEO.home;
     let ogImage: string | null = null;
-    const DEFAULT_OG_IMAGE = 'https://i.postimg.cc/8Cy68DD6/Whats-App-Image-2026-02-12-at-18-57-42-1.jpg';
+    const DEFAULT_OG_IMAGE = 'https://ik.imagekit.io/amieshomemade/Whats-App-Image-2026-02-12-at-18-57-42-1.jpg';
 
     if (currentPage === 'blog' && currentBlogSlug) {
       const post = getPostBySlug(currentBlogSlug);
@@ -519,7 +519,7 @@ const App: React.FC = () => {
         width: 512,
         height: 512,
       },
-      image: 'https://i.postimg.cc/8Cy68DD6/Whats-App-Image-2026-02-12-at-18-57-42-1.jpg',
+      image: 'https://ik.imagekit.io/amieshomemade/Whats-App-Image-2026-02-12-at-18-57-42-1.jpg',
       description: "Family-run artisan food brand crafting authentic Indian mukhwas, snacks, sweets & gift hampers in Ahmedabad, Gujarat. Handmade by Ami Shah with pure ingredients and no preservatives.",
       founder: {
         '@type': 'Person',
