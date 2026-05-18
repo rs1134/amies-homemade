@@ -701,7 +701,7 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: 'raksha-bandhan-gifts-beyond-mithai-box',
     title: 'Raksha Bandhan Gift Ideas: Beyond the Standard Mithai Box',
     excerpt: 'Raksha Bandhan is one of India\'s most personal festivals, the bond between siblings deserves something more thoughtful than the same box of kaju katli every year. Here\'s how to make it memorable.',
-    coverImage: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?q=80&w=1600&auto=format&fit=crop',
+    coverImage: 'https://i.postimg.cc/VkqxNH7F/bhaiyabhabhiphotobasedmugs-007.webp',
     publishedAt: '2026-05-16',
     readTime: 4,
     category: 'Festive Gifting',
