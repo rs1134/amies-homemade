@@ -158,14 +158,14 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               <img referrerPolicy="origin" src="https://badges.razorpay.com/badge-light.png" style={{ height: '45px', width: '113px' }} alt="Razorpay | Payment Gateway | Neobank" />
             </a>
             {/* FSSAI Badge */}
-            <div className="flex items-center gap-3">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/FSSAI_Logo.png/200px-FSSAI_Logo.png"
-                alt="FSSAI Registered"
-                className="h-8 w-auto object-contain"
-              />
-              <span className="text-white/50 text-xs">
-                FSSAI Reg. No. <strong className="text-white/70">20726034001023</strong>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-white/5 border border-white/10">
+              <div className="flex flex-col items-center justify-center px-2 py-1 rounded bg-[#1A8442] text-white shadow-sm" style={{ minWidth: '36px' }}>
+                <span className="text-[9px] font-black tracking-wider leading-none">FSSAI</span>
+                <span className="text-[7px] font-bold leading-none mt-0.5 opacity-90">CERTIFIED</span>
+              </div>
+              <span className="text-white/50 text-[11px] leading-tight">
+                Reg. No.<br />
+                <strong className="text-white/80 font-mono tracking-wide">20726034001023</strong>
               </span>
             </div>
           </div>
