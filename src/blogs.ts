@@ -361,7 +361,7 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: 'health-benefits-of-saunf-fennel-seeds',
     title: 'Health Benefits of Saunf (Fennel Seeds): India\'s Ancient Digestive Superfood',
     excerpt: 'You\'ve been eating saunf after meals your whole life. But do you know what it\'s actually doing for your body? The science behind this tiny seed is remarkable.',
-    coverImage: 'https://images.unsplash.com/photo-1599639668273-d4f6f7e7ab8a?q=80&w=1600&auto=format&fit=crop',
+    coverImage: 'https://i.postimg.cc/nzGKjByy/fennel-seeds-uses-of-fennel-seeds-health-benefits-fennel-seeds-in-a-bowl.webp',
     publishedAt: '2026-03-26',
     readTime: 5,
     category: 'Health & Wellness',
