@@ -90,7 +90,7 @@ export const PRODUCTS: Product[] = [
     price: 300,
     weight: '250 G',
     description: 'Tangy dried raw mango pieces seasoned with a special homemade spice blend.',
-    image: 'https://i.postimg.cc/7hPkzTHJ/Whats-App-Image-2026-02-12-at-18-57-57-2.jpg',
+    image: 'https://i.postimg.cc/s2xn76jB/Chat-GPT-Image-May-18-2026-09-44-23-AM.png',
     ingredients: ['Raw Mango', 'Homemade Anardana Churan'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 300, '500 G': 600, '1 KG': 1200 },
