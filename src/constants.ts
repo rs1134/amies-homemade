@@ -137,7 +137,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'm10',
-    name: 'Dryfruit and Seeds',
+    name: 'Dryfruit and Seeds (Sugarfree)',
     category: Category.MUKHWAS,
     price: 350,
     weight: '250 G',
@@ -176,7 +176,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'm12',
-    name: 'Ginger Chat',
+    name: 'Ginger Chat (Sugarfree)',
     category: Category.MUKHWAS,
     price: 300,
     weight: '250 G',
