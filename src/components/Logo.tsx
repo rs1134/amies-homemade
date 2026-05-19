@@ -19,7 +19,7 @@ const Logo: React.FC<LogoProps> = ({ className = '', size = 'md', manualHeight }
   return (
     <div className={`inline-flex items-center justify-center bg-[#FFF8EE] rounded-2xl p-1 shadow-sm transition-transform hover:scale-105 ${className}`}>
       <img 
-        src="https://ik.imagekit.io/amieshomemade/Whats-App-Image-2026-02-12-at-18-59-03-1.jpg"
+        src="https://ik.imagekit.io/amieshomemade/Whats-App-Image-2026-02-12-at-18-59-03-1.jpg?tr=w-200,q-85,f-auto"
         alt="Amie's Homemade Logo" 
         className={`w-auto object-contain mix-blend-multiply ${finalHeightClass}`}
         loading="eager"

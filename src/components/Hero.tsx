@@ -13,8 +13,8 @@ const Hero: React.FC<HeroProps> = ({ onShopClick, onAboutClick }) => {
       {/* Image — visible strip on mobile, full-bleed on desktop */}
       <div className="relative h-64 mt-20 md:absolute md:inset-0 md:h-auto md:mt-0 z-0">
         <img
-          src="https://images.pexels.com/photos/11835220/pexels-photo-11835220.jpeg?auto=compress&cs=tinysrgb&w=1920"
-          srcSet="https://images.pexels.com/photos/11835220/pexels-photo-11835220.jpeg?auto=compress&cs=tinysrgb&w=800 800w, https://images.pexels.com/photos/11835220/pexels-photo-11835220.jpeg?auto=compress&cs=tinysrgb&w=1200 1200w, https://images.pexels.com/photos/11835220/pexels-photo-11835220.jpeg?auto=compress&cs=tinysrgb&w=1920 1920w"
+          src="https://ik.imagekit.io/amieshomemade/ahmedabad-heritage-stepwell.jpg?tr=w-1600,q-75,f-auto"
+          srcSet="https://ik.imagekit.io/amieshomemade/ahmedabad-heritage-stepwell.jpg?tr=w-800,q-75,f-auto 800w, https://ik.imagekit.io/amieshomemade/ahmedabad-heritage-stepwell.jpg?tr=w-1200,q-75,f-auto 1200w, https://ik.imagekit.io/amieshomemade/ahmedabad-heritage-stepwell.jpg?tr=w-1600,q-75,f-auto 1600w"
           sizes="100vw"
           className="w-full h-full object-cover object-center"
           alt="Ahmedabad Heritage Background"
