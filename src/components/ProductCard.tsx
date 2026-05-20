@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, ImageOff } from 'lucide-react';
+import { Plus, ImageOff, ChevronRight } from 'lucide-react';
 import { Product } from '../types.ts';
 
 interface ProductCardProps {
@@ -148,9 +148,42 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
               content_type: 'product',
             });
           }}
-          className={`w-full py-2.5 sm:py-3.5 rounded-full text-[11px] sm:text-sm font-medium transition-all duration-300 flex items-center justify-center gap-1.5 ${isOOS ? 'border border-[#4A3728]/15 text-[#4A3728]/40 cursor-not-allowed bg-[#4A3728]/5' : 'border border-[#F14E4E] text-[#F14E4E] hover:bg-[#F14E4E] hover:text-white'}`}
+          className={`group/btn w-full py-2.5 sm:py-3 rounded-full text-[10px] sm:text-xs font-black tracking-[0.18em] uppercase transition-all duration-300 flex items-center justify-between gap-2 px-3 sm:px-4 ${isOOS ? 'bg-[#4A3728]/10 text-[#4A3728]/40 cursor-not-allowed' : 'bg-[#4A3728] text-white hover:bg-black active:scale-[0.98] shadow-md hover:shadow-lg'}`}
         >
-          {isOOS ? 'Out of Stock' : '+ Add to Cart'}
+          {isOOS ? (
+            <span className="w-full text-center">Out of Stock</span>
+          ) : (
+            <>
+              <span>Buy Now</span>
+              <div className="flex items-center gap-1.5">
+                {/* Payment icons — inline SVG for fast loading */}
+                <div className="flex -space-x-1.5">
+                  {/* Paytm */}
+                  <div className="w-5 h-5 sm:w-[22px] sm:h-[22px] rounded-full bg-white flex items-center justify-center shadow-sm ring-1 ring-black/5">
+                    <span className="text-[6px] sm:text-[7px] font-black tracking-tight leading-none">
+                      <span className="text-[#00BAF2]">pay</span><span className="text-[#012E5B]">tm</span>
+                    </span>
+                  </div>
+                  {/* PhonePe */}
+                  <div className="w-5 h-5 sm:w-[22px] sm:h-[22px] rounded-full bg-[#5F259F] flex items-center justify-center shadow-sm ring-1 ring-black/5">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M19.27 5.43c.74 0 1.36.62 1.36 1.36v10.42c0 .74-.62 1.36-1.36 1.36H4.73c-.74 0-1.36-.62-1.36-1.36V6.79c0-.74.62-1.36 1.36-1.36h14.54zm-7.84 7.06l1.42 1.42c.18.18.36.27.55.27.46 0 .82-.36.82-.82V8.07c0-.18-.09-.36-.27-.45-.18-.09-.36-.09-.55 0L8.34 9.97c-.18.09-.27.27-.27.45 0 .46.36.82.82.82h2.18v.36c0 .27-.18.45-.45.45h-.91c-.27 0-.45.18-.45.45v.55c0 .27.18.45.45.45h1.36c.27 0 .45.09.36.18z"/>
+                    </svg>
+                  </div>
+                  {/* Google Pay (Google "G") */}
+                  <div className="w-5 h-5 sm:w-[22px] sm:h-[22px] rounded-full bg-white flex items-center justify-center shadow-sm ring-1 ring-black/5">
+                    <svg width="11" height="11" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                      <path fill="#4285F4" d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"/>
+                      <path fill="#34A853" d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"/>
+                      <path fill="#FBBC05" d="M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34C2.85 17.09 2 20.45 2 24c0 3.55.85 6.91 2.34 9.88l7.35-5.7z"/>
+                      <path fill="#EA4335" d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"/>
+                    </svg>
+                  </div>
+                </div>
+                <ChevronRight size={14} className="ml-0.5 group-hover/btn:translate-x-0.5 transition-transform" strokeWidth={2.5} />
+              </div>
+            </>
+          )}
         </button>
       </div>
     </div>
