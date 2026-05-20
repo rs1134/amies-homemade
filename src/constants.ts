@@ -488,6 +488,19 @@ export const PRODUCTS: Product[] = [
 
   // --- HEALTH & WELLNESS ---
   {
+    id: 'hw2',
+    name: 'Masala Protein Beans Mix',
+    category: Category.WELLNESS,
+    price: 275,
+    weight: '250 G',
+    description: 'Protein-rich blend of soybeans, edamame and black seeds, slow-roasted in pure ghee with aromatic spices. A wholesome, guilt-free snack packed with plant protein.',
+    image: 'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20May%2020,%202026,%2012_31_30%20PM.png',
+    ingredients: ['Soybeans', 'Edamame Seeds', 'Black Seeds', 'Pure Ghee', 'Mixed Spices'],
+    weights: ['250 G', '500 G', '1 KG'],
+    prices: { '250 G': 275, '500 G': 550, '1 KG': 1100 },
+    isNew: true
+  },
+  {
     id: 'hw1',
     name: 'Homemade Healthy Granola',
     category: Category.WELLNESS,
