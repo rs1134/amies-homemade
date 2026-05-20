@@ -180,10 +180,8 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onClose, onAddTo
                 <div className="flex items-center gap-1.5">
                   <div className="flex -space-x-2">
                     {/* Paytm */}
-                    <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-sm ring-1 ring-black/5">
-                      <span className="text-[7px] font-black tracking-tight leading-none" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-                        <span style={{ color: '#002E6E' }}>Pay</span><span style={{ color: '#00BAF2' }}>tm</span>
-                      </span>
+                    <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-sm ring-1 ring-black/5 overflow-hidden">
+                      <img src="https://ik.imagekit.io/amieshomemade/paytm-logo.svg" alt="Paytm" className="w-4 h-auto" />
                     </div>
                     {/* PhonePe */}
                     <div className="w-6 h-6 rounded-full bg-[#5F259F] flex items-center justify-center shadow-sm ring-1 ring-black/5">
