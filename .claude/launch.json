@@ -1,0 +1,10 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "amies-app",
+      "runtimeExecutable": "/tmp/amies_starter",
+      "port": 5173
+    }
+  ]
+}

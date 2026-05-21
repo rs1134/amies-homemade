@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Amie's Homemade — Product Catalog</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Fredoka:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Pacifico&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    @page { size: A4; margin: 10mm; }
+
+    body {
+      background: #FFF8EE;
+      font-family: 'Inter', sans-serif;
+      color: #4A3728;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .page {
+      width: 190mm;
+      margin: 0 auto;
+      background: #FFF8EE;
+      padding: 8mm 0;
+    }
+
+
+    /* ── Header ── */
+    .header {
+      text-align: center;
+      margin-bottom: 7mm;
+      padding-bottom: 5mm;
+      border-bottom: 1.5px solid #D4AF3740;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2mm;
+    }
+    .header img.logo {
+      height: 20mm;
+      width: auto;
+      object-fit: contain;
+      border-radius: 14px;
+    }
+    .header .tagline {
+      font-family: 'Pacifico', cursive;
+      color: #F04E4E;
+      font-size: 10pt;
+      opacity: 0.85;
+    }
+
+    /* ── Category Header ── */
+    .category-header {
+      display: flex;
+      align-items: center;
+      gap: 3mm;
+      margin: 6mm 0 4mm;
+    }
+    .category-header::before,
+    .category-header::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #D4AF3760;
+    }
+    .category-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 16pt;
+      color: #4A3728;
+      font-style: italic;
+      white-space: nowrap;
+      padding: 0 2mm;
+    }
+
+    /* ── Product Grid ── */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4mm;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #4A372810;
+      box-shadow: 0 1px 6px rgba(74,55,40,0.07);
+      display: flex;
+      flex-direction: column;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    .card-img {
+      width: 100%;
+      height: 32mm;
+      object-fit: cover;
+      display: block;
+      page-break-inside: avoid;
+      break-inside: avoid;
+      page-break-after: avoid;
+      break-after: avoid;
+    }
+    .card-body {
+      padding: 3mm 3mm 3.5mm;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2mm;
+      flex: 1;
+    }
+
+    /* Name pill — centered, compact, like Hetal's */
+    .card-name {
+      display: inline-block;
+      background: #4A3728;
+      color: white;
+      font-family: 'Fredoka', sans-serif;
+      font-size: 7.5pt;
+      font-weight: 600;
+      padding: 1.2mm 4mm;
+      border-radius: 100px;
+      text-align: center;
+      line-height: 1.3;
+    }
+    .card-name.coral { background: #F04E4E; }
+    .card-name.gold  { background: #C9A84C; }
+
+    .card-desc {
+      font-size: 6pt;
+      color: #4A3728;
+      opacity: 0.6;
+      line-height: 1.55;
+      text-align: center;
+    }
+
+    /* Price table */
+    .price-table {
+      width: 100%;
+      border-top: 1px solid #4A372808;
+      margin-top: 1mm;
+      padding-top: 2mm;
+      display: flex;
+      flex-direction: column;
+      gap: 1mm;
+    }
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 6pt;
+    }
+    .price-row .wt {
+      color: #4A3728;
+      opacity: 0.55;
+      font-weight: 500;
+    }
+    .price-row .pr {
+      font-weight: 700;
+      color: #F04E4E;
+    }
+
+    .badge-sf {
+      font-size: 5pt;
+      background: #E8F5E9;
+      color: #2E7D32;
+      border-radius: 100px;
+      padding: 0.4mm 2mm;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      align-self: center;
+    }
+
+    /* ── Divider ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, #D4AF3750, transparent);
+      margin: 5mm 0;
+    }
+
+    /* ── Note ── */
+    .note {
+      text-align: center;
+      font-size: 5.5pt;
+      color: #4A3728;
+      opacity: 0.5;
+      margin-top: 4mm;
+      font-style: italic;
+    }
+
+    /* ── Footer ── */
+    .footer {
+      margin-top: 5mm;
+      padding-top: 4mm;
+      border-top: 1px solid #D4AF3740;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-left {
+      display: flex;
+      flex-direction: column;
+      gap: 1mm;
+    }
+    .footer-left .label {
+      font-size: 5pt;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #4A3728;
+      opacity: 0.4;
+    }
+    .footer-left .fssai {
+      font-size: 6pt;
+      color: #4A3728;
+      opacity: 0.55;
+    }
+    .footer-right {
+      text-align: right;
+    }
+    .footer-right .order-label {
+      font-size: 5.5pt;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #4A3728;
+      opacity: 0.4;
+      margin-bottom: 1mm;
+    }
+    .footer-right .phone {
+      font-family: 'Fredoka', sans-serif;
+      font-size: 12pt;
+      font-weight: 700;
+      color: #F04E4E;
+    }
+    .footer-right .web {
+      font-size: 6pt;
+      color: #4A3728;
+      opacity: 0.4;
+      margin-top: 0.5mm;
+    }
+
+    @media print {
+      body { background: white; }
+      .page { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <img class="logo" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774927666/WhatsApp_Image_2026-02-12_at_18.59.03_1_qshodj.jpg" alt="Amie's Homemade" />
+    <span class="tagline">Homemade with Love</span>
+  </div>
+
+  <!-- ── MUKHWAS ── -->
+  <div class="category-header"><h2>Mukhwas</h2></div>
+  <div class="product-grid">
+
+    <div class="card">
+      <img class="card-img" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.58_2_qlbxrc.jpg" alt="Amla Ginger"/>
+      <div class="card-body">
+        <span class="card-name coral">Amla Ginger</span>
+        <p class="card-desc">Refreshing digestive blend of dried amla and zesty ginger.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">250 G</span><span class="pr">₹300</span></div>
+          <div class="price-row"><span class="wt">500 G</span><span class="pr">₹600</span></div>
+          <div class="price-row"><span class="wt">1 KG</span><span class="pr">₹1200</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <img class="card-img" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.57_2_g3kejf.jpg" alt="Chatpati Mango"/>
+      <div class="card-body">
+        <span class="card-name coral">Chatpati Mango</span>
+        <p class="card-desc">Tangy dried raw mango with a secret homemade spice blend.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">250 G</span><span class="pr">₹300</span></div>
+          <div class="price-row"><span class="wt">500 G</span><span class="pr">₹600</span></div>
+          <div class="price-row"><span class="wt">1 KG</span><span class="pr">₹1200</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <img class="card-img" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.55_2_zsdkam.jpg" alt="Black Grape & Til Goli"/>
+      <div class="card-body">
+        <span class="card-name coral">Black Grape & Til Goli</span>
+        <p class="card-desc">Digestive balls with black grapes and toasted black sesame.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">250 G</span><span class="pr">₹300</span></div>
+          <div class="price-row"><span class="wt">500 G</span><span class="pr">₹600</span></div>
+          <div class="price-row"><span class="wt">1 KG</span><span class="pr">₹1200</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <img class="card-img" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.57_1_mp1guy.jpg" alt="Tender Coconut Chips"/>
+      <div class="card-body">
+        <span class="card-name coral">Tender Coconut Chips</span>
+        <p class="card-desc">Crispy natural slices of fresh tender coconut. Light and tropical.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">250 G</span><span class="pr">₹375</span></div>
+          <div class="price-row"><span class="wt">500 G</span><span class="pr">₹750</span></div>
+          <div class="price-row"><span class="wt">1 KG</span><span class="pr">₹1500</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <img class="card-img" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543462/WhatsApp_Image_2026-01-28_at_20.21.40_sgnmbl.jpg" alt="Chocolate Coconut Chips"/>
+      <div class="card-body">
+        <span class="card-name coral">Chocolate Coconut Chips</span>
+        <p class="card-desc">Premium coconut slices coated in rich dark chocolate.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">250 G</span><span class="pr">₹450</span></div>
+          <div class="price-row"><span class="wt">500 G</span><span class="pr">₹900</span></div>
+          <div class="price-row"><span class="wt">1 KG</span><span class="pr">₹1800</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <img class="card-img" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543456/WhatsApp_Image_2026-02-12_at_18.57.56_3_xwxf5y.jpg" alt="Cranberry Mix"/>
+      <div class="card-body">
+        <span class="card-name coral">Cranberry Mix</span>
+        <p class="card-desc">Sweet-and-sour mix of premium cranberries and digestive nuts.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">250 G</span><span class="pr">₹400</span></div>
+          <div class="price-row"><span class="wt">500 G</span><span class="pr">₹800</span></div>
+          <div class="price-row"><span class="wt">1 KG</span><span class="pr">₹1600</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <img class="card-img" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/WhatsApp_Image_2026-02-12_at_18.57.55_x6btgg.jpg" alt="Dryfruit and Seeds"/>
+      <div class="card-body">
+        <span class="card-name coral">Dryfruit and Seeds</span>
+        <p class="card-desc">Nutrient-dense mix of roasted almonds, cashews, and super-seeds.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">250 G</span><span class="pr">₹350</span></div>
+          <div class="price-row"><span class="wt">500 G</span><span class="pr">₹700</span></div>
+          <div class="price-row"><span class="wt">1 KG</span><span class="pr">₹1400</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <img class="card-img" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543463/WhatsApp_Image_2026-02-12_at_18.57.41_rkhf9z.jpg" alt="Date & Almond"/>
+      <div class="card-body">
+        <span class="card-name coral">Date & Almond</span>
+        <p class="card-desc">Chopped premium dates paired with crunchy almond slivers.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">250 G</span><span class="pr">₹350</span></div>
+          <div class="price-row"><span class="wt">500 G</span><span class="pr">₹700</span></div>
+          <div class="price-row"><span class="wt">1 KG</span><span class="pr">₹1400</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <img class="card-img" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543469/WhatsApp_Image_2026-03-14_at_21.37.48_knoien.jpg" alt="Ginger Chat"/>
+      <div class="card-body">
+        <span class="card-name coral">Ginger Chat</span>
+        <p class="card-desc">Bold and tangy with the zesty punch of ginger and chaat masala.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">250 G</span><span class="pr">₹300</span></div>
+          <div class="price-row"><span class="wt">500 G</span><span class="pr">₹600</span></div>
+          <div class="price-row"><span class="wt">1 KG</span><span class="pr">₹1200</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <img class="card-img" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543465/WhatsApp_Image_2026-02-15_at_17.53.58_tnzte2.jpg" alt="Amla Ginger Beet"/>
+      <div class="card-body">
+        <span class="card-name coral">Amla Ginger Beet</span>
+        <p class="card-desc">Vibrant digestive blend of amla, ginger, and earthy beetroot.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">250 G</span><span class="pr">₹350</span></div>
+          <div class="price-row"><span class="wt">500 G</span><span class="pr">₹700</span></div>
+          <div class="price-row"><span class="wt">1 KG</span><span class="pr">₹1400</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <img class="card-img" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543464/WhatsApp_Image_2026-02-15_at_17.06.18_qsid6v.jpg" alt="Kharek Coconut Almond"/>
+      <div class="card-body">
+        <span class="card-name coral">Kharek Coconut Almond</span>
+        <p class="card-desc">Sugar-free blend of dried dates, coconut, and almond slivers.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">250 G</span><span class="pr">₹375</span></div>
+          <div class="price-row"><span class="wt">500 G</span><span class="pr">₹750</span></div>
+          <div class="price-row"><span class="wt">1 KG</span><span class="pr">₹1500</span></div>
+        </div>
+        <span class="badge-sf">Sugar-Free</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── SWEETS ── -->
+  <div class="category-header"><h2>Sweets</h2></div>
+  <div class="product-grid">
+
+    <div class="card">
+      <img class="card-img" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543466/WhatsApp_Image_2026-02-15_at_20.10.12_jvzm16.jpg" alt="Ghugra"/>
+      <div class="card-body">
+        <span class="card-name gold">Pista / Rava Dryfruit Ghugra</span>
+        <p class="card-desc">Decadent sweet dumplings — pista or rava dryfruit filling.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">Pista — 250 G</span><span class="pr">₹450</span></div>
+          <div class="price-row"><span class="wt">Rava — 250 G</span><span class="pr">₹350</span></div>
+          <div class="price-row"><span class="wt">Pista — 500 G</span><span class="pr">₹900</span></div>
+          <div class="price-row"><span class="wt">Rava — 500 G</span><span class="pr">₹700</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <img class="card-img" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543462/vj17zw61fxrmr0cwejfr4h0s5w_waghxx.png" alt="Rotla"/>
+      <div class="card-body">
+        <span class="card-name gold">Kaju / Badam / Pista Rotla</span>
+        <p class="card-desc">Rich fudge-like traditional sweet. Choose your nut base.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">Kaju/Badam — 250 G</span><span class="pr">₹470</span></div>
+          <div class="price-row"><span class="wt">Pista Badam — 250 G</span><span class="pr">₹545</span></div>
+          <div class="price-row"><span class="wt">Kaju/Badam — 500 G</span><span class="pr">₹940</span></div>
+          <div class="price-row"><span class="wt">Pista Badam — 500 G</span><span class="pr">₹1090</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <img class="card-img" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/Kajupuri2PS-_5-of-7_blmxyn.jpg" alt="Puri"/>
+      <div class="card-body">
+        <span class="card-name gold">Kaju / Badam / Pista Puri</span>
+        <p class="card-desc">Delicate flaky discs soaked in saffron syrup. Pick your nut.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">Kaju/Badam — 250 G</span><span class="pr">₹400</span></div>
+          <div class="price-row"><span class="wt">Pista Badam — 250 G</span><span class="pr">₹500</span></div>
+          <div class="price-row"><span class="wt">Kaju/Badam — 500 G</span><span class="pr">₹800</span></div>
+          <div class="price-row"><span class="wt">Pista Badam — 500 G</span><span class="pr">₹1000</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <img class="card-img" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543467/WhatsApp_Image_2026-02-15_at_20.10.14_2_rnbqyr.jpg" alt="Almond Motichoor Ladoo"/>
+      <div class="card-body">
+        <span class="card-name gold">Almond Motichoor Ladoo</span>
+        <p class="card-desc">Premium motichoor with toasted almond slivers in pure ghee.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">250 G</span><span class="pr">₹400</span></div>
+          <div class="price-row"><span class="wt">500 G</span><span class="pr">₹800</span></div>
+          <div class="price-row"><span class="wt">1 KG</span><span class="pr">₹1600</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <img class="card-img" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543461/magas-recipe-2_svofa6.jpg" alt="Magaz"/>
+      <div class="card-body">
+        <span class="card-name gold">Magaz</span>
+        <p class="card-desc">Beloved Gujarati classic made with gram flour and pure desi ghee.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">250 G</span><span class="pr">₹250</span></div>
+          <div class="price-row"><span class="wt">500 G</span><span class="pr">₹500</span></div>
+          <div class="price-row"><span class="wt">1 KG</span><span class="pr">₹1000</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <img class="card-img" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543469/WhatsApp_Image_2026-02-15_at_20.10.16_mx3fnn.jpg" alt="Dryfruit Mathdi"/>
+      <div class="card-body">
+        <span class="card-name gold">Dryfruit Mathdi</span>
+        <p class="card-desc">Sweet crunchy flaky biscuits enriched with generous mixed nuts.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">250 G</span><span class="pr">₹300</span></div>
+          <div class="price-row"><span class="wt">500 G</span><span class="pr">₹600</span></div>
+          <div class="price-row"><span class="wt">1 KG</span><span class="pr">₹1200</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── SNACKS ── -->
+  <div class="category-header"><h2>Snacks</h2></div>
+  <div class="product-grid">
+
+    <div class="card">
+      <img class="card-img" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1775232432/81YCSnJoCgL._AC_UF894_1000_QL80__f1jird.jpg" alt="Chakri"/>
+      <div class="card-body">
+        <span class="card-name">Chakri</span>
+        <p class="card-desc">Classic crunchy spiral snack with rice flour and homemade spices.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">250 G</span><span class="pr">₹175</span></div>
+          <div class="price-row"><span class="wt">500 G</span><span class="pr">₹350</span></div>
+          <div class="price-row"><span class="wt">1 KG</span><span class="pr">₹700</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <img class="card-img" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/4540cc6d6d0f0a3f4c9e1f612e7f0b73_1_lgqb4z.jpg" alt="Farsi Puri"/>
+      <div class="card-body">
+        <span class="card-name">Farsi Puri</span>
+        <p class="card-desc">Flaky crispy puri with black pepper and cumin in pure ghee.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">250 G</span><span class="pr">₹150</span></div>
+          <div class="price-row"><span class="wt">500 G</span><span class="pr">₹300</span></div>
+          <div class="price-row"><span class="wt">1 KG</span><span class="pr">₹600</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <img class="card-img" src="https://i.postimg.cc/mgK8Jcnz/મસલ_કડક_પર_masala_kadak_puri_recipe_in_gujarati_રસપ_મખય_ફટ.jpg" alt="Masala Puri"/>
+      <div class="card-body">
+        <span class="card-name">Masala / Kothmir Puri</span>
+        <p class="card-desc">Spicy crunchy wheat discs. Two flavors to choose from.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">Masala — 250 G</span><span class="pr">₹150</span></div>
+          <div class="price-row"><span class="wt">Kothmir — 250 G</span><span class="pr">₹165</span></div>
+          <div class="price-row"><span class="wt">Masala — 500 G</span><span class="pr">₹300</span></div>
+          <div class="price-row"><span class="wt">Kothmir — 500 G</span><span class="pr">₹330</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <img class="card-img" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543459/istockphoto-1149101234-1024x1024_ipuvuy.jpg" alt="Banana Chips"/>
+      <div class="card-body">
+        <span class="card-name">Banana Chips</span>
+        <p class="card-desc">Thinly sliced raw bananas fried to golden perfection.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">250 G</span><span class="pr">₹165</span></div>
+          <div class="price-row"><span class="wt">500 G</span><span class="pr">₹325</span></div>
+          <div class="price-row"><span class="wt">1 KG</span><span class="pr">₹650</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <img class="card-img" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774544872/istockphoto-1360236832-612x612_jb7lgc.jpg" alt="Ratalu Chips"/>
+      <div class="card-body">
+        <span class="card-name">Ratalu Chips</span>
+        <p class="card-desc">Crispy premium purple yam chips, a traditional favourite.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">250 G</span><span class="pr">₹215</span></div>
+          <div class="price-row"><span class="wt">500 G</span><span class="pr">₹425</span></div>
+          <div class="price-row"><span class="wt">1 KG</span><span class="pr">₹850</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <img class="card-img" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543460/istockphoto-2196882416-1024x1024_ojyojd.jpg" alt="Thiki Sev"/>
+      <div class="card-body">
+        <span class="card-name">Thiki Sev</span>
+        <p class="card-desc">Spicy thin gram flour noodles with a kick of red chilli.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">250 G</span><span class="pr">₹150</span></div>
+          <div class="price-row"><span class="wt">500 G</span><span class="pr">₹300</span></div>
+          <div class="price-row"><span class="wt">1 KG</span><span class="pr">₹600</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <img class="card-img" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543459/istockphoto-1080623274-1024x1024_ddkbga.jpg" alt="Khasta Kachori"/>
+      <div class="card-body">
+        <span class="card-name">Khasta Kachori</span>
+        <p class="card-desc">Flaky deep-fried pastry filled with spiced moong dal.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">250 G</span><span class="pr">₹210</span></div>
+          <div class="price-row"><span class="wt">500 G</span><span class="pr">₹420</span></div>
+          <div class="price-row"><span class="wt">1 KG</span><span class="pr">₹840</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="product-grid" style="page-break-before: always; break-before: page;">
+
+    <div class="card">
+      <img class="card-img" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543458/bv8arqx6axrmw0cwc5hbxzzzy0_xxqz73.png" alt="Roasted Chevdo"/>
+      <div class="card-body">
+        <span class="card-name">Roasted Chevdo</span>
+        <p class="card-desc">Traditional savory mix with roasted poha, peanuts, and spices.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">250 G</span><span class="pr">₹150</span></div>
+          <div class="price-row"><span class="wt">500 G</span><span class="pr">₹300</span></div>
+          <div class="price-row"><span class="wt">1 KG</span><span class="pr">₹600</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <img class="card-img" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543469/WhatsApp_Image_2026-02-19_at_11.57.05_hiqois.jpg" alt="Methi Masala Stick"/>
+      <div class="card-body">
+        <span class="card-name">Methi Masala Stick</span>
+        <p class="card-desc">Crunchy wheat sticks with dried fenugreek leaves and spices.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">250 G</span><span class="pr">₹150</span></div>
+          <div class="price-row"><span class="wt">500 G</span><span class="pr">₹300</span></div>
+          <div class="price-row"><span class="wt">1 KG</span><span class="pr">₹600</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <img class="card-img" src="https://i.postimg.cc/2SH7N1X8/cjpjdzmbyhrmw0cwc6783pqgdg.png" alt="Sweet Sakarpara"/>
+      <div class="card-body">
+        <span class="card-name">Sweet Sakarpara</span>
+        <p class="card-desc">Sweet crunchy diamond biscuits made with wheat flour and jaggery.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">250 G</span><span class="pr">₹150</span></div>
+          <div class="price-row"><span class="wt">500 G</span><span class="pr">₹300</span></div>
+          <div class="price-row"><span class="wt">1 KG</span><span class="pr">₹600</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── HEALTH & WELLNESS ── -->
+  <div class="category-header"><h2>Health &amp; Wellness</h2></div>
+  <div class="product-grid">
+
+    <div class="card">
+      <img class="card-img" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774697443/Granola_jar_with_colorful_label_and_hand_oiqmtv.png" alt="Homemade Healthy Granola"/>
+      <div class="card-body">
+        <span class="card-name" style="background:#4CAF50;">Homemade Healthy Granola</span>
+        <p class="card-desc">Rolled oats, mixed nuts, seeds, dried cranberries and dates. Baked fresh, no preservatives.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">250 G</span><span class="pr">₹450</span></div>
+          <div class="price-row"><span class="wt">500 G</span><span class="pr">₹900</span></div>
+          <div class="price-row"><span class="wt">1 KG</span><span class="pr">₹1800</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <img class="card-img" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543464/WhatsApp_Image_2026-02-15_at_17.09.52_nouzpm.jpg" alt="Dry Fruit Milk Masala" style="object-fit: contain; background: #FFF8EE;"/>
+      <div class="card-body">
+        <span class="card-name" style="background:#4CAF50;">Dry Fruit Milk Masala</span>
+        <p class="card-desc">Rich aromatic blend of saffron, pistachios and almonds for a nourishing glass of milk.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">100 G</span><span class="pr">₹400</span></div>
+          <div class="price-row"><span class="wt">250 G</span><span class="pr">₹800</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <img class="card-img" src="https://res.cloudinary.com/dqs95a7w2/image/upload/q_auto,f_auto/v1774543464/WhatsApp_Image_2026-02-15_at_17.15.19_tovhut.jpg" alt="Chai Masala" style="object-fit: contain; background: #FFF8EE;"/>
+      <div class="card-body">
+        <span class="card-name" style="background:#4CAF50;">Chai Masala</span>
+        <p class="card-desc">Hand-ground cardamom, ginger and cinnamon for the perfect authentic Indian chai.</p>
+        <div class="price-table">
+          <div class="price-row"><span class="wt">100 G</span><span class="pr">₹160</span></div>
+          <div class="price-row"><span class="wt">250 G</span><span class="pr">₹320</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="note">All products are made fresh in small batches with zero preservatives, no artificial colors, and no synthetic flavors.</p>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-left">
+      <span class="label">FSSAI Licensed</span>
+      <span class="fssai">Reg. No. 20726034001023</span>
+      <span class="fssai" style="margin-top:0.5mm;">amieshomemade.com</span>
+    </div>
+    <div class="footer-right">
+      <p class="order-label">Order on WhatsApp</p>
+      <p class="phone">+91 91575 37842</p>
+      <p class="web">No preservatives &nbsp;·&nbsp; Made fresh &nbsp;·&nbsp; Pan-India delivery</p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
