@@ -399,7 +399,7 @@ export const PRODUCTS: Product[] = [
     price: 150,
     weight: '250 G',
     description: 'Sweet crunchy diamond biscuits made with flour and sugar.',
-    image: 'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20May%2024,%202026,%2011_57_29%20AM.png',
+    image: 'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20May%2024,%202026,%2011_57_29%20AM.png?tr=w-800,ar-1-1,fo-auto',
     ingredients: ['Wheat Flour', 'Jaggery', 'Seasame seeds'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 150, '500 G': 300, '1 KG': 600 },
