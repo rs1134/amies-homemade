@@ -486,6 +486,20 @@ export const PRODUCTS: Product[] = [
     isNew: true
   },
 
+  {
+    id: 's15',
+    name: 'Cheese Herb Sticks',
+    category: Category.SNACKS,
+    price: 175,
+    weight: '250 G',
+    description: 'Crispy baked sticks packed with rich cheese and fragrant herbs. A savory tea-time snack made fresh with no preservatives — the perfect cheesy crunch in every bite.',
+    image: 'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20May%2025,%202026,%2001_45_47%20PM.png',
+    ingredients: ['White Flour', 'Cheese', 'Herbs', 'Mixed Spices'],
+    weights: ['250 G', '500 G', '1 KG'],
+    prices: { '250 G': 175, '500 G': 350, '1 KG': 700 },
+    isNew: true
+  },
+
   // --- HEALTH & WELLNESS ---
   {
     id: 'hw2',
