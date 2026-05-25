@@ -923,7 +923,7 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: 'is-mukhwas-good-for-you-health-benefits',
     title: 'Is Mukhwas Actually Good for You? The Honest Answer',
     excerpt: 'Mukhwas has been eaten after every meal in Indian homes for centuries. But is it genuinely healthy, or just a pleasant habit? Here\'s the honest, ingredient-by-ingredient answer.',
-    coverImage: 'https://images.unsplash.com/photo-1490818387583-1baba5e638af?q=80&w=1600&auto=format&fit=crop',
+    coverImage: 'https://ik.imagekit.io/amieshomemade/Whats-App-Image-2026-03-14-at-21-37-48.jpg',
     publishedAt: '2026-05-23',
     readTime: 5,
     category: 'Health & Wellness',
