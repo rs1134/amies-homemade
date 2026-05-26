@@ -200,6 +200,16 @@ const App: React.FC = () => {
     if (page === 'shop') setActiveCategory('All');
   }, []);
 
+  const navigateToCategory = useCallback((cat: Category) => {
+    const slug = CATEGORY_SLUG[cat];
+    window.history.pushState(null, '', slug ? `/shop/${slug}` : '/shop');
+    setCurrentPage('shop');
+    setActiveCategory(cat);
+    setCurrentArea('');
+    setCurrentCity('');
+    setCurrentBlogSlug('');
+  }, []);
+
   const navigateToBlog = useCallback((slug?: string) => {
     const path = slug ? `/blog/${slug}` : '/blog';
     window.history.pushState(null, '', path);
@@ -1099,6 +1109,8 @@ const App: React.FC = () => {
         onNavigate={navigate}
         onSearchOpen={() => setIsSearchOpen(true)}
         currentPage={currentPage}
+        onNavigateToCategory={navigateToCategory}
+        onSelectProduct={(product) => openProduct(product)}
       />
 
       <SearchOverlay
