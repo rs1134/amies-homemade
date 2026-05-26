@@ -175,15 +175,18 @@ interface CategoryFilterBarProps {
 }
 
 const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, onSelect, onSelectProduct }) => {
-  const [hovered, setHovered] = React.useState<Category | null>(null);
+  const [openCat, setOpenCat] = React.useState<Category | null>(null);
   const closeTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const open = (cat: Category) => {
+  const openMenu = (cat: Category) => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
-    setHovered(cat);
+    setOpenCat(cat);
   };
-  const close = () => {
-    closeTimer.current = setTimeout(() => setHovered(null), 150);
+  const scheduleClose = () => {
+    closeTimer.current = setTimeout(() => setOpenCat(null), 150);
+  };
+  const toggleMenu = (cat: Category) => {
+    setOpenCat(prev => prev === cat ? null : cat);
   };
 
   const productsFor = (cat: Category) =>
@@ -192,60 +195,130 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, o
   const categories: Array<Category | 'All'> = ['All', ...Object.values(Category).filter(c => c !== Category.GIFTING)];
 
   return (
-    <div className="flex flex-wrap justify-center gap-4">
-      {categories.map(cat => {
-        const isAll = cat === 'All';
-        const isActive = activeCategory === cat;
-        const isOpen = !isAll && hovered === cat;
+    <>
+      <div className="flex flex-wrap justify-center gap-4">
+        {categories.map(cat => {
+          const isAll = cat === 'All';
+          const isActive = activeCategory === cat;
+          const isOpen = !isAll && openCat === cat;
 
-        return (
-          <div
-            key={cat}
-            className="relative"
-            onMouseEnter={() => !isAll && open(cat as Category)}
-            onMouseLeave={() => !isAll && close()}
-          >
-            <button
-              onClick={() => { onSelect(cat); setHovered(null); }}
-              className={`brand-rounded text-[10px] uppercase tracking-[0.2em] font-bold transition-all px-8 py-3 rounded-full border-2 ${
-                isActive
-                  ? 'bg-[#F04E4E] border-[#F04E4E] text-white shadow-xl shadow-[#F04E4E]/30 scale-105'
-                  : 'border-[#F04E4E]/10 text-[#4A3728]/50 hover:text-coral hover:bg-[#F04E4E]/5'
-              }`}
+          return (
+            <div
+              key={cat}
+              className="relative"
+              onMouseEnter={() => !isAll && openMenu(cat as Category)}
+              onMouseLeave={() => !isAll && scheduleClose()}
             >
-              {cat}
-            </button>
-
-            {/* Dropdown */}
-            {isOpen && (
-              <div
-                className="absolute left-1/2 -translate-x-1/2 top-full pt-2 z-50"
-                onMouseEnter={() => open(cat as Category)}
-                onMouseLeave={close}
+              <button
+                onClick={() => {
+                  if (isAll) {
+                    onSelect('All');
+                  } else {
+                    toggleMenu(cat as Category);
+                  }
+                }}
+                className={`brand-rounded text-[10px] uppercase tracking-[0.2em] font-bold transition-all px-8 py-3 rounded-full border-2 flex items-center gap-1.5 ${
+                  isActive
+                    ? 'bg-[#F04E4E] border-[#F04E4E] text-white shadow-xl shadow-[#F04E4E]/30 scale-105'
+                    : isOpen
+                    ? 'border-[#F04E4E] text-coral bg-[#F04E4E]/5'
+                    : 'border-[#F04E4E]/10 text-[#4A3728]/50 hover:text-coral hover:bg-[#F04E4E]/5'
+                }`}
               >
-                <div className="bg-white rounded-2xl shadow-2xl border border-[#4A3728]/8 overflow-hidden min-w-[210px] animate-in fade-in slide-in-from-top-2 duration-150">
-                  <div className="px-4 py-2.5 bg-[#F04E4E]/5 border-b border-[#F04E4E]/10">
-                    <span className="text-[9px] font-black brand-rounded uppercase tracking-widest text-[#F04E4E]">{cat}</span>
-                  </div>
-                  <div className="py-1.5">
-                    {productsFor(cat as Category).map(product => (
-                      <button
-                        key={product.id}
-                        onClick={() => { onSelectProduct(product); setHovered(null); }}
-                        className="w-full text-left px-4 py-2.5 text-[13px] text-[#4A3728]/80 hover:text-[#F04E4E] hover:bg-[#F04E4E]/5 transition-colors font-medium flex items-center gap-2 group/item"
-                      >
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#4A3728]/15 group-hover/item:bg-[#F04E4E] transition-colors flex-shrink-0" />
-                        {product.name}
-                      </button>
-                    ))}
+                {cat}
+                {!isAll && (
+                  <svg
+                    width="10" height="10" viewBox="0 0 10 10"
+                    className={`transition-transform duration-200 flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}
+                    fill="currentColor"
+                  >
+                    <path d="M1 3l4 4 4-4" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                )}
+              </button>
+
+              {/* Desktop floating dropdown */}
+              {isOpen && (
+                <div
+                  className="hidden md:block absolute left-1/2 -translate-x-1/2 top-full pt-2 z-50"
+                  onMouseEnter={() => openMenu(cat as Category)}
+                  onMouseLeave={scheduleClose}
+                >
+                  <div className="bg-white rounded-2xl shadow-2xl border border-[#4A3728]/8 overflow-hidden min-w-[220px] animate-in fade-in slide-in-from-top-2 duration-150">
+                    <button
+                      onClick={() => { onSelect(cat); setOpenCat(null); }}
+                      className="w-full text-left px-4 py-3 text-[10px] font-black brand-rounded uppercase tracking-widest text-[#F04E4E] bg-[#F04E4E]/5 hover:bg-[#F04E4E]/10 transition-colors border-b border-[#F04E4E]/10 flex items-center justify-between"
+                    >
+                      <span>View All {cat}</span>
+                      <span>→</span>
+                    </button>
+                    <div className="py-1.5">
+                      {productsFor(cat as Category).map(product => (
+                        <button
+                          key={product.id}
+                          onClick={() => { onSelectProduct(product); setOpenCat(null); }}
+                          className="w-full text-left px-4 py-2.5 text-[13px] text-[#4A3728]/80 hover:text-[#F04E4E] hover:bg-[#F04E4E]/5 transition-colors font-medium flex items-center gap-2 group/item"
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#4A3728]/15 group-hover/item:bg-[#F04E4E] transition-colors flex-shrink-0" />
+                          {product.name}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Mobile bottom sheet — shown when any category is open */}
+      {openCat && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="md:hidden fixed inset-0 bg-black/40 z-[100]"
+            onClick={() => setOpenCat(null)}
+          />
+          {/* Sheet */}
+          <div className="md:hidden fixed inset-x-0 bottom-0 z-[101] bg-white rounded-t-3xl shadow-2xl animate-in slide-in-from-bottom duration-300 max-h-[75vh] flex flex-col">
+            {/* Handle */}
+            <div className="flex justify-center pt-3 pb-1 flex-shrink-0">
+              <div className="w-10 h-1 bg-[#4A3728]/20 rounded-full" />
+            </div>
+            {/* Header */}
+            <div className="flex items-center justify-between px-5 py-3 border-b border-[#4A3728]/8 flex-shrink-0">
+              <span className="text-sm font-black brand-rounded uppercase tracking-widest text-[#4A3728]">{openCat}</span>
+              <button onClick={() => setOpenCat(null)} className="p-1 text-[#4A3728]/40">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <path d="M2 2l14 14M16 2L2 16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </button>
+            </div>
+            {/* View All */}
+            <button
+              onClick={() => { onSelect(openCat); setOpenCat(null); }}
+              className="mx-4 mt-3 mb-1 py-3 rounded-2xl bg-[#F04E4E] text-white font-black brand-rounded text-xs uppercase tracking-widest flex-shrink-0"
+            >
+              View All {openCat} →
+            </button>
+            {/* Product list */}
+            <div className="overflow-y-auto flex-1 px-4 pb-8 pt-2">
+              {productsFor(openCat).map(product => (
+                <button
+                  key={product.id}
+                  onClick={() => { onSelectProduct(product); setOpenCat(null); }}
+                  className="w-full text-left py-3.5 border-b border-[#4A3728]/6 text-[15px] text-[#4A3728]/80 font-medium flex items-center gap-3 active:text-[#F04E4E]"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#F04E4E]/40 flex-shrink-0" />
+                  {product.name}
+                </button>
+              ))}
+            </div>
           </div>
-        );
-      })}
-    </div>
+        </>
+      )}
+    </>
   );
 };
 
