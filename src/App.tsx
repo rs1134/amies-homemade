@@ -167,6 +167,88 @@ const getPageFromPath = (path: string): string => {
   return PATH_TO_PAGE[path] || 'home';
 };
 
+// ── CategoryFilterBar ────────────────────────────────────────────────────────
+interface CategoryFilterBarProps {
+  activeCategory: Category | 'All';
+  onSelect: (cat: Category | 'All') => void;
+  onSelectProduct: (product: Product) => void;
+}
+
+const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, onSelect, onSelectProduct }) => {
+  const [hovered, setHovered] = React.useState<Category | null>(null);
+  const closeTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const open = (cat: Category) => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    setHovered(cat);
+  };
+  const close = () => {
+    closeTimer.current = setTimeout(() => setHovered(null), 150);
+  };
+
+  const productsFor = (cat: Category) =>
+    PRODUCTS.filter(p => p.category === cat && !p.outOfStock && !p.isGift);
+
+  const categories: Array<Category | 'All'> = ['All', ...Object.values(Category).filter(c => c !== Category.GIFTING)];
+
+  return (
+    <div className="flex flex-wrap justify-center gap-4">
+      {categories.map(cat => {
+        const isAll = cat === 'All';
+        const isActive = activeCategory === cat;
+        const isOpen = !isAll && hovered === cat;
+
+        return (
+          <div
+            key={cat}
+            className="relative"
+            onMouseEnter={() => !isAll && open(cat as Category)}
+            onMouseLeave={() => !isAll && close()}
+          >
+            <button
+              onClick={() => { onSelect(cat); setHovered(null); }}
+              className={`brand-rounded text-[10px] uppercase tracking-[0.2em] font-bold transition-all px-8 py-3 rounded-full border-2 ${
+                isActive
+                  ? 'bg-[#F04E4E] border-[#F04E4E] text-white shadow-xl shadow-[#F04E4E]/30 scale-105'
+                  : 'border-[#F04E4E]/10 text-[#4A3728]/50 hover:text-coral hover:bg-[#F04E4E]/5'
+              }`}
+            >
+              {cat}
+            </button>
+
+            {/* Dropdown */}
+            {isOpen && (
+              <div
+                className="absolute left-1/2 -translate-x-1/2 top-full pt-2 z-50"
+                onMouseEnter={() => open(cat as Category)}
+                onMouseLeave={close}
+              >
+                <div className="bg-white rounded-2xl shadow-2xl border border-[#4A3728]/8 overflow-hidden min-w-[210px] animate-in fade-in slide-in-from-top-2 duration-150">
+                  <div className="px-4 py-2.5 bg-[#F04E4E]/5 border-b border-[#F04E4E]/10">
+                    <span className="text-[9px] font-black brand-rounded uppercase tracking-widest text-[#F04E4E]">{cat}</span>
+                  </div>
+                  <div className="py-1.5">
+                    {productsFor(cat as Category).map(product => (
+                      <button
+                        key={product.id}
+                        onClick={() => { onSelectProduct(product); setHovered(null); }}
+                        className="w-full text-left px-4 py-2.5 text-[13px] text-[#4A3728]/80 hover:text-[#F04E4E] hover:bg-[#F04E4E]/5 transition-colors font-medium flex items-center gap-2 group/item"
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#4A3728]/15 group-hover/item:bg-[#F04E4E] transition-colors flex-shrink-0" />
+                        {product.name}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(() => getPageFromPath(window.location.pathname));
   const [currentArea, setCurrentArea] = useState(() => getAreaFromPath(window.location.pathname));
@@ -828,26 +910,15 @@ const App: React.FC = () => {
               <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-[#4A3728] serif mt-4 leading-tight">Handcrafted Treats</h2>
               <div className="w-20 h-1.5 bg-coral rounded-full mx-auto md:mx-0 mt-4"></div>
             </div>
-            <div className="flex flex-wrap justify-center gap-4">
-              {['All', ...Object.values(Category).filter(c => c !== Category.GIFTING)].map(cat => (
-                <button
-                  key={cat}
-                  onClick={() => {
-                    const c = cat as Category | 'All';
-                    setActiveCategory(c);
-                    const slug = CATEGORY_SLUG[c as Category];
-                    window.history.pushState(null, '', slug ? `/shop/${slug}` : '/shop');
-                  }}
-                  className={`brand-rounded text-[10px] uppercase tracking-[0.2em] font-bold transition-all px-8 py-3 rounded-full border-2 ${
-                    activeCategory === cat 
-                      ? 'bg-[#F04E4E] border-[#F04E4E] text-white shadow-xl shadow-[#F04E4E]/30 scale-105' 
-                      : 'border-[#F04E4E]/10 text-[#4A3728]/50 hover:text-coral hover:bg-[#F04E4E]/5'
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
+            <CategoryFilterBar
+              activeCategory={activeCategory}
+              onSelect={(c) => {
+                setActiveCategory(c);
+                const slug = CATEGORY_SLUG[c as Category];
+                window.history.pushState(null, '', slug ? `/shop/${slug}` : '/shop');
+              }}
+              onSelectProduct={(p) => openProduct(p)}
+            />
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6 lg:gap-10">
             {filteredProducts.map(product => (
@@ -1109,8 +1180,6 @@ const App: React.FC = () => {
         onNavigate={navigate}
         onSearchOpen={() => setIsSearchOpen(true)}
         currentPage={currentPage}
-        onNavigateToCategory={navigateToCategory}
-        onSelectProduct={(product) => openProduct(product)}
       />
 
       <SearchOverlay
