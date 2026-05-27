@@ -188,6 +188,19 @@ export const PRODUCTS: Product[] = [
     rating: 4.5, reviewCount: 37
   },
   {
+    id: 'm13',
+    name: 'Digestive Crunch',
+    category: Category.MUKHWAS,
+    price: 250,
+    weight: '250 G',
+    description: 'A powerhouse digestive mukhwas packed with gut-friendly seeds and spices. Black sesame, white sesame, ajwain, dill seeds, saunf, dhana dal, amla and turmeric — every seed earns its place.',
+    image: 'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20May%2027,%202026,%2011_20_52%20AM.png',
+    ingredients: ['Black Sesame', 'White Sesame', 'Ajwain', 'Suva (Dill Seeds)', 'Saunf', 'Dhana Dal', 'Amla', 'Turmeric'],
+    weights: ['250 G', '500 G', '1 KG'],
+    prices: { '250 G': 250, '500 G': 500, '1 KG': 1000 },
+    isNew: true
+  },
+  {
     id: 'sf3',
     name: 'Kharek Coconut Almond (Sugarfree)',
     category: Category.MUKHWAS,
