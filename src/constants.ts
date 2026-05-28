@@ -475,13 +475,13 @@ export const PRODUCTS: Product[] = [
     id: 's13',
     name: 'Peri-Peri Makhana',
     category: Category.WELLNESS,
-    price: 250,
+    price: 225,
     weight: '100 G',
     description: 'Light and crispy fox nuts tossed in a bold peri-peri spice blend. A guilt-free snack with a fiery kick.',
     image: 'https://ik.imagekit.io/amieshomemade/Crunchy-crispy-and-full-of-flavor-Healthy-Cravings-Gourav-Ojha.jpg',
     ingredients: ['Fox Nuts (Makhana)', 'Peri-Peri Spice', 'Oil', 'Salt'],
     weights: ['100 G'],
-    prices: { '100 G': 250 },
+    prices: { '100 G': 225 },
     isNew: true
   },
 
