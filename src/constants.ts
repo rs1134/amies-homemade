@@ -392,20 +392,6 @@ export const PRODUCTS: Product[] = [
     rating: 5, reviewCount: 32
   },
   {
-    id: 's7',
-    name: 'Ratalu Chips',
-    category: Category.SNACKS,
-    price: 215,
-    weight: '250 G',
-    description: 'Crispy premium purple yam chips, a traditional favorite.',
-    image: 'https://ik.imagekit.io/amieshomemade/istockphoto-1360236832-612x612.jpg',
-    ingredients: ['Purple Yam', 'Oil', 'Salt and Pepper'],
-    weights: ['250 G', '500 G', '1 KG'],
-    prices: { '250 G': 215, '500 G': 425, '1 KG': 850 },
-    rating: 4, reviewCount: 17,
-    outOfStock: true
-  },
-  {
     id: 's8',
     name: 'Sweet Sakarpara',
     category: Category.SNACKS,
