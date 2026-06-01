@@ -127,13 +127,9 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
     setIsSubmitting(true);
     const orderId = `AM-${Math.floor(Math.random() * 90000 + 10000)}`;
     
-    const itemsSummary = items.map(i => {
-      const basicInfo = `${i.quantity}x ${i.name} (${i.selectedWeight || i.weight})`;
-      const choices = (i.ingredients && i.ingredients.length > 0) 
-        ? `\n   └ Choices: ${i.ingredients.join(', ')}` 
-        : '';
-      return `${basicInfo}${choices}`;
-    }).join('\n');
+    const itemsSummary = items.map(i =>
+      `${i.quantity}x ${i.name} (${i.selectedWeight || i.weight})`
+    ).join('\n');
     
     const notificationMessage = `
 🛍️ NEW ORDER: ${orderId}
