@@ -733,7 +733,7 @@ export const BLOG_POSTS: BlogPost[] = [
     slug: 'festive-hampers-best-indian-corporate-gift',
     title: 'Why Festive Hampers Are the Best Indian Corporate Gift, For Every Occasion',
     excerpt: 'India has 29 major public holidays, dozens of regional festivals, and a business culture where relationship-building is everything. Here\'s why a thoughtful festive hamper beats every other corporate gift option.',
-    coverImage: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?q=80&w=1600&auto=format&fit=crop',
+    coverImage: 'https://ik.imagekit.io/amieshomemade/The-Festive-Reserve.jpg',
     publishedAt: '2026-05-30',
     readTime: 5,
     category: 'Corporate Gifting',
