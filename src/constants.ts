@@ -337,7 +337,7 @@ export const PRODUCTS: Product[] = [
     price: 175,
     weight: '250 G',
     description: 'Classic crunchy spiral snack made with rice flour and spices.',
-    image: 'https://ik.imagekit.io/amieshomemade/Chat-GPT-Image-Apr-29-2026-05-33-06-PM.png',
+    image: 'https://ik.imagekit.io/amieshomemade/IMG_8015.JPG',
     ingredients: ['Rice Flour', 'Sesame', 'Mixed Spices', 'Butter', 'Curd'],
     weights: ['250 G', '500 G', '1 KG'],
     prices: { '250 G': 175, '500 G': 350, '1 KG': 700 },
