@@ -26,7 +26,15 @@ function escapeHtml(str: string): string {
     .replace(/"/g, '&quot;');
 }
 
-const PAGES = [
+interface PageEntry {
+  path: string;
+  url: string;
+  title: string;
+  description: string;
+  ogImage?: string;
+}
+
+const PAGES: PageEntry[] = [
   {
     path: 'shop',
     url: 'https://amieshomemade.com/shop',
@@ -75,6 +83,34 @@ const PAGES = [
     title: "Cities We Deliver To | Amie's Homemade",
     description: "Amie's Homemade delivers homemade mukhwas, sweets, snacks, and gift hampers across India. Check if we deliver to your city.",
   },
+  {
+    path: 'shop/mukhwas',
+    url: 'https://amieshomemade.com/shop/mukhwas',
+    title: "Mukhwas | Amie's Homemade",
+    description: "Shop our full range of handmade mukhwas — Amla Ginger, Chatpati Mango, Digestive Crunch, and more. Made fresh in small batches with no preservatives.",
+    ogImage: 'https://ik.imagekit.io/amieshomemade/Whats-App-Image-2026-02-12-at-18-57-58-2.jpg',
+  },
+  {
+    path: 'shop/traditional-sweets',
+    url: 'https://amieshomemade.com/shop/traditional-sweets',
+    title: "Traditional Sweets | Amie's Homemade",
+    description: "Authentic homemade Indian sweets — Pista Ghugra, Kaju Rotla, Badam Puri, Almond Motichoor Ladoo and more. Made fresh with pure ghee and no preservatives.",
+    ogImage: 'https://ik.imagekit.io/amieshomemade/Whats_App_Image_2026_02_15_at_20_10_14_2.jpg',
+  },
+  {
+    path: 'shop/gujarati-snacks',
+    url: 'https://amieshomemade.com/shop/gujarati-snacks',
+    title: "Gujarati Snacks | Amie's Homemade",
+    description: "Classic homemade Gujarati namkeen — Chakri, Farsi Puri, Masala Puri, Thiki Sev, Roasted Chevdo and more. Made fresh with no preservatives.",
+    ogImage: 'https://ik.imagekit.io/amieshomemade/IMG_8015.JPG',
+  },
+  {
+    path: 'shop/health-wellness',
+    url: 'https://amieshomemade.com/shop/health-wellness',
+    title: "Health & Wellness | Amie's Homemade",
+    description: "Healthy homemade snacks — Makhana, Granola, Masala Protein Beans Mix and more. No preservatives, no artificial additives.",
+    ogImage: 'https://ik.imagekit.io/amieshomemade/Granola-jar-with-colorful-label-and-hand.png',
+  },
 ];
 
 for (const page of PAGES) {
@@ -86,6 +122,10 @@ for (const page of PAGES) {
   html = html.replace(/(<meta property="og:title" content=")[^"]*"/, `$1${escapeHtml(page.title)}"`);
   html = html.replace(/(<meta property="og:description" content=")[^"]*"/, `$1${escapeHtml(page.description)}"`);
   html = html.replace(/(<meta property="og:url" content=")[^"]*"/, `$1${page.url}"`);
+  if (page.ogImage) {
+    html = html.replace(/(<meta property="og:image" content=")[^"]*"/, `$1${page.ogImage}"`);
+    html = html.replace(/(<meta name="twitter:image" content=")[^"]*"/, `$1${page.ogImage}"`);
+  }
 
   const dir = join(distDir, page.path);
   mkdirSync(dir, { recursive: true });
