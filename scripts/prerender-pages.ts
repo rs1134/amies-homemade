@@ -88,28 +88,28 @@ const PAGES: PageEntry[] = [
     url: 'https://amieshomemade.com/shop/mukhwas',
     title: "Mukhwas | Amie's Homemade",
     description: "Shop our full range of handmade mukhwas — Amla Ginger, Chatpati Mango, Digestive Crunch, and more. Made fresh in small batches with no preservatives.",
-    ogImage: 'https://ik.imagekit.io/amieshomemade/Whats-App-Image-2026-02-12-at-18-57-58-2.jpg',
+    ogImage: 'https://ik.imagekit.io/amieshomemade/Whats-App-Image-2026-02-12-at-18-57-58-2.jpg?tr=w-1200,h-630,fo-auto',
   },
   {
     path: 'shop/traditional-sweets',
     url: 'https://amieshomemade.com/shop/traditional-sweets',
     title: "Traditional Sweets | Amie's Homemade",
     description: "Authentic homemade Indian sweets — Pista Ghugra, Kaju Rotla, Badam Puri, Almond Motichoor Ladoo and more. Made fresh with pure ghee and no preservatives.",
-    ogImage: 'https://ik.imagekit.io/amieshomemade/Whats_App_Image_2026_02_15_at_20_10_14_2.jpg',
+    ogImage: 'https://ik.imagekit.io/amieshomemade/Whats_App_Image_2026_02_15_at_20_10_14_2.jpg?tr=w-1200,h-630,fo-auto',
   },
   {
     path: 'shop/gujarati-snacks',
     url: 'https://amieshomemade.com/shop/gujarati-snacks',
     title: "Gujarati Snacks | Amie's Homemade",
     description: "Classic homemade Gujarati namkeen — Chakri, Farsi Puri, Masala Puri, Thiki Sev, Roasted Chevdo and more. Made fresh with no preservatives.",
-    ogImage: 'https://ik.imagekit.io/amieshomemade/IMG_8015.JPG',
+    ogImage: 'https://ik.imagekit.io/amieshomemade/IMG_8015.JPG?tr=w-1200,h-630,fo-auto',
   },
   {
     path: 'shop/health-wellness',
     url: 'https://amieshomemade.com/shop/health-wellness',
     title: "Health & Wellness | Amie's Homemade",
     description: "Healthy homemade snacks — Makhana, Granola, Masala Protein Beans Mix and more. No preservatives, no artificial additives.",
-    ogImage: 'https://ik.imagekit.io/amieshomemade/Granola-jar-with-colorful-label-and-hand.png',
+    ogImage: 'https://ik.imagekit.io/amieshomemade/Granola-jar-with-colorful-label-and-hand.png?tr=w-1200,h-630,fo-auto',
   },
 ];
 
@@ -125,6 +125,16 @@ for (const page of PAGES) {
   if (page.ogImage) {
     html = html.replace(/(<meta property="og:image" content=")[^"]*"/, `$1${page.ogImage}"`);
     html = html.replace(/(<meta name="twitter:image" content=")[^"]*"/, `$1${page.ogImage}"`);
+    // Ensure width/height tags exist (Instagram/Facebook use these for validation)
+    if (/<meta property="og:image:width"/.test(html)) {
+      html = html.replace(/(<meta property="og:image:width" content=")[^"]*"/, `$11200"`);
+      html = html.replace(/(<meta property="og:image:height" content=")[^"]*"/, `$1630"`);
+    } else {
+      html = html.replace(
+        /(<meta property="og:image" content="[^"]*" \/>)/,
+        `$1\n    <meta property="og:image:width" content="1200" />\n    <meta property="og:image:height" content="630" />`
+      );
+    }
   }
 
   const dir = join(distDir, page.path);
