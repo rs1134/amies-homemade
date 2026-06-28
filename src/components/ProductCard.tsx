@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Plus, ImageOff, Images } from 'lucide-react';
 import { Product } from '../types.ts';
 
@@ -51,8 +51,35 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onOpen 
   const isOOS = product.outOfStock;
   const hasMultiplePhotos = (product.images?.length ?? 0) > 1;
 
+  // Touch devices have no hover, so press-and-hold reveals the 2nd photo.
+  // A quick tap still opens the product; a hold-to-preview does not navigate.
+  const [showAlt, setShowAlt] = useState(false);
+  const holdTimer = useRef<number | null>(null);
+  const didHold = useRef(false);
+  const startHold = () => {
+    if (!hasMultiplePhotos || isOOS) return;
+    didHold.current = false;
+    holdTimer.current = window.setTimeout(() => { didHold.current = true; setShowAlt(true); }, 220);
+  };
+  const endHold = () => {
+    if (holdTimer.current) { clearTimeout(holdTimer.current); holdTimer.current = null; }
+    setShowAlt(false);
+  };
+  const cancelHold = () => { didHold.current = false; endHold(); };
+
   return (
-    <a href={productPath} onClick={(e) => { e.preventDefault(); onOpen(product); }} className="block group bg-white rounded-3xl overflow-hidden border border-[#4A3728]/5 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 cursor-pointer">
+    <a
+      href={productPath}
+      onClick={(e) => {
+        e.preventDefault();
+        if (didHold.current) { didHold.current = false; return; } // was a hold-to-preview, not a tap
+        onOpen(product);
+      }}
+      onTouchStart={startHold}
+      onTouchEnd={endHold}
+      onTouchMove={cancelHold}
+      onTouchCancel={cancelHold}
+      className="block group bg-white rounded-3xl overflow-hidden border border-[#4A3728]/5 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 cursor-pointer">
       <div className="relative aspect-[4/5] overflow-hidden bg-cream/50">
         {!imageError ? (
           <>
@@ -71,7 +98,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onOpen 
                 alt=""
                 loading="lazy"
                 decoding="async"
-                className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 group-hover:opacity-100 ${showAlt ? 'opacity-100' : 'opacity-0'}`}
               />
             )}
           </>
