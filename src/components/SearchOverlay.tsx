@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Search, X, ArrowRight, Tag } from 'lucide-react';
 import { Product, Category } from '../types.ts';
-import { PRODUCTS } from '../constants.ts';
+import { PRODUCTS, isProductVisible } from '../constants.ts';
 
 interface SearchOverlayProps {
   isOpen: boolean;
@@ -23,7 +23,7 @@ function searchProducts(query: string): Product[] {
   if (!query.trim()) return [];
   const q = query.toLowerCase().trim();
 
-  const scored = PRODUCTS.map(p => {
+  const scored = PRODUCTS.filter(isProductVisible).map(p => {
     let score = 0;
     const name = p.name.toLowerCase();
     const cat  = p.category.toLowerCase();

@@ -206,9 +206,10 @@ const BlogPostView: React.FC<BlogPostViewProps> = ({ slug, onBack, onSelectPost,
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {related.map(rp => (
-                <article
+                <a
                   key={rp.id}
-                  onClick={() => onSelectPost(rp.slug)}
+                  href={`/blog/${rp.slug}`}
+                  onClick={(e) => { e.preventDefault(); onSelectPost(rp.slug); }}
                   className="group bg-white rounded-[1.5rem] overflow-hidden shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-400 cursor-pointer border border-[#4A3728]/5"
                 >
                   <div className="h-40 overflow-hidden">
@@ -221,7 +222,7 @@ const BlogPostView: React.FC<BlogPostViewProps> = ({ slug, onBack, onSelectPost,
                       Read <ArrowRight size={11} className="group-hover:translate-x-1 transition-transform" />
                     </span>
                   </div>
-                </article>
+                </a>
               ))}
             </div>
             <div className="text-center mt-10">

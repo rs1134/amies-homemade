@@ -24,7 +24,7 @@ const FAQ_DATA: FAQCategory[] = [
     items: [
       {
         q: 'Do you use any artificial colours, flavours, or preservatives?',
-        a: 'No. Every product — mukhwas, snacks, and sweets — is made with 100% natural ingredients. No artificial colours, no synthetic flavours, and no preservatives of any kind.',
+        a: 'No. Every product — mukhwas, masalas, and wellness blends — is made with 100% natural ingredients. No artificial colours, no synthetic flavours, and no preservatives of any kind.',
       },
       {
         q: 'Are all your products made in-house?',
@@ -32,7 +32,7 @@ const FAQ_DATA: FAQCategory[] = [
       },
       {
         q: 'What is the shelf life of your products?',
-        a: 'Mukhwas stays fresh for 3 to 4 months. Snacks stay fresh for up to 60 days. Sweets are best consumed within 30 days. Store all products in a cool, dry place away from direct sunlight.',
+        a: 'Mukhwas, granola, and dry fruit milk masala stay fresh for 6 months from the date of packaging, and chai masala for up to 1 year. Store all products in a cool, dry place away from direct sunlight.',
       },
       {
         q: 'Do you offer sugar-free options for diabetics?',
@@ -40,7 +40,7 @@ const FAQ_DATA: FAQCategory[] = [
       },
       {
         q: 'What are your best-selling products?',
-        a: 'For mukhwas, our best sellers are Kharek Coconut Almond and Chatpati Mango. For snacks, Khasta Kachori and Ratalu Chips are most popular. For sweets, Ghughra and Mathadi are ordered most frequently.',
+        a: 'For mukhwas, our best sellers are Kharek Coconut Almond and Chatpati Mango. Among our wellness range, the Homemade Healthy Granola and Dry Fruit Milk Masala are ordered most frequently.',
       },
     ],
   },
@@ -60,7 +60,7 @@ const FAQ_DATA: FAQCategory[] = [
       },
       {
         q: 'Can I customize the contents of a gift hamper?',
-        a: 'Yes. You can choose which mukhwas varieties, snacks, and sweets go in, specify quantities, and mention any dietary needs (sugar-free, nut-free, etc.). Just tell us who it is for and we will build it around them.',
+        a: 'Yes. You can choose which mukhwas and wellness varieties go in, specify quantities, and mention any dietary needs (sugar-free, nut-free, etc.). Just tell us who it is for and we will build it around them.',
       },
       {
         q: 'Is there a minimum order quantity?',
@@ -92,7 +92,7 @@ const FAQ_DATA: FAQCategory[] = [
       },
       {
         q: 'How are products packed for shipping?',
-        a: 'Mukhwas and snacks are packed in airtight containers, then bubble-wrapped and boxed securely. If your order arrives damaged, WhatsApp us within 24 hours with a photo and we will resolve it immediately.',
+        a: 'Mukhwas and wellness products are packed in airtight containers, then bubble-wrapped and boxed securely. If your order arrives damaged, WhatsApp us within 24 hours with a photo and we will resolve it immediately.',
       },
     ],
   },
@@ -116,7 +116,7 @@ const FAQ_DATA: FAQCategory[] = [
       },
       {
         q: 'What hamper options are popular for corporate gifting?',
-        a: 'Our most requested options are the Classic Mukhwas Set (glass jars in a wooden box), the Wellness Hamper (sugar-free varieties), the Heritage Snack Box (mukhwas + snacks + sweets), and the Grand Heritage Hamper for VIP relationships.',
+        a: 'Our most requested options are the Classic Mukhwas Set (glass jars in a wooden box), the Wellness Hamper (sugar-free varieties), the Heritage Box (a curated mix of mukhwas & wellness treats), and the Grand Heritage Hamper for VIP relationships.',
       },
       {
         q: 'How early should I place a large corporate order?',

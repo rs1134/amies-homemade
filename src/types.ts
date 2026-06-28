@@ -27,6 +27,8 @@ export interface Product {
   prices?: Record<string, number>; // Mapping weight string to price
   rating?: number;
   reviewCount?: number;
+  /** Shelf life shown in Additional Information, e.g. '6 months' (default) or '1 year'. */
+  shelfLife?: string;
   isGift?: boolean;
   isNew?: boolean;
   outOfStock?: boolean;

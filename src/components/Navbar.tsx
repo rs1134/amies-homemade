@@ -17,13 +17,13 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount, onCartClick, onNavigate, onS
   return (
     <nav className="fixed w-full bg-[#FFF8EE]/90 backdrop-blur-md z-50 border-b border-[#F04E4E]/10 top-[40px]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-20 items-center">
-          <div className="flex items-center gap-6">
+        <div className="flex justify-between h-16 md:h-20 items-center">
+          <div className="flex items-center gap-3 md:gap-6">
             <button className="md:hidden p-2 text-[#4A3728]" onClick={() => setIsOpen(!isOpen)}>
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
             <button onClick={() => onNavigate('home')} className="flex items-center transition-transform hover:scale-105 active:scale-95">
-              <Logo manualHeight="h-16" />
+              <Logo manualHeight="h-12 md:h-16" />
             </button>
           </div>
 

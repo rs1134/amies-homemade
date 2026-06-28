@@ -9,7 +9,11 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { BLOG_POSTS } from '../src/blogs.ts';
+import { getPublishedPosts } from '../src/blogs.ts';
+
+// Only prerender posts that are actually published (respects the frozen cutoff),
+// so upcoming/removed posts get no static HTML and stay genuinely unreachable.
+const BLOG_POSTS = getPublishedPosts();
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const distDir = join(__dirname, '..', 'dist');

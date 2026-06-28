@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsx server.ts",
     "start": "node server.ts",
-    "build": "vite build && tsx scripts/prerender-blogs.ts && tsx scripts/prerender-products.ts && tsx scripts/prerender-pages.ts",
+    "build": "vite build && tsx scripts/prerender-blogs.ts && tsx scripts/prerender-products.ts && tsx scripts/prerender-pages.ts && tsx scripts/generate-sitemap.ts",
     "lint": "echo 'Skipping lint'",
     "preview": "vite preview"
   },

@@ -806,42 +806,6 @@ export const BLOG_POSTS: BlogPost[] = [
     ],
   },
 
-  // ── POST 18 ───────────────────────────────────────────────────────────────
-  {
-    id: 'post-18',
-    slug: 'new-client-welcome-gift-hamper',
-    title: 'New Client Welcome Gifts: How to Start a Business Relationship the Right Way',
-    excerpt: 'The first impression you make on a new client sets the tone for everything that follows. Most businesses start with an onboarding email. The ones clients remember start with something more.',
-    coverImage: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?q=80&w=1600&auto=format&fit=crop',
-    publishedAt: '2026-06-13',
-    readTime: 4,
-    category: 'Corporate Gifting',
-    categoryColor: 'bg-blue-100 text-blue-700',
-    tags: ['corporate', 'gifting', 'onboarding', 'client welcome', 'business'],
-    content: [
-      { type: 'p', text: 'The moment a new client signs on with your business is one of the most emotionally charged moments in any professional relationship. They have just made a decision, often one involving real money and real risk. Most businesses respond with a standardized onboarding email and a Zoom link. The businesses that build lasting loyalty understand that this moment deserves to be marked with something that communicates: you made the right choice, and we are genuinely glad you are here.' },
-      { type: 'h2', text: 'Why the First Gift Matters Most' },
-      { type: 'p', text: 'In relationship psychology, the primacy effect describes our tendency to remember the first thing in a sequence more vividly than what follows. The first impression a new client has of how you treat people will color every subsequent interaction. A welcome gift, especially one that is handmade and personal, creates an emotional anchor. Every time they work with you after that, they are working with the company that welcomed them with genuine warmth.' },
-      { type: 'h2', text: 'What a Welcome Hamper Should Communicate' },
-      { type: 'p', text: 'A well-chosen welcome gift communicates four things simultaneously: warmth (we are genuinely happy you are here), quality (we hold ourselves to a high standard), culture (this is the kind of company we are), and thoughtfulness (we chose this specifically, not generically). A handcrafted food hamper, made in small batches by a home kitchen, with no preservatives and real ingredients, embodies all four without requiring any explanation.' },
-      { type: 'h2', text: 'What to Include in a Welcome Hamper' },
-      { type: 'ul', items: [
-        'A selection of 2–3 mukhwas varieties, elegant, culturally meaningful, and universally enjoyed',
-        'One sweet item, besan ladoo or coconut barfi signals celebration and warmth',
-        'One savory snack, chakli or namkeen adds variety and everyday appeal',
-        'A handwritten welcome note, personal, specific, and not a template',
-        'A clean, reusable presentation box, the packaging sends a quality signal before the box is opened',
-      ]},
-      { type: 'h2', text: 'Timing the Welcome Gift Right' },
-      { type: 'p', text: 'The welcome hamper should arrive within 48–72 hours of the client signing on, ideally before or alongside the formal onboarding process begins. This timing makes the gift feel like a genuine first gesture rather than an afterthought. If the client is in Ahmedabad, same-day or next-day delivery is practical. For clients in other cities, plan for 2–3 business days shipping time and coordinate accordingly.' },
-      { type: 'h2', text: 'Scaling Welcome Gifts for Growing Businesses' },
-      { type: 'p', text: 'If your business brings on 5–10 new clients per month, a standing arrangement with a homemade food supplier makes the welcome gift process seamless. At Amie\'s, businesses can set up a recurring welcome hamper arrangement, fixed contents, consistent quality, delivered fresh each time. You focus on the relationship. We handle the hamper.' },
-      { type: 'quote', text: 'The welcome gift is the opening line of a long conversation. Make sure it says something worth remembering.' },
-      { type: 'tip', heading: 'Include Your Story', text: 'Consider including a small card that tells the Amie\'s story, handmade by Ami Shah, no preservatives, small batches. When clients understand that the hamper is genuinely artisanal, the gift gains an additional dimension of meaning. It becomes a story they share, not just a snack they consume.' },
-      { type: 'p', text: 'A new client relationship is like a new plant, what you do in the first few weeks determines how it grows. A warm, genuine welcome is not just nice to have. It is the foundation of everything that follows.' },
-    ],
-  },
-
   // ── POST 19 ───────────────────────────────────────────────────────────────
   {
     id: 'post-19',
@@ -1057,18 +1021,27 @@ export const BLOG_POSTS: BlogPost[] = [
 
 ];
 
-// Returns only posts whose publishedAt date has passed (auto-scheduling)
+// Auto-scheduling is FROZEN. Posts only go live if dated on/before this cutoff.
+// Anything dated after it stays hidden — no more blogs auto-publish on their own.
+// To publish new posts later: raise this date (or set it to a far-future date to
+// re-enable automatic scheduling).
+const PUBLISH_CUTOFF = '2026-06-15';
+
+// Returns only posts published on/before the frozen cutoff date
 export const getPublishedPosts = (): BlogPost[] => {
   const today = new Date().toISOString().split('T')[0];
-  return BLOG_POSTS.filter(p => p.publishedAt <= today).sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
+  const cutoff = today < PUBLISH_CUTOFF ? today : PUBLISH_CUTOFF;
+  return BLOG_POSTS.filter(p => p.publishedAt <= cutoff).sort((a, b) => b.publishedAt.localeCompare(a.publishedAt));
 };
 
+// Only resolves PUBLISHED posts — a future/removed slug typed directly returns
+// undefined (BlogPostView then shows its not-found state), so upcoming posts
+// can't be reached by guessing the URL.
 export const getPostBySlug = (slug: string): BlogPost | undefined =>
-  BLOG_POSTS.find(p => p.slug === slug);
+  getPublishedPosts().find(p => p.slug === slug);
 
 export const getRelatedPosts = (post: BlogPost, limit = 3): BlogPost[] => {
-  const today = new Date().toISOString().split('T')[0];
-  return BLOG_POSTS
-    .filter(p => p.id !== post.id && p.publishedAt <= today && p.category === post.category)
+  return getPublishedPosts()
+    .filter(p => p.id !== post.id && p.category === post.category)
     .slice(0, limit);
 };

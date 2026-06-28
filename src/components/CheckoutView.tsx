@@ -8,18 +8,38 @@ const COUPON_STORAGE_KEY = 'thanks10_used_phones';
 interface CheckoutViewProps {
   items: CartItem[];
   onComplete: () => void;
-  onUpdateQuantity: (id: string, delta: number) => void;
-  onRemove: (id: string) => void;
+  onUpdateQuantity: (index: number, delta: number) => void;
+  onRemove: (index: number) => void;
   total: number;
-  couponDiscount?: number;
+  couponApplied?: boolean;
+  onShopClick?: () => void;
+  onOrderPlaced?: () => void;
 }
 
 type FieldName = 'name' | 'phone' | 'email' | 'city' | 'address' | 'flat';
 
-const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdateQuantity, onRemove, total, couponDiscount = 0 }) => {
+interface OrderSnapshot {
+  items: CartItem[];
+  total: number;
+  couponDiscount: number;
+  shippingFee: number;
+  grandTotal: number;
+  city: string;
+  address: string;
+  isAhmedabad: boolean;
+}
+
+const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdateQuantity, onRemove, total, couponApplied = false, onShopClick, onOrderPlaced }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [paymentId, setPaymentId] = useState('');
+  // Snapshot of the order taken the instant payment succeeds, so the success
+  // screen can render correct details even after the live cart is cleared.
+  const [orderSnapshot, setOrderSnapshot] = useState<OrderSnapshot | null>(null);
+
+  // Discount is always 10% of the CURRENT cart — recomputed live, so changing
+  // quantities at checkout can never desync it from the items shown.
+  const couponDiscount = couponApplied ? Math.round(total * 0.1) : 0;
 
   const [formData, setFormData] = useState({
     name: '',
@@ -34,68 +54,103 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   const [touched, setTouched] = useState<Partial<Record<FieldName, boolean>>>({});
 
   const formRef = useRef<HTMLDivElement>(null);
-  const addressSearchRef = useRef<HTMLInputElement>(null);
-  const autocompleteRef = useRef<any>(null);
 
-  // Load Google Places Autocomplete
+  // ── Address autocomplete (new Places API — the legacy Autocomplete widget is
+  //    not available to API keys created after March 2025, so we fetch
+  //    suggestions ourselves and render a custom branded dropdown) ────────────
+  const [addressQuery, setAddressQuery] = useState('');
+  const [suggestions, setSuggestions] = useState<Array<{ id: string; main: string; secondary: string; prediction: any }>>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const placesLibRef = useRef<any>(null);
+  const sessionTokenRef = useRef<any>(null);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   useEffect(() => {
     const apiKey = import.meta.env.VITE_GOOGLE_PLACES_API_KEY;
     if (!apiKey) return;
 
-    const initAutocomplete = () => {
-      if (!addressSearchRef.current || !(window as any).google) return;
-      // Strong bias towards Ahmedabad (tighter circle around city center)
-      const ahmedabadBounds = new (window as any).google.maps.LatLngBounds(
-        new (window as any).google.maps.LatLng(22.95, 72.50),
-        new (window as any).google.maps.LatLng(23.10, 72.65)
-      );
-      const autocomplete = new (window as any).google.maps.places.Autocomplete(
-        addressSearchRef.current,
-        {
-          componentRestrictions: { country: 'in' },
-          fields: ['address_components', 'formatted_address', 'name'],
-          // No `types` restriction → finds apartments, societies, landmarks AND street addresses
-          bounds: ahmedabadBounds,
-          strictBounds: false,
-        }
-      );
-      autocompleteRef.current = autocomplete;
-      autocomplete.addListener('place_changed', () => {
-        const place = autocomplete.getPlace();
-        if (!place.address_components) return;
-        let streetNumber = '', route = '', sublocality = '', city = '';
-        place.address_components.forEach((c: any) => {
-          if (c.types.includes('street_number'))       streetNumber = c.long_name;
-          if (c.types.includes('route'))               route = c.long_name;
-          if (c.types.includes('sublocality_level_1')) sublocality = c.long_name;
-          if (c.types.includes('locality'))            city = c.long_name;
-        });
-        // Build address: prefer apartment/establishment name + sublocality if present
-        const namePart = place.name && !route.includes(place.name) ? place.name : '';
-        const addressParts = [namePart, streetNumber, route, sublocality].filter(Boolean);
-        const address = addressParts.length > 0 ? addressParts.join(', ') : (place.formatted_address || '');
-        setFormData(prev => ({ ...prev, address, city: city || prev.city }));
-        setTouched(prev => ({ ...prev, address: true, city: true }));
-        setFieldErrors(prev => ({ ...prev, address: '', city: '' }));
-      });
+    const init = async () => {
+      try {
+        const lib = await (window as any).google.maps.importLibrary('places');
+        placesLibRef.current = lib;
+        sessionTokenRef.current = new lib.AutocompleteSessionToken();
+      } catch (e) {
+        console.error('Google Places failed to initialise:', e);
+      }
     };
 
-    if ((window as any).google) {
-      initAutocomplete();
-    } else {
-      const existing = document.getElementById('google-maps-script');
-      if (!existing) {
-        const script = document.createElement('script');
-        script.id = 'google-maps-script';
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
-        script.async = true;
-        script.onload = initAutocomplete;
-        document.head.appendChild(script);
-      } else {
-        existing.addEventListener('load', initAutocomplete);
-      }
+    if ((window as any).google?.maps?.importLibrary) {
+      init();
+      return;
     }
+    // With loading=async the API isn't ready at script.onload — Google calls
+    // the global callback once importLibrary is actually available.
+    (window as any).__amiePlacesReady = init;
+    const existing = document.getElementById('google-maps-script');
+    if (existing) return;
+    const script = document.createElement('script');
+    script.id = 'google-maps-script';
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&v=weekly&loading=async&callback=__amiePlacesReady`;
+    script.async = true;
+    document.head.appendChild(script);
   }, []);
+
+  const fetchSuggestions = (input: string) => {
+    const lib = placesLibRef.current;
+    if (!lib?.AutocompleteSuggestion || input.trim().length < 3) {
+      setSuggestions([]);
+      return;
+    }
+    lib.AutocompleteSuggestion.fetchAutocompleteSuggestions({
+      input,
+      sessionToken: sessionTokenRef.current,
+      includedRegionCodes: ['in'],
+      // Bias towards Ahmedabad without excluding the rest of India
+      locationBias: { north: 23.15, south: 22.90, east: 72.75, west: 72.45 },
+    }).then(({ suggestions: sugs }: any) => {
+      setSuggestions((sugs || []).slice(0, 5).map((s: any) => ({
+        id: s.placePrediction.placeId,
+        main: s.placePrediction.mainText?.text ?? s.placePrediction.text?.text ?? '',
+        secondary: s.placePrediction.secondaryText?.text ?? '',
+        prediction: s.placePrediction,
+      })));
+      setShowSuggestions(true);
+    }).catch((e: any) => {
+      console.error('Address suggestions failed:', e);
+      setSuggestions([]);
+    });
+  };
+
+  const selectSuggestion = async (sug: { id: string; main: string; secondary: string; prediction: any }) => {
+    setShowSuggestions(false);
+    setSuggestions([]);
+    setAddressQuery(sug.main);
+    try {
+      const place = sug.prediction.toPlace();
+      await place.fetchFields({ fields: ['addressComponents', 'formattedAddress', 'displayName'] });
+      let streetNumber = '', route = '', sublocality = '', city = '';
+      (place.addressComponents || []).forEach((c: any) => {
+        const types: string[] = c.types || [];
+        if (types.includes('street_number'))       streetNumber = c.longText;
+        if (types.includes('route'))               route = c.longText;
+        if (types.includes('sublocality_level_1')) sublocality = c.longText;
+        if (types.includes('locality'))            city = c.longText;
+      });
+      const namePart = place.displayName && !route.includes(place.displayName) ? place.displayName : '';
+      const addressParts = [namePart, streetNumber, route, sublocality].filter(Boolean);
+      const address = addressParts.length > 0 ? addressParts.join(', ') : (place.formattedAddress || sug.main);
+      setFormData(prev => ({ ...prev, address, city: city || prev.city }));
+      setTouched(prev => ({ ...prev, address: true, city: true }));
+      setFieldErrors(prev => ({ ...prev, address: '', city: '' }));
+    } catch {
+      // Place details unavailable — still fill in what the suggestion showed
+      const fallback = sug.secondary ? `${sug.main}, ${sug.secondary}` : sug.main;
+      setFormData(prev => ({ ...prev, address: fallback }));
+      setTouched(prev => ({ ...prev, address: true }));
+    }
+    // New session token for the next search (billing best practice)
+    if (placesLibRef.current) sessionTokenRef.current = new placesLibRef.current.AutocompleteSessionToken();
+  };
 
   // Accept common spellings/variants of Ahmedabad (Gujarati: Amdavad)
   const AHMEDABAD_VARIANTS = ['ahmedabad', 'amdavad', 'amdaavad', 'ahmadabad', 'ahemdabad', 'ahembdabad'];
@@ -235,8 +290,16 @@ _Please confirm my order and share delivery details._
     }
 
     (window as any).lastOrderWhatsappUrl = whatsappUrl;
+    // Freeze the order details before clearing the cart, so the success screen
+    // still shows everything correctly.
+    setOrderSnapshot({
+      items, total, couponDiscount,
+      shippingFee: shippingFee ?? 0, grandTotal,
+      city: formData.city, address: fullDeliveryAddress, isAhmedabad,
+    });
     setPaymentId(razorpayPaymentId);
     setIsSuccess(true);
+    onOrderPlaced?.(); // clears the live cart + coupon so paid items can't linger
     window.history.pushState(null, '', '/order-confirmed');
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setIsSubmitting(false);
@@ -248,6 +311,7 @@ _Please confirm my order and share delivery details._
     : formData.address;
 
   const handleProceed = async () => {
+    if (items.length === 0) return; // nothing to pay for
     const fieldNames: FieldName[] = ['name', 'phone', 'city', 'email', 'address', 'flat'];
     const newErrors: Partial<Record<FieldName, string>> = {};
     let firstErrorField: FieldName | null = null;
@@ -344,24 +408,25 @@ _Please confirm my order and share delivery details._
   };
 
   // ── Success Screen ──────────────────────────────────────────────────────────
-  if (isSuccess) {
+  if (isSuccess && orderSnapshot) {
+    const snap = orderSnapshot;
     return (
-      <div className="pt-32 pb-24 px-4 sm:px-6 lg:px-8 bg-cream min-h-screen flex items-center justify-center">
-        <div className="max-w-3xl w-full bg-white rounded-[4rem] shadow-2xl overflow-hidden border border-[#4A3728]/5 animate-in zoom-in fade-in duration-500">
-          <div className="bg-[#F04E4E] p-16 text-center text-white relative">
+      <div className="pt-28 sm:pt-32 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8 bg-cream min-h-screen flex items-center justify-center">
+        <div className="max-w-3xl w-full bg-white rounded-[2rem] sm:rounded-[4rem] shadow-2xl overflow-hidden border border-[#4A3728]/5 animate-in zoom-in fade-in duration-500">
+          <div className="bg-[#F04E4E] p-8 sm:p-16 text-center text-white relative">
             <div className="relative z-10 flex flex-col items-center">
-              <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center text-[#F04E4E] mb-6 shadow-xl">
-                <CheckCircle size={44} strokeWidth={2.5} />
+              <div className="w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-full flex items-center justify-center text-[#F04E4E] mb-4 sm:mb-6 shadow-xl">
+                <CheckCircle size={40} strokeWidth={2.5} />
               </div>
-              <h2 className="text-5xl font-bold serif mb-3">Order Placed!</h2>
-              <p className="text-white/80 brand-rounded font-bold uppercase text-[11px] tracking-[0.3em]">
+              <h2 className="text-3xl sm:text-5xl font-bold serif mb-2 sm:mb-3">Order Placed!</h2>
+              <p className="text-white/80 brand-rounded font-bold uppercase text-[10px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.3em] break-all px-2">
                 Payment ID: {paymentId}
               </p>
             </div>
           </div>
 
-          <div className="p-10 sm:p-14 space-y-12">
-            <div className="flex items-center gap-6 p-8 bg-white rounded-[2.5rem] border border-[#4A3728]/5 shadow-[0_10px_40px_rgba(0,0,0,0.03)]">
+          <div className="p-5 sm:p-14 space-y-7 sm:space-y-12">
+            <div className="flex items-center gap-4 sm:gap-6 p-5 sm:p-8 bg-white rounded-[1.5rem] sm:rounded-[2.5rem] border border-[#4A3728]/5 shadow-[0_10px_40px_rgba(0,0,0,0.03)]">
               <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-[#F04E4E] shadow-sm border border-[#F04E4E]/10 flex-shrink-0">
                 <MessageCircle size={28} />
               </div>
@@ -374,7 +439,7 @@ _Please confirm my order and share delivery details._
             <div className="space-y-6">
               <h3 className="text-xs font-black brand-rounded uppercase tracking-widest text-[#4A3728]/40 border-b border-[#4A3728]/5 pb-4">Order Summary</h3>
               <div className="space-y-6 max-h-[300px] overflow-y-auto pr-2 no-scrollbar">
-                {items.map((item, idx) => (
+                {snap.items.map((item, idx) => (
                   <div key={idx} className="flex justify-between items-start">
                     <div className="flex gap-5">
                       <div className="w-12 h-12 rounded-2xl overflow-hidden bg-cream flex-shrink-0 border border-[#4A3728]/5">
@@ -391,19 +456,19 @@ _Please confirm my order and share delivery details._
               </div>
               <div className="pt-8 border-t border-[#4A3728]/5 flex flex-col gap-2">
                 <div className="flex justify-between items-center text-sm font-bold text-[#4A3728]/50">
-                  <span>Subtotal</span><span>₹{total}</span>
+                  <span>Subtotal</span><span>₹{snap.total}</span>
                 </div>
-                {couponDiscount > 0 && (
+                {snap.couponDiscount > 0 && (
                   <div className="flex justify-between items-center text-sm font-bold text-green-600">
-                    <span>Coupon Discount (Thanks10)</span><span>− ₹{couponDiscount}</span>
+                    <span>Coupon Discount (Thanks10)</span><span>− ₹{snap.couponDiscount}</span>
                   </div>
                 )}
                 <div className="flex justify-between items-center text-sm font-bold text-[#4A3728]/50">
-                  <span>Delivery Fee</span><span>{shippingFee === 0 ? 'FREE' : `₹${shippingFee ?? 0}`}</span>
+                  <span>Delivery Fee</span><span>{snap.shippingFee === 0 ? 'FREE' : `₹${snap.shippingFee}`}</span>
                 </div>
                 <div className="flex justify-between items-center pt-4 border-t border-[#4A3728]/5">
-                  <span className="text-2xl font-bold serif text-[#4A3728]">Grand Total Paid</span>
-                  <span className="text-3xl font-black text-[#F04E4E]">₹{grandTotal}</span>
+                  <span className="text-lg sm:text-2xl font-bold serif text-[#4A3728]">Grand Total Paid</span>
+                  <span className="text-2xl sm:text-3xl font-black text-[#F04E4E]">₹{snap.grandTotal}</span>
                 </div>
               </div>
             </div>
@@ -413,14 +478,14 @@ _Please confirm my order and share delivery details._
                 <MapPin className="text-[#F04E4E] flex-shrink-0" size={20} />
                 <div>
                   <p className="text-[9px] font-black brand-rounded uppercase text-[#4A3728]/40 tracking-widest mb-1">Delivering To</p>
-                  <p className="text-[12px] font-bold text-[#4A3728] leading-relaxed">{formData.city}, {fullDeliveryAddress}</p>
+                  <p className="text-[12px] font-bold text-[#4A3728] leading-relaxed">{snap.city}, {snap.address}</p>
                 </div>
               </div>
               <div className="p-6 bg-white rounded-[2rem] border border-[#4A3728]/5 flex items-start gap-4 shadow-sm">
                 <Calendar className="text-[#F04E4E] flex-shrink-0" size={20} />
                 <div>
                   <p className="text-[9px] font-black brand-rounded uppercase text-[#4A3728]/40 tracking-widest mb-1">Estimated Arrival</p>
-                  <p className="text-[12px] font-bold text-[#4A3728]">{isAhmedabad ? '2 Working Days' : '3-5 Working Days'}</p>
+                  <p className="text-[12px] font-bold text-[#4A3728]">{snap.isAhmedabad ? '2 Working Days' : '3-5 Working Days'}</p>
                 </div>
               </div>
             </div>
@@ -429,18 +494,77 @@ _Please confirm my order and share delivery details._
               <a
                 href={(window as any).lastOrderWhatsappUrl || `https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}`}
                 target="_blank" rel="noopener noreferrer"
-                className="w-full py-6 bg-[#25D366] text-white rounded-[1.5rem] font-bold brand-rounded uppercase tracking-[0.3em] text-[11px] hover:shadow-2xl hover:shadow-[#25D366]/30 transition-all flex items-center justify-center gap-3 active:scale-[0.98]"
+                className="w-full py-4 sm:py-6 bg-[#25D366] text-white rounded-2xl sm:rounded-[1.5rem] font-bold brand-rounded uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[11px] hover:shadow-2xl hover:shadow-[#25D366]/30 transition-all flex items-center justify-center gap-3 active:scale-[0.98]"
               >
                 <MessageCircle size={20} /> Confirm on WhatsApp
               </a>
               <button
                 onClick={() => onComplete()}
-                className="w-full py-6 bg-[#4A3728] text-white rounded-[1.5rem] font-bold brand-rounded uppercase tracking-[0.3em] text-[11px] hover:bg-black transition-all shadow-xl active:scale-[0.98]"
+                className="w-full py-4 sm:py-6 bg-[#4A3728] text-white rounded-2xl sm:rounded-[1.5rem] font-bold brand-rounded uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[11px] hover:bg-black transition-all shadow-xl active:scale-[0.98]"
               >
                 Continue Shopping
               </button>
             </div>
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Order-confirmed URL refreshed (snapshot gone) ───────────────────────────
+  // Someone reloaded /order-confirmed after paying — show a friendly note rather
+  // than silently bouncing them to an empty cart.
+  if (typeof window !== 'undefined' && window.location.pathname === '/order-confirmed') {
+    return (
+      <div className="pt-28 sm:pt-32 pb-16 px-4 bg-cream min-h-screen flex items-center justify-center text-center">
+        <div className="max-w-md w-full bg-white rounded-[2rem] sm:rounded-[3rem] shadow-2xl border border-[#4A3728]/5 p-8 sm:p-12">
+          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-green-600 mx-auto mb-6">
+            <CheckCircle size={36} />
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-bold serif text-[#4A3728] mb-3">Your order was received</h2>
+          <p className="text-sm text-[#4A3728]/60 brand-rounded leading-relaxed mb-8">
+            Thank you! We'll confirm the details with you on WhatsApp shortly. If you have any questions, just message us.
+          </p>
+          <div className="flex flex-col gap-3">
+            <a
+              href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}`}
+              target="_blank" rel="noopener noreferrer"
+              className="w-full py-4 bg-[#25D366] text-white rounded-2xl font-bold brand-rounded uppercase tracking-[0.2em] text-[11px] hover:shadow-xl transition-all flex items-center justify-center gap-2 active:scale-[0.98]"
+            >
+              <MessageCircle size={18} /> Message us on WhatsApp
+            </a>
+            <button
+              onClick={() => { window.history.pushState(null, '', '/shop'); onShopClick?.(); }}
+              className="w-full py-4 bg-[#4A3728] text-white rounded-2xl font-bold brand-rounded uppercase tracking-[0.2em] text-[11px] hover:bg-black transition-all active:scale-[0.98]"
+            >
+              Continue Shopping
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Empty cart guard ────────────────────────────────────────────────────────
+  // No items → there's nothing to check out. Block the whole flow (and the pay
+  // button) instead of showing a ₹0 order.
+  if (items.length === 0) {
+    return (
+      <div className="pt-28 sm:pt-32 pb-16 px-4 bg-cream min-h-screen flex items-center justify-center text-center">
+        <div className="max-w-md w-full bg-white rounded-[2rem] sm:rounded-[3rem] shadow-2xl border border-[#4A3728]/5 p-8 sm:p-12">
+          <div className="w-16 h-16 bg-coral/10 rounded-full flex items-center justify-center text-coral mx-auto mb-6">
+            <Truck size={32} />
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-bold serif text-[#4A3728] mb-3">Your bag is empty</h2>
+          <p className="text-sm text-[#4A3728]/60 brand-rounded leading-relaxed mb-8">
+            Add a few of Ami's handmade treats to your bag, then come back here to check out.
+          </p>
+          <button
+            onClick={() => onShopClick?.()}
+            className="w-full py-4 bg-coral text-white rounded-2xl font-bold brand-rounded uppercase tracking-[0.2em] text-[11px] hover:bg-[#d43d3d] transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+          >
+            Browse Products <ChevronRight size={18} />
+          </button>
         </div>
       </div>
     );
@@ -463,15 +587,45 @@ _Please confirm my order and share delivery details._
                 <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Search Your Address</label>
                 <div className="relative">
                   <input
-                    ref={addressSearchRef}
                     type="text"
-                    placeholder="Start typing your address..."
+                    value={addressQuery}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      setAddressQuery(v);
+                      if (debounceRef.current) clearTimeout(debounceRef.current);
+                      debounceRef.current = setTimeout(() => fetchSuggestions(v), 250);
+                    }}
+                    onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
+                    onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+                    placeholder="Type your society, street or landmark…"
                     disabled={isSubmitting}
+                    autoComplete="off"
                     className="w-full p-3.5 pl-11 bg-[#F9F5EE] rounded-xl border-2 border-[#4A3728]/10 text-[#4A3728] font-medium placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 focus:border-[#F04E4E] outline-none text-sm transition-all disabled:opacity-50"
                   />
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#F04E4E]/60" size={16} />
+
+                  {/* Custom branded suggestion dropdown */}
+                  {showSuggestions && suggestions.length > 0 && (
+                    <div className="absolute left-0 right-0 top-full mt-1.5 bg-white rounded-2xl shadow-2xl border border-[#4A3728]/10 z-30 overflow-hidden animate-in fade-in slide-in-from-top-1 duration-150">
+                      {suggestions.map(s => (
+                        <button
+                          type="button"
+                          key={s.id}
+                          onMouseDown={(e) => { e.preventDefault(); selectSuggestion(s); }}
+                          className="w-full text-left px-4 py-3 hover:bg-[#F04E4E]/5 active:bg-[#F04E4E]/10 transition-colors flex items-start gap-3 border-b border-[#4A3728]/5 last:border-b-0"
+                        >
+                          <MapPin size={15} className="text-[#F04E4E]/70 mt-0.5 flex-shrink-0" />
+                          <span className="min-w-0">
+                            <span className="block text-sm font-bold text-[#4A3728] truncate">{s.main}</span>
+                            {s.secondary && <span className="block text-xs text-[#4A3728]/50 truncate">{s.secondary}</span>}
+                          </span>
+                        </button>
+                      ))}
+                      <p className="px-4 py-1.5 text-right text-[9px] text-[#4A3728]/30 bg-[#F9F5EE]/60">powered by Google</p>
+                    </div>
+                  )}
                 </div>
-                <p className="text-[9px] text-[#4A3728]/40 ml-3 brand-rounded font-bold">Select from suggestions to auto-fill city & address</p>
+                <p className="text-[9px] text-[#4A3728]/40 ml-3 brand-rounded font-bold">Pick a suggestion to auto-fill your address &amp; city — then add your flat number below</p>
               </div>
 
               <div className="border-t border-[#4A3728]/5" />
@@ -590,7 +744,8 @@ _Please confirm my order and share delivery details._
                 <div className="flex items-center gap-3">
                   <div className="w-14 h-14 rounded-xl overflow-hidden bg-cream shadow-sm flex-shrink-0 border border-[#4A3728]/5 relative">
                     <img src={item.image} className="w-full h-full object-cover" />
-                    <button onClick={() => onRemove(item.id)} className="absolute inset-0 bg-red-600/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    {/* Desktop: hover-reveal overlay on the thumbnail */}
+                    <button onClick={() => onRemove(idx)} aria-label={`Remove ${item.name}`} className="hidden sm:flex absolute inset-0 bg-red-600/80 text-white items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                       <Trash2 size={18} />
                     </button>
                   </div>
@@ -598,13 +753,19 @@ _Please confirm my order and share delivery details._
                     <h4 className="text-sm font-bold text-[#4A3728] leading-tight">{item.name}</h4>
                     <p className="text-[11px] text-[#4A3728]/50 uppercase brand-rounded mt-0.5 font-bold tracking-wider">{item.selectedWeight || item.weight}</p>
                     <div className="flex items-center gap-2 mt-1.5 border border-coral/10 bg-white rounded-lg w-fit p-0.5">
-                      <button onClick={() => onUpdateQuantity(item.id, -1)} className="p-1 hover:bg-coral/5 rounded text-coral transition-colors"><Minus size={11} /></button>
+                      <button onClick={() => onUpdateQuantity(idx, -1)} className="p-1 hover:bg-coral/5 rounded text-coral transition-colors"><Minus size={11} /></button>
                       <span className="text-sm font-black brand-rounded text-[#4A3728] min-w-[18px] text-center">{item.quantity}</span>
-                      <button onClick={() => onUpdateQuantity(item.id, 1)} className="p-1 hover:bg-coral/5 rounded text-coral transition-colors"><Plus size={11} /></button>
+                      <button onClick={() => onUpdateQuantity(idx, 1)} className="p-1 hover:bg-coral/5 rounded text-coral transition-colors"><Plus size={11} /></button>
                     </div>
                   </div>
                 </div>
-                <span className="font-bold text-[#4A3728] text-sm">₹{item.price * item.quantity}</span>
+                <div className="flex items-center gap-2.5">
+                  <span className="font-bold text-[#4A3728] text-sm">₹{item.price * item.quantity}</span>
+                  {/* Mobile: always-visible remove button (no hover on touch) */}
+                  <button onClick={() => onRemove(idx)} aria-label={`Remove ${item.name}`} className="sm:hidden p-1.5 text-[#4A3728]/30 hover:text-red-500 transition-colors">
+                    <Trash2 size={15} />
+                  </button>
+                </div>
               </div>
             ))}
           </div>

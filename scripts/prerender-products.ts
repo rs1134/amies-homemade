@@ -54,7 +54,7 @@ for (const product of PRODUCTS) {
   html = html.replace(/(<meta name="twitter:description" content=")[^"]*"/, `$1${escapeHtml(description)}"`);
   html = html.replace(/(<meta name="twitter:image" content=")[^"]*"/, `$1${product.image}"`);
 
-  const schema = {
+  const schema: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'Product',
     sku: product.id,
@@ -68,10 +68,22 @@ for (const product of PRODUCTS) {
       url: productUrl,
       priceCurrency: 'INR',
       price: product.price,
-      availability: 'https://schema.org/InStock',
+      availability: product.outOfStock ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock',
+      itemCondition: 'https://schema.org/NewCondition',
       seller: { '@type': 'Organization', name: "Amie's Homemade", url: 'https://amieshomemade.com' },
     },
   };
+
+  // Star ratings → eligible for review-stars rich results in Google search
+  if (product.rating && product.reviewCount) {
+    schema.aggregateRating = {
+      '@type': 'AggregateRating',
+      ratingValue: product.rating,
+      reviewCount: product.reviewCount,
+      bestRating: 5,
+      worstRating: 1,
+    };
+  }
 
   html = html.replace('</head>', `<script type="application/ld+json">${JSON.stringify(schema)}</script>\n</head>`);
 

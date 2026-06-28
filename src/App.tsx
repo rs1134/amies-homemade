@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Category, Product, CartItem } from './types.ts';
-import { PRODUCTS, WHATSAPP_NUMBER } from './constants.ts';
+import { PRODUCTS, WHATSAPP_NUMBER, isProductVisible, isCategoryVisible } from './constants.ts';
 import { AREA_MAP } from './deliveryAreas.ts';
 import { CITY_MAP } from './cities.ts';
 import Navbar from './components/Navbar.tsx';
@@ -24,25 +24,25 @@ import { Sparkles, ArrowRight, MessageCircle, CheckCircle, Heart, ShieldCheck, H
 
 const PAGE_SEO: Record<string, { title: string; description: string; canonical: string; ogTitle: string; ogDescription: string }> = {
   home: {
-    title: "Amie's Homemade | Mukhwas, Snacks & Sweets in Ahmedabad",
-    description: "Best homemade mukhwas, snacks & gift hampers in Ahmedabad. Made fresh in small batches with pure ingredients. No preservatives. Pan-India delivery.",
+    title: "Buy Mukhwas Online | Granola, Masalas & Gift Hampers — Amie's Homemade Ahmedabad",
+    description: "Buy homemade mukhwas, granola, chai masala, dry fruit milk masala & gift hampers online. Made fresh in Ahmedabad with no preservatives. Delivered across Ahmedabad, Gujarat & all over India.",
     canonical: "https://amieshomemade.com",
-    ogTitle: "Amie's Homemade | Best Mukhwas & Homemade Snacks in Ahmedabad",
-    ogDescription: "Ahmedabad's finest homemade mukhwas, snacks, sweets & gift hampers. Made fresh in small batches with no preservatives. Pan-India delivery.",
+    ogTitle: "Amie's Homemade | Best Mukhwas & Wellness Treats in Ahmedabad",
+    ogDescription: "Ahmedabad's finest homemade mukhwas, granola, masalas & gift hampers. Made fresh in small batches with no preservatives. Pan-India delivery.",
   },
   shop: {
-    title: "Buy Mukhwas & Homemade Snacks Online Ahmedabad | Amie's Homemade",
-    description: "Buy homemade mukhwas, snacks & sweets online from Ahmedabad. Amla Ginger, Chatpati Mango, Chakri, Ladoo & more. No preservatives. Pan-India delivery.",
+    title: "Buy Mukhwas & Wellness Treats Online Ahmedabad | Amie's Homemade",
+    description: "Buy homemade mukhwas, granola & masalas online from Ahmedabad. Amla Ginger, Chatpati Mango, Kharek Coconut Almond & more. No preservatives. Pan-India delivery.",
     canonical: "https://amieshomemade.com/shop",
-    ogTitle: "Buy Mukhwas & Snacks Online | Amie's Homemade Ahmedabad",
-    ogDescription: "Order authentic homemade mukhwas, snacks, sweets & masalas online from Ahmedabad. Fresh, no preservatives. Pan-India delivery.",
+    ogTitle: "Buy Mukhwas & Wellness Treats Online | Amie's Homemade Ahmedabad",
+    ogDescription: "Order authentic homemade mukhwas, granola & masalas online from Ahmedabad. Fresh, no preservatives. Pan-India delivery.",
   },
   about: {
     title: "Our Story | Amie's Homemade — Homemade Mukhwas Brand in Ahmedabad",
-    description: "Meet Ami Shah, founder of Amie's Homemade — Ahmedabad's favourite homemade mukhwas & snacks brand. Authentic recipes, no preservatives, made with love.",
+    description: "Meet Ami Shah, founder of Amie's Homemade — Ahmedabad's favourite homemade mukhwas & wellness brand. Authentic recipes, no preservatives, made with love.",
     canonical: "https://amieshomemade.com/about",
     ogTitle: "Our Story | Amie's Homemade — Ahmedabad's Mukhwas Brand",
-    ogDescription: "Meet Ami Shah — the heart behind Ahmedabad's favourite homemade mukhwas & snacks brand. Authentic recipes made with love.",
+    ogDescription: "Meet Ami Shah — the heart behind Ahmedabad's favourite homemade mukhwas & wellness brand. Authentic recipes made with love.",
   },
   gifting: {
     title: "Diwali & Wedding Gift Hampers Ahmedabad | Amie's Homemade",
@@ -52,28 +52,28 @@ const PAGE_SEO: Record<string, { title: string; description: string; canonical: 
     ogDescription: "Best handmade Indian food gift hampers in Ahmedabad for Diwali, weddings & corporate gifting. Custom boxes with pan-India delivery.",
   },
   contact: {
-    title: "Contact Amie's Homemade | Order Mukhwas & Snacks in Ahmedabad",
-    description: "Order mukhwas, snacks & gift hampers from Ahmedabad. Chat on WhatsApp or email hello@amieshomemade.com. Bulk & wholesale inquiries welcome.",
+    title: "Contact Amie's Homemade | Order Mukhwas & Wellness Treats in Ahmedabad",
+    description: "Order mukhwas, granola, masalas & gift hampers from Ahmedabad. Chat on WhatsApp or email hello@amieshomemade.com. Bulk & wholesale inquiries welcome.",
     canonical: "https://amieshomemade.com/contact",
-    ogTitle: "Contact Amie's Homemade — Ahmedabad Mukhwas & Snacks",
-    ogDescription: "Order mukhwas, snacks & gift hampers in Ahmedabad. Chat on WhatsApp or email for bulk pricing and custom hampers.",
+    ogTitle: "Contact Amie's Homemade — Ahmedabad Mukhwas & Wellness Treats",
+    ogDescription: "Order mukhwas, granola, masalas & gift hampers in Ahmedabad. Chat on WhatsApp or email for bulk pricing and custom hampers.",
   },
   checkout: {
     title: "Checkout | Amie's Homemade",
-    description: "Complete your order for fresh homemade mukhwas, snacks and sweets from Amie's Homemade.",
+    description: "Complete your order for fresh homemade mukhwas & wellness treats from Amie's Homemade.",
     canonical: "https://amieshomemade.com/checkout",
     ogTitle: "Checkout | Amie's Homemade",
-    ogDescription: "Complete your order for fresh homemade Indian snacks and mukhwas.",
+    ogDescription: "Complete your order for fresh homemade Indian mukhwas & wellness treats.",
   },
   blog: {
     title: "The Journal | Amie's Homemade — Mukhwas, Gifting & Food Stories",
     description: "Gifting guides, mukhwas wisdom, health stories and Ayurvedic food traditions from Amie's home kitchen in Ahmedabad. New stories every week.",
     canonical: "https://amieshomemade.com/blog",
     ogTitle: "The Journal | Amie's Homemade Blog",
-    ogDescription: "Gifting guides, mukhwas stories, and healthy snack wisdom from Amie's home kitchen in Ahmedabad.",
+    ogDescription: "Gifting guides, mukhwas stories, and wellness food wisdom from Amie's home kitchen in Ahmedabad.",
   },
   faq: {
-    title: "FAQs | Amie's Homemade — Mukhwas, Snacks & Gift Hampers",
+    title: "FAQs | Amie's Homemade — Mukhwas, Wellness & Gift Hampers",
     description: "Answers to your most common questions about Amie's Homemade — ingredients, preservatives, delivery, custom hampers, corporate gifting, and more.",
     canonical: "https://amieshomemade.com/faq",
     ogTitle: "Frequently Asked Questions | Amie's Homemade",
@@ -83,7 +83,7 @@ const PAGE_SEO: Record<string, { title: string; description: string; canonical: 
 
 const BREADCRUMBS: Record<string, Array<{ name: string; item: string }>> = {
   home:     [{ name: 'Home', item: 'https://amieshomemade.com' }],
-  shop:     [{ name: 'Home', item: 'https://amieshomemade.com' }, { name: 'Shop Mukhwas & Snacks', item: 'https://amieshomemade.com/shop' }],
+  shop:     [{ name: 'Home', item: 'https://amieshomemade.com' }, { name: 'Shop Mukhwas & Wellness', item: 'https://amieshomemade.com/shop' }],
   about:    [{ name: 'Home', item: 'https://amieshomemade.com' }, { name: 'Our Story', item: 'https://amieshomemade.com/about' }],
   gifting:  [{ name: 'Home', item: 'https://amieshomemade.com' }, { name: 'Gift Hampers', item: 'https://amieshomemade.com/gifting' }],
   contact:  [{ name: 'Home', item: 'https://amieshomemade.com' }, { name: 'Contact Us', item: 'https://amieshomemade.com/contact' }],
@@ -190,13 +190,13 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, o
   };
 
   const productsFor = (cat: Category) =>
-    PRODUCTS.filter(p => p.category === cat && !p.outOfStock && !p.isGift);
+    PRODUCTS.filter(p => p.category === cat && !p.outOfStock && !p.isGift && isProductVisible(p));
 
-  const categories: Array<Category | 'All'> = ['All', ...Object.values(Category).filter(c => c !== Category.GIFTING)];
+  const categories: Array<Category | 'All'> = ['All', ...Object.values(Category).filter(c => c !== Category.GIFTING && isCategoryVisible(c))];
 
   return (
     <>
-      <div className="flex flex-wrap justify-center gap-4">
+      <div className="flex flex-wrap justify-center gap-2 sm:gap-4">
         {categories.map(cat => {
           const isAll = cat === 'All';
           const isActive = activeCategory === cat;
@@ -209,15 +209,17 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, o
               onMouseEnter={() => !isAll && openMenu(cat as Category)}
               onMouseLeave={() => !isAll && scheduleClose()}
             >
-              <button
-                onClick={() => {
+              <a
+                href={isAll ? '/shop' : `/shop/${CATEGORY_SLUG[cat as Category]}`}
+                onClick={(e) => {
+                  e.preventDefault();
                   if (isAll) {
                     onSelect('All');
                   } else {
                     toggleMenu(cat as Category);
                   }
                 }}
-                className={`brand-rounded text-[10px] uppercase tracking-[0.2em] font-bold transition-all px-8 py-3 rounded-full border-2 flex items-center gap-1.5 ${
+                className={`brand-rounded text-[10px] uppercase tracking-[0.1em] sm:tracking-[0.2em] font-bold transition-all px-4 sm:px-8 py-2.5 sm:py-3 rounded-full border-2 flex items-center gap-1.5 cursor-pointer ${
                   isActive
                     ? 'bg-[#F04E4E] border-[#F04E4E] text-white shadow-xl shadow-[#F04E4E]/30 scale-105'
                     : isOpen
@@ -235,7 +237,7 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, o
                     <path d="M1 3l4 4 4-4" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 )}
-              </button>
+              </a>
 
               {/* Desktop floating dropdown */}
               {isOpen && (
@@ -254,14 +256,15 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, o
                     </button>
                     <div className="py-1.5">
                       {productsFor(cat as Category).map(product => (
-                        <button
+                        <a
                           key={product.id}
-                          onClick={() => { onSelectProduct(product); setOpenCat(null); }}
+                          href={`/shop/${slugify(product.name)}`}
+                          onClick={(e) => { e.preventDefault(); onSelectProduct(product); setOpenCat(null); }}
                           className="w-full text-left px-4 py-2.5 text-[13px] text-[#4A3728]/80 hover:text-[#F04E4E] hover:bg-[#F04E4E]/5 transition-colors font-medium flex items-center gap-2 group/item"
                         >
                           <span className="w-1.5 h-1.5 rounded-full bg-[#4A3728]/15 group-hover/item:bg-[#F04E4E] transition-colors flex-shrink-0" />
                           {product.name}
-                        </button>
+                        </a>
                       ))}
                     </div>
                   </div>
@@ -305,14 +308,15 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, o
             {/* Product list */}
             <div className="overflow-y-auto flex-1 px-4 pb-8 pt-2">
               {productsFor(openCat).map(product => (
-                <button
+                <a
                   key={product.id}
-                  onClick={() => { onSelectProduct(product); setOpenCat(null); }}
+                  href={`/shop/${slugify(product.name)}`}
+                  onClick={(e) => { e.preventDefault(); onSelectProduct(product); setOpenCat(null); }}
                   className="w-full text-left py-3.5 border-b border-[#4A3728]/6 text-[15px] text-[#4A3728]/80 font-medium flex items-center gap-3 active:text-[#F04E4E]"
                 >
                   <span className="w-1.5 h-1.5 rounded-full bg-[#F04E4E]/40 flex-shrink-0" />
                   {product.name}
-                </button>
+                </a>
               ))}
             </div>
           </div>
@@ -322,14 +326,34 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, o
   );
 };
 
+const CART_STORAGE_KEY = 'amies_cart_v1';
+const COUPON_APPLIED_KEY = 'amies_coupon_applied_v1';
+
+const loadSavedCart = (): CartItem[] => {
+  try {
+    const saved = localStorage.getItem(CART_STORAGE_KEY);
+    if (!saved) return [];
+    const items: CartItem[] = JSON.parse(saved);
+    // Drop items for products that no longer exist on the site
+    return items.filter(i => PRODUCTS.some(p => p.id === i.id));
+  } catch {
+    return [];
+  }
+};
+
 const App: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(() => getPageFromPath(window.location.pathname));
   const [currentArea, setCurrentArea] = useState(() => getAreaFromPath(window.location.pathname));
   const [currentCity, setCurrentCity] = useState(() => getCityFromPath(window.location.pathname));
   const [currentBlogSlug, setCurrentBlogSlug] = useState(() => getBlogSlugFromPath(window.location.pathname));
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const [cart, setCart] = useState<CartItem[]>(loadSavedCart);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [couponDiscount, setCouponDiscount] = useState(0);
+  // Coupon is stored as a boolean flag (not a frozen amount) so the discount is
+  // always recomputed live from the current cart — quantity changes & refreshes
+  // can never desync it. Persisted so a checkout-page refresh keeps the coupon.
+  const [couponApplied, setCouponApplied] = useState<boolean>(() => {
+    try { return localStorage.getItem(COUPON_APPLIED_KEY) === '1'; } catch { return false; }
+  });
   const [activeCategory, setActiveCategory] = useState<Category | 'All'>(() => getCategoryFromPath(window.location.pathname));
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(() => {
     const slug = getProductSlugFromPath(window.location.pathname);
@@ -338,6 +362,27 @@ const App: React.FC = () => {
   const [orderComplete, setOrderComplete] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [showDeliveryPopup, setShowDeliveryPopup] = useState(false);
+  const [addedToast, setAddedToast] = useState<string | null>(null);
+
+  // Persist cart so it survives refresh / accidental tab close
+  useEffect(() => {
+    try {
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+    } catch { /* storage full or blocked — non-fatal */ }
+  }, [cart]);
+
+  // Persist the coupon flag so a checkout-page refresh keeps the discount
+  useEffect(() => {
+    try {
+      if (couponApplied) localStorage.setItem(COUPON_APPLIED_KEY, '1');
+      else localStorage.removeItem(COUPON_APPLIED_KEY);
+    } catch { /* non-fatal */ }
+  }, [couponApplied]);
+
+  // A coupon with no items is meaningless — drop it when the cart empties
+  useEffect(() => {
+    if (cart.length === 0 && couponApplied) setCouponApplied(false);
+  }, [cart.length, couponApplied]);
 
   // Delivery announcement bar
   const DELIVERY_BANNER = {
@@ -459,19 +504,19 @@ const App: React.FC = () => {
       const areaData = currentArea ? AREA_MAP[currentArea] : null;
       if (areaData) {
         seo = {
-          title: `Homemade Mukhwas & Snacks Delivery in ${areaData.name}, Ahmedabad | Amie's Homemade`,
-          description: `Order fresh homemade mukhwas, snacks & sweets delivered to ${areaData.name}, Ahmedabad. No preservatives. Made in small batches by Ami Shah.`,
+          title: `Homemade Mukhwas & Wellness Treats Delivery in ${areaData.name}, Ahmedabad | Amie's Homemade`,
+          description: `Order fresh homemade mukhwas, granola & masalas delivered to ${areaData.name}, Ahmedabad. No preservatives. Made in small batches by Ami Shah.`,
           canonical: `https://amieshomemade.com/delivery/${currentArea}`,
-          ogTitle: `Mukhwas & Snacks Delivered to ${areaData.name} | Amie's Homemade`,
-          ogDescription: `Get fresh homemade mukhwas & snacks delivered to ${areaData.name}, Ahmedabad. Small batches, no preservatives, made with love.`,
+          ogTitle: `Mukhwas & Wellness Treats Delivered to ${areaData.name} | Amie's Homemade`,
+          ogDescription: `Get fresh homemade mukhwas & wellness treats delivered to ${areaData.name}, Ahmedabad. Small batches, no preservatives, made with love.`,
         };
       } else {
         seo = {
-          title: "Homemade Mukhwas & Snacks Delivery Across Ahmedabad | Amie's Homemade",
-          description: "Amie's Homemade delivers fresh mukhwas, snacks & sweets across Ahmedabad — Satellite, Navrangpura, Bopal, Vastrapur, Bodakdev & more. No preservatives.",
+          title: "Homemade Mukhwas & Wellness Treats Delivery Across Ahmedabad | Amie's Homemade",
+          description: "Amie's Homemade delivers fresh mukhwas, granola & masalas across Ahmedabad — Satellite, Navrangpura, Bopal, Vastrapur, Bodakdev & more. No preservatives.",
           canonical: "https://amieshomemade.com/delivery",
-          ogTitle: "Homemade Snack Delivery Across Ahmedabad | Amie's Homemade",
-          ogDescription: "Fresh homemade mukhwas & snacks delivered to every area of Ahmedabad. No preservatives, made with love.",
+          ogTitle: "Homemade Mukhwas & Wellness Delivery Across Ahmedabad | Amie's Homemade",
+          ogDescription: "Fresh homemade mukhwas & wellness treats delivered to every area of Ahmedabad. No preservatives, made with love.",
         };
       }
     }
@@ -480,19 +525,19 @@ const App: React.FC = () => {
       const cityData = currentCity ? CITY_MAP[currentCity] : null;
       if (cityData) {
         seo = {
-          title: `Buy Homemade Mukhwas & Snacks Online, Delivered to ${cityData.name} | Amie's Homemade`,
-          description: `Order authentic homemade mukhwas, chakli, ladoo & snacks from Ahmedabad delivered to ${cityData.name}, ${cityData.state}. No preservatives. Pan-India shipping.`,
+          title: `Buy Homemade Mukhwas & Wellness Treats Online, Delivered to ${cityData.name} | Amie's Homemade`,
+          description: `Order authentic homemade mukhwas, granola & masalas from Ahmedabad delivered to ${cityData.name}, ${cityData.state}. No preservatives. Pan-India shipping.`,
           canonical: `https://amieshomemade.com/cities/${currentCity}`,
-          ogTitle: `Homemade Mukhwas & Snacks Delivered to ${cityData.name} | Amie's Homemade`,
-          ogDescription: `Fresh homemade mukhwas & snacks shipped from Ahmedabad to ${cityData.name}. Small batches, no preservatives, made with love by Ami Shah.`,
+          ogTitle: `Homemade Mukhwas & Wellness Treats Delivered to ${cityData.name} | Amie's Homemade`,
+          ogDescription: `Fresh homemade mukhwas & wellness treats shipped from Ahmedabad to ${cityData.name}. Small batches, no preservatives, made with love by Ami Shah.`,
         };
       } else {
         seo = {
-          title: "Homemade Mukhwas & Snacks Pan-India Delivery | Amie's Homemade",
-          description: "Amie's Homemade ships authentic homemade mukhwas, snacks & sweets from Ahmedabad to Mumbai, Delhi, Bengaluru, Chennai, Hyderabad & all major Indian cities.",
+          title: "Homemade Mukhwas & Wellness Treats Pan-India Delivery | Amie's Homemade",
+          description: "Amie's Homemade ships authentic homemade mukhwas, granola & masalas from Ahmedabad to Mumbai, Delhi, Bengaluru, Chennai, Hyderabad & all major Indian cities.",
           canonical: "https://amieshomemade.com/cities",
-          ogTitle: "Pan-India Homemade Mukhwas & Snack Delivery | Amie's Homemade",
-          ogDescription: "Authentic homemade mukhwas & snacks delivered pan-India from Ahmedabad. No preservatives, made with love.",
+          ogTitle: "Pan-India Homemade Mukhwas & Wellness Delivery | Amie's Homemade",
+          ogDescription: "Authentic homemade mukhwas & wellness treats delivered pan-India from Ahmedabad. No preservatives, made with love.",
         };
       }
     }
@@ -590,7 +635,7 @@ const App: React.FC = () => {
           { '@type': 'Question', name: 'How do I place an order?', acceptedAnswer: { '@type': 'Answer', text: 'The easiest way is to WhatsApp us at +91 91575 37842. You can also browse products on the website, add items to your cart, and complete checkout online.' } },
           { '@type': 'Question', name: 'Do you deliver pan-India?', acceptedAnswer: { '@type': 'Answer', text: 'Yes — we deliver pan-India. Ahmedabad orders arrive in 2 working days. For the rest of India, orders typically arrive within 3 to 5 working days via courier.' } },
           { '@type': 'Question', name: 'What are the delivery charges?', acceptedAnswer: { '@type': 'Answer', text: 'Delivery within Ahmedabad is free. For orders outside Ahmedabad: up to 500g — ₹60; 500g to 1kg — ₹100; 1kg to 2kg — ₹150; 2kg to 5kg — ₹200; above 5kg — ₹250.' } },
-          { '@type': 'Question', name: 'What is the shelf life of your products?', acceptedAnswer: { '@type': 'Answer', text: 'Mukhwas stays fresh for 3 to 4 months. Snacks stay fresh for up to 60 days. Sweets are best consumed within 30 days.' } },
+          { '@type': 'Question', name: 'What is the shelf life of your products?', acceptedAnswer: { '@type': 'Answer', text: 'Mukhwas, granola, and dry fruit milk masala stay fresh for 6 months from the date of packaging, and chai masala for up to 1 year.' } },
           { '@type': 'Question', name: 'Can I customize the contents of a gift hamper?', acceptedAnswer: { '@type': 'Answer', text: 'Absolutely. You can choose which mukhwas varieties go in, adjust quantities, add or remove products, and specify dietary requirements. Just tell us who it is for and what they love.' } },
           { '@type': 'Question', name: 'Do you handle corporate gifting orders?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. We handle corporate gifting for Diwali and all major festivals, from 10-piece hamper sets to 500+ unit orders. Bulk pricing, custom cards, and branded packaging are available.' } },
           { '@type': 'Question', name: 'What is the minimum quantity for bulk orders?', acceptedAnswer: { '@type': 'Answer', text: 'Bulk pricing applies from 10 hampers onwards. For 50+ hampers we offer preferential rates and custom branding. WhatsApp us with your requirement for a detailed quote.' } },
@@ -636,12 +681,22 @@ const App: React.FC = () => {
         image: selectedProduct.image,
         url: productUrl,
         brand: { '@type': 'Brand', name: "Amie's Homemade" },
+        ...(selectedProduct.rating && selectedProduct.reviewCount ? {
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: selectedProduct.rating,
+            reviewCount: selectedProduct.reviewCount,
+            bestRating: 5,
+            worstRating: 1,
+          },
+        } : {}),
         offers: {
           '@type': 'Offer',
           url: productUrl,
           priceCurrency: 'INR',
           price: selectedProduct.price,
-          availability: 'https://schema.org/InStock',
+          availability: selectedProduct.outOfStock ? 'https://schema.org/OutOfStock' : 'https://schema.org/InStock',
+          itemCondition: 'https://schema.org/NewCondition',
           seller: { '@id': 'https://amieshomemade.com/#business' },
         },
       });
@@ -658,7 +713,7 @@ const App: React.FC = () => {
       name: "Amie's Homemade",
       alternateName: ["Amies Homemade", "Amie's Homemade Ahmedabad"],
       url: 'https://amieshomemade.com',
-      description: "Ahmedabad's finest handmade mukhwas, snacks, sweets & gift hampers. Made fresh in small batches by Ami Shah. No preservatives. Pan-India delivery.",
+      description: "Ahmedabad's finest handmade mukhwas, granola, masalas & gift hampers. Made fresh in small batches by Ami Shah. No preservatives. Pan-India delivery.",
       inLanguage: 'en-IN',
       potentialAction: {
         '@type': 'SearchAction',
@@ -685,7 +740,7 @@ const App: React.FC = () => {
         height: 512,
       },
       image: 'https://ik.imagekit.io/amieshomemade/Whats-App-Image-2026-02-12-at-18-57-42-1.jpg',
-      description: "Family-run artisan food brand crafting authentic Indian mukhwas, snacks, sweets & gift hampers in Ahmedabad, Gujarat. Handmade by Ami Shah with pure ingredients and no preservatives.",
+      description: "Family-run artisan food brand crafting authentic Indian mukhwas, granola, masalas & gift hampers in Ahmedabad, Gujarat. Handmade by Ami Shah with pure ingredients and no preservatives.",
       founder: {
         '@type': 'Person',
         name: 'Ami Shah',
@@ -712,6 +767,21 @@ const App: React.FC = () => {
         'https://www.instagram.com/amies_homemadefoods',
       ],
       email: 'hello@amieshomemade.com',
+      priceRange: '₹₹',
+      areaServed: [
+        { '@type': 'City', name: 'Ahmedabad' },
+        { '@type': 'State', name: 'Gujarat' },
+        { '@type': 'Country', name: 'India' },
+      ],
+      knowsAbout: [
+        'Mukhwas',
+        'Homemade granola',
+        'Chai masala',
+        'Dry fruit milk masala',
+        'Indian gift hampers',
+        'Corporate gifting',
+        'Sugar-free mukhwas',
+      ],
     });
 
     // ── SiteNavigationElement schema (explicitly tells Google your main nav links) ─
@@ -729,7 +799,7 @@ const App: React.FC = () => {
           '@type': 'ListItem',
           position: 1,
           name: 'Shop All Products',
-          description: 'Browse all homemade mukhwas, snacks, sweets and wellness products',
+          description: 'Browse all homemade mukhwas, granola, masalas and wellness products',
           url: 'https://amieshomemade.com/shop',
         },
         {
@@ -804,13 +874,13 @@ const App: React.FC = () => {
   }, [currentPage]);
 
   const filteredProducts = useMemo(() => {
-    // Exclude gifting from the standard shop list to keep it exclusive
-    const availableProducts = PRODUCTS.filter(p => p.category !== Category.GIFTING);
+    // Exclude gifting (kept exclusive) and any hidden categories/products
+    const availableProducts = PRODUCTS.filter(p => p.category !== Category.GIFTING && isProductVisible(p));
     if (activeCategory === 'All') return availableProducts;
     return availableProducts.filter(p => p.category === activeCategory);
   }, [activeCategory]);
 
-  const addToCart = useCallback((product: Product, weight?: string, subOptionName?: string) => {
+  const addToCart = useCallback((product: Product, weight?: string, subOptionName?: string, openCart: boolean = true) => {
     const finalWeight = weight || product.weight;
     
     // Determine the active price based on variety selection or defaults
@@ -856,39 +926,76 @@ const App: React.FC = () => {
         price: finalPrice 
       }];
     });
-    const curPath = window.location.pathname;
-    if (curPath.startsWith('/shop/')) window.history.pushState(null, '', '/shop');
-    else if (curPath.startsWith('/gifting/')) window.history.pushState(null, '', '/gifting');
-    setSelectedProduct(null);
-    setIsCartOpen(true);
+    // Fire the Meta Pixel event here — the single place where an item is truly added
+    (window as any).fbq?.('track', 'AddToCart', {
+      value: finalPrice,
+      currency: 'INR',
+      content_name: product.name,
+      content_ids: [product.id],
+      content_type: 'product',
+    });
+
+    if (openCart) {
+      const curPath = window.location.pathname;
+      if (curPath.startsWith('/shop/')) window.history.pushState(null, '', '/shop');
+      else if (curPath.startsWith('/gifting/')) window.history.pushState(null, '', '/gifting');
+      setSelectedProduct(null);
+      setIsCartOpen(true);
+    } else {
+      setAddedToast(`${displayName} (${finalWeight}) added to bag`);
+    }
   }, [setSelectedProduct, setIsCartOpen]);
 
-  const updateQuantity = (id: string, delta: number) => {
-    setCart(prev => prev.map(item => {
-      if (item.id === id) {
-        const newQty = Math.max(1, item.quantity + delta);
-        return { ...item, quantity: newQty };
-      }
-      return item;
-    }));
+  // Auto-dismiss the "added to bag" toast
+  useEffect(() => {
+    if (!addedToast) return;
+    const t = setTimeout(() => setAddedToast(null), 2500);
+    return () => clearTimeout(t);
+  }, [addedToast]);
+
+  // Index-based so two line items of the same product (different weights) update independently
+  const updateQuantity = (index: number, delta: number) => {
+    setCart(prev => prev.map((item, i) => (
+      i === index ? { ...item, quantity: Math.max(1, item.quantity + delta) } : item
+    )));
   };
 
-  const removeFromCart = (id: string) => {
-    setCart(prev => prev.filter(item => item.id !== id));
+  const removeFromCart = (index: number) => {
+    setCart(prev => prev.filter((_, i) => i !== index));
   };
 
   const cartTotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   const renderPage = () => {
+    // Full-page product view takes priority whenever a product is selected.
+    if (selectedProduct) {
+      const isGifting = selectedProduct.category === Category.GIFTING;
+      const related = PRODUCTS.filter(p =>
+        p.id !== selectedProduct.id &&
+        isProductVisible(p) &&
+        p.category === selectedProduct.category
+      ).slice(0, 4);
+      return (
+        <ProductDetail
+          product={selectedProduct}
+          onAddToCart={addToCart}
+          onClose={() => navigate(isGifting ? 'gifting' : 'shop')}
+          onNavigateHome={() => navigate('home')}
+          related={related}
+          onSelectProduct={(p) => openProduct(p)}
+        />
+      );
+    }
+
     if (orderComplete) {
       return (
         <div className="min-h-screen flex items-center justify-center p-8 text-center">
-          <div className="max-w-md bg-white p-12 rounded-[4rem] shadow-2xl border border-coral/5">
-            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center text-green-600 mx-auto mb-8 animate-bounce">
-              <CheckCircle size={40} />
+          <div className="max-w-md bg-white p-7 sm:p-12 rounded-[2rem] sm:rounded-[4rem] shadow-2xl border border-coral/5">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-green-100 rounded-full flex items-center justify-center text-green-600 mx-auto mb-6 sm:mb-8 animate-bounce">
+              <CheckCircle size={36} />
             </div>
-            <h2 className="text-4xl font-bold serif text-[#4A3728] mb-4">Order Received!</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold serif text-[#4A3728] mb-4">Order Received!</h2>
             <p className="text-[#4A3728]/60 mb-8 brand-rounded font-bold uppercase text-xs tracking-widest">We're preparing your treats right now with love.</p>
             <button 
               onClick={() => { setOrderComplete(false); navigate('home'); setCart([]); }}
@@ -923,7 +1030,7 @@ const App: React.FC = () => {
           ? <BlogPostView slug={currentBlogSlug} onBack={() => navigateToBlog()} onSelectPost={(s) => navigateToBlog(s)} onNavigate={navigate} />
           : <BlogView onSelectPost={(s) => navigateToBlog(s)} />;
       case 'faq': return <FAQView onNavigate={navigate} />;
-      case 'about': return <AboutUs />;
+      case 'about': return <AboutUs onNavigate={navigate} />;
       case 'gifting': return <GiftingView onAddToCart={(p) => addToCart(p)} onSelectProduct={(p) => openProduct(p)} />;
       case 'shop': return (
         <section id="shop" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 sm:pt-32 sm:pb-32 relative z-10">
@@ -995,10 +1102,11 @@ const App: React.FC = () => {
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6 lg:gap-10">
             {filteredProducts.map(product => (
-              <ProductCard 
-                key={product.id} 
-                product={product} 
-                onAddToCart={(p) => openProduct(p)}
+              <ProductCard
+                key={product.id}
+                product={product}
+                onAddToCart={(p) => addToCart(p, undefined, undefined, false)}
+                onOpen={(p) => openProduct(p)}
               />
             ))}
           </div>
@@ -1008,23 +1116,25 @@ const App: React.FC = () => {
         <CheckoutView
           items={cart}
           total={cartTotal}
-          couponDiscount={couponDiscount}
+          couponApplied={couponApplied}
           onUpdateQuantity={updateQuantity}
           onRemove={removeFromCart}
-          onComplete={() => { setOrderComplete(true); setCouponDiscount(0); }}
+          onShopClick={() => navigate('shop')}
+          onOrderPlaced={() => { setCart([]); setCouponApplied(false); }}
+          onComplete={() => { setOrderComplete(true); setCouponApplied(false); }}
         />
       );
       case 'contact': return (
         <div className="pt-24 pb-14 sm:pt-32 sm:pb-24 px-4 text-center min-h-screen">
-          <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em] block mb-4">Homemade Mukhwas &amp; Snacks · Ahmedabad, Gujarat</span>
+          <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em] block mb-4">Homemade Mukhwas &amp; Wellness Treats · Ahmedabad, Gujarat</span>
           <h1 className="text-4xl sm:text-6xl font-bold serif mb-6 text-[#4A3728]">Contact Amie's Homemade</h1>
           <p className="max-w-2xl mx-auto text-[#4A3728]/60 mb-16 text-lg">
-            Order mukhwas, snacks, sweets &amp; gift hampers from Ahmedabad. Whether you're looking for a small treat or planning a grand celebration, we're here to help.
+            Order mukhwas, granola, masalas &amp; gift hampers from Ahmedabad. Whether you're looking for a small treat or planning a grand celebration, we're here to help.
           </p>
           
           <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12">
             {/* General Inquiry Card */}
-            <div className="bg-white p-10 sm:p-14 rounded-[3.5rem] shadow-2xl border border-coral/5 flex flex-col items-center group hover:-translate-y-2 transition-all duration-500">
+            <div className="bg-white p-7 sm:p-14 rounded-[2rem] sm:rounded-[3.5rem] shadow-2xl border border-coral/5 flex flex-col items-center group hover:-translate-y-2 transition-all duration-500">
               <div className="w-20 h-20 bg-coral/5 rounded-[2rem] flex items-center justify-center text-coral mb-8 group-hover:scale-110 group-hover:bg-coral group-hover:text-white transition-all duration-500">
                 <MessageCircle size={36} />
               </div>
@@ -1048,7 +1158,7 @@ const App: React.FC = () => {
             </div>
 
             {/* Bulk & Wholesale Card */}
-            <div className="bg-white p-10 sm:p-14 rounded-[3.5rem] shadow-2xl border border-[#F6C94C]/20 flex flex-col items-center group hover:-translate-y-2 transition-all duration-500 relative overflow-hidden">
+            <div className="bg-white p-7 sm:p-14 rounded-[2rem] sm:rounded-[3.5rem] shadow-2xl border border-[#F6C94C]/20 flex flex-col items-center group hover:-translate-y-2 transition-all duration-500 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#F6C94C]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
               
               <div className="w-20 h-20 bg-[#F6C94C]/10 rounded-[2rem] flex items-center justify-center text-[#D97706] mb-8 group-hover:scale-110 group-hover:bg-[#F6C94C] group-hover:text-[#4A3728] transition-all duration-500">
@@ -1094,7 +1204,7 @@ const App: React.FC = () => {
               <a href="mailto:hello@amieshomemade.com" className="text-coral hover:underline">hello@amieshomemade.com</a>
             </address>
             <p className="text-xs text-[#4A3728]/60 mt-4 leading-relaxed max-w-md mx-auto">
-              From our kitchen in Ahmedabad, we deliver fresh homemade mukhwas, snacks &amp; sweets across Ahmedabad and every corner of India.
+              From our kitchen in Ahmedabad, we deliver fresh homemade mukhwas & wellness treats across Ahmedabad and every corner of India.
             </p>
           </div>
         </div>
@@ -1111,7 +1221,9 @@ const App: React.FC = () => {
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-10 sm:mb-16 gap-4">
                 <div>
                   <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em] mb-4 block">Customer Favourites</span>
-                  <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold serif text-[#4A3728]">Our Bestsellers</h2>
+                  <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold serif text-[#4A3728] leading-[0.95]">
+                    Our <span className="brand-script text-coral text-5xl sm:text-7xl lg:text-8xl">Bestsellers</span>
+                  </h2>
                   <div className="w-16 h-1 bg-coral rounded-full mt-6"></div>
                 </div>
                 <button
@@ -1124,11 +1236,12 @@ const App: React.FC = () => {
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
                 {(['sf3', 'm2', 'hw1', 'hw2', 'sw5', 'sm1', 'sw1', 'm4'] as const).map(id => {
                   const product = PRODUCTS.find(p => p.id === id);
-                  if (!product) return null;
+                  if (!product || !isProductVisible(product)) return null; // skip hidden/curating later
                   return (
-                    <div
+                    <a
                       key={product.id}
-                      onClick={() => openProduct(product)}
+                      href={`/${product.category === Category.GIFTING ? 'gifting' : 'shop'}/${slugify(product.name)}`}
+                      onClick={(e) => { e.preventDefault(); openProduct(product); }}
                       className="group cursor-pointer bg-white rounded-[2rem] overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-[#4A3728]/8 flex flex-col"
                     >
                       <div className="relative overflow-hidden bg-[#FFF9F0] aspect-square">
@@ -1146,16 +1259,76 @@ const App: React.FC = () => {
                         <div className="mt-auto flex flex-col gap-2">
                           <p className="text-coral font-black text-base">₹{product.price} <span className="text-[#4A3728]/40 font-medium text-xs">/ {product.weight}</span></p>
                           <button
-                            onClick={e => { e.stopPropagation(); openProduct(product); }}
+                            onClick={e => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              product.subOptions ? openProduct(product) : addToCart(product, undefined, undefined, false);
+                            }}
                             className="w-full py-2.5 bg-[#F04E4E] text-white text-[10px] font-black brand-rounded uppercase tracking-[0.2em] rounded-2xl hover:bg-[#d43c3c] transition-colors active:scale-95"
                           >
-                            Add to Bag
+                            {product.subOptions ? 'Choose Options' : 'Add to Bag'}
                           </button>
                         </div>
                       </div>
-                    </div>
+                    </a>
                   );
                 })}
+              </div>
+            </div>
+          </section>
+
+          {/* ── Meet the Maker — founder trust section ──────────────────────── */}
+          <section className="relative bg-gradient-to-b from-[#FFF8EE] via-[#E5EBDB] to-[#FFF8EE] py-16 sm:py-28 px-4 sm:px-6 lg:px-8 overflow-hidden">
+            <div className="pointer-events-none absolute top-1/4 -left-24 w-[34rem] h-[34rem] rounded-full bg-[#F6C94C]/8 blur-3xl" />
+            <div className="relative max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+
+              {/* Photos */}
+              <div className="relative mx-auto w-full max-w-md lg:max-w-none order-1">
+                <div className="relative rounded-[1.75rem] overflow-hidden shadow-[0_40px_80px_-25px_rgba(74,55,40,0.45)] ring-1 ring-white/60">
+                  <img
+                    src="https://ik.imagekit.io/amieshomemade/067A4339-1.jpg?tr=w-1000,q-80,f-auto"
+                    srcSet="https://ik.imagekit.io/amieshomemade/067A4339-1.jpg?tr=w-600,q-80,f-auto 600w, https://ik.imagekit.io/amieshomemade/067A4339-1.jpg?tr=w-1000,q-80,f-auto 1000w"
+                    sizes="(max-width: 1024px) 90vw, 44vw"
+                    alt="Ami Shah, founder of Amie's Homemade, with the full product range"
+                    className="w-full h-auto block"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+                {/* Tilted candid inset */}
+                <div className="hidden sm:block absolute -bottom-6 -right-3 lg:-right-7 w-[38%] rounded-xl overflow-hidden shadow-2xl ring-[6px] ring-[#FFF8EE] rotate-[4deg]">
+                  <img
+                    src="https://ik.imagekit.io/amieshomemade/067A4315-1.jpg?tr=w-560,q-80,f-auto"
+                    alt="Ami Shah with Amie's Homemade mukhwas and treats"
+                    className="w-full h-auto block"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+              </div>
+
+              {/* Story */}
+              <div className="text-center lg:text-left order-2">
+                <span className="inline-flex items-center gap-2.5 text-coral brand-rounded uppercase tracking-[0.35em] font-black text-[10px] sm:text-xs mb-5">
+                  <span className="w-6 h-px bg-coral/50" /> Meet Ami
+                </span>
+                <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold serif text-[#4A3728] leading-[0.98] mb-6">
+                  The Heart Behind<br /> <span className="brand-script text-coral text-5xl sm:text-7xl lg:text-8xl">Amie's Homemade</span>
+                </h2>
+                <p className="text-[#4A3728]/70 text-sm sm:text-lg font-medium leading-relaxed max-w-lg mx-auto lg:mx-0 mb-6">
+                  Every jar is handcrafted by <span className="text-[#4A3728] font-bold">Ami Shah</span> using treasured family recipes and carefully selected ingredients. No mass production. No shortcuts. Just homemade goodness in every bite.
+                </p>
+                <div className="mb-8">
+                  <p className="brand-script text-coral text-3xl sm:text-4xl leading-none">Ami Shah</p>
+                  <p className="brand-rounded text-[10px] sm:text-xs font-bold uppercase tracking-[0.25em] text-[#4A3728]/50 mt-1.5">Founder · Amie's Homemade</p>
+                </div>
+                <button
+                  onClick={() => navigate('about')}
+                  className="group inline-flex items-center gap-3 px-9 sm:px-11 py-4 sm:py-5 bg-[#4A3728] text-[#FFF8EE] rounded-full font-bold tracking-[0.2em] uppercase text-xs hover:bg-[#3D2D1F] hover:scale-[1.03] transition-all duration-300 shadow-xl shadow-[#4A3728]/20"
+                >
+                  Read Our Story
+                  <ArrowRight size={16} className="group-hover:translate-x-1.5 transition-transform" />
+                </button>
               </div>
             </div>
           </section>
@@ -1163,7 +1336,7 @@ const App: React.FC = () => {
           <section className="pt-12 pb-14 sm:pt-20 sm:pb-24 px-4 max-w-7xl mx-auto">
             <div className="text-center mb-10 sm:mb-16">
               <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em] mb-4 block">The Amie's Difference</span>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold serif text-[#4A3728]">Why Everyone Loves amie's</h2>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold serif text-[#4A3728]">Why Everyone Loves Amie's Homemade</h2>
               <div className="w-16 h-1 bg-coral mx-auto rounded-full mt-6"></div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -1275,31 +1448,35 @@ const App: React.FC = () => {
         href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-6 right-6 z-50 bg-[#25D366] text-white p-5 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center gap-3 group px-8 brand-rounded font-bold"
+        className="fixed bottom-5 right-4 sm:bottom-6 sm:right-6 z-50 bg-[#25D366] text-white p-3.5 sm:p-5 sm:px-8 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center gap-3 group brand-rounded font-bold"
       >
-        <MessageCircle size={24} />
+        <MessageCircle size={22} className="sm:hidden" />
+        <MessageCircle size={24} className="hidden sm:block" />
         <span className="text-xs uppercase tracking-wider hidden sm:block">Chat with us</span>
       </a>
 
 
-      {selectedProduct && (
-        <ProductDetail 
-          product={selectedProduct} 
-          onClose={() => {
-            const p = window.location.pathname;
-            (p.startsWith('/shop/') || p.startsWith('/gifting/')) ? closeProduct() : setSelectedProduct(null);
-          }}
-          onAddToCart={addToCart} 
-        />
+      {/* "Added to bag" toast — confirms one-click adds without yanking the cart open */}
+      {addedToast && (
+        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[130] bg-[#4A3728] text-white pl-5 pr-3 py-3 rounded-full shadow-2xl flex items-center gap-2.5 animate-in fade-in slide-in-from-bottom-4 duration-300 max-w-[92vw]">
+          <CheckCircle size={16} className="text-[#F6C94C] flex-shrink-0" />
+          <span className="text-xs font-bold brand-rounded truncate">{addedToast}</span>
+          <button
+            onClick={() => { setAddedToast(null); setIsCartOpen(true); }}
+            className="ml-1 px-3.5 py-1.5 bg-[#F04E4E] rounded-full text-[10px] font-black brand-rounded uppercase tracking-widest flex-shrink-0 hover:bg-[#d43d3d] transition-colors"
+          >
+            View Bag
+          </button>
+        </div>
       )}
 
-      <Cart 
+      <Cart
         isOpen={isCartOpen} 
         onClose={() => setIsCartOpen(false)}
         items={cart}
         onUpdateQuantity={updateQuantity}
         onRemove={removeFromCart}
-        onCheckout={(discount) => { setCouponDiscount(discount); setIsCartOpen(false); navigate('checkout'); }}
+        onCheckout={(applied) => { setCouponApplied(applied); setIsCartOpen(false); navigate('checkout'); }}
       />
     </div>
   );

@@ -73,6 +73,30 @@
     animation: slow-zoom 20s linear infinite alternate;
   }
 
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-7px); }
+  }
+  .animate-float {
+    animation: float 7s ease-in-out infinite;
+  }
+
+  @keyframes float-soft {
+    0%, 100% { transform: translateY(0) rotate(var(--tw-rotate, 0)); }
+    50% { transform: translateY(-10px) rotate(var(--tw-rotate, 0)); }
+  }
+  .animate-float-soft {
+    animation: float-soft 5s ease-in-out infinite;
+  }
+
+  @keyframes float-rev {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(11px); }
+  }
+  .animate-float-rev {
+    animation: float-rev 7s ease-in-out infinite;
+  }
+
   @keyframes marquee-left {
     0% { transform: translateX(0); }
     100% { transform: translateX(-50%); }

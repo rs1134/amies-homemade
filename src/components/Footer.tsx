@@ -120,11 +120,13 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <h4 className="text-sm font-bold uppercase tracking-[0.2em] mb-8 text-[#F14E4E]">Quick Links</h4>
             <ul className="space-y-4 text-white/60 text-lg font-medium">
               <li><a href="/shop" onClick={(e) => { e.preventDefault(); handleNav('shop'); }} className="hover:text-white transition-colors">Shop Collection</a></li>
-              <li><a href="/shop" onClick={(e) => { e.preventDefault(); handleNav('shop'); }} className="hover:text-white transition-colors">Best Sellers</a></li>
+              <li><a href="/gifting" onClick={(e) => { e.preventDefault(); handleNav('gifting'); }} className="hover:text-white transition-colors">Gift Hampers</a></li>
               <li><a href="/about" onClick={(e) => { e.preventDefault(); handleNav('about'); }} className="hover:text-white transition-colors">Our Story</a></li>
               <li><a href="/contact" onClick={(e) => { e.preventDefault(); handleNav('contact'); }} className="hover:text-white transition-colors">Wholesale Inquiry</a></li>
               <li><a href="/blog" onClick={(e) => { e.preventDefault(); handleNav('blog'); }} className="hover:text-white transition-colors">The Journal</a></li>
               <li><a href="/faq" onClick={(e) => { e.preventDefault(); handleNav('faq'); }} className="hover:text-white transition-colors">FAQs</a></li>
+              <li><a href="/delivery" onClick={(e) => { e.preventDefault(); handleNav('delivery'); }} className="hover:text-white transition-colors">Delivery in Ahmedabad</a></li>
+              <li><a href="/cities" onClick={(e) => { e.preventDefault(); handleNav('cities'); }} className="hover:text-white transition-colors">Cities We Deliver To</a></li>
             </ul>
           </div>
           

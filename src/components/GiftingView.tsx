@@ -1,10 +1,11 @@
 import React, { useMemo, useState } from 'react';
 import { Gift, Sparkles, Heart, ChevronRight, MessageSquareText, PackageCheck, SendHorizontal, Image as ImageIcon, Home, ShieldCheck, Package, MessageCircle, Clock, Star, Users, Trophy, Mail, Sparkle } from 'lucide-react';
-import { PRODUCTS, WHATSAPP_NUMBER } from '../constants.ts';
+import { PRODUCTS, WHATSAPP_NUMBER, isProductVisible } from '../constants.ts';
 import { Category, Product } from '../types.ts';
 import PersonalizationModal from './PersonalizationModal.tsx';
 import WellnessPersonalizationModal from './WellnessPersonalizationModal.tsx';
 import SweetMemoriesModal from './SweetMemoriesModal.tsx';
+import ProductCard from './ProductCard.tsx';
 
 interface HamperCardProps {
   item: Product;
@@ -27,6 +28,8 @@ const HamperCard: React.FC<HamperCardProps> = ({ item, onAddToCart, onSelectProd
   const isHeritageBox = item.id === 'g1';
   const isWellnessBox = item.id === 'g2';
   const isSweetMemories = item.id === 'g3';
+  // Only the legacy hampers have a personalization flow; new hampers are fixed sets.
+  const isPersonalizable = isHeritageBox || isWellnessBox || isSweetMemories;
 
   // Benefit Row Configs
   const benefits = useMemo(() => {
@@ -179,21 +182,23 @@ const HamperCard: React.FC<HamperCardProps> = ({ item, onAddToCart, onSelectProd
             </div>
             
             <div className="flex gap-4 w-full sm:w-auto">
+              {isPersonalizable && (
+                <button
+                  onClick={() => {
+                    setIsPersonalizing(true);
+                    window.history.pushState(null, '', `/gifting#hamper-${item.id}`);
+                  }}
+                  className="flex-1 sm:flex-none px-10 py-5 border-2 border-[#D4AF37] text-[#D4AF37] rounded-3xl text-[11px] font-black uppercase tracking-[0.2em] hover:bg-[#D4AF37] hover:text-white transition-all flex items-center justify-center gap-3 brand-rounded shadow-lg shadow-[#D4AF37]/5 active:scale-95"
+                >
+                  <MessageSquareText size={16} /> Personalize Box
+                </button>
+              )}
               <button
-                onClick={() => {
-                  setIsPersonalizing(true);
-                  window.history.pushState(null, '', `/gifting#hamper-${item.id}`);
-                }}
-                className="flex-1 sm:flex-none px-10 py-5 border-2 border-[#D4AF37] text-[#D4AF37] rounded-3xl text-[11px] font-black uppercase tracking-[0.2em] hover:bg-[#D4AF37] hover:text-white transition-all flex items-center justify-center gap-3 brand-rounded shadow-lg shadow-[#D4AF37]/5 active:scale-95"
-              >
-                <MessageSquareText size={16} /> Personalize Box
-              </button>
-              <button 
                 onClick={() => onAddToCart({ ...item, ingredients: currentTreats, price: currentPrice })}
-                className="p-5 bg-coral text-white rounded-3xl shadow-2xl hover:scale-110 active:scale-95 transition-all shadow-coral/30 flex items-center justify-center"
+                className={`${isPersonalizable ? '' : 'flex-1 px-10'} p-5 bg-coral text-white rounded-3xl shadow-2xl hover:scale-105 active:scale-95 transition-all shadow-coral/30 flex items-center justify-center gap-3`}
                 title="Add to Cart"
               >
-                <Gift size={26} />
+                <Gift size={26} /> {!isPersonalizable && <span className="text-[11px] font-black uppercase tracking-[0.2em] brand-rounded">Add to Cart</span>}
               </button>
             </div>
           </div>
@@ -248,7 +253,7 @@ const HamperCard: React.FC<HamperCardProps> = ({ item, onAddToCart, onSelectProd
 };
 
 const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct }) => {
-  const giftItems = useMemo(() => PRODUCTS.filter(p => p.category === Category.GIFTING), []);
+  const giftItems = useMemo(() => PRODUCTS.filter(p => p.category === Category.GIFTING && isProductVisible(p)), []);
 
 
   return (
@@ -282,16 +287,18 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
           </p>
         </div>
 
-        <div className="space-y-10 sm:space-y-32">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 mb-10 sm:mb-32">
           {giftItems.map(item => (
-            <HamperCard 
-              key={item.id} 
-              item={item} 
-              onAddToCart={onAddToCart} 
-              onSelectProduct={onSelectProduct} 
+            <ProductCard
+              key={item.id}
+              product={item}
+              onAddToCart={(p) => onAddToCart(p)}
+              onOpen={(p) => onSelectProduct(p)}
             />
           ))}
+        </div>
 
+        <div className="space-y-10 sm:space-y-32">
           {/* HIGH-APPEAL CUSTOM HAMPER CALLOUT CARD */}
           <div className="relative overflow-hidden bg-white rounded-[4rem] flex flex-col lg:flex-row border-2 border-[#D4AF37]/20 shadow-2xl group transition-all duration-700 hover:shadow-[#D4AF37]/25">
             {/* Rich Image Collage Section */}

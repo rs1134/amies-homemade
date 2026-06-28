@@ -1,85 +1,235 @@
 import React from 'react';
-import { Heart, Sparkles, Utensils, ShieldCheck } from 'lucide-react';
+import { Heart, Sparkles, Utensils, ShieldCheck, ArrowRight } from 'lucide-react';
 
-const AboutUs: React.FC = () => {
+interface AboutUsProps {
+  onNavigate?: (page: string) => void;
+}
+
+// ── Founder photography (new shoot, sage studio backdrop) ──
+const FOUNDER_MAIN = 'https://ik.imagekit.io/amieshomemade/067A4315-1.jpg';
+const FOUNDER_CANDID = 'https://ik.imagekit.io/amieshomemade/067A4339-1.jpg';
+const img = (u: string, w: number) => `${u}?tr=w-${w},q-80,f-auto`;
+
+// ── Hand-drawn ingredient illustrations (original SVG, license-free) ──
+type IconProps = { className?: string; style?: React.CSSProperties };
+const Almond: React.FC<IconProps> = ({ className, style }) => (
+  <svg viewBox="0 0 40 56" className={className} style={style} aria-hidden>
+    <path d="M20 2C30 9 35 24 31 41 28 51 12 51 9 41 5 24 10 9 20 2Z" fill="#E7C9A1" stroke="#C79B68" strokeWidth="1.4" />
+    <path d="M20 9C22 22 22 38 20 49" fill="none" stroke="#C79B68" strokeWidth="1.1" opacity="0.7" />
+  </svg>
+);
+const Fennel: React.FC<IconProps> = ({ className, style }) => (
+  <svg viewBox="0 0 54 40" className={className} style={style} aria-hidden>
+    <g fill="#AEBE74" stroke="#85974C" strokeWidth="0.9">
+      <path d="M6 26C7 16 13 15 14 25 13 31 7 32 6 26Z" />
+      <path d="M20 20C22 10 28 10 28 20 27 27 21 27 20 20Z" />
+      <path d="M34 28C35 18 41 18 42 27 41 34 35 34 34 28Z" />
+      <path d="M44 14C45 7 50 8 49 15 48 20 44 19 44 14Z" />
+    </g>
+  </svg>
+);
+const Petal: React.FC<IconProps> = ({ className, style }) => (
+  <svg viewBox="0 0 50 46" className={className} style={style} aria-hidden>
+    <path d="M25 44C7 37 5 15 23 5 24 4 26 4 27 5 45 15 43 37 25 44Z" fill="#DDA0A8" stroke="#C57E88" strokeWidth="1.2" />
+    <path d="M25 41C25 28 25 14 25 7" fill="none" stroke="#C57E88" strokeWidth="1" opacity="0.45" />
+  </svg>
+);
+
+// Small ornamental divider
+const Ornament: React.FC<{ tone?: string }> = ({ tone = '#C79B68' }) => (
+  <div className="flex items-center justify-center gap-3 my-2" aria-hidden>
+    <span className="h-px w-10 sm:w-16" style={{ background: `${tone}66` }} />
+    <span className="text-sm" style={{ color: tone }}>✦</span>
+    <span className="h-px w-10 sm:w-16" style={{ background: `${tone}66` }} />
+  </div>
+);
+
+const JOURNEY = [
+  { year: '2020', title: 'It began in lockdown', desc: 'When the world shut its doors, Ami opened ours — to the kitchen. A way to fill quiet afternoons with the recipes she grew up on.' },
+  { year: 'Then', title: 'Word began to spread', desc: 'Neighbours knocked. Friends called. The way it always does in Ahmedabad — quietly, genuinely, one household at a time.' },
+  { year: 'Every season', title: 'Packed by hand', desc: 'Festive boxes, everyday jars, special requests — each one filled fresh, by the same hands, with the same care.' },
+  { year: 'Today', title: 'Known by heart', desc: 'A name hundreds of Ahmedabad homes now keep on their shelves. And through it all, nothing has changed.' },
+];
+
+const VALUES = [
+  { icon: <ShieldCheck size={22} />, title: '100% Homemade', desc: 'No factories. Just our kitchen.' },
+  { icon: <Sparkles size={22} />, title: 'No Preservatives', desc: 'Always fresh, always natural.' },
+  { icon: <Utensils size={22} />, title: 'Premium Ingredients', desc: 'Only the finest make the jar.' },
+  { icon: <Heart size={22} />, title: 'Hygienically Prepared', desc: 'Your health, our first priority.' },
+];
+
+const AboutUs: React.FC<AboutUsProps> = ({ onNavigate }) => {
   return (
-    <div className="pt-24 pb-14 sm:pt-32 sm:pb-24 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-20">
-          <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em]">
-            The Story of amie's
+    <div className="overflow-hidden bg-[#FFF8EE]">
+
+      {/* ── Masthead ─────────────────────────────────────────────── */}
+      <section className="relative kitchen-pattern bg-gradient-to-b from-[#DCE3D0] via-[#E9EEE0] to-[#FFF8EE] pt-28 sm:pt-36 pb-16 sm:pb-24 px-4 text-center overflow-hidden">
+        <div className="pointer-events-none absolute -top-24 left-1/4 w-[34rem] h-[34rem] rounded-full bg-[#F6C94C]/10 blur-3xl" />
+        <Almond className="absolute left-[6%] top-[28%] w-9 sm:w-12 opacity-30 -rotate-12 animate-float-soft" />
+        <Fennel className="absolute right-[8%] top-[22%] w-12 sm:w-16 opacity-30 rotate-6 animate-float-rev" />
+        <Petal className="absolute right-[16%] bottom-[14%] w-9 sm:w-12 opacity-25 rotate-12 animate-float" />
+
+        <div className="relative max-w-3xl mx-auto">
+          <p className="brand-rounded text-[#4A3728]/55 font-black text-[10px] sm:text-xs uppercase tracking-[0.35em] mb-5">
+            Est. 2020 · Ahmedabad · Handmade
+          </p>
+          <span className="inline-flex items-center gap-2.5 text-coral brand-rounded uppercase tracking-[0.35em] font-black text-[10px] sm:text-xs mb-5">
+            <span className="w-6 h-px bg-coral/50" /> The Story of Amie's Homemade <span className="w-6 h-px bg-coral/50" />
           </span>
-          <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold text-[#4A3728] serif mt-6">From Ahmedabad's Kitchen to Yours</h1>
+          <h1 className="serif font-bold text-[#4A3728] leading-[0.95] text-4xl sm:text-6xl lg:text-7xl">
+            From Ahmedabad's Kitchen,<br />
+            <span className="brand-script text-coral text-5xl sm:text-7xl lg:text-8xl">to Yours</span>
+          </h1>
+          <Ornament />
+          <p className="text-[#4A3728]/70 text-base sm:text-lg max-w-xl mx-auto leading-relaxed mt-4">
+            A small home kitchen, a handful of treasured recipes, and a belief that food made with love simply tastes better.
+          </p>
         </div>
+      </section>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 sm:gap-20 items-center mb-16 sm:mb-32">
-          <div className="flex justify-center lg:justify-start">
-            <div className="relative w-full max-w-md">
-              <div className="absolute inset-0 bg-coral/10 custom-curve transform -rotate-6 scale-110"></div>
-              <img 
-                src="https://ik.imagekit.io/amieshomemade/Whats-App-Image-2026-02-19-at-17-35-38.jpg" 
-                className="relative rounded-[3rem] shadow-2xl z-10 w-full aspect-[4/5] object-cover object-top border-[12px] border-white" 
-                alt="Ami Shah - Founder" 
-              />
-              <div className="absolute -bottom-6 -right-2 sm:-bottom-8 sm:-right-8 bg-[#F6C94C] p-4 sm:p-8 rounded-[2rem] sm:rounded-[3rem] shadow-2xl z-20 border-4 border-white">
-                <p className="text-xl sm:text-3xl font-bold text-[#F04E4E] brand-script mb-0.5 text-center leading-none">Ami Shah</p>
-                <p className="text-[8px] sm:text-[10px] brand-rounded font-black uppercase tracking-[0.2em] text-[#4A3728] text-center">Founder</p>
-              </div>
+      {/* ── The heart: founder + narrative ───────────────────────── */}
+      <section className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-28">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          {/* Portrait */}
+          <div className="relative mx-auto w-full max-w-md">
+            <div className="absolute inset-0 bg-coral/10 custom-curve -rotate-6 scale-110" />
+            <img
+              src={img(FOUNDER_MAIN, 900)}
+              srcSet={`${img(FOUNDER_MAIN, 600)} 600w, ${img(FOUNDER_MAIN, 900)} 900w`}
+              sizes="(max-width: 1024px) 90vw, 45vw"
+              alt="Ami Shah, founder of Amie's Homemade, with the full product range"
+              className="relative z-10 w-full aspect-square object-cover rounded-[3rem] border-[12px] border-white shadow-2xl"
+              loading="lazy"
+              decoding="async"
+            />
+            <div className="absolute -bottom-6 -right-2 sm:-bottom-7 sm:-right-6 z-20 bg-[#F6C94C] px-6 py-4 sm:px-8 sm:py-5 rounded-[2rem] shadow-2xl border-4 border-white text-center rotate-[-3deg]">
+              <p className="brand-script text-[#F04E4E] text-2xl sm:text-3xl leading-none">Ami Shah</p>
+              <p className="brand-rounded text-[8px] sm:text-[10px] font-black uppercase tracking-[0.25em] text-[#4A3728] mt-1">Founder</p>
             </div>
+            <Almond className="absolute -top-5 -left-4 w-10 opacity-50 -rotate-12 animate-float-soft z-20" />
           </div>
 
-          <div className="space-y-8">
-            <h2 className="text-4xl font-bold serif text-[#4A3728]">A Legacy of Flavor</h2>
-            <p className="text-xl text-[#4A3728]/70 leading-relaxed">
-              In 2020, when the world shut its doors, we opened ours to our kitchen.
+          {/* Narrative */}
+          <div>
+            <span className="brand-rounded text-coral font-black text-[10px] sm:text-xs uppercase tracking-[0.35em]">A Legacy of Flavour</span>
+            <h2 className="serif font-bold text-[#4A3728] text-3xl sm:text-5xl mt-3 mb-7 leading-[1.02]">
+              It started with<br /><span className="brand-script text-coral text-4xl sm:text-6xl">a mother's hands</span>
+            </h2>
+            <p className="text-[#4A3728]/75 text-lg leading-relaxed mb-5 first-letter:float-left first-letter:serif first-letter:font-bold first-letter:text-coral first-letter:text-6xl sm:first-letter:text-7xl first-letter:leading-[0.7] first-letter:mr-3 first-letter:mt-1">
+              In 2020, when the world shut its doors, we opened ours to our kitchen. What started as a way to fill quiet afternoons during lockdown became something none of us expected.
             </p>
-            <p className="text-xl text-[#4A3728]/70 leading-relaxed">
-              What started as a way to fill quiet afternoons during lockdown became something none of us expected. Neighbors began knocking. Friends started calling. Word spread the way it always does in Ahmedabad, quietly, genuinely, one household at a time.
+            <p className="text-[#4A3728]/75 text-lg leading-relaxed mb-5">
+              Neighbours began knocking. Friends started calling. Word spread the way it always does in Ahmedabad — quietly, genuinely, one household at a time.
             </p>
-            <p className="text-xl text-[#4A3728]/70 leading-relaxed">
-              No ads. No packaging. Just food made the way it always should be, with the same hands, the same recipes, the same care that has lived in Gujarati kitchens for generations.
+            <p className="text-[#4A3728]/75 text-lg leading-relaxed">
+              Five years on, Amie's is a name hundreds of Ahmedabad homes now know by heart. Through every batch, every season, every festive box — nothing has changed.
             </p>
-            <p className="text-xl text-[#4A3728]/70 leading-relaxed">
-              Five years later, Amie's has become a name that hundreds of Ahmedabad homes now know by heart. And through every batch, every season, every festive box carefully packed, nothing has changed. Same hands. Same recipes. Same love.
-            </p>
-            
-            <div className="grid grid-cols-2 gap-8 pt-8">
-              <div className="flex flex-col gap-4">
-                <div className="w-12 h-12 bg-coral rounded-2xl flex items-center justify-center text-white">
-                  <Heart size={24} fill="currentColor" />
-                </div>
-                <h4 className="font-bold brand-rounded text-sm uppercase">Made with Love</h4>
-                <p className="text-xs text-[#4A3728]/60">Pure intentions in every ingredient.</p>
-              </div>
-              <div className="flex flex-col gap-4">
-                <div className="w-12 h-12 bg-[#F6C94C] rounded-2xl flex items-center justify-center text-[#4A3728]">
-                  <Utensils size={24} />
-                </div>
-                <h4 className="font-bold brand-rounded text-sm uppercase">Traditional Recipes</h4>
-                <p className="text-xs text-[#4A3728]/60">Time-honored preparation methods.</p>
-              </div>
+
+            <div className="mt-8 pt-6 border-t border-[#4A3728]/10">
+              <p className="brand-script text-coral text-3xl sm:text-4xl leading-none">Ami Shah</p>
+              <p className="brand-rounded text-[10px] font-bold uppercase tracking-[0.25em] text-[#4A3728]/50 mt-1.5">Founder · Amie's Homemade</p>
             </div>
           </div>
         </div>
+      </section>
 
-        <div className="bg-white/50 rounded-[2rem] sm:rounded-[4rem] p-6 sm:p-12 lg:p-20 text-center border border-coral/5">
-          <h2 className="text-4xl font-bold serif mb-12">Why Choose amie's?</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12">
-            {[
-              { icon: <ShieldCheck className="text-green-500" />, title: "100% Homemade", desc: "No factories, just our kitchen." },
-              { icon: <Sparkles className="text-yellow-500" />, title: "No Preservatives", desc: "Always fresh, always natural." },
-              { icon: <Utensils className="text-orange-500" />, title: "Premium Ingredients", desc: "Only the best for you." },
-              { icon: <Heart className="text-red-500" />, title: "Hygienically Prepared", desc: "Your health is our priority." }
-            ].map((item, idx) => (
-              <div key={idx} className="flex flex-col items-center gap-4">
-                <div className="p-4 bg-white rounded-3xl shadow-lg mb-2">{item.icon}</div>
-                <h4 className="font-bold brand-rounded text-sm uppercase">{item.title}</h4>
-                <p className="text-xs text-[#4A3728]/60 max-w-[150px]">{item.desc}</p>
+      {/* ── Pull-quote band with the candid photo ────────────────── */}
+      <section className="relative bg-[#3D2D1F] text-[#FFF8EE] overflow-hidden py-12 sm:py-20">
+        <div className="pointer-events-none absolute top-0 right-1/4 w-[34rem] h-[34rem] rounded-full bg-[#F6C94C]/10 blur-3xl" />
+        <div className="relative max-w-6xl mx-auto grid lg:grid-cols-2 items-center gap-8 lg:gap-14 px-4 sm:px-6 lg:px-12">
+          <div className="relative">
+            <img
+              src={img(FOUNDER_CANDID, 1000)}
+              srcSet={`${img(FOUNDER_CANDID, 600)} 600w, ${img(FOUNDER_CANDID, 1000)} 1000w`}
+              sizes="(max-width: 1024px) 100vw, 50vw"
+              alt="Ami Shah with the Amie's Homemade range"
+              className="w-full h-auto block rounded-[1.5rem] shadow-2xl ring-1 ring-white/10"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <div className="text-center lg:text-left">
+            <span className="serif text-7xl sm:text-8xl text-[#F6C94C] leading-[0.5] block mb-4">&ldquo;</span>
+            <p className="serif text-2xl sm:text-4xl lg:text-[2.6rem] leading-[1.2] text-[#FFF8EE]">
+              No ads. No packaging. Just food made the way it always should be —
+              <span className="text-[#F6C94C]"> the same hands, the same recipes, the same love.</span>
+            </p>
+            <p className="brand-rounded text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] text-[#FFF8EE]/50 mt-8">
+              The Amie's Promise
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── The journey (heritage timeline) ──────────────────────── */}
+      <section className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-28">
+        <div className="text-center mb-12 sm:mb-20">
+          <span className="brand-rounded text-coral font-black text-[10px] sm:text-xs uppercase tracking-[0.35em]">Our Journey</span>
+          <h2 className="serif font-bold text-[#4A3728] text-3xl sm:text-5xl mt-3">How a kitchen became a name</h2>
+          <Ornament />
+        </div>
+
+        <div className="relative">
+          {/* vertical line */}
+          <div className="absolute left-[1.15rem] sm:left-1/2 sm:-translate-x-1/2 top-2 bottom-2 w-px bg-gradient-to-b from-coral/40 via-[#C79B68]/40 to-coral/40" />
+          <div className="space-y-10 sm:space-y-16">
+            {JOURNEY.map((m, i) => (
+              <div key={m.year} className={`relative pl-12 sm:pl-0 sm:grid sm:grid-cols-2 sm:gap-12 ${i % 2 ? 'sm:[&>*:first-child]:order-2' : ''}`}>
+                {/* dot */}
+                <span className="absolute left-[0.7rem] sm:left-1/2 sm:-translate-x-1/2 top-1.5 w-4 h-4 rounded-full bg-coral ring-4 ring-[#FFF8EE] shadow" />
+                <div className={`${i % 2 ? 'sm:text-left sm:pl-12' : 'sm:text-right sm:pr-12'}`}>
+                  <span className="brand-script text-coral text-3xl sm:text-5xl leading-none">{m.year}</span>
+                </div>
+                <div className={`${i % 2 ? 'sm:pr-12 sm:text-right' : 'sm:pl-12'}`}>
+                  <h3 className="serif font-bold text-[#4A3728] text-xl sm:text-2xl mb-2">{m.title}</h3>
+                  <p className="text-[#4A3728]/65 leading-relaxed text-sm sm:text-base">{m.desc}</p>
+                </div>
               </div>
             ))}
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* ── Values ───────────────────────────────────────────────── */}
+      <section className="relative bg-gradient-to-b from-[#FFF8EE] to-[#F3EEE2] py-16 sm:py-28 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        <Fennel className="absolute left-[5%] top-[18%] w-12 opacity-25 -rotate-12 animate-float-soft" />
+        <Petal className="absolute right-[6%] bottom-[16%] w-11 opacity-25 rotate-6 animate-float-rev" />
+        <div className="relative max-w-6xl mx-auto">
+          <div className="text-center mb-12 sm:mb-16">
+            <span className="brand-rounded text-coral font-black text-[10px] sm:text-xs uppercase tracking-[0.35em]">The Amie's Difference</span>
+            <h2 className="serif font-bold text-[#4A3728] text-3xl sm:text-5xl mt-3">Why families choose <span className="brand-script text-coral whitespace-nowrap">Amie's Homemade</span></h2>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-7">
+            {VALUES.map((v) => (
+              <div key={v.title} className="group bg-white rounded-[1.75rem] p-6 sm:p-8 text-center shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-[#4A3728]/5">
+                <div className="mx-auto mb-5 w-14 h-14 rounded-2xl bg-[#F6C94C]/20 text-[#C79B68] flex items-center justify-center group-hover:bg-[#F6C94C] group-hover:text-[#3D2D1F] group-hover:scale-110 transition-all duration-300">
+                  {v.icon}
+                </div>
+                <h4 className="serif font-bold text-[#4A3728] text-base sm:text-lg mb-2">{v.title}</h4>
+                <p className="text-[12px] sm:text-sm text-[#4A3728]/60 leading-relaxed">{v.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Closing signature ────────────────────────────────────── */}
+      <section className="relative bg-[#DCE3D0] kitchen-pattern py-16 sm:py-24 px-4 text-center overflow-hidden">
+        <Almond className="absolute left-[10%] top-[30%] w-9 opacity-30 -rotate-12 animate-float" />
+        <Petal className="absolute right-[12%] top-[24%] w-9 opacity-30 rotate-12 animate-float-soft" />
+        <div className="relative max-w-2xl mx-auto">
+          <Ornament />
+          <p className="serif text-2xl sm:text-4xl text-[#4A3728] leading-tight mb-3">Made with love in Ahmedabad.</p>
+          <p className="brand-script text-coral text-4xl sm:text-6xl leading-[1.05] mb-8">Amie's Homemade</p>
+          <button
+            onClick={() => onNavigate?.('shop')}
+            className="group inline-flex items-center gap-3 px-10 sm:px-12 py-4 sm:py-5 bg-coral text-white rounded-full font-bold tracking-[0.2em] uppercase text-xs hover:scale-[1.03] transition-all duration-300 shadow-2xl shadow-coral/30"
+          >
+            Explore the Collection
+            <ArrowRight size={16} className="group-hover:translate-x-1.5 transition-transform" />
+          </button>
+        </div>
+      </section>
     </div>
   );
 };

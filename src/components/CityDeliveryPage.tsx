@@ -47,10 +47,11 @@ const HubPage: React.FC<{ onNavigateToCity: (s: string) => void; onShopClick: ()
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-16">
         {CITIES.map(c => (
-          <button
+          <a
             key={c.slug}
-            onClick={() => onNavigateToCity(c.slug)}
-            className="group bg-white p-6 rounded-[2rem] border border-coral/10 hover:border-coral/40 hover:shadow-xl hover:shadow-coral/10 hover:-translate-y-1 transition-all text-left"
+            href={`/cities/${c.slug}`}
+            onClick={(e) => { e.preventDefault(); onNavigateToCity(c.slug); }}
+            className="group bg-white p-6 rounded-[2rem] border border-coral/10 hover:border-coral/40 hover:shadow-xl hover:shadow-coral/10 hover:-translate-y-1 transition-all text-left block"
           >
             <MapPin size={20} className="text-coral mb-3 group-hover:scale-110 transition-transform" />
             <h2 className="font-bold serif text-[#4A3728] text-lg mb-1">{c.name}</h2>
@@ -59,7 +60,7 @@ const HubPage: React.FC<{ onNavigateToCity: (s: string) => void; onShopClick: ()
             <div className="flex items-center gap-1 mt-3 text-coral text-xs font-bold brand-rounded uppercase tracking-wide group-hover:gap-2 transition-all">
               See page <ArrowRight size={12} />
             </div>
-          </button>
+          </a>
         ))}
       </div>
 
@@ -292,20 +293,22 @@ const CityPage: React.FC<{ city: City; onShopClick: () => void; onNavigateToCity
           <h2 className="text-2xl font-bold serif text-[#4A3728] mb-8">We Also Deliver To</h2>
           <div className="flex flex-wrap justify-center gap-3">
             {otherCities.map(c => (
-              <button
+              <a
                 key={c.slug}
-                onClick={() => onNavigateToCity(c.slug)}
+                href={`/cities/${c.slug}`}
+                onClick={(e) => { e.preventDefault(); onNavigateToCity(c.slug); }}
                 className="px-6 py-3 rounded-full border-2 border-coral/15 text-[#4A3728]/70 brand-rounded text-xs font-bold uppercase tracking-wider hover:border-coral hover:text-coral hover:bg-coral/5 transition-all flex items-center gap-2"
               >
                 <MapPin size={12} /> {c.name}
-              </button>
+              </a>
             ))}
-            <button
-              onClick={() => onNavigateToCity('')}
+            <a
+              href="/cities"
+              onClick={(e) => { e.preventDefault(); onNavigateToCity(''); }}
               className="px-6 py-3 rounded-full border-2 border-[#4A3728]/10 text-[#4A3728]/50 brand-rounded text-xs font-bold uppercase tracking-wider hover:border-[#4A3728]/30 hover:text-[#4A3728]/80 transition-all flex items-center gap-2"
             >
               View all cities <ArrowRight size={12} />
-            </button>
+            </a>
           </div>
         </div>
       </section>

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { ArrowRight, BookOpen, Calendar, Clock, Sparkles } from 'lucide-react';
-import { getPublishedPosts, BLOG_POSTS, type BlogPost } from '../blogs.ts';
+import { getPublishedPosts, type BlogPost } from '../blogs.ts';
 
 interface BlogViewProps {
   onSelectPost: (slug: string) => void;
@@ -18,8 +18,9 @@ const CategoryBadge: React.FC<{ category: string; colorClass: string }> = ({ cat
 );
 
 const BlogCard: React.FC<{ post: BlogPost; onSelect: () => void; featured?: boolean }> = ({ post, onSelect, featured }) => (
-  <article
-    onClick={onSelect}
+  <a
+    href={`/blog/${post.slug}`}
+    onClick={(e) => { e.preventDefault(); onSelect(); }}
     className={`group bg-white rounded-[2rem] overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 cursor-pointer border border-[#4A3728]/5 ${featured ? 'lg:flex' : 'flex flex-col'}`}
   >
     {/* Cover image */}
@@ -57,19 +58,12 @@ const BlogCard: React.FC<{ post: BlogPost; onSelect: () => void; featured?: bool
         Read Article <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
       </div>
     </div>
-  </article>
+  </a>
 );
 
 const BlogView: React.FC<BlogViewProps> = ({ onSelectPost }) => {
   const published = useMemo(() => getPublishedPosts(), []);
   const [featured, ...rest] = published;
-
-  // Find next scheduled post
-  const today = new Date().toISOString().split('T')[0];
-  const nextPost = useMemo(
-    () => BLOG_POSTS.filter(p => p.publishedAt > today).sort((a, b) => a.publishedAt.localeCompare(b.publishedAt))[0],
-    [today]
-  );
 
   return (
     <div className="pt-24 sm:pt-20 bg-[#FFF8EE] min-h-screen">
@@ -124,20 +118,6 @@ const BlogView: React.FC<BlogViewProps> = ({ onSelectPost }) => {
                 <BlogCard key={post.id} post={post} onSelect={() => onSelectPost(post.slug)} />
               ))}
             </div>
-          </div>
-        )}
-
-        {/* Next post teaser */}
-        {nextPost && (
-          <div className="mt-16 sm:mt-24 bg-white rounded-[2rem] p-8 sm:p-12 border border-[#D4AF37]/15 shadow-lg text-center max-w-2xl mx-auto">
-            <div className="w-12 h-12 bg-[#D4AF37]/10 rounded-2xl flex items-center justify-center text-[#D4AF37] mx-auto mb-6">
-              <Clock size={24} />
-            </div>
-            <p className="text-[10px] brand-rounded font-black uppercase tracking-[0.3em] text-[#D4AF37] mb-3">Next Story Drops</p>
-            <h3 className="text-xl sm:text-2xl font-bold serif text-[#4A3728] mb-2">{nextPost.title}</h3>
-            <p className="text-[#4A3728]/50 text-sm brand-rounded font-medium">
-              Publishing on {formatDate(nextPost.publishedAt)}
-            </p>
           </div>
         )}
       </section>
