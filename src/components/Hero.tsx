@@ -109,7 +109,7 @@ const Hero: React.FC<HeroProps> = ({ onShopClick, onAboutClick }) => {
             <span
               className="inline-flex items-center gap-2.5 text-[#F04E4E] brand-rounded uppercase tracking-[0.35em] font-black text-[10px] sm:text-xs mb-5 sm:mb-7 animate-in fade-in slide-in-from-bottom-3 duration-700"
             >
-              <span className="w-6 h-px bg-coral/50" /> Ami Shah's Secret Recipes
+              <span className="w-6 h-px bg-coral/50" /> Ami Shah's Secret Recipes <span className="w-6 h-px bg-coral/50" />
             </span>
 
             <h1 className="text-[#4A3728] serif font-bold leading-[0.92] tracking-[-0.01em] mb-6 sm:mb-8">
