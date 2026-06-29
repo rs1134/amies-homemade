@@ -151,7 +151,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onNavigate }) => {
           <div className="text-center lg:text-left">
             <span className="serif text-7xl sm:text-8xl text-[#F6C94C] leading-[0.5] block mb-4">&ldquo;</span>
             <p className="serif text-2xl sm:text-4xl lg:text-[2.6rem] leading-[1.2] text-[#FFF8EE]">
-              No ads. No packaging. Just food made the way it always should be —
+              No shortcuts. No compromises. Food made the way it always should be —
               <span className="text-[#F6C94C]"> the same hands, the same recipes, the same love.</span>
             </p>
             <p className="brand-rounded text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] text-[#FFF8EE]/50 mt-8">
