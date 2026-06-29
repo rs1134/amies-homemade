@@ -94,23 +94,24 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
         <div className="grid md:grid-cols-2 gap-6 lg:gap-12">
           {/* ── Left: image gallery (natural ratio, no gaps) + thumbnail row ── */}
           <div className="flex flex-col gap-3 md:sticky md:top-28 md:self-start">
-            <div className="relative w-full rounded-2xl overflow-hidden bg-[#F5EFE6]">
-              {!imageError ? (
-                <img
-                  key={gallery[activeImg]}
-                  src={gallery[activeImg]}
-                  alt={`${product.name} — photo ${activeImg + 1}`}
-                  onError={() => setImageError(true)}
-                  className="w-full h-auto block animate-in fade-in duration-300"
-                />
-              ) : (
-                <div className="w-full aspect-square flex flex-col items-center justify-center bg-coral/5 text-coral/30 p-12 text-center">
-                  <ImageOff size={48} strokeWidth={1} className="mb-4" />
-                  <p className="brand-script text-3xl opacity-60">amie's</p>
-                  <p className="brand-rounded text-xs font-bold uppercase tracking-widest mt-2">Homemade With Love</p>
-                </div>
-              )}
-
+            <div className="relative w-full">
+              <div className="rounded-2xl overflow-hidden bg-[#F5EFE6]">
+                {!imageError ? (
+                  <img
+                    key={gallery[activeImg]}
+                    src={gallery[activeImg]}
+                    alt={`${product.name} — photo ${activeImg + 1}`}
+                    onError={() => setImageError(true)}
+                    className="w-full h-auto block animate-in fade-in duration-300"
+                  />
+                ) : (
+                  <div className="w-full aspect-square flex flex-col items-center justify-center bg-coral/5 text-coral/30 p-12 text-center">
+                    <ImageOff size={48} strokeWidth={1} className="mb-4" />
+                    <p className="brand-script text-3xl opacity-60">amie's</p>
+                    <p className="brand-rounded text-xs font-bold uppercase tracking-widest mt-2">Homemade With Love</p>
+                  </div>
+                )}
+              </div>
 
               {gallery.length > 1 && !imageError && (
                 <>
