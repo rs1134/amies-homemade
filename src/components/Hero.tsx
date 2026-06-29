@@ -53,16 +53,16 @@ const Seed: React.FC<IconProps> = ({ className, style }) => (
 // size / opacity / drift so they read as atmosphere, not clustered clutter.
 const SCATTER: { C: React.FC<IconProps>; cls: string; delay: string }[] = [
   { C: Fennel,    cls: 'left-[3%] top-[10%] w-10 sm:w-14 opacity-30 -rotate-12 animate-float-soft', delay: '0s' },
-  { C: Almond,    cls: 'hidden sm:block left-[12%] top-[40%] w-7 sm:w-9 opacity-25 rotate-12 animate-float-rev', delay: '0.8s' },
+  { C: Almond,    cls: 'left-[12%] top-[40%] w-7 sm:w-9 opacity-25 rotate-12 animate-float-rev', delay: '0.8s' },
   { C: Seed,      cls: 'left-[7%] top-[72%] w-6 sm:w-8 opacity-30 -rotate-6 animate-float', delay: '1.6s' },
-  { C: Petal,     cls: 'hidden sm:block left-[22%] top-[88%] w-9 sm:w-12 opacity-25 rotate-6 animate-float-soft', delay: '0.4s' },
+  { C: Petal,     cls: 'left-[22%] top-[88%] w-9 sm:w-12 opacity-25 rotate-6 animate-float-soft', delay: '0.4s' },
   { C: DateFruit, cls: 'left-[44%] top-[6%] w-6 sm:w-8 opacity-25 rotate-6 animate-float-rev', delay: '1.1s' },
-  { C: Almond,    cls: 'hidden sm:block left-[55%] top-[80%] w-7 sm:w-10 opacity-25 -rotate-12 animate-float', delay: '0.6s' },
-  { C: Seed,      cls: 'hidden sm:block left-[38%] top-[58%] w-5 sm:w-7 opacity-20 rotate-12 animate-float-rev', delay: '1.9s' },
+  { C: Almond,    cls: 'left-[55%] top-[80%] w-7 sm:w-10 opacity-25 -rotate-12 animate-float', delay: '0.6s' },
+  { C: Seed,      cls: 'left-[38%] top-[58%] w-5 sm:w-7 opacity-20 rotate-12 animate-float-rev', delay: '1.9s' },
   { C: Fennel,    cls: 'right-[6%] top-[16%] w-9 sm:w-12 opacity-30 rotate-6 animate-float', delay: '0.3s' },
-  { C: Petal,     cls: 'hidden sm:block right-[14%] top-[46%] w-7 sm:w-10 opacity-25 -rotate-12 animate-float-soft', delay: '1.3s' },
+  { C: Petal,     cls: 'right-[14%] top-[46%] w-7 sm:w-10 opacity-25 -rotate-12 animate-float-soft', delay: '1.3s' },
   { C: DateFruit, cls: 'right-[4%] top-[68%] w-6 sm:w-9 opacity-30 -rotate-6 animate-float-rev', delay: '0.9s' },
-  { C: Almond,    cls: 'hidden sm:block right-[24%] top-[6%] w-6 sm:w-8 opacity-20 rotate-12 animate-float', delay: '1.5s' },
+  { C: Almond,    cls: 'right-[24%] top-[6%] w-6 sm:w-8 opacity-20 rotate-12 animate-float', delay: '1.5s' },
   { C: Seed,      cls: 'right-[2%] top-[40%] w-5 sm:w-7 opacity-25 rotate-6 animate-float-soft', delay: '0.5s' },
 ];
 
