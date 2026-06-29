@@ -1234,10 +1234,10 @@ const App: React.FC = () => {
                   Shop All Products <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-                {(['sf3', 'm2', 'hw1', 'hw2', 'sw5', 'sm1', 'sw1', 'm4'] as const).map(id => {
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
+                {(['sf3', 'm2', 'hw1', 'm4', 'sm1', 'sm2'] as const).map(id => {
                   const product = PRODUCTS.find(p => p.id === id);
-                  if (!product || !isProductVisible(product)) return null; // skip hidden/curating later
+                  if (!product || !isProductVisible(product)) return null;
                   return (
                     <a
                       key={product.id}
@@ -1249,27 +1249,23 @@ const App: React.FC = () => {
                         <img
                           src={product.image}
                           alt={product.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           loading="lazy"
                         />
                       </div>
-                      <div className="p-4 flex flex-col gap-3 flex-1">
-                        <div>
-                          <h3 className="font-bold serif text-[#4A3728] text-sm leading-tight">{product.name}</h3>
-                        </div>
-                        <div className="mt-auto flex flex-col gap-2">
-                          <p className="text-coral font-black text-base">₹{product.price} <span className="text-[#4A3728]/40 font-medium text-xs">/ {product.weight}</span></p>
-                          <button
-                            onClick={e => {
-                              e.preventDefault();
-                              e.stopPropagation();
-                              product.subOptions ? openProduct(product) : addToCart(product, undefined, undefined, false);
-                            }}
-                            className="w-full py-2.5 bg-[#F04E4E] text-white text-[10px] font-black brand-rounded uppercase tracking-[0.2em] rounded-2xl hover:bg-[#d43c3c] transition-colors active:scale-95"
-                          >
-                            {product.subOptions ? 'Choose Options' : 'Add to Bag'}
-                          </button>
-                        </div>
+                      <div className="p-4 sm:p-5 flex flex-col gap-2 flex-1">
+                        <h3 className="font-bold serif text-[#4A3728] text-sm sm:text-base leading-tight">{product.name}</h3>
+                        <p className="text-coral font-black text-base">₹{product.price} <span className="text-[#4A3728]/40 font-medium text-xs">/ {product.weight}</span></p>
+                        <button
+                          onClick={e => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            product.subOptions ? openProduct(product) : addToCart(product, undefined, undefined, false);
+                          }}
+                          className="mt-auto w-full py-3 bg-[#F04E4E] text-white text-[10px] sm:text-[11px] font-black brand-rounded uppercase tracking-[0.25em] rounded-full hover:bg-[#d43c3c] hover:shadow-lg hover:shadow-coral/30 transition-all duration-200 active:scale-95"
+                        >
+                          {product.subOptions ? 'Choose Options' : 'Add to Bag'}
+                        </button>
                       </div>
                     </a>
                   );
