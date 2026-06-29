@@ -116,9 +116,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onOpen 
           </div>
         )}
         {BESTSELLER_IDS.has(product.id) && !isOOS && (
-          <div className="absolute top-4 left-4">
-            <span className="px-3 py-1 bg-[#F6C94C] text-[#4A3728] rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm">
-              ★ Bestseller
+          <div className="absolute top-3 left-3">
+            <span className="flex items-center gap-1 pl-2.5 pr-3 py-1.5 bg-[#2A1E14]/80 backdrop-blur-sm text-[#F6C94C] rounded-full text-[9px] font-bold brand-rounded uppercase tracking-[0.18em] shadow-lg">
+              <svg width="8" height="8" viewBox="0 0 10 10" fill="#F6C94C"><polygon points="5,0 6.2,3.8 10,3.8 7,6.1 8.1,10 5,7.6 1.9,10 3,6.1 0,3.8 3.8,3.8"/></svg>
+              Bestseller
             </span>
           </div>
         )}
