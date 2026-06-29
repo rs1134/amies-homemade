@@ -106,7 +106,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
 
         <div className="grid md:grid-cols-2 gap-6 lg:gap-12">
           {/* ── Left: image gallery (natural ratio, no gaps) + thumbnail row ── */}
-          <div className="flex flex-col gap-3 md:sticky md:top-28 md:self-start">
+          <div className="min-w-0 flex flex-col gap-3 md:sticky md:top-28 md:self-start">
             <div className="relative w-full">
               <div
                 className="rounded-2xl overflow-hidden bg-[#F5EFE6]"
@@ -180,7 +180,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
           </div>
 
           {/* ── Right: product info ── */}
-          <div>
+          <div className="min-w-0">
             <span className="text-coral font-bold brand-rounded text-xs uppercase tracking-widest">{product.category}</span>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#4A3728] serif mt-1 mb-4">{product.name}</h1>
 
