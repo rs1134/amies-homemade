@@ -24,23 +24,27 @@ const FAQ_DATA: FAQCategory[] = [
     items: [
       {
         q: 'Do you use any artificial colours, flavours, or preservatives?',
-        a: 'No. Every product — mukhwas, masalas, and wellness blends — is made with 100% natural ingredients. No artificial colours, no synthetic flavours, and no preservatives of any kind.',
+        a: 'No. Every product — mukhwas, masalas, granola, and wellness blends — is made with 100% natural ingredients. No artificial colours, no synthetic flavours, and no preservatives of any kind.',
       },
       {
         q: 'Are all your products made in-house?',
-        a: 'Yes, all our products are made in-house. We do not resell products from anywhere outside of our company premises.',
+        a: 'Yes, everything is made in-house by hand in small batches. We do not source or resell products from outside our kitchen.',
       },
       {
         q: 'What is the shelf life of your products?',
-        a: 'Mukhwas, granola, and dry fruit milk masala stay fresh for 6 months from the date of packaging, and chai masala for up to 1 year. Store all products in a cool, dry place away from direct sunlight.',
-      },
-      {
-        q: 'Do you offer sugar-free options for diabetics?',
-        a: 'Yes. Our plain mukhwas blends — saunf, dhana, til, ajwain — have no added sugar, no coating, and no glucose syrup. They are naturally low-GI and safe for diabetics.',
+        a: 'All mukhwas, granola, and dry fruit milk masala stay fresh for 6 months from the date of packaging. Chai Masala lasts up to 1 year. Store in a cool, dry place away from direct sunlight — the best before date is printed on every pack.',
       },
       {
         q: 'What are your best-selling products?',
-        a: 'For mukhwas, our best sellers are Kharek Coconut Almond and Chatpati Mango. Among our wellness range, the Homemade Healthy Granola and Dry Fruit Milk Masala are ordered most frequently.',
+        a: 'Our top six are: Dryfruit and Seeds, Chatpati Mango, Tender Coconut Vanilla Chips, Kharek Coconut Almond, Homemade Healthy Granola, and Dry Fruit Milk Masala. All six are marked with a Bestseller badge in our shop.',
+      },
+      {
+        q: 'What sizes are available?',
+        a: 'Mukhwas varieties are available in 200 g packs. Homemade Healthy Granola comes in 250 g. Dry Fruit Milk Masala is available in 100 g, and Chai Masala in 250 g. All sizes are clearly shown on the product page.',
+      },
+      {
+        q: 'Are your products suitable for diabetics?',
+        a: 'Several of our mukhwas blends are free from added sugar, coating, and glucose syrup — making them suitable for diabetics. Check the product description for each variety, or WhatsApp us and we will guide you to the right options.',
       },
     ],
   },
@@ -52,23 +56,23 @@ const FAQ_DATA: FAQCategory[] = [
     items: [
       {
         q: 'How do I place an order?',
-        a: 'You can order directly on this website or WhatsApp us at +91 91575 37842. For custom hampers or bulk orders, WhatsApp is the easiest way — we will guide you personally.',
+        a: 'Add products to your cart directly on this website and complete checkout — it takes under 2 minutes. For custom hampers, bulk orders, or any special requests, WhatsApp us at +91 91575 37842 and we will guide you personally.',
       },
       {
         q: 'What payment methods do you accept?',
-        a: 'We accept all UPI apps (Google Pay, PhonePe, Paytm), net banking, and debit/credit cards.',
+        a: 'We accept UPI (Google Pay, PhonePe, Paytm), debit/credit cards, and net banking — all processed securely via Razorpay. We do not offer Cash on Delivery.',
       },
       {
-        q: 'Can I customize the contents of a gift hamper?',
-        a: 'Yes. You can choose which mukhwas and wellness varieties go in, specify quantities, and mention any dietary needs (sugar-free, nut-free, etc.). Just tell us who it is for and we will build it around them.',
+        q: 'Can I get a custom gift hamper?',
+        a: 'Yes. We offer two ready hampers — Trio of Traditions (₹999) and The Gourmet Discovery (₹1,499) — available directly on the Gifting page. For fully custom hampers with specific products, quantities, or sizes, WhatsApp us and we will build one around your budget.',
       },
       {
         q: 'Is there a minimum order quantity?',
-        a: 'There is no minimum order quantity. For wholesale pricing, a minimum order of 15 kg applies.',
+        a: 'No minimum for regular orders. For wholesale or bulk pricing, a minimum order of 15 kg applies. For corporate hampers, bulk pricing starts from 50 units.',
       },
       {
         q: 'Can I schedule delivery for a specific date?',
-        a: 'Yes. Mention your required delivery date when ordering. For Diwali and festival seasons, order at least 7 to 10 days in advance. For birthdays and events, 3 to 4 days is usually enough.',
+        a: 'Yes. Mention your required delivery date at checkout or on WhatsApp. For Diwali and festival seasons, order at least 7–10 days in advance. For birthdays and events, 3–4 days is usually sufficient.',
       },
     ],
   },
@@ -80,19 +84,19 @@ const FAQ_DATA: FAQCategory[] = [
     items: [
       {
         q: 'Do you deliver across India?',
-        a: 'Yes. We deliver pan-India. Ahmedabad orders arrive in 2 working days. All other cities typically receive orders within 3 to 5 working days via courier.',
+        a: 'Yes, we deliver pan-India. Ahmedabad orders arrive within 2 working days. All other cities receive orders within 3–5 working days via courier.',
       },
       {
         q: 'What are the delivery charges?',
-        a: 'Delivery within Ahmedabad is FREE. Outside Ahmedabad: up to 500g — ₹60 | 500g–1kg — ₹100 | 1–2kg — ₹150 | 2–5kg — ₹200 | above 5kg — ₹250.',
+        a: 'Delivery within Ahmedabad is FREE. Outside Ahmedabad: up to 500g — ₹60 | 500g–1kg — ₹100 | 1–2kg — ₹150 | 2–5kg — ₹200 | above 5kg — ₹250. Pan-India shipping is FREE on orders above ₹1,499.',
       },
       {
         q: 'Do you offer same-day delivery in Ahmedabad?',
-        a: 'Same-day delivery is available for Ahmedabad orders placed before 12 PM, subject to availability. WhatsApp us to confirm.',
+        a: 'Same-day delivery is available for Ahmedabad orders placed before 12 PM, subject to availability. WhatsApp us to confirm before placing your order.',
       },
       {
         q: 'How are products packed for shipping?',
-        a: 'Mukhwas and wellness products are packed in airtight containers, then bubble-wrapped and boxed securely. If your order arrives damaged, WhatsApp us within 24 hours with a photo and we will resolve it immediately.',
+        a: 'All products are sealed in airtight packaging, then bubble-wrapped and boxed to survive the journey safely. If your order arrives damaged, WhatsApp us within 24 hours with a photo and we will resolve it right away.',
       },
     ],
   },
@@ -104,23 +108,23 @@ const FAQ_DATA: FAQCategory[] = [
     items: [
       {
         q: 'Do you offer corporate and bulk gifting?',
-        a: 'Yes. We handle corporate gifting for Diwali, Navratri, and all major occasions — from 10-piece sets to 500+ unit orders. Every hamper is made fresh with the option for a custom card or branded packaging.',
+        a: 'Yes. We handle corporate gifting for Diwali, Navratri, and all major occasions — from 10-piece sets to 500+ unit orders. Every hamper is made fresh, with the option for a custom card or personalised message.',
+      },
+      {
+        q: 'What hamper options are available for corporate gifting?',
+        a: 'Our two signature hampers are Trio of Traditions (₹999 — Dryfruit & Seeds, Chatpati Mango, Tender Coconut Vanilla Chips) and The Gourmet Discovery (₹1,499 — Dryfruit & Seeds, Homemade Healthy Granola, Almond Motichoor Ladoo). For fully custom corporate hampers with your preferred products and packaging, contact us on WhatsApp.',
       },
       {
         q: 'What is the minimum order for bulk pricing?',
-        a: 'For hampers, bulk pricing starts from a minimum of 50 hampers. For wholesale loose products, the minimum is 15 kg. WhatsApp us with your requirement and we will send a quote.',
+        a: 'For hampers, bulk pricing starts from 50 units. For wholesale loose products, the minimum is 15 kg. WhatsApp us with your requirement and we will send a quote within 24 hours.',
       },
       {
-        q: 'Can you add a personalized message or company branding?',
-        a: 'Yes. Personal orders include a handwritten note card. Corporate orders can include a printed card with your logo and message. Custom box branding is available for orders of 50+ units.',
-      },
-      {
-        q: 'What hamper options are popular for corporate gifting?',
-        a: 'Our most requested options are the Classic Mukhwas Set (glass jars in a wooden box), the Wellness Hamper (sugar-free varieties), the Heritage Box (a curated mix of mukhwas & wellness treats), and the Grand Heritage Hamper for VIP relationships.',
+        q: 'Can you add a personalised message or company branding?',
+        a: 'Yes. All orders can include a handwritten note card. Corporate orders can include a printed card with your logo and message. Custom box branding is available for orders of 50+ units — contact us to discuss.',
       },
       {
         q: 'How early should I place a large corporate order?',
-        a: 'Up to 50 hampers — 5 to 7 days. 50 to 200 hampers — 10 to 14 days. Above 200 hampers — at least 3 to 4 weeks, especially for Diwali season.',
+        a: 'Up to 50 hampers — 5 to 7 days. 50 to 200 hampers — 10 to 14 days. Above 200 hampers — at least 3 to 4 weeks. For Diwali season, we recommend reaching out as early as possible.',
       },
     ],
   },
