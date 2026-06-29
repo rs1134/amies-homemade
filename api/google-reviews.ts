@@ -3,7 +3,7 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 const PLACE_ID = 'ChIJk_J9J7KFXjkRxyd9_kxmrz8';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-  const apiKey = process.env.GOOGLE_PLACES_API_KEY;
+  const apiKey = process.env.GOOGLE_PLACES_API_KEY || process.env.VITE_GOOGLE_PLACES_API_KEY;
   if (!apiKey) {
     return res.status(500).json({ error: 'GOOGLE_PLACES_API_KEY not configured' });
   }
