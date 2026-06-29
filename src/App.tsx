@@ -211,8 +211,8 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, o
             <div
               key={cat}
               className="relative"
-              onMouseEnter={() => !isAll && openMenu(cat as Category)}
-              onMouseLeave={() => !isAll && scheduleClose()}
+              onPointerEnter={(e) => { if (e.pointerType === 'mouse' && !isAll) openMenu(cat as Category); }}
+              onPointerLeave={(e) => { if (e.pointerType === 'mouse' && !isAll) scheduleClose(); }}
             >
               <a
                 href={isAll ? '/shop' : `/shop/${CATEGORY_SLUG[cat as Category]}`}
