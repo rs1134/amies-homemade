@@ -114,22 +114,22 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
               </div>
 
               {gallery.length > 1 && !imageError && (
-                <>
+                <div className="absolute inset-0 flex items-center justify-between px-3 pointer-events-none z-10">
                   <button
                     onClick={() => setActiveImg(i => (i - 1 + gallery.length) % gallery.length)}
                     aria-label="Previous photo"
-                    className="flex absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 items-center justify-center rounded-full bg-white/85 hover:bg-white text-[#4A3728] shadow-lg transition-colors z-10"
+                    className="pointer-events-auto flex w-9 h-9 items-center justify-center rounded-full bg-white/85 hover:bg-white text-[#4A3728] shadow-lg transition-colors"
                   >
                     <ChevronLeft size={18} />
                   </button>
                   <button
                     onClick={() => setActiveImg(i => (i + 1) % gallery.length)}
                     aria-label="Next photo"
-                    className="flex absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 items-center justify-center rounded-full bg-white/85 hover:bg-white text-[#4A3728] shadow-lg transition-colors z-10"
+                    className="pointer-events-auto flex w-9 h-9 items-center justify-center rounded-full bg-white/85 hover:bg-white text-[#4A3728] shadow-lg transition-colors"
                   >
                     <ChevronRight size={18} />
                   </button>
-                </>
+                </div>
               )}
             </div>
 
