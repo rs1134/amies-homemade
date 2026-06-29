@@ -4,6 +4,12 @@ import { Product } from '../types.ts';
 
 const BESTSELLER_IDS = new Set(['m10', 'm2', 'm4', 'sf3', 'hw1', 'sm1']);
 
+const ikImg = (url: string, w: number) => {
+  if (!url.includes('ik.imagekit.io')) return url;
+  const base = url.split('?')[0];
+  return `${base}?tr=w-${w},q-80,f-auto`;
+};
+
 interface ProductCardProps {
   product: Product;
   onAddToCart: (product: Product) => void;
@@ -59,7 +65,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onOpen 
         {!imageError ? (
           <>
             <img
-              src={product.image}
+              src={ikImg(product.image, 600)}
+              srcSet={`${ikImg(product.image, 400)} 400w, ${ikImg(product.image, 700)} 700w`}
+              sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 22vw"
               alt={product.name}
               onError={() => setImageError(true)}
               loading="lazy"
@@ -69,7 +77,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onOpen 
             {/* Second photo — preloaded eagerly so it's in cache on hover */}
             {hasMultiplePhotos && !isOOS && (
               <img
-                src={product.images![1]}
+                src={ikImg(product.images![1], 700)}
                 alt=""
                 loading="eager"
                 decoding="async"

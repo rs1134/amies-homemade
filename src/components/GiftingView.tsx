@@ -305,10 +305,11 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
             <div className="lg:w-1/2 grid grid-cols-2 grid-rows-2 h-[500px] lg:h-auto overflow-hidden">
                {/* WEDDINGS */}
                <div className="relative overflow-hidden group/img border-r border-b border-[#D4AF37]/10">
-                  <img 
-                    src="https://ik.imagekit.io/amieshomemade/amish-thakkar-7O422y-G-b80-unsplash.jpg" 
-                    className="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-110" 
-                    alt="Weddings at Amie's" 
+                  <img
+                    src="https://ik.imagekit.io/amieshomemade/amish-thakkar-7O422y-G-b80-unsplash.jpg?tr=w-600,q-80,f-auto"
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-110"
+                    alt="Weddings at Amie's"
+                    loading="lazy" decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-6">
                     <span className="text-white text-[11px] font-black brand-rounded uppercase tracking-[0.3em]">Weddings</span>
@@ -316,10 +317,11 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
                </div>
                {/* FESTIVALS */}
                <div className="relative overflow-hidden group/img border-b border-[#D4AF37]/10">
-                  <img 
-                    src="https://ik.imagekit.io/amieshomemade/bh6cmv93h5rmt0cwehc94w18rr.png" 
-                    className="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-110" 
-                    alt="Festivals at Amie's" 
+                  <img
+                    src="https://ik.imagekit.io/amieshomemade/bh6cmv93h5rmt0cwehc94w18rr.png?tr=w-600,q-80,f-auto"
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-110"
+                    alt="Festivals at Amie's"
+                    loading="lazy" decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-6">
                     <span className="text-white text-[11px] font-black brand-rounded uppercase tracking-[0.3em]">Festivals</span>
@@ -327,10 +329,11 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
                </div>
                {/* CORPORATE GIFTS */}
                <div className="relative overflow-hidden group/img border-r border-[#D4AF37]/10">
-                  <img 
-                    src="https://ik.imagekit.io/amieshomemade/3mx66mz99srmr0cwehfssqfz10.png" 
-                    className="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-110" 
-                    alt="Corporate Gifting" 
+                  <img
+                    src="https://ik.imagekit.io/amieshomemade/3mx66mz99srmr0cwehfssqfz10.png?tr=w-600,q-80,f-auto"
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-110"
+                    alt="Corporate Gifting"
+                    loading="lazy" decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-6">
                     <span className="text-white text-[11px] font-black brand-rounded uppercase tracking-[0.3em]">Corporate</span>
@@ -338,10 +341,11 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
                </div>
                {/* CELEBRATIONS */}
                <div className="relative overflow-hidden group/img">
-                  <img 
-                    src="https://ik.imagekit.io/amieshomemade/nescmvzyzhrmw0cweh988hsnk0.png" 
-                    className="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-110" 
-                    alt="Celebrations" 
+                  <img
+                    src="https://ik.imagekit.io/amieshomemade/nescmvzyzhrmw0cweh988hsnk0.png?tr=w-600,q-80,f-auto"
+                    className="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-110"
+                    alt="Celebrations"
+                    loading="lazy" decoding="async"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-6">
                     <span className="text-white text-[11px] font-black brand-rounded uppercase tracking-[0.3em]">Celebrations</span>

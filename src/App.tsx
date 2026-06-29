@@ -109,6 +109,11 @@ const PATH_TO_PAGE: Record<string, string> = Object.fromEntries(
   Object.entries(PAGE_TO_PATH).map(([page, path]) => [path, page])
 );
 
+const ikImg = (url: string, w: number) => {
+  if (!url || !url.includes('ik.imagekit.io')) return url;
+  return `${url.split('?')[0]}?tr=w-${w},q-80,f-auto`;
+};
+
 // Product URL helpers
 const slugify = (name: string) =>
   name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
@@ -1247,10 +1252,13 @@ const App: React.FC = () => {
                     >
                       <div className="relative overflow-hidden bg-[#FFF9F0] aspect-square">
                         <img
-                          src={product.image}
+                          src={ikImg(product.image, 500)}
+                          srcSet={`${ikImg(product.image, 350)} 350w, ${ikImg(product.image, 600)} 600w`}
+                          sizes="(max-width: 640px) 45vw, 30vw"
                           alt={product.name}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                           loading="lazy"
+                          decoding="async"
                         />
                       </div>
                       <div className="p-4 sm:p-5 flex flex-col gap-2 flex-1">
