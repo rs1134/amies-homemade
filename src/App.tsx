@@ -1235,7 +1235,7 @@ const App: React.FC = () => {
                 </button>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6">
-                {(['sf3', 'm2', 'hw1', 'm4', 'sm1', 'sm2'] as const).map(id => {
+                {(['m10', 'm2', 'm4', 'sf3', 'hw1', 'sm1'] as const).map(id => {
                   const product = PRODUCTS.find(p => p.id === id);
                   if (!product || !isProductVisible(product)) return null;
                   return (
