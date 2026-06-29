@@ -79,6 +79,7 @@
   }
   .animate-float {
     animation: float 7s ease-in-out infinite;
+    will-change: transform;
   }
 
   @keyframes float-soft {
@@ -87,6 +88,7 @@
   }
   .animate-float-soft {
     animation: float-soft 5s ease-in-out infinite;
+    will-change: transform;
   }
 
   @keyframes float-rev {
@@ -95,24 +97,34 @@
   }
   .animate-float-rev {
     animation: float-rev 7s ease-in-out infinite;
+    will-change: transform;
   }
 
   @keyframes marquee-left {
     0% { transform: translateX(0); }
     100% { transform: translateX(-50%); }
   }
-  
+
   @keyframes marquee-right {
     0% { transform: translateX(-50%); }
     100% { transform: translateX(0); }
   }
-  
+
   .animate-marquee-left {
     animation: marquee-left 40s linear infinite;
+    will-change: transform;
   }
-  
+
   .animate-marquee-right {
     animation: marquee-right 40s linear infinite;
+    will-change: transform;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-float, .animate-float-soft, .animate-float-rev,
+    .animate-marquee-left, .animate-marquee-right {
+      animation: none;
+    }
   }
   
   .pause-on-hover:hover .animate-marquee-left,

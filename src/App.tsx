@@ -397,6 +397,7 @@ const App: React.FC = () => {
     setCurrentArea('');
     setCurrentCity('');
     setCurrentBlogSlug('');
+    setSelectedProduct(null);
     if (page === 'shop') setActiveCategory('All');
   }, []);
 

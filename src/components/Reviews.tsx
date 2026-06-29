@@ -68,6 +68,8 @@ const AuthorAvatar = ({ name, photoUri }: { name: string; photoUri: string }) =>
   );
 };
 
+const GOOGLE_MAPS_URL = 'https://www.google.com/maps/place/?q=place_id:ChIJk_J9J7KFXjkRxyd9_kxmrz8';
+
 export default function Reviews() {
   const [data, setData] = useState<ReviewsData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -99,7 +101,7 @@ export default function Reviews() {
           {/* Google rating summary */}
           {data && data.rating != null && (
             <a
-              href={data.googleMapsUri}
+              href={data.googleMapsUri || GOOGLE_MAPS_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2.5 bg-white rounded-full px-5 py-2.5 shadow-sm border border-gray-100 hover:shadow-md transition-shadow"
@@ -180,10 +182,10 @@ export default function Reviews() {
         ) : null}
 
         {/* View all link */}
-        {data && (
+        {(!loading) && (
           <div className="text-center mt-8">
             <a
-              href={data.googleMapsUri}
+              href={(data && data.googleMapsUri) || GOOGLE_MAPS_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-sm font-semibold text-[#F14E4E] hover:underline"

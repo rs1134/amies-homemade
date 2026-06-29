@@ -76,6 +76,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
   };
 
   return (
+    <>
     <footer className="bg-[#2A1E14] text-white pt-24 pb-12 px-4 sm:px-6 lg:px-8 relative z-40">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-20">
@@ -191,8 +192,10 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         </div>
       </div>
 
-      {/* Shipping Terms Modal */}
-      <PolicyModal 
+    </footer>
+
+      {/* Shipping Terms Modal — rendered outside <footer> to escape z-40 stacking context */}
+      <PolicyModal
         isOpen={activeModal === 'shipping'}
         onClose={closeModal}
         title="Shipping & Delivery"
@@ -277,8 +280,8 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
         </div>
       </PolicyModal>
 
-      {/* Privacy Policy Modal */}
-      <PolicyModal 
+      {/* Privacy Policy Modal — also outside <footer> */}
+      <PolicyModal
         isOpen={activeModal === 'privacy'}
         onClose={closeModal}
         title="Privacy Policy"
@@ -311,7 +314,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           </div>
         </div>
       </PolicyModal>
-    </footer>
+    </>
   );
 };
 
