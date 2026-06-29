@@ -62,16 +62,16 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onOpen 
               onError={() => setImageError(true)}
               loading="lazy"
               decoding="async"
-              className={`w-full h-full object-cover transition-transform duration-700 ${isOOS ? 'grayscale' : 'group-hover:scale-110'}`}
+              className={`w-full h-full object-cover transition-transform duration-300 ${isOOS ? 'grayscale' : 'group-hover:scale-105'}`}
             />
-            {/* Second photo (e.g. a styled/model shot) revealed on hover */}
+            {/* Second photo — preloaded eagerly so it's in cache on hover */}
             {hasMultiplePhotos && !isOOS && (
               <img
                 src={product.images![1]}
                 alt=""
-                loading="lazy"
+                loading="eager"
                 decoding="async"
-                className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-150"
               />
             )}
           </>
