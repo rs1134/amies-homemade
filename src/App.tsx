@@ -1270,9 +1270,9 @@ const App: React.FC = () => {
                             e.stopPropagation();
                             product.subOptions ? openProduct(product) : addToCart(product, undefined, undefined, false);
                           }}
-                          className="mt-auto w-full py-3 bg-[#F04E4E] text-white text-[10px] sm:text-[11px] font-black brand-rounded uppercase tracking-[0.25em] rounded-full hover:bg-[#d43c3c] hover:shadow-lg hover:shadow-coral/30 transition-all duration-200 active:scale-95"
+                          className="mt-auto w-full py-3 border border-[#F14E4E] text-[#F14E4E] text-[10px] sm:text-[11px] font-medium rounded-full hover:bg-[#F14E4E] hover:text-white transition-all duration-300 active:scale-95"
                         >
-                          {product.subOptions ? 'Choose Options' : 'Add to Bag'}
+                          {product.subOptions ? 'Choose Options' : '+ Add to Cart'}
                         </button>
                       </div>
                     </a>
