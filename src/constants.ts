@@ -178,6 +178,7 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/067A3436.JPG?updatedAt=1782443782864',
       'https://ik.imagekit.io/amieshomemade/067A3461.JPG?updatedAt=1782443783639',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2010_41_48%20AM.png?updatedAt=1782444349735',
+      'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%202.20.50%E2%80%AFPM.png?updatedAt=1782463855011',
     ],
     ingredients: ['Black Grapes', 'Black Sesame Seeds', 'Homemade Anardana Churan'],
     prices: { '200 G': 264 },
