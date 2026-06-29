@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Plus, ImageOff, Images } from 'lucide-react';
 import { Product } from '../types.ts';
 
+const BESTSELLER_IDS = new Set(['m10', 'm2', 'm4', 'sf3', 'hw1', 'sm1']);
+
 interface ProductCardProps {
   product: Product;
   onAddToCart: (product: Product) => void;
@@ -113,18 +115,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onOpen 
             </button>
           </div>
         )}
-        <div className="absolute top-4 left-4 flex flex-col gap-1.5">
-          {product.isNew && !isOOS && (
-            <span className="px-2.5 py-1 bg-white/80 backdrop-blur-sm border border-emerald-400/40 rounded-full text-[9px] font-bold uppercase tracking-widest text-emerald-600 shadow-sm">
-              ✦ Newly Launched
+        {BESTSELLER_IDS.has(product.id) && !isOOS && (
+          <div className="absolute top-4 left-4">
+            <span className="px-3 py-1 bg-[#F6C94C] text-[#4A3728] rounded-full text-[9px] font-black uppercase tracking-widest shadow-sm">
+              ★ Bestseller
             </span>
-          )}
-          {product.id === 'm2' && !isOOS && (
-            <span className="px-3 py-1 bg-[#F04E4E] rounded-full text-[9px] font-black uppercase tracking-widest text-white animate-pulse shadow-lg">
-              🥭 Limited Stock
-            </span>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       <div className="p-3 sm:p-6">
