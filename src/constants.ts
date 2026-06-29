@@ -138,6 +138,7 @@ export const PRODUCTS: Product[] = [
     images: [
       'https://ik.imagekit.io/amieshomemade/067A4449.JPG?updatedAt=1782443771436',
       'https://ik.imagekit.io/amieshomemade/067A3311.JPG?updatedAt=1782443783626',
+      'https://ik.imagekit.io/amieshomemade/067A3341.JPG?updatedAt=1782443779684',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2009_21_11%20AM.png?updatedAt=1782444349584',
       'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%202.36.04%E2%80%AFPM.png',
     ],
