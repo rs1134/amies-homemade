@@ -24,11 +24,11 @@ import { Sparkles, ArrowRight, MessageCircle, CheckCircle, Heart, ShieldCheck, H
 
 const PAGE_SEO: Record<string, { title: string; description: string; canonical: string; ogTitle: string; ogDescription: string }> = {
   home: {
-    title: "Buy Mukhwas Online | Granola, Masalas & Gift Hampers — Amie's Homemade Ahmedabad",
-    description: "Buy homemade mukhwas, granola, chai masala, dry fruit milk masala & gift hampers online. Made fresh in Ahmedabad with no preservatives. Delivered across Ahmedabad, Gujarat & all over India.",
+    title: "Amie's Homemade | Mukhwas & Homemade Delights in Ahmedabad",
+    description: "Buy handmade mukhwas, granola, chai masala & dry fruit milk masala online from Ahmedabad. Made fresh in small batches with no preservatives. Pan-India delivery.",
     canonical: "https://amieshomemade.com",
-    ogTitle: "Amie's Homemade | Best Mukhwas & Wellness Treats in Ahmedabad",
-    ogDescription: "Ahmedabad's finest homemade mukhwas, granola, masalas & gift hampers. Made fresh in small batches with no preservatives. Pan-India delivery.",
+    ogTitle: "Amie's Homemade | Mukhwas & Homemade Delights in Ahmedabad",
+    ogDescription: "Handmade mukhwas, granola, chai masala & dry fruit milk masala from Ahmedabad. No preservatives. Pan-India delivery.",
   },
   shop: {
     title: "Buy Mukhwas & Wellness Treats Online Ahmedabad | Amie's Homemade",
