@@ -1299,6 +1299,18 @@ const App: React.FC = () => {
                     loading="lazy"
                     decoding="async"
                   />
+                  {/* Founder badge — bottom left of photo */}
+                  <div className="absolute bottom-4 left-4">
+                    <div className="flex items-center gap-2.5 bg-[#2A1E14]/75 backdrop-blur-md rounded-full pl-1 pr-4 py-1 shadow-xl">
+                      <div className="w-8 h-8 rounded-full bg-coral flex items-center justify-center flex-shrink-0">
+                        <span className="brand-script text-white text-base leading-none">A</span>
+                      </div>
+                      <div>
+                        <p className="text-white font-bold text-xs leading-tight">Ami Shah</p>
+                        <p className="text-white/60 text-[10px] brand-rounded uppercase tracking-wider leading-tight">Founder & Maker</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 {/* Tilted candid inset */}
                 <div className="hidden sm:block absolute -bottom-6 -right-3 lg:-right-7 w-[38%] rounded-xl overflow-hidden shadow-2xl ring-[6px] ring-[#FFF8EE] rotate-[4deg]">
