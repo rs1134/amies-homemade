@@ -115,36 +115,34 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
           {/* ── Left: image gallery (natural ratio, no gaps) + thumbnail row ── */}
           <div className="min-w-0 flex flex-col gap-3 md:sticky md:top-28 md:self-start">
             <div className="relative w-full">
+              {/* Fixed aspect-ratio container prevents height jump when switching images */}
               <div
-                className="rounded-2xl overflow-hidden bg-[#F5EFE6]"
+                className="relative rounded-2xl overflow-hidden bg-[#F5EFE6] aspect-square"
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
               >
                 {!imageError ? (
                   <img
-                    key={gallery[activeImg]}
                     src={ikImg(gallery[activeImg], 800)}
                     alt={`${product.name} — photo ${activeImg + 1}`}
                     onError={() => setImageError(true)}
                     decoding="async"
                     fetchPriority="high"
-                    className="w-full h-auto block"
+                    className="absolute inset-0 w-full h-full object-contain"
                   />
                 ) : (
-                  <div className="w-full aspect-square flex flex-col items-center justify-center bg-coral/5 text-coral/30 p-12 text-center">
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-coral/5 text-coral/30 p-12 text-center">
                     <ImageOff size={48} strokeWidth={1} className="mb-4" />
                     <p className="brand-script text-3xl opacity-60">amie's</p>
                     <p className="brand-rounded text-xs font-bold uppercase tracking-widest mt-2">Homemade With Love</p>
                   </div>
                 )}
-                {/* Preload every gallery image (resized) so swiping is instant after first paint */}
-                {gallery.length > 1 && (
-                  <div aria-hidden className="hidden">
-                    {gallery.map((img, i) => i !== activeImg && (
-                      <img key={img} src={ikImg(img, 800)} alt="" loading="lazy" decoding="async" />
-                    ))}
-                  </div>
-                )}
+                {/* Preload all gallery images so switching is instant */}
+                <div aria-hidden className="hidden">
+                  {gallery.map((img, i) => i !== activeImg && (
+                    <img key={img} src={ikImg(img, 800)} alt="" loading="lazy" decoding="async" />
+                  ))}
+                </div>
               </div>
 
               {gallery.length > 1 && !imageError && (
