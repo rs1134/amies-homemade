@@ -5,6 +5,13 @@ import { Product } from '../types.ts';
 import { FSSAI_LICENSE } from '../constants.ts';
 import ProductCard from './ProductCard.tsx';
 
+// Resize ImageKit images on the fly so the gallery loads fast (some source
+// files are 20MB+ raw uploads). Leaves non-ImageKit URLs untouched.
+const ikImg = (url: string, w: number) => {
+  if (!url || !url.includes('ik.imagekit.io')) return url;
+  return `${url.split('?')[0]}?tr=w-${w},q-80,f-auto`;
+};
+
 interface ProductDetailProps {
   product: Product;
   onAddToCart: (product: Product, weight: string, subOption?: string) => void;
@@ -116,16 +123,26 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
                 {!imageError ? (
                   <img
                     key={gallery[activeImg]}
-                    src={gallery[activeImg]}
+                    src={ikImg(gallery[activeImg], 800)}
                     alt={`${product.name} — photo ${activeImg + 1}`}
                     onError={() => setImageError(true)}
-                    className="w-full h-auto block animate-in fade-in duration-300"
+                    decoding="async"
+                    fetchPriority="high"
+                    className="w-full h-auto block"
                   />
                 ) : (
                   <div className="w-full aspect-square flex flex-col items-center justify-center bg-coral/5 text-coral/30 p-12 text-center">
                     <ImageOff size={48} strokeWidth={1} className="mb-4" />
                     <p className="brand-script text-3xl opacity-60">amie's</p>
                     <p className="brand-rounded text-xs font-bold uppercase tracking-widest mt-2">Homemade With Love</p>
+                  </div>
+                )}
+                {/* Preload every gallery image (resized) so swiping is instant after first paint */}
+                {gallery.length > 1 && (
+                  <div aria-hidden className="hidden">
+                    {gallery.map((img, i) => i !== activeImg && (
+                      <img key={img} src={ikImg(img, 800)} alt="" loading="lazy" decoding="async" />
+                    ))}
                   </div>
                 )}
               </div>
@@ -172,7 +189,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
                     aria-label={`View photo ${i + 1}`}
                     className={`w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden flex-shrink-0 border-2 transition-all bg-[#F5EFE6] ${i === activeImg ? 'border-coral' : 'border-transparent opacity-70 hover:opacity-100'}`}
                   >
-                    <img src={img} alt="" className="w-full h-full object-cover" />
+                    <img src={ikImg(img, 120)} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>
