@@ -385,26 +385,6 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
                   </a>
                 </div>
                 
-                <div className="mt-12 pt-10 border-t border-[#4A3728]/5">
-                   <div className="flex items-center gap-6">
-                      <div className="flex -space-x-4">
-                         {[
-                           { url: "https://lh3.googleusercontent.com/a-/ALV-UjXOOzgEDPdqTzFnOvrhxFSceXox3gjqAIqBhl0QsroKczKbSCKfRQ=w144-h144-p-rp-mo-ba3-br100", name: "Krishna Mody" },
-                           { url: "https://lh3.googleusercontent.com/a-/ALV-UjWxH3cjrv3mEBuGaAQvVuvyaxTo0K7q1b3Pf6X8ZeCOZwH68yE94w=w144-h144-p-rp-mo-br100", name: "Pratik Sanghavi" },
-                           { url: "https://lh3.googleusercontent.com/a-/ALV-UjUjnn8q7od8Ko_BCTPygrxFxU6PBI7lD-hNQfRmm6AX1leC_Vla=w144-h144-p-rp-mo-br100", name: "Falguni Mehta" },
-                         ].map((reviewer, i) => (
-                           <div key={i} className="w-12 h-12 rounded-full border-2 border-white overflow-hidden bg-cream shadow-lg relative z-[5]">
-                              <img src={reviewer.url} className="w-full h-full object-cover" alt={reviewer.name} />
-                           </div>
-                         ))}
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-[10px] font-bold brand-rounded text-[#4A3728]/40 uppercase tracking-widest leading-tight">
-                          TRUSTED BY 453+ HAPPY FAMILIES FOR THEIR <br className="hidden sm:block"/>MOST PRECIOUS CELEBRATIONS.
-                        </p>
-                      </div>
-                   </div>
-                </div>
               </div>
             </div>
           </div>
