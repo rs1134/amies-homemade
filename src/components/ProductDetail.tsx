@@ -74,6 +74,19 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
   // Ingredients are variant-specific when a sub-option supplies them.
   const displayIngredients = product.subOptions?.find(o => o.name === selectedSubOption)?.ingredients ?? product.ingredients;
 
+  // Swipe support for mobile gallery
+  const touchStartX = React.useRef<number | null>(null);
+  const handleTouchStart = (e: React.TouchEvent) => { touchStartX.current = e.touches[0].clientX; };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    if (Math.abs(dx) > 40) {
+      if (dx < 0) setActiveImg(i => (i + 1) % gallery.length);
+      else setActiveImg(i => (i - 1 + gallery.length) % gallery.length);
+    }
+    touchStartX.current = null;
+  };
+
   const handleAddToCart = () => {
     if (product.outOfStock) return;
     for (let i = 0; i < quantity; i++) onAddToCart(product, selectedWeight, selectedSubOption);
@@ -95,7 +108,11 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
           {/* ── Left: image gallery (natural ratio, no gaps) + thumbnail row ── */}
           <div className="flex flex-col gap-3 md:sticky md:top-28 md:self-start">
             <div className="relative w-full">
-              <div className="rounded-2xl overflow-hidden bg-[#F5EFE6]">
+              <div
+                className="rounded-2xl overflow-hidden bg-[#F5EFE6]"
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+              >
                 {!imageError ? (
                   <img
                     key={gallery[activeImg]}
@@ -114,7 +131,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
               </div>
 
               {gallery.length > 1 && !imageError && (
-                <div className="absolute inset-0 flex items-center justify-between px-3 pointer-events-none z-10">
+                <div className="absolute inset-0 hidden md:flex items-center justify-between px-3 pointer-events-none z-10">
                   <button
                     onClick={() => setActiveImg(i => (i - 1 + gallery.length) % gallery.length)}
                     aria-label="Previous photo"
@@ -132,6 +149,19 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
                 </div>
               )}
             </div>
+
+            {/* Mobile swipe dots */}
+            {gallery.length > 1 && !imageError && (
+              <div className="flex md:hidden justify-center gap-1.5 -mt-1">
+                {gallery.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setActiveImg(i)}
+                    className={`rounded-full transition-all duration-200 ${i === activeImg ? 'w-4 h-1.5 bg-coral' : 'w-1.5 h-1.5 bg-[#4A3728]/20'}`}
+                  />
+                ))}
+              </div>
+            )}
 
             {gallery.length > 1 && !imageError && (
               <div className="flex gap-2 overflow-x-auto no-scrollbar">
