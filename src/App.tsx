@@ -1315,7 +1315,7 @@ const App: React.FC = () => {
               {/* Story */}
               <div className="text-center lg:text-left order-2">
                 <span className="inline-flex items-center gap-2.5 text-coral brand-rounded uppercase tracking-[0.35em] font-black text-[10px] sm:text-xs mb-5">
-                  <span className="w-6 h-px bg-coral/50" /> Meet Ami
+                  <span className="w-6 h-px bg-coral/50" /> Meet Ami Shah
                 </span>
                 <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold serif text-[#4A3728] leading-[0.98] mb-6">
                   The Heart Behind<br /> <span className="brand-script text-coral text-5xl sm:text-7xl lg:text-8xl">Amie's Homemade</span>
