@@ -111,11 +111,6 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
                 </div>
               )}
 
-              <div className="absolute top-3 left-3 flex gap-2 z-10">
-                <span className="bg-[#F6C94C] text-[#4A3728] px-3 py-1.5 rounded-full text-xs font-bold brand-rounded flex items-center gap-1.5 shadow-lg">
-                  <Clock size={12} /> Made Fresh
-                </span>
-              </div>
 
               {gallery.length > 1 && !imageError && (
                 <>
