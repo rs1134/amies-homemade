@@ -232,7 +232,7 @@ export const PRODUCTS: Product[] = [
     id: 'm10',
     name: 'Dryfruit and Seeds',
     category: Category.MUKHWAS,
-    price: 308,
+    price: 299,
     weight: '200 G',
     description: 'More than just a mukhwas, this premium blend combines roasted almonds, cashews, dates, rose petals, and wholesome seeds for the perfect balance of crunch and natural sweetness. Rich, satisfying, and crafted to keep you energized throughout the day.',
     image: 'https://ik.imagekit.io/amieshomemade/067A4467.JPG',
@@ -245,7 +245,7 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%209.00.41%E2%80%AFAM.png',
     ],
     ingredients: ['Almond', 'Cashews', 'Dry Dates', 'Coconut', 'Pumpkin Seeds', 'Sunflower Seeds', 'Saunf', 'Dhana Dal', 'Rose Petals', 'Natural Flavouring Substance'],
-    prices: { '200 G': 308 },
+    prices: { '200 G': 299 },
     rating: 4.5, reviewCount: 24
   },
   {
@@ -312,7 +312,7 @@ export const PRODUCTS: Product[] = [
     id: 'sf3',
     name: 'Kharek Coconut Almond',
     category: Category.MUKHWAS,
-    price: 308,
+    price: 299,
     weight: '200 G',
     description: 'Rooted in Gujarati tradition, this premium blend combines sun-dried kharek, toasted coconut flakes, and whole almonds for the perfect balance of sweetness and crunch. Naturally sweetened with zero added sugar, it\'s a wholesome mukhwas crafted for a satisfying finish to every meal.',
     image: 'https://ik.imagekit.io/amieshomemade/067A4479.JPG',
@@ -325,7 +325,7 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%209.04.09%E2%80%AFAM.png?updatedAt=1782444865788',
     ],
     ingredients: ['Kharek', 'Coconut', 'Almond', 'Natural Flavouring Substance'],
-    prices: { '200 G': 308 },
+    prices: { '200 G': 299 },
     rating: 5, reviewCount: 29
   },
   {
