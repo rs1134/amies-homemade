@@ -189,26 +189,6 @@ export const PRODUCTS: Product[] = [
     rating: 4.5, reviewCount: 35
   },
   {
-    id: 'm4',
-    name: 'Tender Coconut Vanilla Chips',
-    category: Category.MUKHWAS,
-    price: 206,
-    weight: '125 G',
-    description: 'Sourced from the sun-drenched groves of Kerala, our tender coconuts are picked at peak freshness for a light, satisfying crunch. Naturally wholesome and irresistibly delicious, every bite is a tropical escape and the perfect post-meal treat.',
-    image: 'https://ik.imagekit.io/amieshomemade/067A4421.JPG?updatedAt=1782443772884',
-    images: [
-      'https://ik.imagekit.io/amieshomemade/067A4421.JPG?updatedAt=1782443772884',
-      'https://ik.imagekit.io/amieshomemade/067A3234.JPG?updatedAt=1782443781375',
-      'https://ik.imagekit.io/amieshomemade/067A3259.JPG?updatedAt=1782443779904',
-      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2009_32_32%20AM.png?updatedAt=1782444349692',
-      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png',
-      'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%202.43.00%E2%80%AFPM.png',
-    ],
-    ingredients: ['Coconut', 'Vanilla Extract', 'Salt', 'Sugar'],
-    prices: { '125 G': 206 },
-    rating: 5, reviewCount: 37
-  },
-  {
     id: 'm9',
     name: 'Tender Coconut Chocolate Chips',
     category: Category.MUKHWAS,
@@ -227,6 +207,26 @@ export const PRODUCTS: Product[] = [
     ingredients: ['Coconut', 'Cocoa Powder', 'Salt', 'Sugar'],
     prices: { '125 G': 206 },
     rating: 4.5, reviewCount: 31
+  },
+  {
+    id: 'm4',
+    name: 'Tender Coconut Vanilla Chips',
+    category: Category.MUKHWAS,
+    price: 206,
+    weight: '125 G',
+    description: 'Sourced from the sun-drenched groves of Kerala, our tender coconuts are picked at peak freshness for a light, satisfying crunch. Naturally wholesome and irresistibly delicious, every bite is a tropical escape and the perfect post-meal treat.',
+    image: 'https://ik.imagekit.io/amieshomemade/067A4421.JPG?updatedAt=1782443772884',
+    images: [
+      'https://ik.imagekit.io/amieshomemade/067A4421.JPG?updatedAt=1782443772884',
+      'https://ik.imagekit.io/amieshomemade/067A3234.JPG?updatedAt=1782443781375',
+      'https://ik.imagekit.io/amieshomemade/067A3259.JPG?updatedAt=1782443779904',
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2009_32_32%20AM.png?updatedAt=1782444349692',
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png',
+      'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%202.43.00%E2%80%AFPM.png',
+    ],
+    ingredients: ['Coconut', 'Vanilla Extract', 'Salt', 'Sugar'],
+    prices: { '125 G': 206 },
+    rating: 5, reviewCount: 37
   },
   {
     id: 'm10',
