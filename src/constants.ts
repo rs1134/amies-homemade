@@ -109,24 +109,24 @@ export const PRODUCTS: Product[] = [
 
   // --- MUKHWAS ---
   {
-    id: 'm1',
-    name: 'Amla Ginger',
+    id: 'm5',
+    name: 'Cranberry Mix',
     category: Category.MUKHWAS,
-    price: 165,
-    weight: '125 G',
-    description: 'Inspired by traditional Indian home remedies, our Amla Ginger mukhwas is a light, functional blend designed to refresh your taste and aid digestion naturally.',
-    image: 'https://ik.imagekit.io/amieshomemade/067A4410.JPG?updatedAt=1782443772730',
+    price: 330,
+    weight: '200 G',
+    description: 'Tart cranberries and crunchy almonds come together in this nutrient-rich blend for a naturally energizing snack. A perfect balance of wholesome goodness and refreshing flavour.',
+    image: 'https://ik.imagekit.io/amieshomemade/067A4439.JPG?updatedAt=1782443772420',
     images: [
-      'https://ik.imagekit.io/amieshomemade/067A4410.JPG?updatedAt=1782443772730',
-      'https://ik.imagekit.io/amieshomemade/067A3367.JPG?updatedAt=1782443777244',
-      'https://ik.imagekit.io/amieshomemade/067A3381.JPG?updatedAt=1782443776839',
-      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2010_34_20%20AM.png?updatedAt=1782444349670',
+      'https://ik.imagekit.io/amieshomemade/067A4439.JPG?updatedAt=1782443772420',
+      'https://ik.imagekit.io/amieshomemade/067A3136.JPG?updatedAt=1782443779492',
+      'https://ik.imagekit.io/amieshomemade/067A3179.JPG?updatedAt=1782443778784',
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2010_56_04%20AM.png?updatedAt=1782444349678',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png',
-      'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%202.20.22%E2%80%AFPM.png',
+      'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%202.21.10%E2%80%AFPM.png',
     ],
-    ingredients: ['Amla', 'Ginger', 'Salt', 'Sugar', 'Black Pepper', 'Black Salt'],
-    prices: { '125 G': 165 },
-    rating: 4.5, reviewCount: 38
+    ingredients: ['Cranberries', 'Black Grapes', 'Kismis', 'Almonds', 'Anardana Churan'],
+    prices: { '200 G': 330 },
+    rating: 4.5, reviewCount: 19
   },
   {
     id: 'm11',
@@ -249,24 +249,24 @@ export const PRODUCTS: Product[] = [
     rating: 4.5, reviewCount: 24
   },
   {
-    id: 'm5',
-    name: 'Cranberry Mix',
+    id: 'm1',
+    name: 'Amla Ginger',
     category: Category.MUKHWAS,
-    price: 330,
-    weight: '200 G',
-    description: 'Tart cranberries and crunchy almonds come together in this nutrient-rich blend for a naturally energizing snack. A perfect balance of wholesome goodness and refreshing flavour.',
-    image: 'https://ik.imagekit.io/amieshomemade/067A4439.JPG?updatedAt=1782443772420',
+    price: 165,
+    weight: '125 G',
+    description: 'Inspired by traditional Indian home remedies, our Amla Ginger mukhwas is a light, functional blend designed to refresh your taste and aid digestion naturally.',
+    image: 'https://ik.imagekit.io/amieshomemade/067A4410.JPG?updatedAt=1782443772730',
     images: [
-      'https://ik.imagekit.io/amieshomemade/067A4439.JPG?updatedAt=1782443772420',
-      'https://ik.imagekit.io/amieshomemade/067A3136.JPG?updatedAt=1782443779492',
-      'https://ik.imagekit.io/amieshomemade/067A3179.JPG?updatedAt=1782443778784',
-      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2010_56_04%20AM.png?updatedAt=1782444349678',
+      'https://ik.imagekit.io/amieshomemade/067A4410.JPG?updatedAt=1782443772730',
+      'https://ik.imagekit.io/amieshomemade/067A3367.JPG?updatedAt=1782443777244',
+      'https://ik.imagekit.io/amieshomemade/067A3381.JPG?updatedAt=1782443776839',
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2010_34_20%20AM.png?updatedAt=1782444349670',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png',
-      'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%202.21.10%E2%80%AFPM.png',
+      'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%202.20.22%E2%80%AFPM.png',
     ],
-    ingredients: ['Cranberries', 'Black Grapes', 'Kismis', 'Almonds', 'Anardana Churan'],
-    prices: { '200 G': 330 },
-    rating: 4.5, reviewCount: 19
+    ingredients: ['Amla', 'Ginger', 'Salt', 'Sugar', 'Black Pepper', 'Black Salt'],
+    prices: { '125 G': 165 },
+    rating: 4.5, reviewCount: 38
   },
   {
     id: 'm8',
