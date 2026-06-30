@@ -1,5 +1,15 @@
 import { neon } from '@neondatabase/serverless';
 
+// HTTP headers can only contain Latin-1 (ByteString) characters. Customer
+// names/addresses can contain em-dashes, smart quotes, emoji, etc., which
+// would otherwise throw and silently kill the whole notification + DB log.
+const toHeaderSafe = (s: any) =>
+  String(s ?? '')
+    .replace(/[–—]/g, '-')   // en/em dash → hyphen
+    .replace(/[‘’]/g, "'")   // smart single quotes
+    .replace(/[“”]/g, '"')   // smart double quotes
+    .replace(/[^\x00-\xFF]/g, '');     // strip anything else non-Latin-1
+
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -51,7 +61,7 @@ export default async function handler(req: any, res: any) {
       body: message,
       headers: {
         'Content-Type': 'text/plain; charset=utf-8',
-        'Title': `New Order: ${name} (Rs. ${grandTotal})`,
+        'Title': toHeaderSafe(`New Order: ${name} (Rs. ${grandTotal})`),
         'Priority': 'high',
         'Tags': 'shopping_cart,package,star',
       },
