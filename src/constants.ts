@@ -655,10 +655,10 @@ export const PRODUCTS: Product[] = [
     price: 450,
     weight: '250 G',
     description: 'Crafted with 12 real ingredients, our granola combines hearty rolled oats, premium walnuts, cashews, pistachios, wholesome seeds, pure peanut butter, and naturally sweet Medjool dates. With zero added sugar and no artificial ingredients, it delivers clean, wholesome nutrition to keep you energized and satisfied throughout the day. Every 100g provides 13.3g of naturally sourced plant-based protein from nuts and seeds, making it a delicious and nourishing way to start your morning.',
-    image: 'https://ik.imagekit.io/amieshomemade/067A3622.JPG?updatedAt=1782443777858',
+    image: 'https://ik.imagekit.io/amieshomemade/067A3622%20(1).jpg',
     images: [
-      'https://ik.imagekit.io/amieshomemade/067A3622.JPG?updatedAt=1782443777858',
-      'https://ik.imagekit.io/amieshomemade/067A3625.JPG?updatedAt=1782443778131',
+      'https://ik.imagekit.io/amieshomemade/067A3622%20(1).jpg',
+      'https://ik.imagekit.io/amieshomemade/067A3625%20(1).JPG',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2011_38_47%20AM.png?updatedAt=1782444349716',
       'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%203.01.54%E2%80%AFPM.png',
     ],
