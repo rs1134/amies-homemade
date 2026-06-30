@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Order History — Amie's Homemade</title>
+<style>
+  :root { --coral: #F04E4E; --brown: #4A3728; --cream: #FFF8EE; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--cream); color: var(--brown);
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 20px 14px 60px; }
+  h1 { font-size: 22px; margin: 10px 0 4px; }
+  .sub { color: rgba(74,55,40,0.5); font-size: 13px; margin-bottom: 20px; }
+
+  /* Login screen */
+  #login { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; gap: 14px; padding: 20px; }
+  #login input {
+    width: 100%; max-width: 320px; padding: 14px 16px; border-radius: 14px;
+    border: 2px solid rgba(74,55,40,0.12); font-size: 16px; outline: none;
+  }
+  #login input:focus { border-color: var(--coral); }
+  #login button, .refresh-btn {
+    background: var(--coral); color: white; border: none; padding: 14px 28px;
+    border-radius: 999px; font-weight: 700; font-size: 13px; text-transform: uppercase;
+    letter-spacing: 0.1em; cursor: pointer; width: 100%; max-width: 320px;
+  }
+  #loginError { color: var(--coral); font-size: 13px; font-weight: 600; min-height: 18px; }
+
+  /* Toolbar */
+  .toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; align-items: center; }
+  #search {
+    flex: 1; min-width: 200px; padding: 12px 16px; border-radius: 12px;
+    border: 2px solid rgba(74,55,40,0.1); font-size: 14px; outline: none;
+  }
+  #search:focus { border-color: var(--coral); }
+  .refresh-btn { width: auto; padding: 12px 20px; font-size: 11px; white-space: nowrap; }
+  .count { font-size: 12px; color: rgba(74,55,40,0.5); font-weight: 700; }
+
+  /* Order cards */
+  .order {
+    background: white; border-radius: 18px; padding: 16px 18px; margin-bottom: 12px;
+    border: 1px solid rgba(74,55,40,0.06); box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+  }
+  .order-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; flex-wrap: wrap; }
+  .order-id { font-weight: 800; font-size: 13px; color: var(--coral); }
+  .order-date { font-size: 11px; color: rgba(74,55,40,0.45); margin-top: 2px; }
+  .order-total { font-weight: 800; font-size: 17px; }
+  .order-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; margin-top: 12px; font-size: 13px; }
+  .order-grid .label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(74,55,40,0.4); font-weight: 700; margin-bottom: 2px; }
+  .order-items { margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(74,55,40,0.06); font-size: 12.5px; white-space: pre-line; color: rgba(74,55,40,0.75); }
+  .call-link { color: var(--coral); text-decoration: none; font-weight: 700; }
+  #empty { text-align: center; padding: 60px 20px; color: rgba(74,55,40,0.4); }
+  @media (max-width: 480px) { .order-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div id="login">
+  <h1 style="margin-bottom:0">Order History</h1>
+  <p class="sub">Amie's Homemade — staff only</p>
+  <input id="pw" type="password" placeholder="Enter password" autocomplete="off" />
+  <button onclick="tryLogin()">View Orders</button>
+  <p id="loginError"></p>
+</div>
+
+<div class="wrap" id="dashboard" style="display:none">
+  <h1>Order History</h1>
+  <p class="sub">Every order placed on amieshomemade.com, newest first.</p>
+  <div class="toolbar">
+    <input id="search" placeholder="Search by name, phone, city, order ID..." oninput="render()" />
+    <button class="refresh-btn" onclick="loadOrders()">Refresh</button>
+  </div>
+  <p class="count" id="count"></p>
+  <div id="orders"></div>
+  <div id="empty" style="display:none">No orders yet.</div>
+</div>
+
+<script>
+  let allOrders = [];
+
+  function tryLogin() {
+    const pw = document.getElementById('pw').value;
+    if (!pw) return;
+    sessionStorage.setItem('admin_pw', pw);
+    loadOrders();
+  }
+  document.getElementById('pw').addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
+
+  async function loadOrders() {
+    const pw = sessionStorage.getItem('admin_pw');
+    if (!pw) return;
+    document.getElementById('loginError').textContent = '';
+    try {
+      const res = await fetch('/api/admin-orders', { headers: { 'X-Admin-Password': pw } });
+      if (res.status === 401) {
+        sessionStorage.removeItem('admin_pw');
+        document.getElementById('loginError').textContent = 'Wrong password.';
+        document.getElementById('login').style.display = 'flex';
+        document.getElementById('dashboard').style.display = 'none';
+        return;
+      }
+      if (!res.ok) throw new Error('Server error: ' + res.status);
+      const data = await res.json();
+      allOrders = data.orders || [];
+      document.getElementById('login').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      render();
+    } catch (err) {
+      document.getElementById('loginError').textContent = 'Could not load orders. ' + err.message;
+      document.getElementById('login').style.display = 'flex';
+    }
+  }
+
+  function render() {
+    const q = document.getElementById('search').value.trim().toLowerCase();
+    const filtered = !q ? allOrders : allOrders.filter(o =>
+      [o.name, o.phone, o.city, o.order_id, o.email, o.address].some(f => (f || '').toLowerCase().includes(q))
+    );
+    document.getElementById('count').textContent = filtered.length + ' order' + (filtered.length === 1 ? '' : 's');
+    const container = document.getElementById('orders');
+    const empty = document.getElementById('empty');
+    if (filtered.length === 0) {
+      container.innerHTML = '';
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+    container.innerHTML = filtered.map(o => {
+      const date = new Date(o.created_at).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' });
+      return '<div class="order">' +
+        '<div class="order-top">' +
+          '<div><div class="order-id">' + esc(o.order_id) + '</div><div class="order-date">' + date + '</div></div>' +
+          '<div class="order-total">₹' + Number(o.grand_total).toLocaleString('en-IN') + '</div>' +
+        '</div>' +
+        '<div class="order-grid">' +
+          '<div><div class="label">Customer</div>' + esc(o.name) + '</div>' +
+          '<div><div class="label">Phone</div><a class="call-link" href="tel:' + esc(o.phone) + '">' + esc(o.phone) + '</a></div>' +
+          '<div><div class="label">City</div>' + esc(o.city || '—') + '</div>' +
+          '<div><div class="label">Email</div>' + esc(o.email || '—') + '</div>' +
+          '<div style="grid-column:1/-1"><div class="label">Address</div>' + esc(o.address || '—') + '</div>' +
+          '<div><div class="label">Payment ID</div>' + esc(o.payment_id || '—') + '</div>' +
+          '<div><div class="label">Weight</div>' + esc(o.total_weight) + 'g</div>' +
+        '</div>' +
+        '<div class="order-items">' + esc(o.items_summary || '') + '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  // Auto-login if password already saved this session
+  if (sessionStorage.getItem('admin_pw')) loadOrders();
+</script>
+</body>
+</html>

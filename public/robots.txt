@@ -2,5 +2,6 @@ User-agent: *
 Allow: /
 Disallow: /checkout
 Disallow: /api/
+Disallow: /admin.html
 
 Sitemap: https://amieshomemade.com/sitemap.xml
