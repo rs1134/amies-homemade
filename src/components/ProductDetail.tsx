@@ -117,7 +117,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
             <div className="relative w-full">
               {/* Fixed aspect-ratio container prevents height jump when switching images */}
               <div
-                className="relative rounded-2xl overflow-hidden bg-white aspect-square"
+                className="relative rounded-2xl overflow-hidden bg-cream aspect-square"
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
               >
@@ -128,7 +128,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
                     onError={() => setImageError(true)}
                     decoding="async"
                     fetchPriority="high"
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-contain"
                   />
                 ) : (
                   <div className="absolute inset-0 flex flex-col items-center justify-center bg-coral/5 text-coral/30 p-12 text-center">
