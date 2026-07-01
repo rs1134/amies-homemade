@@ -128,7 +128,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
                     onError={() => setImageError(true)}
                     decoding="async"
                     fetchPriority="high"
-                    className="absolute inset-0 w-full h-full object-contain"
+                    className="absolute inset-0 w-full h-full object-cover"
                   />
                 ) : (
                   <div className="absolute inset-0 flex flex-col items-center justify-center bg-coral/5 text-coral/30 p-12 text-center">
