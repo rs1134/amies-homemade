@@ -117,7 +117,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
             <div className="relative w-full">
               {/* Fixed aspect-ratio container prevents height jump when switching images */}
               <div
-                className="relative rounded-2xl overflow-hidden bg-[#F5EFE6] aspect-square"
+                className="relative rounded-2xl overflow-hidden bg-white aspect-square"
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
               >
