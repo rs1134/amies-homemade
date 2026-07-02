@@ -16,7 +16,8 @@
       s.parentNode.insertBefore(t,s)}(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
       fbq('init', '1974729913133100');
-      fbq('track', 'PageView');
+      // PageView is fired once per route (incl. initial load) from App.tsx —
+      // firing it here too would double-count every session's first pageview.
     </script>
     <noscript><img height="1" width="1" style="display:none"
       src="https://www.facebook.com/tr?id=1974729913133100&ev=PageView&noscript=1"
@@ -29,7 +30,10 @@
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'G-Z1QY7YJYQ3');
+      // send_page_view: false — page_view is fired once per route (incl.
+      // initial load) from App.tsx with the full URL, so GA4 gets UTM params
+      // and we don't double-count every session's first pageview.
+      gtag('config', 'G-Z1QY7YJYQ3', { send_page_view: false });
     </script>
 
     <!-- Preconnect to all external resources used on first paint -->

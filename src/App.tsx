@@ -854,11 +854,14 @@ const App: React.FC = () => {
     document.body.scrollTop = 0;
   }, [currentPage, currentArea, currentCity, currentBlogSlug]);
 
-  // Fire GA4 page_view on every SPA route change
+  // Fire GA4 page_view on every SPA route change (incl. initial load — this is
+  // the sole page_view source since send_page_view:false in index.html).
+  // page_location carries the full URL so UTM params survive.
   useEffect(() => {
     if (typeof window.gtag === 'function') {
       window.gtag('event', 'page_view', {
-        page_path: window.location.pathname,
+        page_location: window.location.href,
+        page_path: window.location.pathname + window.location.search,
         page_title: document.title,
       });
     }

@@ -3,7 +3,8 @@
   "configurations": [
     {
       "name": "amies-app",
-      "runtimeExecutable": "/tmp/amies_starter",
+      "runtimeExecutable": "/bin/sh",
+      "runtimeArgs": ["-c", "npm run dev"],
       "port": 3000
     }
   ]
