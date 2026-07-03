@@ -88,7 +88,7 @@ const PAGES: PageEntry[] = [
     url: 'https://amieshomemade.com/shop/mukhwas',
     title: "Mukhwas | Amie's Homemade",
     description: "Shop our full range of handmade mukhwas — Amla Ginger, Chatpati Mango, Digestive Crunch, and more. Made fresh in small batches with no preservatives.",
-    ogImage: 'https://ik.imagekit.io/amieshomemade/Whats-App-Image-2026-02-12-at-18-57-58-2.jpg?tr=w-1200,h-630,fo-auto',
+    ogImage: 'https://ik.imagekit.io/amieshomemade/067A4467.JPG?tr=w-1200,h-630,fo-auto',
   },
   {
     path: 'shop/traditional-sweets',
