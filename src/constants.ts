@@ -346,7 +346,7 @@ export const PRODUCTS: Product[] = [
     ],
     ingredients: ['Black Sesame', 'White Sesame', 'Ajwain', 'Suva (Dill Seeds)', 'Saunf', 'Dhana Dal', 'Amla', 'Turmeric'],
     prices: { '200 G': 264 },
-    isNew: true
+    rating: 4.5, reviewCount: 29
   },
 
   // --- SWEETS ---
