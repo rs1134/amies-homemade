@@ -13,7 +13,7 @@
 import { writeFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { PRODUCTS } from '../src/constants.ts';
+import { PRODUCTS, isProductVisible, HIDDEN_CATEGORIES } from '../src/constants.ts';
 import { getPublishedPosts } from '../src/blogs.ts';
 import { DELIVERY_AREAS } from '../src/deliveryAreas.ts';
 import { CITIES } from '../src/cities.ts';
@@ -48,13 +48,26 @@ entries.push(
 );
 
 // ── Category pages (prerendered) ──────────────────────────────────────────
-for (const slug of ['mukhwas', 'traditional-sweets', 'gujarati-snacks', 'health-wellness']) {
+// traditional-sweets (Sweets) and gujarati-snacks (Snacks) are excluded
+// while HIDDEN_CATEGORIES hides them from the shop — don't feed Google a
+// category page for something that's been pulled from sale.
+const CATEGORY_SLUG_TO_CATEGORY: Record<string, string> = {
+  'mukhwas': 'Mukhwas',
+  'traditional-sweets': 'Traditional Sweets',
+  'gujarati-snacks': 'Gujarati Snacks',
+  'health-wellness': 'Health & Wellness',
+};
+for (const [slug, category] of Object.entries(CATEGORY_SLUG_TO_CATEGORY)) {
+  if (HIDDEN_CATEGORIES.includes(category as any)) continue;
   entries.push({ loc: `${BASE}/shop/${slug}`, lastmod: today, changefreq: 'weekly', priority: '0.8' });
 }
 
 // ── Product pages ─────────────────────────────────────────────────────────
+// Hidden products drop out of the sitemap the same way they're excluded
+// from prerendering — no static page, no sitemap entry, nothing for Google
+// to crawl or keep indexed.
 const GIFTING_CATEGORY = 'Gifting & Hampers';
-for (const product of PRODUCTS) {
+for (const product of PRODUCTS.filter(isProductVisible)) {
   const section = product.category === GIFTING_CATEGORY ? 'gifting' : 'shop';
   entries.push({
     loc: `${BASE}/${section}/${slugify(product.name)}`,

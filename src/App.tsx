@@ -122,6 +122,16 @@ const PRODUCT_SLUG_MAP: Record<string, Product> = Object.fromEntries(
   PRODUCTS.map(p => [slugify(p.name), p])
 );
 
+// A hidden product (see HIDDEN_CATEGORIES in constants.ts) has no static
+// prerendered page any more, but the SPA shell still resolves — this keeps
+// direct navigation to its old URL from client-rendering full product
+// content, which would otherwise let it get re-indexed via Googlebot's JS
+// rendering pass even after the static page and sitemap entry are gone.
+const getVisibleProductFromSlug = (slug: string): Product | null => {
+  const product = PRODUCT_SLUG_MAP[slug];
+  return product && isProductVisible(product) ? product : null;
+};
+
 const getProductSlugFromPath = (path: string): string => {
   const m = path.match(/^\/(?:shop|gifting)\/(.+)$/);
   return m ? m[1] : '';
@@ -362,7 +372,7 @@ const App: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<Category | 'All'>(() => getCategoryFromPath(window.location.pathname));
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(() => {
     const slug = getProductSlugFromPath(window.location.pathname);
-    return slug ? (PRODUCT_SLUG_MAP[slug] ?? null) : null;
+    return slug ? getVisibleProductFromSlug(slug) : null;
   });
   const [orderComplete, setOrderComplete] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -464,7 +474,7 @@ const App: React.FC = () => {
       setCurrentCity(getCityFromPath(path));
       setCurrentBlogSlug(getBlogSlugFromPath(path));
       const slug = getProductSlugFromPath(path);
-      setSelectedProduct(slug ? (PRODUCT_SLUG_MAP[slug] ?? null) : null);
+      setSelectedProduct(slug ? getVisibleProductFromSlug(slug) : null);
       setActiveCategory(getCategoryFromPath(path));
       // Reset order confirmation if navigating away from /order-confirmed
       if (path !== '/order-confirmed') setOrderComplete(false);

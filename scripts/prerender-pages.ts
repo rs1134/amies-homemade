@@ -13,6 +13,8 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { HIDDEN_CATEGORIES } from '../src/constants.ts';
+import { Category } from '../src/types.ts';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const distDir = join(__dirname, '..', 'dist');
@@ -113,7 +115,14 @@ const PAGES: PageEntry[] = [
   },
 ];
 
-for (const page of PAGES) {
+// Skip static category pages for hidden categories (see HIDDEN_CATEGORIES
+// in constants.ts) — a delisted category shouldn't get a crawlable page
+// with full title/description/og-image any more than a delisted product.
+const HIDDEN_PAGE_PATHS = new Set<string>();
+if (HIDDEN_CATEGORIES.includes(Category.SWEETS)) HIDDEN_PAGE_PATHS.add('shop/traditional-sweets');
+if (HIDDEN_CATEGORIES.includes(Category.SNACKS)) HIDDEN_PAGE_PATHS.add('shop/gujarati-snacks');
+
+for (const page of PAGES.filter(p => !HIDDEN_PAGE_PATHS.has(p.path))) {
   let html = template;
 
   html = html.replace(/<title>[^<]*<\/title>/, `<title>${escapeHtml(page.title)}</title>`);
@@ -144,4 +153,4 @@ for (const page of PAGES) {
   console.log(`  ✓ /${page.path}`);
 }
 
-console.log(`\n✅ Pre-rendered ${PAGES.length} section pages`);
+console.log(`\n✅ Pre-rendered ${PAGES.length - HIDDEN_PAGE_PATHS.size} section pages (${HIDDEN_PAGE_PATHS.size} hidden, skipped)`);

@@ -12,7 +12,7 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { PRODUCTS } from '../src/constants.ts';
+import { PRODUCTS, isProductVisible } from '../src/constants.ts';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const distDir = join(__dirname, '..', 'dist');
@@ -32,7 +32,12 @@ function escapeHtml(str: string): string {
 
 const GIFTING_CATEGORY = 'Gifting & Hampers';
 
-for (const product of PRODUCTS) {
+// Hidden categories/products (see HIDDEN_CATEGORIES in constants.ts) must
+// never get a static, crawlable page — that's how a delisted product like
+// Dryfruit Mathdi ended up indexed by Google with full rich-snippet data.
+const visibleProducts = PRODUCTS.filter(isProductVisible);
+
+for (const product of visibleProducts) {
   const isGifting = product.category === GIFTING_CATEGORY;
   const slug = slugify(product.name);
   const section = isGifting ? 'gifting' : 'shop';
@@ -94,4 +99,4 @@ for (const product of PRODUCTS) {
   console.log(`  ✓ /${section}/${slug}`);
 }
 
-console.log(`\n✅ Pre-rendered ${PRODUCTS.length} product pages`);
+console.log(`\n✅ Pre-rendered ${visibleProducts.length} product pages (${PRODUCTS.length - visibleProducts.length} hidden, skipped)`);
