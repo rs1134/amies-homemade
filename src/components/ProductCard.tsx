@@ -173,7 +173,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onOpen 
             if (isOOS) { onOpen(product); return; } // still let them read the product
             handleAdd();
           }}
-          className={`w-full py-3 sm:py-3.5 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 flex items-center justify-center gap-1.5 border ${isOOS ? 'border-[#4A3728]/20 text-[#4A3728]/60 hover:bg-[#4A3728]/5' : 'border-[#F14E4E] text-[#F14E4E] hover:bg-[#F14E4E] hover:text-white'}`}
+          className={`w-full py-3 sm:py-3.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 flex items-center justify-center gap-1.5 border ${isOOS ? 'border-[#4A3728]/20 text-[#4A3728]/60 hover:bg-[#4A3728]/5' : 'border-[#F14E4E] bg-[#F14E4E] text-white shadow-md shadow-[#F14E4E]/30 hover:bg-[#d43d3d] hover:border-[#d43d3d] hover:shadow-lg hover:shadow-[#F14E4E]/40 active:scale-[0.98]'}`}
         >
           {isOOS ? 'Out of Stock · View Details' : needsOptions ? 'Choose Options' : '+ Add to Cart'}
         </button>
