@@ -1260,15 +1260,21 @@ const App: React.FC = () => {
                     loading="lazy"
                     decoding="async"
                   />
-                  {/* Founder badge — bottom left of photo */}
-                  <div className="absolute bottom-4 left-4">
-                    <div className="flex items-center gap-2.5 bg-[#2A1E14]/75 backdrop-blur-md rounded-full pl-1 pr-4 py-1 shadow-xl">
-                      <div className="w-8 h-8 rounded-full bg-coral flex items-center justify-center flex-shrink-0">
-                        <span className="brand-script text-white text-base leading-none">A</span>
+                  {/* Founder badge — bottom left of photo, styled like a handwritten kitchen label */}
+                  <div className="absolute bottom-4 left-4 rotate-[-2deg]">
+                    <div
+                      className="flex items-center gap-3 rounded-lg pl-2.5 pr-4 py-2 shadow-xl ring-1 ring-[#4A3728]/10"
+                      style={{ background: 'linear-gradient(135deg, #FFF9EE 0%, #FBEFD9 100%)' }}
+                    >
+                      <div
+                        className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 ring-2 ring-white/70 shadow-sm"
+                        style={{ background: 'linear-gradient(135deg, #F14E4E 0%, #C93A3A 100%)' }}
+                      >
+                        <span className="brand-script text-white text-lg leading-none">A</span>
                       </div>
                       <div>
-                        <p className="text-white font-bold text-xs leading-tight">Ami Shah</p>
-                        <p className="text-white/60 text-[10px] brand-rounded uppercase tracking-wider leading-tight">Founder & Maker</p>
+                        <p className="brand-script text-[#4A3728] text-xl leading-none">Ami Shah</p>
+                        <p className="text-[#8A6A2E] text-[9px] font-bold brand-rounded uppercase tracking-[0.15em] leading-tight mt-1">✦ Founder &amp; Maker</p>
                       </div>
                     </div>
                   </div>
