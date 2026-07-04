@@ -126,7 +126,7 @@ export const PRODUCTS: Product[] = [
     ],
     ingredients: ['Cranberries', 'Black Grapes', 'Kismis', 'Almonds', 'Anardana Churan'],
     prices: { '215 G': 355 },
-    rating: 4.5, reviewCount: 19
+    rating: 4.5, reviewCount: 29
   },
   {
     id: 'm11',
@@ -146,7 +146,7 @@ export const PRODUCTS: Product[] = [
     ],
     ingredients: ['Amla', 'Beet', 'Ginger', 'Salt', 'Sugar', 'Black Pepper', 'Black Salt'],
     prices: { '100 G': 154 },
-    rating: 4.5, reviewCount: 28
+    rating: 4.5, reviewCount: 38
   },
   {
     id: 'm2',
@@ -166,7 +166,7 @@ export const PRODUCTS: Product[] = [
     ],
     ingredients: ['Raw Mango', 'Homemade Anardana Churan'],
     prices: { '200 G': 264 },
-    rating: 5, reviewCount: 39
+    rating: 5, reviewCount: 49
   },
   {
     id: 'm3',
@@ -186,7 +186,7 @@ export const PRODUCTS: Product[] = [
     ],
     ingredients: ['Black Grapes', 'Black Sesame Seeds', 'Homemade Anardana Churan'],
     prices: { '200 G': 264 },
-    rating: 4.5, reviewCount: 35
+    rating: 4.5, reviewCount: 45
   },
   {
     id: 'm9',
@@ -206,7 +206,7 @@ export const PRODUCTS: Product[] = [
     ],
     ingredients: ['Coconut', 'Cocoa Powder', 'Salt', 'Sugar'],
     prices: { '125 G': 206 },
-    rating: 4.5, reviewCount: 31
+    rating: 4.5, reviewCount: 41
   },
   {
     id: 'm4',
@@ -226,7 +226,7 @@ export const PRODUCTS: Product[] = [
     ],
     ingredients: ['Coconut', 'Vanilla Extract', 'Salt', 'Sugar'],
     prices: { '125 G': 206 },
-    rating: 5, reviewCount: 37
+    rating: 5, reviewCount: 47
   },
   {
     id: 'm10',
@@ -246,7 +246,7 @@ export const PRODUCTS: Product[] = [
     ],
     ingredients: ['Almond', 'Cashews', 'Dry Dates', 'Coconut', 'Pumpkin Seeds', 'Sunflower Seeds', 'Saunf', 'Dhana Dal', 'Rose Petals', 'Natural Flavouring Substance'],
     prices: { '200 G': 299 },
-    rating: 4.5, reviewCount: 24
+    rating: 4.5, reviewCount: 34
   },
   {
     id: 'm1',
@@ -266,7 +266,7 @@ export const PRODUCTS: Product[] = [
     ],
     ingredients: ['Amla', 'Ginger', 'Salt', 'Sugar', 'Black Pepper', 'Black Salt'],
     prices: { '125 G': 165 },
-    rating: 4.5, reviewCount: 38
+    rating: 4.5, reviewCount: 48
   },
   {
     id: 'm8',
@@ -286,7 +286,7 @@ export const PRODUCTS: Product[] = [
     ],
     ingredients: ['Dates', 'Almond', 'Anardana Churan'],
     prices: { '215 G': 285 },
-    rating: 4, reviewCount: 22
+    rating: 4.5, reviewCount: 32
   },
   {
     id: 'm12',
@@ -306,7 +306,7 @@ export const PRODUCTS: Product[] = [
     ],
     ingredients: ['Ginger', 'Chaat Masala', 'Black Salt'],
     prices: { '170 G': 225 },
-    rating: 4.5, reviewCount: 37
+    rating: 4.5, reviewCount: 47
   },
   {
     id: 'sf3',
@@ -326,7 +326,7 @@ export const PRODUCTS: Product[] = [
     ],
     ingredients: ['Kharek', 'Coconut', 'Almond', 'Natural Flavouring Substance'],
     prices: { '190 G': 285 },
-    rating: 5, reviewCount: 29
+    rating: 5, reviewCount: 39
   },
   {
     id: 'm13',
@@ -346,7 +346,7 @@ export const PRODUCTS: Product[] = [
     ],
     ingredients: ['Black Sesame', 'White Sesame', 'Ajwain', 'Suva (Dill Seeds)', 'Saunf', 'Dhana Dal', 'Amla', 'Turmeric'],
     prices: { '200 G': 264 },
-    rating: 4.5, reviewCount: 29
+    rating: 4.5, reviewCount: 39
   },
 
   // --- SWEETS ---
