@@ -674,8 +674,9 @@ export const PRODUCTS: Product[] = [
     price: 400,
     weight: '100 G',
     description: 'Bring a luxurious touch of traditional warmth to your everyday routine. This premium, nutrient-rich blend pairs rich nuts with pure saffron to turn a simple glass of warm milk into a deeply comforting treat. Made with zero added sugar and packed with natural protein, it is the perfect wholesome ritual to help your body relax at the end of a busy day.',
-    image: 'https://ik.imagekit.io/amieshomemade/067A3606.JPG?updatedAt=1782443775172',
+    image: 'https://ik.imagekit.io/amieshomemade/067A3596%20(1).JPG?updatedAt=1782826370420',
     images: [
+      'https://ik.imagekit.io/amieshomemade/067A3596%20(1).JPG?updatedAt=1782826370420',
       'https://ik.imagekit.io/amieshomemade/067A3606.JPG?updatedAt=1782443775172',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jul%204,%202026,%2006_08_13%20PM.png',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2011_45_06%20AM.png?updatedAt=1782444349708',
