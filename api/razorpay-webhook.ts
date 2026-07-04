@@ -77,6 +77,16 @@ export default async function handler(req: any, res: any) {
     return res.status(200).json({ ok: true, skipped: 'no payment entity' });
   }
 
+  // Notes store amounts as "Rs.1020" — strip the "Rs." prefix (not just any
+  // non-digit char) before parsing, since a blanket [^\d.] strip leaves the
+  // period in "Rs." dangling in front of the real number (e.g. "Rs.100" ->
+  // ".100" -> parseFloat gives 0.1, not 100).
+  const parseRs = (v: any): number => {
+    const cleaned = String(v ?? '').replace(/^\s*Rs\.?\s*/i, '').replace(/[^\d.]/g, '');
+    const n = parseFloat(cleaned);
+    return Number.isFinite(n) ? n : 0;
+  };
+
   const notes = payment.notes || {};
   const orderId = `AM-WH${String(payment.id).slice(-5)}`;
   const name = notes.customer_name || 'Unknown';
@@ -86,9 +96,9 @@ export default async function handler(req: any, res: any) {
   const address = notes.address || '';
   const itemsSummary = notes.items || '';
   const totalWeight = parseInt(String(notes.total_weight || '0').replace(/[^\d]/g, ''), 10) || 0;
-  const subtotal = parseFloat(String(notes.subtotal || '0').replace(/[^\d.]/g, '')) || (payment.amount / 100);
-  const shippingFee = parseFloat(String(notes.shipping || '0').replace(/[^\d.]/g, '')) || 0;
-  const grandTotal = parseFloat(String(notes.grand_total || '0').replace(/[^\d.]/g, '')) || (payment.amount / 100);
+  const subtotal = parseRs(notes.subtotal) || (payment.amount / 100);
+  const shippingFee = parseRs(notes.shipping);
+  const grandTotal = parseRs(notes.grand_total) || (payment.amount / 100);
   const paymentId = payment.id;
 
   try {
