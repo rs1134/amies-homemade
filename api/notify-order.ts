@@ -1,4 +1,4 @@
-import { logAndNotifyOrder } from '../lib/orderLogger.ts';
+import { logAndNotifyOrder } from './_lib/orderLogger.ts';
 
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {

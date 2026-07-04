@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { logAndNotifyOrder } from '../lib/orderLogger.ts';
+import { logAndNotifyOrder } from './_lib/orderLogger.ts';
 
 // Disable Vercel's automatic JSON body parsing — webhook signature
 // verification needs the exact raw bytes Razorpay signed, not a re-serialized
