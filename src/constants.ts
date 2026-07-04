@@ -166,7 +166,7 @@ export const PRODUCTS: Product[] = [
     ],
     ingredients: ['Raw Mango', 'Homemade Anardana Churan'],
     prices: { '200 G': 264 },
-    rating: 5, reviewCount: 72
+    rating: 5, reviewCount: 64
   },
   {
     id: 'm3',
@@ -226,7 +226,7 @@ export const PRODUCTS: Product[] = [
     ],
     ingredients: ['Coconut', 'Vanilla Extract', 'Salt', 'Sugar'],
     prices: { '125 G': 206 },
-    rating: 5, reviewCount: 66
+    rating: 5, reviewCount: 60
   },
   {
     id: 'm10',
@@ -246,7 +246,7 @@ export const PRODUCTS: Product[] = [
     ],
     ingredients: ['Almond', 'Cashews', 'Dry Dates', 'Coconut', 'Pumpkin Seeds', 'Sunflower Seeds', 'Saunf', 'Dhana Dal', 'Rose Petals', 'Natural Flavouring Substance'],
     prices: { '200 G': 299 },
-    rating: 4.5, reviewCount: 60
+    rating: 4.5, reviewCount: 56
   },
   {
     id: 'm1',
@@ -326,7 +326,7 @@ export const PRODUCTS: Product[] = [
     ],
     ingredients: ['Kharek', 'Coconut', 'Almond', 'Natural Flavouring Substance'],
     prices: { '190 G': 285 },
-    rating: 5, reviewCount: 54
+    rating: 5, reviewCount: 52
   },
   {
     id: 'm13',
