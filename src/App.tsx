@@ -1231,7 +1231,7 @@ const App: React.FC = () => {
                             e.stopPropagation();
                             product.subOptions ? openProduct(product) : addToCart(product, undefined, undefined, false);
                           }}
-                          className="mt-auto w-full py-3 border border-[#F14E4E] text-[#F14E4E] text-[10px] sm:text-[11px] font-medium rounded-full hover:bg-[#F14E4E] hover:text-white transition-all duration-300 active:scale-95"
+                          className="mt-auto w-full py-3 border border-[#F14E4E] bg-[#F14E4E] text-white text-[10px] sm:text-[11px] font-bold rounded-full shadow-md shadow-[#F14E4E]/30 hover:bg-[#d43d3d] hover:border-[#d43d3d] hover:shadow-lg hover:shadow-[#F14E4E]/40 transition-all duration-300 active:scale-95"
                         >
                           {product.subOptions ? 'Choose Options' : '+ Add to Cart'}
                         </button>
