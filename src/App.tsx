@@ -20,7 +20,7 @@ import BlogView from './components/BlogView.tsx';
 import BlogPostView from './components/BlogPostView.tsx';
 import FAQView from './components/FAQView.tsx';
 import { getPostBySlug } from './blogs.ts';
-import { Sparkles, ArrowRight, MessageCircle, CheckCircle, Heart, ShieldCheck, History, Package, Users, Mail, Building2 } from 'lucide-react';
+import { Sparkles, ArrowRight, MessageCircle, CheckCircle, Users, Mail, Building2 } from 'lucide-react';
 
 const PAGE_SEO: Record<string, { title: string; description: string; canonical: string; ogTitle: string; ogDescription: string }> = {
   home: {
@@ -1311,61 +1311,6 @@ const App: React.FC = () => {
                   <ArrowRight size={16} className="group-hover:translate-x-1.5 transition-transform" />
                 </button>
               </div>
-            </div>
-          </section>
-
-          <section className="pt-12 pb-14 sm:pt-20 sm:pb-24 px-4 max-w-7xl mx-auto">
-            <div className="text-center mb-10 sm:mb-16">
-              <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em] mb-4 block">The Amie's Difference</span>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold serif text-[#4A3728]">Why Everyone Loves Amie's Homemade</h2>
-              <div className="w-16 h-1 bg-coral mx-auto rounded-full mt-6"></div>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {[
-                {
-                  title: "100% Homemade",
-                  desc: "Every treat is personally crafted in our home kitchen, ensuring the same authentic warmth and care you'd find in a mother's cooking.",
-                  color: "bg-[#FFF1F1]",
-                  textColor: "text-[#F04E4E]",
-                  icon: <Heart size={20} />
-                },
-                {
-                  title: "No Preservatives",
-                  desc: "We believe in the purity of nature. Our products contain zero artificial colors or chemicals, preserving the genuine goodness of real ingredients.",
-                  color: "bg-[#FFF8E7]",
-                  textColor: "text-[#D97706]",
-                  icon: <ShieldCheck size={20} />
-                },
-                {
-                  title: "Family Recipes",
-                  desc: "Rooted in generations of culinary wisdom, our recipes are kept secret to preserve the nostalgic flavors of traditional Indian households.",
-                  color: "bg-[#FFF0F7]",
-                  textColor: "text-[#DB2777]",
-                  icon: <History size={20} />
-                },
-                {
-                  title: "Small Batches",
-                  desc: "By cooking in limited quantities, we maintain rigorous hygiene standards and ensure that every single jar delivers the highest level of freshness.",
-                  color: "bg-[#F0FFF4]",
-                  textColor: "text-[#059669]",
-                  icon: <Package size={20} />
-                }
-              ].map((item, i) => (
-                <div
-                  key={i}
-                  className={`${item.color} p-6 sm:p-12 rounded-[2rem] sm:rounded-[4rem] text-center hover:shadow-2xl hover:shadow-[#4A3728]/5 hover:-translate-y-2 transition-all duration-500 flex flex-col items-center group`}
-                >
-                  <div className={`mb-6 p-4 rounded-3xl bg-white shadow-sm ${item.textColor} group-hover:scale-110 transition-transform duration-300`}>
-                    {item.icon}
-                  </div>
-                  <h4 className={`font-bold brand-rounded text-sm uppercase mb-6 tracking-[0.15em] ${item.textColor}`}>
-                    {item.title}
-                  </h4>
-                  <p className="text-[13px] text-[#4A3728]/70 leading-[1.8] font-medium">
-                    {item.desc}
-                  </p>
-                </div>
-              ))}
             </div>
           </section>
 
