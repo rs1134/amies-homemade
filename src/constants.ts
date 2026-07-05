@@ -129,27 +129,6 @@ export const PRODUCTS: Product[] = [
     rating: 4.5, reviewCount: 34
   },
   {
-    id: 'm11',
-    name: 'Amla Ginger Beet',
-    category: Category.MUKHWAS,
-    price: 154,
-    weight: '100 G',
-    description: 'Bold, zesty, and naturally sweet, this premium traditional mukhwas blends three wholesome ingredients into a delicious snack. Rich in fibre, it adds the perfect finishing touch to every meal while making healthy eating more enjoyable.',
-    image: 'https://ik.imagekit.io/amieshomemade/067A4449.JPG?updatedAt=1782443771436',
-    images: [
-      'https://ik.imagekit.io/amieshomemade/067A4449.JPG?updatedAt=1782443771436',
-      'https://ik.imagekit.io/amieshomemade/067A3311.JPG?updatedAt=1782443783626',
-      'https://ik.imagekit.io/amieshomemade/067A3341.JPG?updatedAt=1782443779684',
-      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2009_21_11%20AM.png?updatedAt=1782444349584',
-      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png',
-      'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%202.36.04%E2%80%AFPM.png',
-    ],
-    ingredients: ['Amla', 'Beet', 'Ginger', 'Salt', 'Sugar', 'Black Pepper', 'Black Salt'],
-    prices: { '100 G': 154 },
-    rating: 4.5, reviewCount: 38,
-    outOfStock: true
-  },
-  {
     id: 'm2',
     name: 'Chatpati Mango',
     category: Category.MUKHWAS,
@@ -348,6 +327,27 @@ export const PRODUCTS: Product[] = [
     ingredients: ['Black Sesame', 'White Sesame', 'Ajwain', 'Suva (Dill Seeds)', 'Saunf', 'Dhana Dal', 'Amla', 'Turmeric'],
     prices: { '200 G': 264 },
     rating: 4.5, reviewCount: 41
+  },
+  {
+    id: 'm11',
+    name: 'Amla Ginger Beet',
+    category: Category.MUKHWAS,
+    price: 154,
+    weight: '100 G',
+    description: 'Bold, zesty, and naturally sweet, this premium traditional mukhwas blends three wholesome ingredients into a delicious snack. Rich in fibre, it adds the perfect finishing touch to every meal while making healthy eating more enjoyable.',
+    image: 'https://ik.imagekit.io/amieshomemade/067A4449.JPG?updatedAt=1782443771436',
+    images: [
+      'https://ik.imagekit.io/amieshomemade/067A4449.JPG?updatedAt=1782443771436',
+      'https://ik.imagekit.io/amieshomemade/067A3311.JPG?updatedAt=1782443783626',
+      'https://ik.imagekit.io/amieshomemade/067A3341.JPG?updatedAt=1782443779684',
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2009_21_11%20AM.png?updatedAt=1782444349584',
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png',
+      'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%202.36.04%E2%80%AFPM.png',
+    ],
+    ingredients: ['Amla', 'Beet', 'Ginger', 'Salt', 'Sugar', 'Black Pepper', 'Black Salt'],
+    prices: { '100 G': 154 },
+    rating: 4.5, reviewCount: 38,
+    outOfStock: true
   },
 
   // --- SWEETS ---
