@@ -186,7 +186,8 @@ export const PRODUCTS: Product[] = [
     ],
     ingredients: ['Coconut', 'Cocoa Powder', 'Salt', 'Sugar'],
     prices: { '125 G': 206 },
-    rating: 4.5, reviewCount: 48
+    rating: 4.5, reviewCount: 48,
+    outOfStock: true
   },
   {
     id: 'm4',
