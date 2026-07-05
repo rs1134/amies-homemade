@@ -169,27 +169,6 @@ export const PRODUCTS: Product[] = [
     rating: 4.5, reviewCount: 39
   },
   {
-    id: 'm9',
-    name: 'Tender Coconut Chocolate Chips',
-    category: Category.MUKHWAS,
-    price: 206,
-    weight: '125 G',
-    description: 'Handpicked from Kerala\'s sun-drenched groves, our tender coconuts are blended with real cocoa for a rich, chocolatey crunch. High in fibre and naturally satisfying, it\'s the perfect post-meal treat or an energizing snack on the go.',
-    image: 'https://ik.imagekit.io/amieshomemade/067A4473.JPG?updatedAt=1782443770088',
-    images: [
-      'https://ik.imagekit.io/amieshomemade/067A4473.JPG?updatedAt=1782443770088',
-      'https://ik.imagekit.io/amieshomemade/067A3270.JPG?updatedAt=1782443783649',
-      'https://ik.imagekit.io/amieshomemade/067A3296.JPG',
-      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2009_35_49%20AM.png?updatedAt=1782444349713',
-      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png',
-      'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%202.18.46%E2%80%AFPM.png',
-    ],
-    ingredients: ['Coconut', 'Cocoa Powder', 'Salt', 'Sugar'],
-    prices: { '125 G': 206 },
-    rating: 4.5, reviewCount: 48,
-    outOfStock: true
-  },
-  {
     id: 'm4',
     name: 'Tender Coconut Vanilla Chips',
     category: Category.MUKHWAS,
@@ -348,6 +327,27 @@ export const PRODUCTS: Product[] = [
     ingredients: ['Amla', 'Beet', 'Ginger', 'Salt', 'Sugar', 'Black Pepper', 'Black Salt'],
     prices: { '100 G': 154 },
     rating: 4.5, reviewCount: 38,
+    outOfStock: true
+  },
+  {
+    id: 'm9',
+    name: 'Tender Coconut Chocolate Chips',
+    category: Category.MUKHWAS,
+    price: 206,
+    weight: '125 G',
+    description: 'Handpicked from Kerala\'s sun-drenched groves, our tender coconuts are blended with real cocoa for a rich, chocolatey crunch. High in fibre and naturally satisfying, it\'s the perfect post-meal treat or an energizing snack on the go.',
+    image: 'https://ik.imagekit.io/amieshomemade/067A4473.JPG?updatedAt=1782443770088',
+    images: [
+      'https://ik.imagekit.io/amieshomemade/067A4473.JPG?updatedAt=1782443770088',
+      'https://ik.imagekit.io/amieshomemade/067A3270.JPG?updatedAt=1782443783649',
+      'https://ik.imagekit.io/amieshomemade/067A3296.JPG',
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2009_35_49%20AM.png?updatedAt=1782444349713',
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png',
+      'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%202.18.46%E2%80%AFPM.png',
+    ],
+    ingredients: ['Coconut', 'Cocoa Powder', 'Salt', 'Sugar'],
+    prices: { '125 G': 206 },
+    rating: 4.5, reviewCount: 48,
     outOfStock: true
   },
 
