@@ -13,7 +13,7 @@ import { Product, Category } from './types.ts';
 // snack/sweet its new photos + (if different) a `shelfLife` value, since the
 // product page defaults to "6 months" best-before.
 export const HIDDEN_CATEGORIES: Category[] = [Category.SNACKS, Category.SWEETS];
-export const HIDDEN_PRODUCT_IDS: string[] = ['s13', 's14', 'hw2', 'g1', 'g2', 'g3']; // Peri-Peri Makhana, Dry Fruit Makhana, Masala Protein Beans Mix; legacy hampers (replaced by Trio of Traditions & The Gourmet Discovery)
+export const HIDDEN_PRODUCT_IDS: string[] = ['s13', 's14', 'hw2', 'g1', 'g2', 'g3', 'm11']; // Peri-Peri Makhana, Dry Fruit Makhana, Masala Protein Beans Mix; legacy hampers (replaced by Trio of Traditions & The Gourmet Discovery); Amla Ginger Beet (temporarily out of stock)
 
 export const isProductVisible = (p: Product): boolean =>
   !HIDDEN_CATEGORIES.includes(p.category) && !HIDDEN_PRODUCT_IDS.includes(p.id);
