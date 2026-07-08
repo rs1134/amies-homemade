@@ -2,6 +2,7 @@ import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Truck, Wallet, ChevronRight, Smartphone, Loader2, MessageCircle, CheckCircle, MapPin, Calendar, Building2, Minus, Plus, Trash2, Scale, Search } from 'lucide-react';
 import { CartItem } from '../types.ts';
 import { WHATSAPP_NUMBER } from '../constants.ts';
+import { trackMetaEvent } from '../metaTracking.ts';
 
 const COUPON_STORAGE_KEY = 'thanks10_used_phones';
 
@@ -54,6 +55,21 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   const [touched, setTouched] = useState<Partial<Record<FieldName, boolean>>>({});
 
   const formRef = useRef<HTMLDivElement>(null);
+
+  // Fire once when the checkout page is actually reached with items in cart.
+  useEffect(() => {
+    if (items.length === 0) return;
+    trackMetaEvent('InitiateCheckout', {
+      customData: {
+        value: total,
+        currency: 'INR',
+        content_ids: items.map(i => i.id),
+        content_type: 'product',
+        num_items: items.reduce((sum, i) => sum + i.quantity, 0),
+      },
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // ── Address autocomplete (new Places API — the legacy Autocomplete widget is
   //    not available to API keys created after March 2025, so we fetch
@@ -380,11 +396,27 @@ _Please confirm my order and share delivery details._
           }
 
           submitOrderSilently(response.razorpay_payment_id);
-          (window as any).fbq?.('track', 'Purchase', {
-            value: grandTotal, currency: 'INR',
-            content_ids: items.map(i => i.id), content_type: 'product',
-            num_items: items.reduce((sum, i) => sum + i.quantity, 0),
-          });
+
+          // Deterministic event_id (not random) — the Razorpay webhook fires
+          // this same Purchase event server-side as a backstop if the
+          // customer's browser never gets this far (closed tab, dropped
+          // connection right after paying). Sharing the id lets Meta
+          // dedupe the two into a single counted purchase instead of two.
+          const [firstName, ...lastNameParts] = formData.name.trim().split(/\s+/);
+          trackMetaEvent('Purchase', {
+            customData: {
+              value: grandTotal, currency: 'INR',
+              content_ids: items.map(i => i.id), content_type: 'product',
+              num_items: items.reduce((sum, i) => sum + i.quantity, 0),
+            },
+            userData: {
+              email: formData.email,
+              phone: formData.phone,
+              firstName,
+              lastName: lastNameParts.join(' '),
+              city: formData.city,
+            },
+          }, `purchase-${response.razorpay_payment_id}`);
         },
         prefill: { name: formData.name, email: formData.email, contact: formData.phone },
         notes: {

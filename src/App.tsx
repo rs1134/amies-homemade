@@ -3,6 +3,7 @@ import { Category, Product, CartItem } from './types.ts';
 import { PRODUCTS, WHATSAPP_NUMBER, isProductVisible, isCategoryVisible } from './constants.ts';
 import { AREA_MAP } from './deliveryAreas.ts';
 import { CITY_MAP } from './cities.ts';
+import { trackMetaEvent } from './metaTracking.ts';
 import Navbar from './components/Navbar.tsx';
 import SearchOverlay from './components/SearchOverlay.tsx';
 import Hero from './components/Hero.tsx';
@@ -877,11 +878,10 @@ const App: React.FC = () => {
     }
   }, [currentPage, currentArea, currentCity, currentBlogSlug]);
 
-  // Fire Meta Pixel PageView on every SPA route change
+  // Fire Meta Pixel PageView (browser + server-side Conversions API) on every
+  // SPA route change, sharing one event_id between both so Meta dedupes them.
   useEffect(() => {
-    if (typeof (window as any).fbq === 'function') {
-      (window as any).fbq('track', 'PageView');
-    }
+    trackMetaEvent('PageView');
   }, [currentPage, currentArea, currentCity, currentBlogSlug]);
 
   useEffect(() => {
@@ -940,13 +940,15 @@ const App: React.FC = () => {
         price: finalPrice 
       }];
     });
-    // Fire the Meta Pixel event here — the single place where an item is truly added
-    (window as any).fbq?.('track', 'AddToCart', {
-      value: finalPrice,
-      currency: 'INR',
-      content_name: product.name,
-      content_ids: [product.id],
-      content_type: 'product',
+    // Fire AddToCart (browser + server) here — the single place where an item is truly added
+    trackMetaEvent('AddToCart', {
+      customData: {
+        value: finalPrice,
+        currency: 'INR',
+        content_name: product.name,
+        content_ids: [product.id],
+        content_type: 'product',
+      },
     });
 
     if (openCart) {

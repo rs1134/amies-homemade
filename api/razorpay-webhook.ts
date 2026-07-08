@@ -11,6 +11,86 @@ const toHeaderSafe = (s: any) =>
 
 const NTFY_TOPIC = 'amies-homemade-9157537842';
 
+// ── Meta Conversions API — same hashing rules as api/meta-capi.ts, ─────────
+// duplicated here (not imported) because Vercel's per-function bundler does
+// not reliably trace shared modules outside each function's own file for
+// this project. See api/meta-capi.ts for the canonical, documented version.
+const sha256Hex = (s: string) => crypto.createHash('sha256').update(s, 'utf8').digest('hex');
+const normEmail = (v: string) => v.trim().toLowerCase();
+const normPhone = (v: string) => {
+  let digits = v.replace(/\D/g, '');
+  if (digits.length === 10) digits = '91' + digits;
+  else if (digits.length === 11 && digits.startsWith('0')) digits = '91' + digits.slice(1);
+  return digits;
+};
+const normName = (v: string) => v.trim().toLowerCase();
+const hashField = (value: string | undefined, normalize: (v: string) => string): string | undefined => {
+  if (!value) return undefined;
+  const normalized = normalize(String(value));
+  return normalized ? sha256Hex(normalized) : undefined;
+};
+
+async function sendMetaPurchaseBackstop(params: {
+  eventId: string;
+  value: number;
+  contentIds: string[];
+  name: string;
+  phone: string;
+  email: string;
+  city: string;
+}) {
+  const PIXEL_ID = process.env.META_PIXEL_ID;
+  const ACCESS_TOKEN = process.env.META_CAPI_ACCESS_TOKEN;
+  if (!PIXEL_ID || !ACCESS_TOKEN) return;
+
+  const [firstName, ...lastNameParts] = params.name.trim().split(/\s+/);
+  const userData: Record<string, unknown> = {};
+  const em = hashField(params.email, normEmail);
+  const ph = hashField(params.phone, normPhone);
+  const fn = hashField(firstName, normName);
+  const ln = hashField(lastNameParts.join(' '), normName);
+  const ct = hashField(params.city, (v) => v.trim().toLowerCase().replace(/[^a-z0-9]/g, ''));
+  if (em) userData.em = [em];
+  if (ph) userData.ph = [ph];
+  if (fn) userData.fn = [fn];
+  if (ln) userData.ln = [ln];
+  if (ct) userData.ct = [ct];
+  // No fbp/fbc/client IP here — this call originates from Razorpay's server,
+  // not the customer's browser, so those signals genuinely don't exist for
+  // this path. Weaker match quality than the client-fired event is expected;
+  // this only fires at all when the client-fired one never reached us.
+
+  const payload = {
+    data: [{
+      event_name: 'Purchase',
+      event_time: Math.floor(Date.now() / 1000),
+      event_id: params.eventId, // matches the client-fired event_id so Meta dedupes
+      action_source: 'website',
+      user_data: userData,
+      custom_data: {
+        value: params.value,
+        currency: 'INR',
+        content_ids: params.contentIds,
+        content_type: 'product',
+      },
+    }],
+  };
+
+  try {
+    const res = await fetch(`https://graph.facebook.com/v21.0/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const text = await res.text().catch(() => '');
+      console.error(`[razorpay-webhook] Meta CAPI Purchase send failed: ${res.status} ${text}`);
+    }
+  } catch (err: any) {
+    console.error('[razorpay-webhook] Meta CAPI Purchase send error:', err.message);
+  }
+}
+
 // Disable Vercel's automatic JSON body parsing — webhook signature
 // verification needs the exact raw bytes Razorpay signed, not a
 // re-serialized JSON.stringify of a parsed object.
@@ -126,6 +206,11 @@ export default async function handler(req: any, res: any) {
 
     if (inserted.length === 0) {
       console.log(`[razorpay-webhook] payment ${paymentId} already logged`);
+      // Note: deliberately NOT re-sending the Meta Purchase event here — if
+      // the order was already logged, the client-fired Purchase (which
+      // shares this same event_id) almost certainly already reached Meta,
+      // so sending again would just be a duplicate delivery of the same
+      // event_id (harmless, since Meta dedupes on event_id, but pointless).
       return res.status(200).json({ ok: true, isNew: false });
     }
 
@@ -197,6 +282,17 @@ export default async function handler(req: any, res: any) {
         console.error('[razorpay-webhook] SMS error:', smsErr.message);
       }
     }
+
+    // ── Meta Conversions API Purchase — server-side backstop ──────────────
+    // Shares the deterministic event_id `purchase-${paymentId}` with the
+    // client-fired Purchase in CheckoutView.tsx, so this only adds a second
+    // counted purchase on Meta's side if the client one never landed.
+    await sendMetaPurchaseBackstop({
+      eventId: `purchase-${paymentId}`,
+      value: grandTotal,
+      contentIds: [],
+      name, phone, email, city,
+    });
 
     console.log(`[razorpay-webhook] payment ${paymentId}: logged + notified`);
     return res.status(200).json({ ok: true, isNew: true });

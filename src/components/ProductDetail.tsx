@@ -3,6 +3,7 @@ import React, { useState, useMemo } from 'react';
 import { Heart, ShieldCheck, Clock, Truck, ImageOff, ChevronLeft, ChevronRight, ChevronDown, Minus, Plus, ChevronRight as Crumb } from 'lucide-react';
 import { Product } from '../types.ts';
 import { FSSAI_LICENSE } from '../constants.ts';
+import { trackMetaEvent } from '../metaTracking.ts';
 import ProductCard from './ProductCard.tsx';
 
 // Resize ImageKit images on the fly so the gallery loads fast (some source
@@ -65,6 +66,16 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
     setSelectedWeight(product.weights?.[0] || product.weight);
     setSelectedSubOption(product.subOptions?.[0]?.name || '');
     window.scrollTo({ top: 0, behavior: 'auto' });
+
+    trackMetaEvent('ViewContent', {
+      customData: {
+        value: product.price,
+        currency: 'INR',
+        content_name: product.name,
+        content_ids: [product.id],
+        content_type: 'product',
+      },
+    });
   }, [product.id]);
 
   // Find the currently selected sub-option prices if they exist
