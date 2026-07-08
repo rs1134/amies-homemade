@@ -1,6 +1,6 @@
 
 import React, { useState, useMemo } from 'react';
-import { Heart, ShieldCheck, Clock, Truck, ShoppingBag, ImageOff, ChevronLeft, ChevronRight, ChevronDown, Minus, Plus, ChevronRight as Crumb } from 'lucide-react';
+import { Heart, ShieldCheck, Clock, Truck, ImageOff, ChevronLeft, ChevronRight, ChevronDown, Minus, Plus, ChevronRight as Crumb } from 'lucide-react';
 import { Product } from '../types.ts';
 import { FSSAI_LICENSE } from '../constants.ts';
 import { trackMetaEvent } from '../metaTracking.ts';
@@ -346,7 +346,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
                 <Truck size={13} className="text-blue-500" /> Pan India Shipping
               </div>
               <div className="flex items-center gap-1.5 text-[10px] font-bold brand-rounded uppercase text-[#4A3728]/50 col-span-2">
-                <ShoppingBag size={13} className="text-[#F14E4E]" /> Also Available on Amazon
+                Also Available on <img src="https://ik.imagekit.io/amieshomemade/Amazon-logo-meaning.jpg" alt="Amazon" className="h-4 w-auto object-contain" />
               </div>
             </div>
 
