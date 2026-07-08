@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Instagram, ChevronLeft, ChevronRight, Play, VolumeX } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Play, VolumeX } from 'lucide-react';
 
 interface Reel {
   image: string;
@@ -119,15 +119,9 @@ const InstagramReels: React.FC = () => {
     <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-[#FFF8EE]">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-10 sm:mb-14">
-          <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em] mb-4 block">
+          <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em] block">
             Behind The Scenes
           </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold serif text-[#4A3728] mb-3">
-            Follow Us on Instagram
-          </h2>
-          <p className="text-[#4A3728]/60 text-sm sm:text-base">
-            Join our community for daily inspiration and a closer look at our kitchen
-          </p>
         </div>
 
         <div className="relative">
@@ -152,18 +146,6 @@ const InstagramReels: React.FC = () => {
           >
             {REELS.map((reel, i) => <ReelCard key={i} reel={reel} />)}
           </div>
-        </div>
-
-        <div className="text-center mt-10 sm:mt-12">
-          <a
-            href="https://www.instagram.com/amies_homemadefoods/?hl=en"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2.5 px-9 py-4 bg-[#4A3728] text-[#FFF8EE] rounded-full font-bold tracking-[0.2em] uppercase text-xs hover:bg-[#3D2D1F] hover:scale-[1.03] transition-all duration-300 shadow-xl shadow-[#4A3728]/20"
-          >
-            <Instagram size={16} />
-            Visit Instagram
-          </a>
         </div>
       </div>
     </section>
