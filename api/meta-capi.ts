@@ -94,6 +94,12 @@ export async function sendMetaCapiEvent(params: {
   if (params.clientIp) userData.client_ip_address = params.clientIp;
   if (params.clientUserAgent) userData.client_user_agent = params.clientUserAgent;
 
+  // TEMPORARY — remove META_TEST_EVENT_CODE from Vercel env once events are
+  // confirmed landing correctly in Meta's Test Events tab. Leaving this set
+  // routes every event to the test stream instead of counting toward real
+  // ad reporting.
+  const testEventCode = process.env.META_TEST_EVENT_CODE;
+
   const payload = {
     data: [{
       event_name: params.eventName,
@@ -104,6 +110,7 @@ export async function sendMetaCapiEvent(params: {
       user_data: userData,
       custom_data: params.customData || undefined,
     }],
+    ...(testEventCode ? { test_event_code: testEventCode } : {}),
   };
 
   try {
