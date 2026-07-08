@@ -9,11 +9,13 @@ interface Reel {
   url: string;
 }
 
+// ?tr=w-480 shrinks each clip to a few MB (down from tens of MB originally) —
+// still only fetched on click (see ReelCard), never on page load.
 const REELS: Reel[] = [
-  { image: '/instagram-reels/reel-1.jpg', url: 'https://www.instagram.com/p/DahwpBCv2mH/' },
-  { image: '/instagram-reels/reel-2.jpg', url: 'https://www.instagram.com/p/DaQILIYzDVi/' },
-  { image: '/instagram-reels/reel-3.jpg', url: 'https://www.instagram.com/reel/DadDp7WTiX5/' },
-  { image: '/instagram-reels/reel-4.jpg', url: 'https://www.instagram.com/reel/DafmFJbScOR/' },
+  { image: '/instagram-reels/reel-1.jpg', video: 'https://ik.imagekit.io/amieshomemade/IMG_4009.MP4?tr=w-480', url: 'https://www.instagram.com/p/DahwpBCv2mH/' },
+  { image: '/instagram-reels/reel-2.jpg', video: 'https://ik.imagekit.io/amieshomemade/REEL%2004%20(2).mp4?tr=w-480', url: 'https://www.instagram.com/p/DaQILIYzDVi/' },
+  { image: '/instagram-reels/reel-3.jpg', video: 'https://ik.imagekit.io/amieshomemade/REEL%2002%20(5).mp4?tr=w-480', url: 'https://www.instagram.com/reel/DadDp7WTiX5/' },
+  { image: '/instagram-reels/reel-4.jpg', video: 'https://ik.imagekit.io/amieshomemade/REEL%2003%20(2).mp4?tr=w-480', url: 'https://www.instagram.com/reel/DafmFJbScOR/' },
 ];
 
 const ReelCard: React.FC<{ reel: Reel }> = ({ reel }) => {
