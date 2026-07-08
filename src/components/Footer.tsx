@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Instagram, Facebook, Phone, MapPin, Mail, X, ShieldCheck, Truck, CheckCircle, Clock, Scale } from 'lucide-react';
+import { Instagram, Facebook, Phone, MapPin, Mail, X, ShieldCheck, Truck, CheckCircle, Clock, Scale, ShoppingBag } from 'lucide-react';
 import { WHATSAPP_NUMBER } from '../constants.ts';
 import Logo from './Logo.tsx';
 
@@ -159,6 +159,11 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <a href="https://razorpay.com/" target="_blank" rel="noopener noreferrer">
               <img referrerPolicy="origin" src="https://badges.razorpay.com/badge-light.png" style={{ height: '45px', width: '113px' }} alt="Razorpay | Payment Gateway | Neobank" />
             </a>
+            {/* Amazon availability badge */}
+            <div className="flex items-center gap-2 bg-white/5 px-4 py-2 rounded-full">
+              <ShoppingBag size={16} className="text-[#F14E4E]" />
+              <span className="text-white/70 text-xs font-semibold">Also Available on <strong className="text-white">Amazon</strong></span>
+            </div>
             {/* FSSAI Badge */}
             <div className="flex items-center gap-3">
               <img
