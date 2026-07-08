@@ -1,12 +1,79 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Instagram, ChevronLeft, ChevronRight, Play } from 'lucide-react';
 
-const REELS = [
+interface Reel {
+  image: string;
+  /** Self-hosted mp4 — plays inline on click. Falls back to linking out to
+   * `url` when not provided (e.g. before the source video file is on hand). */
+  video?: string;
+  url: string;
+}
+
+const REELS: Reel[] = [
   { image: '/instagram-reels/reel-1.jpg', url: 'https://www.instagram.com/p/DahwpBCv2mH/' },
   { image: '/instagram-reels/reel-2.jpg', url: 'https://www.instagram.com/p/DaQILIYzDVi/' },
   { image: '/instagram-reels/reel-3.jpg', url: 'https://www.instagram.com/reel/DadDp7WTiX5/' },
   { image: '/instagram-reels/reel-4.jpg', url: 'https://www.instagram.com/reel/DafmFJbScOR/' },
 ];
+
+const ReelCard: React.FC<{ reel: Reel }> = ({ reel }) => {
+  const [playing, setPlaying] = useState(false);
+
+  const cardClasses = 'group relative flex-shrink-0 w-[45%] sm:w-[30%] lg:w-[23%] aspect-[9/16] rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 snap-start bg-black';
+
+  // No source video yet — thumbnail links out to the real Instagram post.
+  if (!reel.video) {
+    return (
+      <a href={reel.url} target="_blank" rel="noopener noreferrer" className={cardClasses}>
+        <img
+          src={reel.image}
+          alt="Amie's Homemade on Instagram"
+          loading="lazy"
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+        <div className="absolute top-3 right-3 w-7 h-7 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white">
+          <Play size={13} fill="white" />
+        </div>
+      </a>
+    );
+  }
+
+  // Self-hosted video — plays inline on click, no redirect.
+  return (
+    <div className={cardClasses}>
+      {playing ? (
+        <video
+          src={reel.video}
+          poster={reel.image}
+          controls
+          autoPlay
+          playsInline
+          className="w-full h-full object-cover"
+        />
+      ) : (
+        <button
+          onClick={() => setPlaying(true)}
+          aria-label="Play reel"
+          className="absolute inset-0 w-full h-full"
+        >
+          <img
+            src={reel.image}
+            alt="Amie's Homemade on Instagram"
+            loading="lazy"
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+          <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors" />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
+              <Play size={22} fill="#4A3728" className="text-[#4A3728] ml-0.5" />
+            </div>
+          </div>
+        </button>
+      )}
+    </div>
+  );
+};
 
 const InstagramReels: React.FC = () => {
   const scrollerRef = useRef<HTMLDivElement>(null);
@@ -14,7 +81,7 @@ const InstagramReels: React.FC = () => {
   const scroll = (dir: 'left' | 'right') => {
     const el = scrollerRef.current;
     if (!el) return;
-    const cardWidth = el.querySelector('a')?.clientWidth || 280;
+    const cardWidth = el.querySelector(':scope > *')?.clientWidth || 280;
     el.scrollBy({ left: dir === 'left' ? -(cardWidth + 16) : cardWidth + 16, behavior: 'smooth' });
   };
 
@@ -53,26 +120,7 @@ const InstagramReels: React.FC = () => {
             ref={scrollerRef}
             className="flex gap-4 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory"
           >
-            {REELS.map((reel, i) => (
-              <a
-                key={i}
-                href={reel.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group relative flex-shrink-0 w-[45%] sm:w-[30%] lg:w-[23%] aspect-[9/16] rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 snap-start"
-              >
-                <img
-                  src={reel.image}
-                  alt="Amie's Homemade on Instagram"
-                  loading="lazy"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                <div className="absolute top-3 right-3 w-7 h-7 rounded-full bg-black/40 backdrop-blur-sm flex items-center justify-center text-white">
-                  <Play size={13} fill="white" />
-                </div>
-              </a>
-            ))}
+            {REELS.map((reel, i) => <ReelCard key={i} reel={reel} />)}
           </div>
         </div>
 
