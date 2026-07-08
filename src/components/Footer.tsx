@@ -160,10 +160,15 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               <img referrerPolicy="origin" src="https://badges.razorpay.com/badge-light.png" style={{ height: '45px', width: '113px' }} alt="Razorpay | Payment Gateway | Neobank" />
             </a>
             {/* Amazon availability badge */}
-            <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full">
+            <a
+              href="https://www.amazon.in/s?k=Amie%27s+Homemade&ref=bl_dp_s_web_0"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 bg-white px-4 py-2 rounded-full hover:scale-105 transition-transform"
+            >
               <span className="text-[#2A1E14] text-xs font-semibold">Also on</span>
               <img src="https://ik.imagekit.io/amieshomemade/Amazon-logo-meaning.jpg" alt="Amazon" className="h-5 w-auto object-contain" />
-            </div>
+            </a>
             {/* FSSAI Badge */}
             <div className="flex items-center gap-3">
               <img
