@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { Instagram, ChevronLeft, ChevronRight, Play } from 'lucide-react';
+import React, { useRef, useState, useEffect } from 'react';
+import { Instagram, ChevronLeft, ChevronRight, Play, VolumeX } from 'lucide-react';
 
 interface Reel {
   image: string;
@@ -20,6 +20,24 @@ const REELS: Reel[] = [
 
 const ReelCard: React.FC<{ reel: Reel }> = ({ reel }) => {
   const [playing, setPlaying] = useState(false);
+  const [muted, setMuted] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Mounting a <video autoPlay> after a React state update (rather than
+  // synchronously in the click handler) can silently lose the browser's
+  // "user gesture" association, so autoplay-with-sound gets blocked with no
+  // visible error — the element just sits there. Playing explicitly via a
+  // ref, with a muted-autoplay fallback if the browser still refuses sound,
+  // is the reliable way to make a deferred-mount video actually play.
+  useEffect(() => {
+    if (!playing || !videoRef.current) return;
+    const video = videoRef.current;
+    video.play().catch(() => {
+      video.muted = true;
+      setMuted(true);
+      video.play().catch(() => { /* autoplay fully blocked — controls still let them hit play manually */ });
+    });
+  }, [playing]);
 
   const cardClasses = 'group relative flex-shrink-0 w-[45%] sm:w-[30%] lg:w-[23%] aspect-[9/16] rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 snap-start bg-black';
 
@@ -45,14 +63,24 @@ const ReelCard: React.FC<{ reel: Reel }> = ({ reel }) => {
   return (
     <div className={cardClasses}>
       {playing ? (
-        <video
-          src={reel.video}
-          poster={reel.image}
-          controls
-          autoPlay
-          playsInline
-          className="w-full h-full object-cover"
-        />
+        <>
+          <video
+            ref={videoRef}
+            src={reel.video}
+            poster={reel.image}
+            controls
+            playsInline
+            className="w-full h-full object-cover"
+          />
+          {muted && (
+            <button
+              onClick={() => { if (videoRef.current) { videoRef.current.muted = false; setMuted(false); } }}
+              className="absolute bottom-3 left-3 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold uppercase tracking-wider"
+            >
+              <VolumeX size={12} /> Tap to unmute
+            </button>
+          )}
+        </>
       ) : (
         <button
           onClick={() => setPlaying(true)}
