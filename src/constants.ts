@@ -116,10 +116,10 @@ export const PRODUCTS: Product[] = [
     price: 355,
     weight: '215 G',
     description: 'Tart cranberries and crunchy almonds come together in this nutrient-rich blend for a naturally energizing snack. A perfect balance of wholesome goodness and refreshing flavour.',
-    image: 'https://ik.imagekit.io/amieshomemade/067A4439.JPG?updatedAt=1782443772420&tr=w-2000,h-2000',
+    image: 'https://ik.imagekit.io/amieshomemade/067A4439.JPG?updatedAt=1782443772420',
     images: [
-      'https://ik.imagekit.io/amieshomemade/067A4439.JPG?updatedAt=1782443772420&tr=w-2000,h-2000',
-      'https://ik.imagekit.io/amieshomemade/067A3136.JPG?updatedAt=1782443779492&tr=w-2000,h-2000',
+      'https://ik.imagekit.io/amieshomemade/067A4439.JPG?updatedAt=1782443772420',
+      'https://ik.imagekit.io/amieshomemade/067A3136.JPG?updatedAt=1782443779492',
       'https://ik.imagekit.io/amieshomemade/067A3179.JPG?updatedAt=1782443778784',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2010_56_04%20AM.png?updatedAt=1782444349678',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png',
