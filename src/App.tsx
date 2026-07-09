@@ -21,7 +21,7 @@ import BlogView from './components/BlogView.tsx';
 import BlogPostView from './components/BlogPostView.tsx';
 import FAQView from './components/FAQView.tsx';
 import { getPostBySlug } from './blogs.ts';
-import { Sparkles, ArrowRight, MessageCircle, CheckCircle, Users, Mail, Building2 } from 'lucide-react';
+import { Sparkles, ArrowRight, MessageCircle, CheckCircle, Users, Mail, Building2, Banknote, X } from 'lucide-react';
 
 const PAGE_SEO: Record<string, { title: string; description: string; canonical: string; ogTitle: string; ogDescription: string }> = {
   home: {
@@ -378,6 +378,20 @@ const App: React.FC = () => {
   const [orderComplete, setOrderComplete] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [addedToast, setAddedToast] = useState<string | null>(null);
+  const [showCodPopup, setShowCodPopup] = useState(false);
+
+  // COD announcement — once per browser session, shown a couple seconds
+  // after landing so it doesn't compete with the initial page paint.
+  useEffect(() => {
+    try {
+      if (sessionStorage.getItem('cod_popup_shown')) return;
+    } catch { /* storage blocked — just show it once per page load instead */ }
+    const timer = setTimeout(() => {
+      setShowCodPopup(true);
+      try { sessionStorage.setItem('cod_popup_shown', '1'); } catch { /* non-fatal */ }
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
 
   // Persist cart so it survives refresh / accidental tab close
   useEffect(() => {
@@ -1339,6 +1353,8 @@ const App: React.FC = () => {
                 <span className="text-white/50">|</span>
                 <span className="px-10">Free Delivery across Ahmedabad</span>
                 <span className="text-white/50">|</span>
+                <span className="px-10">Cash on Delivery Now Available in Ahmedabad</span>
+                <span className="text-white/50">|</span>
                 <span className="px-10">Pan-India shipping FREE on orders above ₹1499</span>
                 <span className="text-white/50">|</span>
                 <span className="px-10">Handcrafted in Small Batches</span>
@@ -1395,6 +1411,35 @@ const App: React.FC = () => {
           >
             View Bag
           </button>
+        </div>
+      )}
+
+      {/* Cash on Delivery announcement — once per session */}
+      {showCodPopup && (
+        <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 sm:p-6">
+          <div className="absolute inset-0 bg-[#2A1E14]/60 backdrop-blur-sm transition-opacity" onClick={() => setShowCodPopup(false)} />
+          <div className="relative bg-[#FFF8EE] w-full max-w-sm rounded-[2.5rem] shadow-2xl overflow-hidden animate-in zoom-in fade-in duration-300 p-8 sm:p-10 text-center">
+            <button
+              onClick={() => setShowCodPopup(false)}
+              aria-label="Close"
+              className="absolute top-4 right-4 p-2 hover:bg-[#F04E4E]/5 rounded-full text-coral transition-colors"
+            >
+              <X size={20} />
+            </button>
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-green-600 mx-auto mb-5">
+              <Banknote size={32} />
+            </div>
+            <h3 className="text-2xl font-bold serif text-[#4A3728] mb-2">Cash on Delivery is Here!</h3>
+            <p className="text-sm text-[#4A3728]/60 brand-rounded leading-relaxed mb-7">
+              Now available for orders delivered within <span className="font-bold text-[#4A3728]">Ahmedabad</span>. Pay in cash right at your doorstep — no online payment needed.
+            </p>
+            <button
+              onClick={() => setShowCodPopup(false)}
+              className="w-full py-4 bg-coral text-white rounded-2xl font-bold brand-rounded uppercase tracking-[0.2em] text-[11px] hover:bg-[#d43d3d] transition-all active:scale-[0.98]"
+            >
+              Got It
+            </button>
+          </div>
         </div>
       )}
 
