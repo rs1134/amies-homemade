@@ -15,7 +15,6 @@ import CheckoutView from './components/CheckoutView.tsx';
 import Cart from './components/Cart.tsx';
 import Footer from './components/Footer.tsx';
 import Reviews from './components/Reviews.tsx';
-import LifestyleStrip from './components/LifestyleStrip.tsx';
 import AreaDeliveryPage from './components/AreaDeliveryPage.tsx';
 import CityDeliveryPage from './components/CityDeliveryPage.tsx';
 import BlogView from './components/BlogView.tsx';
@@ -1332,7 +1331,6 @@ const App: React.FC = () => {
           </section>
 
           <Reviews />
-          <LifestyleStrip />
         </>
       );
     }
