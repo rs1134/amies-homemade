@@ -1,10 +1,18 @@
 /**
- * Generates a Google Merchant Center product feed CSV from live site data.
- * Run: npx tsx scripts/generate-merchant-feed.ts
+ * Generates a Google Merchant Center product feed CSV from live site data,
+ * written to dist/merchant-feed.csv so it deploys and is publicly reachable
+ * at https://amieshomemade.com/merchant-feed.csv — that's the URL to paste
+ * into Merchant Center's "Enter a link to your file" field. Runs on every
+ * build (see package.json), so it never drifts from the real catalog.
  */
-import { writeFileSync } from 'fs';
+import { writeFileSync, mkdirSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import { PRODUCTS, isProductVisible } from '../src/constants.ts';
 import { Category } from '../src/types.ts';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const distDir = join(__dirname, '..', 'dist');
 
 const BASE = 'https://amieshomemade.com';
 
@@ -117,9 +125,10 @@ for (const r of rows) {
   lines.push(headers.map(h => csvEscape((r as any)[h])).join(','));
 }
 
-writeFileSync('merchant-feed.csv', lines.join('\n') + '\n', 'utf-8');
+mkdirSync(distDir, { recursive: true });
+writeFileSync(join(distDir, 'merchant-feed.csv'), lines.join('\n') + '\n', 'utf-8');
 
-console.log(`\n✅ Wrote merchant-feed.csv with ${rows.length} products\n`);
+console.log(`\n✅ Wrote dist/merchant-feed.csv with ${rows.length} products\n`);
 if (warnings.length) {
   console.log(`⚠️  ${warnings.length} warnings:`);
   for (const w of warnings) console.log('  - ' + w);
