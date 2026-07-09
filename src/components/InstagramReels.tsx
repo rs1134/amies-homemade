@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Play, VolumeX } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Play } from 'lucide-react';
 
 interface Reel {
   image: string;
@@ -13,8 +13,8 @@ interface Reel {
 // is exhausted, which made every transformed video 403 account-wide
 // (confirmed via ImageKit dashboard: "Video transformation usage exceeded
 // free plan limits"). Plain URLs serve ImageKit's default-optimized upload
-// instead (a few MB, not the 90MB+ raw originals) and don't touch that
-// quota. Still only fetched on click (see ReelCard), never on page load.
+// instead (a few MB, moov atom at front, delivered at ~18MB/s) and don't
+// touch that quota.
 const REELS: Reel[] = [
   { image: '/instagram-reels/reel-1.jpg', video: 'https://ik.imagekit.io/amieshomemade/IMG_4009.MP4', url: 'https://www.instagram.com/p/DahwpBCv2mH/' },
   { image: '/instagram-reels/reel-2.jpg', video: 'https://ik.imagekit.io/amieshomemade/REEL%2004%20(2).mp4', url: 'https://www.instagram.com/p/DaQILIYzDVi/' },
@@ -29,34 +29,20 @@ interface ReelCardProps {
 }
 
 const ReelCard: React.FC<ReelCardProps> = ({ reel, isActive, onActivate }) => {
-  const [muted, setMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [started, setStarted] = useState(false);
 
-  // Mounting a <video autoPlay> after a React state update (rather than
-  // synchronously in the click handler) can silently lose the browser's
-  // "user gesture" association, so autoplay-with-sound gets blocked with no
-  // visible error — the element just sits there. Playing explicitly via a
-  // ref, with a muted-autoplay fallback if the browser still refuses sound,
-  // is the reliable way to make a deferred-mount video actually play.
-  //
-  // isActive also doubles as "am I the only video allowed to be loading" —
-  // only one card is ever mounted with a real <video> at a time (see parent),
-  // which prevents multiple multi-MB clips fighting for bandwidth at once
-  // and all appearing to hang/buffer forever.
+  // When a different card is tapped, pause (and rewind) this one so only one
+  // reel ever plays / buffers at a time.
   useEffect(() => {
-    if (!isActive || !videoRef.current) return;
-    setMuted(false);
-    const video = videoRef.current;
-    video.play().catch(() => {
-      video.muted = true;
-      setMuted(true);
-      video.play().catch(() => { /* autoplay fully blocked — controls still let them hit play manually */ });
-    });
-  }, [isActive]);
-
-  const cardClasses = 'group relative flex-shrink-0 w-[45%] sm:w-[30%] lg:w-[23%] aspect-[9/16] rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 snap-start bg-black';
+    if (!isActive && videoRef.current && started) {
+      videoRef.current.pause();
+    }
+  }, [isActive, started]);
 
   // No source video yet — thumbnail links out to the real Instagram post.
+  const cardClasses = 'group relative flex-shrink-0 w-[45%] sm:w-[30%] lg:w-[23%] aspect-[9/16] rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 snap-start bg-black';
+
   if (!reel.video) {
     return (
       <a href={reel.url} target="_blank" rel="noopener noreferrer" className={cardClasses}>
@@ -74,40 +60,44 @@ const ReelCard: React.FC<ReelCardProps> = ({ reel, isActive, onActivate }) => {
     );
   }
 
-  // Self-hosted video — plays inline on click, no redirect.
+  // CRITICAL: play() is called synchronously here, inside the click handler,
+  // so the browser's user-gesture activation carries through and unmuted
+  // playback is allowed. (Calling play() later — e.g. in a useEffect after a
+  // state change and video remount — loses that activation, so the browser
+  // silently blocks playback and the video sits at 0:00. That was the bug.)
+  const handlePlay = () => {
+    onActivate();
+    setStarted(true);
+    const v = videoRef.current;
+    if (!v) return;
+    v.play().catch(() => {
+      // Some strict mobile/low-power contexts still refuse unmuted autoplay
+      // even from a gesture — retry muted as a last resort.
+      v.muted = true;
+      v.play().catch(() => { /* native controls still let them press play */ });
+    });
+  };
+
   return (
     <div className={cardClasses}>
-      {isActive ? (
-        <>
-          <video
-            ref={videoRef}
-            src={reel.video}
-            poster={reel.image}
-            controls
-            playsInline
-            className="w-full h-full object-cover"
-          />
-          {muted && (
-            <button
-              onClick={() => { if (videoRef.current) { videoRef.current.muted = false; setMuted(false); } }}
-              className="absolute bottom-3 left-3 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold uppercase tracking-wider"
-            >
-              <VolumeX size={12} /> Tap to unmute
-            </button>
-          )}
-        </>
-      ) : (
+      {/* preload="none": the element is always mounted (so play() has a live
+          ref to call synchronously on click) but fetches nothing until then,
+          keeping page load unaffected. */}
+      <video
+        ref={videoRef}
+        src={reel.video}
+        poster={reel.image}
+        controls={started}
+        playsInline
+        preload="none"
+        className="w-full h-full object-cover"
+      />
+      {!started && (
         <button
-          onClick={onActivate}
+          onClick={handlePlay}
           aria-label="Play reel"
           className="absolute inset-0 w-full h-full"
         >
-          <img
-            src={reel.image}
-            alt="Amie's Homemade on Instagram"
-            loading="lazy"
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
           <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors" />
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center shadow-xl group-hover:scale-110 transition-transform">
