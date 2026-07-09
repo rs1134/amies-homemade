@@ -25,7 +25,7 @@ export default async function handler(req: any, res: any) {
     const orders = await sql`
       SELECT id, created_at, order_id, name, phone, email, city, address,
              items_summary, total_weight, subtotal, coupon_discount,
-             shipping_fee, grand_total, payment_id
+             shipping_fee, grand_total, payment_id, payment_method
       FROM orders
       ORDER BY created_at DESC
       LIMIT 500

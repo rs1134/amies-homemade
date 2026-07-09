@@ -45,6 +45,12 @@
     background: white; border-radius: 18px; padding: 16px 18px; margin-bottom: 12px;
     border: 1px solid rgba(74,55,40,0.06); box-shadow: 0 2px 10px rgba(0,0,0,0.03);
   }
+  .order-cod { border: 2px solid #16a34a; background: #f0fdf4; }
+  .cod-badge {
+    display: inline-block; background: #16a34a; color: white; font-weight: 800;
+    font-size: 11px; padding: 4px 10px; border-radius: 999px; margin-bottom: 10px;
+    letter-spacing: 0.02em;
+  }
   .order-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; flex-wrap: wrap; }
   .order-id { font-weight: 800; font-size: 13px; color: var(--coral); }
   .order-date { font-size: 11px; color: rgba(74,55,40,0.45); margin-top: 2px; }
@@ -131,7 +137,10 @@
     empty.style.display = 'none';
     container.innerHTML = filtered.map(o => {
       const date = new Date(o.created_at).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' });
-      return '<div class="order">' +
+      const isCod = o.payment_method === 'COD';
+      const codBadge = isCod ? '<span class="cod-badge">💰 COD — COLLECT ₹' + Number(o.grand_total).toLocaleString('en-IN') + '</span>' : '';
+      return '<div class="order' + (isCod ? ' order-cod' : '') + '">' +
+        codBadge +
         '<div class="order-top">' +
           '<div><div class="order-id">' + esc(o.order_id) + '</div><div class="order-date">' + date + '</div></div>' +
           '<div class="order-total">₹' + Number(o.grand_total).toLocaleString('en-IN') + '</div>' +
@@ -142,7 +151,8 @@
           '<div><div class="label">City</div>' + esc(o.city || '—') + '</div>' +
           '<div><div class="label">Email</div>' + esc(o.email || '—') + '</div>' +
           '<div style="grid-column:1/-1"><div class="label">Address</div>' + esc(o.address || '—') + '</div>' +
-          '<div><div class="label">Payment ID</div>' + esc(o.payment_id || '—') + '</div>' +
+          '<div><div class="label">Payment</div>' + esc(o.payment_method || 'RAZORPAY') + '</div>' +
+          '<div><div class="label">' + (isCod ? 'Order Ref' : 'Payment ID') + '</div>' + esc(o.payment_id || '—') + '</div>' +
           '<div><div class="label">Weight</div>' + esc(o.total_weight) + 'g</div>' +
         '</div>' +
         '<div class="order-items">' + esc(o.items_summary || '') + '</div>' +

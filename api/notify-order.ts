@@ -20,7 +20,10 @@ export default async function handler(req: any, res: any) {
   const {
     orderId, name, phone, city, address, email, itemsSummary,
     totalWeight, subtotal, shippingFee, grandTotal, paymentId, couponDiscount,
+    paymentMethod,
   } = req.body;
+  // Backward-compatible default — older client builds don't send this field.
+  const method = paymentMethod || 'RAZORPAY';
 
   try {
     const dbUrl = process.env.DATABASE_URL;
@@ -38,10 +41,10 @@ export default async function handler(req: any, res: any) {
     const inserted = await sql`
       INSERT INTO orders (
         order_id, name, phone, email, city, address, items_summary,
-        total_weight, subtotal, coupon_discount, shipping_fee, grand_total, payment_id
+        total_weight, subtotal, coupon_discount, shipping_fee, grand_total, payment_id, payment_method
       ) VALUES (
         ${orderId}, ${name}, ${phone}, ${email || ''}, ${city}, ${address}, ${itemsSummary},
-        ${totalWeight}, ${subtotal}, ${couponDiscount || 0}, ${shippingFee}, ${grandTotal}, ${paymentId}
+        ${totalWeight}, ${subtotal}, ${couponDiscount || 0}, ${shippingFee}, ${grandTotal}, ${paymentId}, ${method}
       )
       ON CONFLICT (payment_id) DO NOTHING
       RETURNING id
@@ -52,8 +55,9 @@ export default async function handler(req: any, res: any) {
       return res.status(200).json({ ok: true, isNew: false });
     }
 
+    const isCod = method === 'COD';
     const message = [
-      `NEW ORDER: ${orderId}`,
+      isCod ? `💰 CASH ON DELIVERY — COLLECT Rs.${grandTotal}` : `NEW ORDER: ${orderId}`,
       `---------------------------`,
       `Customer: ${name}`,
       `Phone: ${phone}`,
@@ -69,8 +73,8 @@ export default async function handler(req: any, res: any) {
       ...(couponDiscount > 0 ? [`Coupon (Thanks10): -Rs.${couponDiscount}`] : []),
       `Delivery: Rs.${shippingFee}`,
       `GRAND TOTAL: Rs.${grandTotal}`,
-      `Payment Method: RAZORPAY`,
-      `Payment ID: ${paymentId}`,
+      `Payment Method: ${method}`,
+      isCod ? `Order ID: ${orderId}` : `Payment ID: ${paymentId}`,
       `---------------------------`,
     ].join('\n');
 
@@ -80,9 +84,9 @@ export default async function handler(req: any, res: any) {
         body: message,
         headers: {
           'Content-Type': 'text/plain; charset=utf-8',
-          'Title': toHeaderSafe(`New Order: ${name} (Rs. ${grandTotal})`),
+          'Title': toHeaderSafe(isCod ? `COD Order: ${name} (Rs. ${grandTotal})` : `New Order: ${name} (Rs. ${grandTotal})`),
           'Priority': 'high',
-          'Tags': 'shopping_cart,package,star',
+          'Tags': isCod ? 'moneybag,package,star' : 'shopping_cart,package,star',
         },
       });
       if (!ntfyRes.ok) {
@@ -103,7 +107,7 @@ export default async function handler(req: any, res: any) {
         const delivery = String(city).toLowerCase() === 'ahmedabad' ? '1 working day' : '3-5 business days';
         const smsText =
           `Amie's Homemade: Order ${orderId} confirmed! ` +
-          `Amount: Rs.${grandTotal}. ` +
+          `Amount: Rs.${grandTotal}${isCod ? ' (Cash on Delivery)' : ''}. ` +
           `Items: ${itemsShort}. ` +
           `Est. delivery: ${delivery}. ` +
           `Questions? WhatsApp +91 91575 37842`;

@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
-import { Truck, Wallet, ChevronRight, Smartphone, Loader2, MessageCircle, CheckCircle, MapPin, Calendar, Building2, Minus, Plus, Trash2, Scale, Search } from 'lucide-react';
+import { Truck, Wallet, ChevronRight, Smartphone, Loader2, MessageCircle, CheckCircle, MapPin, Calendar, Building2, Minus, Plus, Trash2, Scale, Search, Banknote } from 'lucide-react';
 import { CartItem } from '../types.ts';
 import { WHATSAPP_NUMBER } from '../constants.ts';
 import { trackMetaEvent } from '../metaTracking.ts';
@@ -28,12 +28,14 @@ interface OrderSnapshot {
   city: string;
   address: string;
   isAhmedabad: boolean;
+  paymentMethod: 'online' | 'cod';
 }
 
 const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdateQuantity, onRemove, total, couponApplied = false, onShopClick, onOrderPlaced }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [paymentId, setPaymentId] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState<'online' | 'cod'>('online');
   // Snapshot of the order taken the instant payment succeeds, so the success
   // screen can render correct details even after the live cart is cleared.
   const [orderSnapshot, setOrderSnapshot] = useState<OrderSnapshot | null>(null);
@@ -172,6 +174,13 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   const AHMEDABAD_VARIANTS = ['ahmedabad', 'amdavad', 'amdaavad', 'ahmadabad', 'ahemdabad', 'ahembdabad'];
   const isAhmedabad = AHMEDABAD_VARIANTS.includes(formData.city.trim().toLowerCase());
 
+  // COD is strictly Ahmedabad-only — if the customer edits the city away
+  // from Ahmedabad after selecting COD, silently fall back to online
+  // payment rather than letting a non-Ahmedabad COD order slip through.
+  useEffect(() => {
+    if (!isAhmedabad && paymentMethod === 'cod') setPaymentMethod('online');
+  }, [isAhmedabad, paymentMethod]);
+
   const validateField = (name: string, value: string): string => {
     switch (name) {
       case 'name':
@@ -251,9 +260,19 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
 
   const grandTotal = total - couponDiscount + (shippingFee || 0);
 
-  const submitOrderSilently = async (razorpayPaymentId: string) => {
+  // `paymentId` is the Razorpay payment id for online orders, or a synthetic
+  // `COD-<orderId>` marker for cash-on-delivery orders (the orders table
+  // has a UNIQUE constraint on payment_id for de-duplication, so COD orders
+  // still need a unique value there even though no real payment happened).
+  const submitOrderSilently = async (id: string, method: 'online' | 'cod'): Promise<string> => {
     setIsSubmitting(true);
     const orderId = `AM-${Math.floor(Math.random() * 90000 + 10000)}`;
+    const isCod = method === 'cod';
+    // Timestamp suffix guarantees uniqueness against the orders.payment_id
+    // UNIQUE constraint — orderId alone is only a 5-digit random number, so
+    // two different COD orders could otherwise collide and the second would
+    // silently get dropped as a "duplicate" by the ON CONFLICT DO NOTHING.
+    const paymentIdForOrder = isCod ? `COD-${orderId}-${Date.now()}` : id;
 
     const itemsSummary = items.map(i =>
       `${i.quantity}x ${i.name} (${i.selectedWeight || i.weight})`
@@ -263,8 +282,7 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
 *New Order from Amie's Homemade*
 ---------------------------
 *Order ID:* ${orderId}
-*Payment ID:* ${razorpayPaymentId}
-*Customer:* ${formData.name}
+${isCod ? '' : `*Payment ID:* ${id}\n`}*Customer:* ${formData.name}
 *Phone:* ${formData.phone}
 *City:* ${formData.city}
 *Address:* ${fullDeliveryAddress}
@@ -273,7 +291,7 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
 ${itemsSummary}
 
 *Total Amount:* Rs.${grandTotal}${couponDiscount > 0 ? `\n*Coupon Applied:* Thanks10 (− Rs.${couponDiscount})` : ''}
-*Payment:* ONLINE (RAZORPAY)
+*Payment:* ${isCod ? 'CASH ON DELIVERY' : 'ONLINE (RAZORPAY)'}
 ---------------------------
 _Please confirm my order and share delivery details._
     `.trim());
@@ -288,7 +306,8 @@ _Please confirm my order and share delivery details._
           orderId, name: formData.name, phone: formData.phone,
           city: formData.city, address: fullDeliveryAddress, email: formData.email,
           itemsSummary, totalWeight, subtotal: total,
-          shippingFee: shippingFee ?? 0, grandTotal, paymentId: razorpayPaymentId,
+          shippingFee: shippingFee ?? 0, grandTotal, paymentId: paymentIdForOrder,
+          paymentMethod: isCod ? 'COD' : 'RAZORPAY',
         }),
       });
       if (!res.ok) console.error('[notify-order] Failed:', await res.json().catch(() => ({})));
@@ -312,13 +331,15 @@ _Please confirm my order and share delivery details._
       items, total, couponDiscount,
       shippingFee: shippingFee ?? 0, grandTotal,
       city: formData.city, address: fullDeliveryAddress, isAhmedabad,
+      paymentMethod: method,
     });
-    setPaymentId(razorpayPaymentId);
+    setPaymentId(paymentIdForOrder);
     setIsSuccess(true);
     onOrderPlaced?.(); // clears the live cart + coupon so paid items can't linger
     window.history.pushState(null, '', '/order-confirmed');
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setIsSubmitting(false);
+    return paymentIdForOrder;
   };
 
   // Combine flat + address for final delivery address
@@ -354,6 +375,37 @@ _Please confirm my order and share delivery details._
         document.getElementById('field-phone')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return;
       }
+    }
+
+    // Cash on Delivery — Ahmedabad only, hard-enforced here regardless of UI
+    // state (the payment-method selector is already hidden for other
+    // cities, and paymentMethod auto-resets if the city field changes away
+    // from Ahmedabad, but this is the last line of defence before an order
+    // is actually placed).
+    if (paymentMethod === 'cod') {
+      if (!isAhmedabad) {
+        setPaymentMethod('online');
+        alert('Cash on Delivery is only available for Ahmedabad. Please pay online.');
+        return;
+      }
+      setIsSubmitting(true);
+      const codOrderId = await submitOrderSilently('', 'cod');
+      const [firstName, ...lastNameParts] = formData.name.trim().split(/\s+/);
+      trackMetaEvent('Purchase', {
+        customData: {
+          value: grandTotal, currency: 'INR',
+          content_ids: items.map(i => i.id), content_type: 'product',
+          num_items: items.reduce((sum, i) => sum + i.quantity, 0),
+        },
+        userData: {
+          email: formData.email,
+          phone: formData.phone,
+          firstName,
+          lastName: lastNameParts.join(' '),
+          city: formData.city,
+        },
+      }, `cod-${codOrderId}`);
+      return;
     }
 
     setIsSubmitting(true);
@@ -395,7 +447,7 @@ _Please confirm my order and share delivery details._
             // Continue anyway so the order isn't lost — admin can verify manually
           }
 
-          submitOrderSilently(response.razorpay_payment_id);
+          submitOrderSilently(response.razorpay_payment_id, 'online');
 
           // Deterministic event_id (not random) — the Razorpay webhook fires
           // this same Purchase event server-side as a backstop if the
@@ -452,7 +504,7 @@ _Please confirm my order and share delivery details._
               </div>
               <h2 className="text-3xl sm:text-5xl font-bold serif mb-2 sm:mb-3">Order Placed!</h2>
               <p className="text-white/80 brand-rounded font-bold uppercase text-[10px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.3em] break-all px-2">
-                Payment ID: {paymentId}
+                {snap.paymentMethod === 'cod' ? 'Pay Cash on Delivery' : `Payment ID: ${paymentId}`}
               </p>
             </div>
           </div>
@@ -499,7 +551,7 @@ _Please confirm my order and share delivery details._
                   <span>Delivery Fee</span><span>{snap.shippingFee === 0 ? 'FREE' : `₹${snap.shippingFee}`}</span>
                 </div>
                 <div className="flex justify-between items-center pt-4 border-t border-[#4A3728]/5">
-                  <span className="text-lg sm:text-2xl font-bold serif text-[#4A3728]">Grand Total Paid</span>
+                  <span className="text-lg sm:text-2xl font-bold serif text-[#4A3728]">{snap.paymentMethod === 'cod' ? 'Grand Total (Pay on Delivery)' : 'Grand Total Paid'}</span>
                   <span className="text-2xl sm:text-3xl font-black text-[#F04E4E]">₹{snap.grandTotal}</span>
                 </div>
               </div>
@@ -753,9 +805,34 @@ _Please confirm my order and share delivery details._
             <h2 className="text-lg font-bold serif mb-4 flex items-center gap-3 text-[#4A3728]">
               <Wallet className="text-[#F04E4E]" size={22} /> Payment Method
             </h2>
-            <div className="p-4 rounded-2xl border-2 border-[#F04E4E] bg-[#F04E4E]/5 flex items-center gap-3 shadow-sm">
-              <Smartphone size={22} className="text-blue-500 flex-shrink-0" />
-              <span className="text-[10px] font-black uppercase brand-rounded tracking-widest">Secure Online Payment (UPI, Cards, Netbanking)</span>
+            <div className="flex flex-col gap-3">
+              <button
+                type="button"
+                onClick={() => setPaymentMethod('online')}
+                disabled={isSubmitting}
+                className={`w-full p-4 rounded-2xl border-2 flex items-center gap-3 shadow-sm transition-all text-left disabled:opacity-50 ${paymentMethod === 'online' ? 'border-[#F04E4E] bg-[#F04E4E]/5' : 'border-[#4A3728]/10 hover:border-[#4A3728]/20'}`}
+              >
+                <Smartphone size={22} className="text-blue-500 flex-shrink-0" />
+                <span className="text-[10px] font-black uppercase brand-rounded tracking-widest">Secure Online Payment (UPI, Cards, Netbanking)</span>
+              </button>
+
+              {isAhmedabad ? (
+                <button
+                  type="button"
+                  onClick={() => setPaymentMethod('cod')}
+                  disabled={isSubmitting}
+                  className={`w-full p-4 rounded-2xl border-2 flex items-center gap-3 shadow-sm transition-all text-left disabled:opacity-50 ${paymentMethod === 'cod' ? 'border-[#F04E4E] bg-[#F04E4E]/5' : 'border-[#4A3728]/10 hover:border-[#4A3728]/20'}`}
+                >
+                  <Banknote size={22} className="text-green-600 flex-shrink-0" />
+                  <span className="text-[10px] font-black uppercase brand-rounded tracking-widest">Cash on Delivery (Ahmedabad Only)</span>
+                </button>
+              ) : (
+                touched.city && !fieldErrors.city && formData.city && (
+                  <p className="text-[9px] text-[#4A3728]/40 italic brand-rounded bg-[#4A3728]/5 p-2.5 rounded-lg border border-[#4A3728]/5">
+                    Cash on Delivery is available only for orders delivered within Ahmedabad.
+                  </p>
+                )
+              )}
             </div>
           </div>
         </div>
@@ -863,7 +940,7 @@ _Please confirm my order and share delivery details._
             onClick={handleProceed}
             className={`w-full py-4 bg-[#F04E4E] shadow-[#F04E4E]/30 text-white rounded-2xl font-bold brand-rounded uppercase tracking-[0.25em] text-[11px] transition-all shadow-xl flex items-center justify-center gap-3 ${isSubmitting ? 'opacity-70 cursor-wait' : 'hover:scale-[1.02] active:scale-[0.97]'}`}
           >
-            {isSubmitting ? <>Processing... <Loader2 className="animate-spin" size={20} /></> : <>Complete My Order <ChevronRight size={20} /></>}
+            {isSubmitting ? <>Processing... <Loader2 className="animate-spin" size={20} /></> : paymentMethod === 'cod' ? <>Place Order (Cash on Delivery) <ChevronRight size={20} /></> : <>Complete My Order <ChevronRight size={20} /></>}
           </button>
         </div>
       </div>

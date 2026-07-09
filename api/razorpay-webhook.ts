@@ -195,10 +195,10 @@ export default async function handler(req: any, res: any) {
     const inserted = await sql`
       INSERT INTO orders (
         order_id, name, phone, email, city, address, items_summary,
-        total_weight, subtotal, coupon_discount, shipping_fee, grand_total, payment_id
+        total_weight, subtotal, coupon_discount, shipping_fee, grand_total, payment_id, payment_method
       ) VALUES (
         ${orderId}, ${name}, ${phone}, ${email}, ${city}, ${address}, ${itemsSummary},
-        ${totalWeight}, ${subtotal}, 0, ${shippingFee}, ${grandTotal}, ${paymentId}
+        ${totalWeight}, ${subtotal}, 0, ${shippingFee}, ${grandTotal}, ${paymentId}, 'RAZORPAY'
       )
       ON CONFLICT (payment_id) DO NOTHING
       RETURNING id
