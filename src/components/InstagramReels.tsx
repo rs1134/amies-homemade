@@ -22,8 +22,13 @@ const REELS: Reel[] = [
   { image: '/instagram-reels/reel-4.jpg', video: 'https://ik.imagekit.io/amieshomemade/REEL%2003%20(2).mp4', url: 'https://www.instagram.com/reel/DafmFJbScOR/' },
 ];
 
-const ReelCard: React.FC<{ reel: Reel }> = ({ reel }) => {
-  const [playing, setPlaying] = useState(false);
+interface ReelCardProps {
+  reel: Reel;
+  isActive: boolean;
+  onActivate: () => void;
+}
+
+const ReelCard: React.FC<ReelCardProps> = ({ reel, isActive, onActivate }) => {
   const [muted, setMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -33,15 +38,21 @@ const ReelCard: React.FC<{ reel: Reel }> = ({ reel }) => {
   // visible error — the element just sits there. Playing explicitly via a
   // ref, with a muted-autoplay fallback if the browser still refuses sound,
   // is the reliable way to make a deferred-mount video actually play.
+  //
+  // isActive also doubles as "am I the only video allowed to be loading" —
+  // only one card is ever mounted with a real <video> at a time (see parent),
+  // which prevents multiple multi-MB clips fighting for bandwidth at once
+  // and all appearing to hang/buffer forever.
   useEffect(() => {
-    if (!playing || !videoRef.current) return;
+    if (!isActive || !videoRef.current) return;
+    setMuted(false);
     const video = videoRef.current;
     video.play().catch(() => {
       video.muted = true;
       setMuted(true);
       video.play().catch(() => { /* autoplay fully blocked — controls still let them hit play manually */ });
     });
-  }, [playing]);
+  }, [isActive]);
 
   const cardClasses = 'group relative flex-shrink-0 w-[45%] sm:w-[30%] lg:w-[23%] aspect-[9/16] rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 snap-start bg-black';
 
@@ -66,7 +77,7 @@ const ReelCard: React.FC<{ reel: Reel }> = ({ reel }) => {
   // Self-hosted video — plays inline on click, no redirect.
   return (
     <div className={cardClasses}>
-      {playing ? (
+      {isActive ? (
         <>
           <video
             ref={videoRef}
@@ -87,7 +98,7 @@ const ReelCard: React.FC<{ reel: Reel }> = ({ reel }) => {
         </>
       ) : (
         <button
-          onClick={() => setPlaying(true)}
+          onClick={onActivate}
           aria-label="Play reel"
           className="absolute inset-0 w-full h-full"
         >
@@ -111,6 +122,7 @@ const ReelCard: React.FC<{ reel: Reel }> = ({ reel }) => {
 
 const InstagramReels: React.FC = () => {
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const scroll = (dir: 'left' | 'right') => {
     const el = scrollerRef.current;
@@ -148,7 +160,14 @@ const InstagramReels: React.FC = () => {
             ref={scrollerRef}
             className="flex gap-4 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory"
           >
-            {REELS.map((reel, i) => <ReelCard key={i} reel={reel} />)}
+            {REELS.map((reel, i) => (
+              <ReelCard
+                key={i}
+                reel={reel}
+                isActive={activeIndex === i}
+                onActivate={() => setActiveIndex(i)}
+              />
+            ))}
           </div>
         </div>
       </div>
