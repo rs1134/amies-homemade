@@ -111,7 +111,7 @@ export const PRODUCTS: Product[] = [
   // --- MUKHWAS ---
   {
     id: 'm14',
-    name: 'Mukhwas Combo',
+    name: 'Everyday Mukhwas Trio',
     category: Category.MUKHWAS,
     price: 761,
     weight: '530 G',
