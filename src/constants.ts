@@ -110,6 +110,24 @@ export const PRODUCTS: Product[] = [
 
   // --- MUKHWAS ---
   {
+    id: 'm14',
+    name: 'Mukhwas Combo',
+    category: Category.MUKHWAS,
+    price: 761,
+    weight: '530 G',
+    description: 'Three of our best-loved mukhwas in one combo — the sweet-crunchy Kharek Coconut Almond, the tangy nutrient-rich Cranberry Mix, and the light, tropical Tender Coconut Vanilla Chips. A perfect way to try our range, at a special combo price.',
+    image: 'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jul%209,%202026,%2003_20_50%20PM.png',
+    images: [
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jul%209,%202026,%2003_20_50%20PM.png',
+      'https://ik.imagekit.io/amieshomemade/067A3029.JPG',
+      'https://ik.imagekit.io/amieshomemade/067A3136.JPG?updatedAt=1782443779492',
+      'https://ik.imagekit.io/amieshomemade/067A3234.JPG?updatedAt=1782443781375',
+    ],
+    ingredients: ['Kharek', 'Coconut', 'Almond', 'Natural Flavouring Substance', 'Cranberries', 'Black Grapes', 'Kismis', 'Anardana Churan', 'Vanilla Extract', 'Salt', 'Sugar'],
+    prices: { '530 G': 761 },
+    rating: 5, reviewCount: 41
+  },
+  {
     id: 'm5',
     name: 'Cranberry Mix',
     category: Category.MUKHWAS,
