@@ -8,8 +8,12 @@ import ProductCard from './ProductCard.tsx';
 
 // Resize ImageKit images on the fly so the gallery loads fast (some source
 // files are 20MB+ raw uploads). Leaves non-ImageKit URLs untouched.
+// A URL that already carries its own `tr=` transform (set intentionally in
+// constants.ts, e.g. a fixed 2000x2000 render) is respected as-is rather
+// than overridden with the default responsive width.
 const ikImg = (url: string, w: number) => {
   if (!url || !url.includes('ik.imagekit.io')) return url;
+  if (url.includes('tr=')) return url;
   return `${url.split('?')[0]}?tr=w-${w},q-80,f-auto`;
 };
 
