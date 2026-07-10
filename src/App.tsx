@@ -1153,7 +1153,7 @@ const App: React.FC = () => {
               </p>
               <div className="w-full space-y-6">
                 <a 
-                  href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=Hi%20Ami!%20I%20would%20like%20to%20inquire%20about%20Bulk%20Orders%20and%20Wholesale%20Pricing%20for%20Amie's%20Homemade.%20Could%20you%20please%20share%20your%20catalog%20and%20wholesale%20price%20list?%20Thank%20you!`} 
+                  href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=Hi!%20I%20would%20like%20to%20inquire%20about%20Bulk%20Orders%20and%20Wholesale%20Pricing%20for%20Amie's%20Homemade.%20Could%20you%20please%20share%20your%20catalog%20and%20wholesale%20price%20list?%20Thank%20you!`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-3 w-full py-5 bg-[#F04E4E] text-white rounded-[1.5rem] font-bold brand-rounded uppercase tracking-[0.2em] text-[10px] hover:shadow-2xl hover:shadow-coral/30 transition-all active:scale-95"
