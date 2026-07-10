@@ -662,7 +662,7 @@ const App: React.FC = () => {
         mainEntity: [
           { '@type': 'Question', name: 'What ingredients do you use? Are there any preservatives?', acceptedAnswer: { '@type': 'Answer', text: "Every product at Amie's Homemade is made with 100% natural ingredients — fennel seeds, coriander seeds, sesame seeds, dried rose petals, cardamom, and carom seeds. No artificial colors, no synthetic flavors, and absolutely no preservatives of any kind." } },
           { '@type': 'Question', name: "Do you offer sugar-free options for diabetics?", acceptedAnswer: { '@type': 'Answer', text: 'Yes. Our plain mukhwas blends have no added sugar, no sugar coating, and no glucose syrup. They are genuinely safe for diabetics. Traditional mukhwas ingredients (fennel, coriander, sesame, carom, cardamom) are naturally low-GI.' } },
-          { '@type': 'Question', name: 'How do I place an order?', acceptedAnswer: { '@type': 'Answer', text: 'The easiest way is to WhatsApp us at +91 91575 37842. You can also browse products on the website, add items to your cart, and complete checkout online.' } },
+          { '@type': 'Question', name: 'How do I place an order?', acceptedAnswer: { '@type': 'Answer', text: 'The easiest way is to WhatsApp us at +91 90540 38876. You can also browse products on the website, add items to your cart, and complete checkout online.' } },
           { '@type': 'Question', name: 'Do you deliver pan-India?', acceptedAnswer: { '@type': 'Answer', text: 'Yes — we deliver pan-India. Ahmedabad orders arrive in 2 working days. For the rest of India, orders typically arrive within 3 to 5 working days via courier.' } },
           { '@type': 'Question', name: 'What are the delivery charges?', acceptedAnswer: { '@type': 'Answer', text: 'Delivery within Ahmedabad is free. For orders outside Ahmedabad: up to 500g — ₹60; 500g to 1kg — ₹100; 1kg to 2kg — ₹150; 2kg to 5kg — ₹200; above 5kg — ₹250.' } },
           { '@type': 'Question', name: 'What is the shelf life of your products?', acceptedAnswer: { '@type': 'Answer', text: 'Mukhwas, granola, and dry fruit milk masala stay fresh for 6 months from the date of packaging, and chai masala for up to 1 year.' } },
@@ -787,7 +787,7 @@ const App: React.FC = () => {
       contactPoint: [
         {
           '@type': 'ContactPoint',
-          telephone: '+91-91575-37842',
+          telephone: '+91-90540-38876',
           contactType: 'customer service',
           availableLanguage: ['English', 'Hindi', 'Gujarati'],
           contactOption: 'TollFree',
@@ -1183,7 +1183,7 @@ const App: React.FC = () => {
             <address className="not-italic text-[#4A3728]/70 leading-relaxed text-sm">
               <strong className="text-[#4A3728] font-bold">Amie's Homemade</strong><br/>
               Ahmedabad, Gujarat 380015, India<br/>
-              <a href="tel:+919157537842" className="text-coral hover:underline">+91 91575 37842</a><br/>
+              <a href="tel:+919054038876" className="text-coral hover:underline">+91 90540 38876</a><br/>
               <a href="mailto:hello@amieshomemade.com" className="text-coral hover:underline">hello@amieshomemade.com</a>
             </address>
             <p className="text-xs text-[#4A3728]/60 mt-4 leading-relaxed max-w-md mx-auto">

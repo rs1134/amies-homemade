@@ -733,7 +733,7 @@ _Please confirm my order and share delivery details._
                   <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Phone Number</label>
                   <input
                     name="phone" disabled={isSubmitting} value={formData.phone}
-                    onChange={handleInputChange} onBlur={handleBlur} type="text" placeholder="e.g. 91575 37842"
+                    onChange={handleInputChange} onBlur={handleBlur} type="text" placeholder="e.g. 90540 38876"
                     className={`w-full p-3.5 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-sm transition-all ${touched.phone && fieldErrors.phone ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                   />
                   {touched.phone && fieldErrors.phone && (

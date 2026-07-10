@@ -283,7 +283,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               </div>
               <div className="p-5 bg-[#FFF8EE]">
                 <p className="text-xs font-black brand-rounded uppercase tracking-widest text-[#4A3728] mb-2">How to raise a concern</p>
-                <p className="text-xs text-[#4A3728]/70 leading-relaxed">Message us on <span className="font-bold">WhatsApp at +91 91575 37842</span> within 24 hours of receiving your order. Include your Order ID, a description of the issue, and at least one clear photo. We will respond within 1 business day.</p>
+                <p className="text-xs text-[#4A3728]/70 leading-relaxed">Message us on <span className="font-bold">WhatsApp at +91 90540 38876</span> within 24 hours of receiving your order. Include your Order ID, a description of the issue, and at least one clear photo. We will respond within 1 business day.</p>
               </div>
             </div>
           </div>

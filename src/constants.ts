@@ -733,6 +733,6 @@ export const PRODUCTS: Product[] = [
 // FSSAI license number shown in each product's Additional Information.
 export const FSSAI_LICENSE = '20726034001023';
 
-export const WHATSAPP_NUMBER = '+919157537842';
+export const WHATSAPP_NUMBER = '+919054038876';
 export const STORE_UPI_ID = "bhadreshshah2311-2@okaxis";
 export const MERCHANT_NAME = "Amie's Homemade";

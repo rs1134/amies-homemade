@@ -374,7 +374,7 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
                 
                 <div className="flex flex-col sm:flex-row items-center gap-6">
                   <a 
-                    href={`https://wa.me/919157537842`}
+                    href={`https://wa.me/919054038876`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full sm:w-auto px-12 py-6 bg-[#25D366] text-white rounded-full font-black brand-rounded uppercase tracking-[0.3em] text-[11px] flex items-center justify-center gap-4 hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-[#25D366]/30"

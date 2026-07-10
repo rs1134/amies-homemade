@@ -110,7 +110,7 @@ export default async function handler(req: any, res: any) {
           `Amount: Rs.${grandTotal}${isCod ? ' (Cash on Delivery)' : ''}. ` +
           `Items: ${itemsShort}. ` +
           `Est. delivery: ${delivery}. ` +
-          `Questions? WhatsApp +91 91575 37842`;
+          `Questions? WhatsApp +91 90540 38876`;
 
         const smsRes = await fetch('https://www.fast2sms.com/dev/bulkV2', {
           method: 'POST',

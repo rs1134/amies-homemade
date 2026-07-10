@@ -10,7 +10,7 @@ const sha256Hex = (s: string) => crypto.createHash('sha256').update(s, 'utf8').d
 const normEmail = (v: string) => v.trim().toLowerCase();
 
 // Phone: strip everything but digits, keep the country code. Our numbers are
-// Indian and stored inconsistently ("9925004388", "+91 91575 37842",
+// Indian and stored inconsistently ("9925004388", "+91 90540 38876",
 // "091575..."), so normalize to bare digits with a leading "91".
 const normPhone = (v: string) => {
   let digits = v.replace(/\D/g, '');
