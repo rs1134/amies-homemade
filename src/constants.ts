@@ -119,7 +119,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(9)_HGXuT3C1DV.jpg',
     images: [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(9)_HGXuT3C1DV.jpg',
-      'https://ik.imagekit.io/amieshomemade/067A3136.JPG?updatedAt=1782443779492',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(10)_AjzQ441zG.jpg',
       'https://ik.imagekit.io/amieshomemade/067A3179.JPG?updatedAt=1782443778784',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2010_56_04%20AM.png?updatedAt=1782444349678',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png',
@@ -139,7 +139,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(27)_zAaGf6zpw.jpg',
     images: [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(27)_zAaGf6zpw.jpg',
-      'https://ik.imagekit.io/amieshomemade/067A3101.JPG?updatedAt=1782443781660',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(28)_2Jr9C37pzx.jpg',
       'https://ik.imagekit.io/amieshomemade/067A3128.JPG?updatedAt=1782443778827',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2009_27_57%20AM.png?updatedAt=1782444349541',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png',
@@ -179,7 +179,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(24)_HQvaLeprU.jpg',
     images: [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(24)_HQvaLeprU.jpg',
-      'https://ik.imagekit.io/amieshomemade/067A3234.JPG?updatedAt=1782443781375',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(25)_hg7AzXcrV.jpg',
       'https://ik.imagekit.io/amieshomemade/067A3259.JPG?updatedAt=1782443779904',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2009_32_32%20AM.png?updatedAt=1782444349692',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png',
@@ -199,7 +199,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(36)_aAxJbrDew.jpg',
     images: [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(36)_aAxJbrDew.jpg',
-      'https://ik.imagekit.io/amieshomemade/067A2972.JPG',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design_volkK0Htd.jpg',
       'https://ik.imagekit.io/amieshomemade/067A3012.JPG',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2027,%202026,%2009_47_04%20AM.png',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png',
@@ -239,7 +239,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(34)_mG5k2TTAJc.jpg',
     images: [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(34)_mG5k2TTAJc.jpg',
-      'https://ik.imagekit.io/amieshomemade/067A3196.JPG?updatedAt=1782443783668',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(33)_PcToJXSIl.jpg',
       'https://ik.imagekit.io/amieshomemade/067A3219.JPG?updatedAt=1782443779319',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2010_29_32%20AM.png?updatedAt=1782444349684',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png',
@@ -259,7 +259,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(12)_6VRr_dQg8.jpg',
     images: [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(12)_6VRr_dQg8.jpg',
-      'https://ik.imagekit.io/amieshomemade/067A3396.JPG?updatedAt=1782443776831',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(13)_EYmQIIYYQG.jpg',
       'https://ik.imagekit.io/amieshomemade/067A3381.JPG?updatedAt=1782443776839',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2009_07_21%20AM.png?updatedAt=1782444349137',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png',
@@ -279,7 +279,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(15)_9rgFNnNhw.jpg',
     images: [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(15)_9rgFNnNhw.jpg',
-      'https://ik.imagekit.io/amieshomemade/067A3029.JPG',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(16)_W6z44A-hJ.jpg',
       'https://ik.imagekit.io/amieshomemade/067A3069.JPG',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2011_10_28%20AM.png',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png',
@@ -299,7 +299,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(20)_9Vt-dPhkV.jpg',
     images: [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(20)_9Vt-dPhkV.jpg',
-      'https://ik.imagekit.io/amieshomemade/067A3474.JPG?updatedAt=1782443781964',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(18)_Zbgo2JRO1y.jpg',
       'https://ik.imagekit.io/amieshomemade/067A3507.JPG?updatedAt=1782443778909',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2011_24_07%20AM.png?updatedAt=1782444349689',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png',
@@ -319,7 +319,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(21)_rjiVJVPS3.jpg',
     images: [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(21)_rjiVJVPS3.jpg',
-      'https://ik.imagekit.io/amieshomemade/067A3311.JPG?updatedAt=1782443783626',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(22)_JbSpZiuRjA.jpg',
       'https://ik.imagekit.io/amieshomemade/067A3341.JPG?updatedAt=1782443779684',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2009_21_11%20AM.png?updatedAt=1782444349584',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png',
@@ -340,7 +340,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(30)_lviUwnaufS.jpg',
     images: [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(30)_lviUwnaufS.jpg',
-      'https://ik.imagekit.io/amieshomemade/067A3270.JPG?updatedAt=1782443783649',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(31)_4JvzhTJKML.jpg',
       'https://ik.imagekit.io/amieshomemade/067A3296.JPG',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2009_35_49%20AM.png?updatedAt=1782444349713',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png',
