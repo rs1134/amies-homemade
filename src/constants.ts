@@ -361,9 +361,10 @@ export const PRODUCTS: Product[] = [
     image: 'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jul%209,%202026,%2003_20_50%20PM.png',
     images: [
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jul%209,%202026,%2003_20_50%20PM.png',
-      'https://ik.imagekit.io/amieshomemade/067A3029.JPG',
-      'https://ik.imagekit.io/amieshomemade/067A3136.JPG?updatedAt=1782443779492',
-      'https://ik.imagekit.io/amieshomemade/067A3234.JPG?updatedAt=1782443781375',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(16)_W6z44A-hJ.jpg?updatedAt=1783678133620',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(10)_AjzQ441zG.jpg?updatedAt=1783678132717',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(25)_hg7AzXcrV.jpg?updatedAt=1783678133200',
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png?updatedAt=1782705910617',
     ],
     ingredients: ['Kharek', 'Coconut', 'Almond', 'Natural Flavouring Substance', 'Cranberries', 'Black Grapes', 'Kismis', 'Anardana Churan', 'Vanilla Extract', 'Salt', 'Sugar'],
     prices: { '530 G': 759 },
