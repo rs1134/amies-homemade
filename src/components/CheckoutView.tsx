@@ -829,7 +829,7 @@ _Please confirm my order and share delivery details._
               ) : null}
 
               {isAhmedabad && paymentMethod === 'cod' && (
-                <p className="text-[9px] text-[#4A3728]/50 italic brand-rounded bg-[#4A3728]/5 p-2.5 rounded-lg border border-[#4A3728]/5">
+                <p className="text-[11px] font-bold text-[#4A3728]/80 brand-rounded bg-[#4A3728]/5 p-2.5 rounded-lg border border-[#4A3728]/5">
                   Please note: Cash on Delivery orders may take up to 1 extra day to be delivered compared to prepaid orders.
                 </p>
               )}
