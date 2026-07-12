@@ -705,7 +705,8 @@ export const PRODUCTS: Product[] = [
     ],
     ingredients: ['Almonds', 'Cashews', 'Pistachios', 'Cardamom (Elaichi)', 'Saffron (Kesar)', 'Nutmeg'],
     prices: { '100 G': 400 },
-    rating: 4.5, reviewCount: 22
+    rating: 4.5, reviewCount: 22,
+    shelfLife: '1 year'
   },
   {
     id: 'sm2',
