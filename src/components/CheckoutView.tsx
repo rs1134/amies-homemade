@@ -826,7 +826,15 @@ _Please confirm my order and share delivery details._
                   <Banknote size={22} className="text-green-600 flex-shrink-0" />
                   <span className="text-[10px] font-black uppercase brand-rounded tracking-widest">Cash on Delivery (Ahmedabad Only)</span>
                 </button>
-              ) : (
+              ) : null}
+
+              {isAhmedabad && paymentMethod === 'cod' && (
+                <p className="text-[9px] text-[#4A3728]/50 italic brand-rounded bg-[#4A3728]/5 p-2.5 rounded-lg border border-[#4A3728]/5">
+                  Please note: Cash on Delivery orders may take up to 1 extra day to be delivered compared to prepaid orders.
+                </p>
+              )}
+
+              {!isAhmedabad && (
                 touched.city && !fieldErrors.city && formData.city && (
                   <p className="text-[9px] text-[#4A3728]/40 italic brand-rounded bg-[#4A3728]/5 p-2.5 rounded-lg border border-[#4A3728]/5">
                     Cash on Delivery is available only for orders delivered within Ahmedabad.
