@@ -641,7 +641,7 @@ _Please confirm my order and share delivery details._
           </div>
           <h2 className="text-2xl sm:text-3xl font-bold serif text-[#4A3728] mb-3">Your bag is empty</h2>
           <p className="text-sm text-[#4A3728]/60 brand-rounded leading-relaxed mb-8">
-            Add a few of Ami's handmade treats to your bag, then come back here to check out.
+            Add a few of Amie's Homemade treats to your bag, then come back here to check out.
           </p>
           <button
             onClick={() => onShopClick?.()}
