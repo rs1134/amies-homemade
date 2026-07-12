@@ -17,7 +17,7 @@ interface CheckoutViewProps {
   onOrderPlaced?: () => void;
 }
 
-type FieldName = 'name' | 'phone' | 'email' | 'city' | 'address' | 'flat';
+type FieldName = 'name' | 'phone' | 'email' | 'city' | 'address' | 'flat' | 'pincode';
 
 interface OrderSnapshot {
   items: CartItem[];
@@ -51,6 +51,7 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
     city: '',
     address: '',
     flat: '',
+    pincode: '',
   });
 
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<FieldName, string>>>({});
@@ -146,20 +147,21 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
     try {
       const place = sug.prediction.toPlace();
       await place.fetchFields({ fields: ['addressComponents', 'formattedAddress', 'displayName'] });
-      let streetNumber = '', route = '', sublocality = '', city = '';
+      let streetNumber = '', route = '', sublocality = '', city = '', pincode = '';
       (place.addressComponents || []).forEach((c: any) => {
         const types: string[] = c.types || [];
         if (types.includes('street_number'))       streetNumber = c.longText;
         if (types.includes('route'))               route = c.longText;
         if (types.includes('sublocality_level_1')) sublocality = c.longText;
         if (types.includes('locality'))            city = c.longText;
+        if (types.includes('postal_code'))          pincode = c.longText;
       });
       const namePart = place.displayName && !route.includes(place.displayName) ? place.displayName : '';
       const addressParts = [namePart, streetNumber, route, sublocality].filter(Boolean);
       const address = addressParts.length > 0 ? addressParts.join(', ') : (place.formattedAddress || sug.main);
-      setFormData(prev => ({ ...prev, address, city: city || prev.city }));
-      setTouched(prev => ({ ...prev, address: true, city: true }));
-      setFieldErrors(prev => ({ ...prev, address: '', city: '' }));
+      setFormData(prev => ({ ...prev, address, city: city || prev.city, pincode: pincode || prev.pincode }));
+      setTouched(prev => ({ ...prev, address: true, city: true, ...(pincode ? { pincode: true } : {}) }));
+      setFieldErrors(prev => ({ ...prev, address: '', city: '', ...(pincode ? { pincode: '' } : {}) }));
     } catch {
       // Place details unavailable — still fill in what the suggestion showed
       const fallback = sug.secondary ? `${sug.main}, ${sug.secondary}` : sug.main;
@@ -206,6 +208,9 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
         return "";
       case 'flat':
         if (!value.trim()) return "Flat / House number is required";
+        return "";
+      case 'pincode':
+        if (!/^[1-9]\d{5}$/.test(value.trim())) return "Please enter a valid 6-digit pincode";
         return "";
       default:
         return "";
@@ -349,7 +354,7 @@ _Please confirm my order and share delivery details._
 
   const handleProceed = async () => {
     if (items.length === 0) return; // nothing to pay for
-    const fieldNames: FieldName[] = ['name', 'phone', 'city', 'email', 'address', 'flat'];
+    const fieldNames: FieldName[] = ['name', 'phone', 'city', 'email', 'address', 'flat', 'pincode'];
     const newErrors: Partial<Record<FieldName, string>> = {};
     let firstErrorField: FieldName | null = null;
 
@@ -403,6 +408,7 @@ _Please confirm my order and share delivery details._
           firstName,
           lastName: lastNameParts.join(' '),
           city: formData.city,
+          zip: formData.pincode,
           country: 'in', // site is India-only right now
         },
       }, `cod-${codOrderId}`);
@@ -468,6 +474,7 @@ _Please confirm my order and share delivery details._
               firstName,
               lastName: lastNameParts.join(' '),
               city: formData.city,
+              zip: formData.pincode,
               country: 'in', // site is India-only right now
             },
           }, `purchase-${response.razorpay_payment_id}`);
@@ -476,6 +483,7 @@ _Please confirm my order and share delivery details._
         notes: {
           customer_name: formData.name, phone: formData.phone,
           city: formData.city, address: fullDeliveryAddress, email: formData.email || 'N/A',
+          pincode: formData.pincode,
           items: items.map(i => `${i.quantity}x ${i.name} (${i.selectedWeight || i.weight})`).join(', ').slice(0, 250),
           subtotal: `Rs.${total}`, shipping: `Rs.${shippingFee ?? 0}`,
           grand_total: `Rs.${grandTotal}`, total_weight: `${totalWeight}g`,
@@ -792,11 +800,25 @@ _Please confirm my order and share delivery details._
                 <textarea
                   name="address" disabled={isSubmitting} value={formData.address}
                   onChange={handleInputChange} onBlur={handleBlur}
-                  placeholder="Building name, street, landmark, pincode" rows={2}
+                  placeholder="Building name, street, landmark" rows={2}
                   className={`w-full p-3.5 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-sm transition-all resize-none ${touched.address && fieldErrors.address ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                 />
                 {touched.address && fieldErrors.address && (
                   <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.address}</p>
+                )}
+              </div>
+
+              {/* Pincode — required */}
+              <div className="space-y-1.5" id="field-pincode">
+                <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Pincode <span className="text-[#F04E4E]">*</span></label>
+                <input
+                  name="pincode" disabled={isSubmitting} value={formData.pincode}
+                  onChange={handleInputChange} onBlur={handleBlur}
+                  type="text" inputMode="numeric" maxLength={6} placeholder="e.g. 380015"
+                  className={`w-full p-3.5 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-sm transition-all ${touched.pincode && fieldErrors.pincode ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                />
+                {touched.pincode && fieldErrors.pincode && (
+                  <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.pincode}</p>
                 )}
               </div>
             </div>

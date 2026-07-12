@@ -38,6 +38,7 @@ async function sendMetaPurchaseBackstop(params: {
   phone: string;
   email: string;
   city: string;
+  zip: string;
 }) {
   const PIXEL_ID = process.env.META_PIXEL_ID;
   const ACCESS_TOKEN = process.env.META_CAPI_ACCESS_TOKEN;
@@ -45,17 +46,20 @@ async function sendMetaPurchaseBackstop(params: {
 
   const [firstName, ...lastNameParts] = params.name.trim().split(/\s+/);
   const userData: Record<string, unknown> = {};
+  const normLocation = (v: string) => v.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
   const em = hashField(params.email, normEmail);
   const ph = hashField(params.phone, normPhone);
   const fn = hashField(firstName, normName);
   const ln = hashField(lastNameParts.join(' '), normName);
-  const ct = hashField(params.city, (v) => v.trim().toLowerCase().replace(/[^a-z0-9]/g, ''));
+  const ct = hashField(params.city, normLocation);
+  const zp = hashField(params.zip, normLocation);
   const country = hashField('in', normName); // site is India-only right now
   if (em) userData.em = [em];
   if (ph) userData.ph = [ph];
   if (fn) userData.fn = [fn];
   if (ln) userData.ln = [ln];
   if (ct) userData.ct = [ct];
+  if (zp) userData.zp = [zp];
   if (country) userData.country = [country];
   // No fbp/fbc/client IP here — this call originates from Razorpay's server,
   // not the customer's browser, so those signals genuinely don't exist for
@@ -175,6 +179,7 @@ export default async function handler(req: any, res: any) {
   const phone = notes.phone || payment.contact || '';
   const email = notes.email && notes.email !== 'N/A' ? notes.email : (payment.email || '');
   const city = notes.city || '';
+  const pincode = notes.pincode || '';
   const address = notes.address || '';
   const itemsSummary = notes.items || '';
   const totalWeight = parseInt(String(notes.total_weight || '0').replace(/[^\d]/g, ''), 10) || 0;
@@ -293,7 +298,7 @@ export default async function handler(req: any, res: any) {
       eventId: `purchase-${paymentId}`,
       value: grandTotal,
       contentIds: [],
-      name, phone, email, city,
+      name, phone, email, city, zip: pincode,
     });
 
     console.log(`[razorpay-webhook] payment ${paymentId}: logged + notified`);
