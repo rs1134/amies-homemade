@@ -16,6 +16,7 @@ export interface MetaUserData {
   city?: string;
   state?: string;
   zip?: string;
+  country?: string;
 }
 
 export type MetaEventName = 'PageView' | 'ViewContent' | 'AddToCart' | 'InitiateCheckout' | 'Purchase';

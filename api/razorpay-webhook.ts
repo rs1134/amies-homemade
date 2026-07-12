@@ -50,11 +50,13 @@ async function sendMetaPurchaseBackstop(params: {
   const fn = hashField(firstName, normName);
   const ln = hashField(lastNameParts.join(' '), normName);
   const ct = hashField(params.city, (v) => v.trim().toLowerCase().replace(/[^a-z0-9]/g, ''));
+  const country = hashField('in', normName); // site is India-only right now
   if (em) userData.em = [em];
   if (ph) userData.ph = [ph];
   if (fn) userData.fn = [fn];
   if (ln) userData.ln = [ln];
   if (ct) userData.ct = [ct];
+  if (country) userData.country = [country];
   // No fbp/fbc/client IP here — this call originates from Razorpay's server,
   // not the customer's browser, so those signals genuinely don't exist for
   // this path. Weaker match quality than the client-fired event is expected;

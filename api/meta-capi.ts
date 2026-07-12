@@ -40,6 +40,7 @@ export interface RawUserData {
   city?: string;
   state?: string;
   zip?: string;
+  country?: string;
 }
 
 function buildHashedUserData(raw: RawUserData): Record<string, string[]> {
@@ -51,6 +52,7 @@ function buildHashedUserData(raw: RawUserData): Record<string, string[]> {
   const ct = hashField(raw.city, normLocation);
   const st = hashField(raw.state, normLocation);
   const zp = hashField(raw.zip, normLocation);
+  const country = hashField(raw.country, normLocation);
   if (em) out.em = [em];
   if (ph) out.ph = [ph];
   if (fn) out.fn = [fn];
@@ -58,6 +60,7 @@ function buildHashedUserData(raw: RawUserData): Record<string, string[]> {
   if (ct) out.ct = [ct];
   if (st) out.st = [st];
   if (zp) out.zp = [zp];
+  if (country) out.country = [country];
   return out;
 }
 

@@ -403,6 +403,7 @@ _Please confirm my order and share delivery details._
           firstName,
           lastName: lastNameParts.join(' '),
           city: formData.city,
+          country: 'in', // site is India-only right now
         },
       }, `cod-${codOrderId}`);
       return;
@@ -467,6 +468,7 @@ _Please confirm my order and share delivery details._
               firstName,
               lastName: lastNameParts.join(' '),
               city: formData.city,
+              country: 'in', // site is India-only right now
             },
           }, `purchase-${response.razorpay_payment_id}`);
         },
