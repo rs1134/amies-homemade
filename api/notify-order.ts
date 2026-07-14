@@ -19,7 +19,7 @@ export default async function handler(req: any, res: any) {
 
   const {
     orderId, name, phone, city, address, email, itemsSummary,
-    totalWeight, subtotal, shippingFee, grandTotal, paymentId, couponDiscount,
+    totalWeight, subtotal, shippingFee, codFee, grandTotal, paymentId, couponDiscount,
     paymentMethod,
   } = req.body;
   // Backward-compatible default — older client builds don't send this field.
@@ -72,6 +72,7 @@ export default async function handler(req: any, res: any) {
       `Subtotal: Rs.${subtotal}`,
       ...(couponDiscount > 0 ? [`Coupon (Thanks10): -Rs.${couponDiscount}`] : []),
       `Delivery: Rs.${shippingFee}`,
+      ...(codFee > 0 ? [`COD Convenience Fee: Rs.${codFee}`] : []),
       `GRAND TOTAL: Rs.${grandTotal}`,
       `Payment Method: ${method}`,
       isCod ? `Order ID: ${orderId}` : `Payment ID: ${paymentId}`,

@@ -24,6 +24,7 @@ interface OrderSnapshot {
   total: number;
   couponDiscount: number;
   shippingFee: number;
+  codFee: number;
   grandTotal: number;
   city: string;
   address: string;
@@ -263,7 +264,11 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
     return Math.max(0, 1500 - subtotalAfterDiscount);
   }, [isAhmedabad, subtotalAfterDiscount]);
 
-  const grandTotal = total - couponDiscount + (shippingFee || 0);
+  // Flat convenience fee for Cash on Delivery — covers the extra handling
+  // cost of collecting cash at the doorstep vs. prepaid online orders.
+  const codFee = paymentMethod === 'cod' ? 50 : 0;
+
+  const grandTotal = total - couponDiscount + (shippingFee || 0) + codFee;
 
   // `paymentId` is the Razorpay payment id for online orders, or a synthetic
   // `COD-<orderId>` marker for cash-on-delivery orders (the orders table
@@ -295,7 +300,7 @@ ${isCod ? '' : `*Payment ID:* ${id}\n`}*Customer:* ${formData.name}
 *Items:*
 ${itemsSummary}
 
-*Total Amount:* Rs.${grandTotal}${couponDiscount > 0 ? `\n*Coupon Applied:* Thanks10 (− Rs.${couponDiscount})` : ''}
+*Total Amount:* Rs.${grandTotal}${couponDiscount > 0 ? `\n*Coupon Applied:* Thanks10 (− Rs.${couponDiscount})` : ''}${isCod ? `\n*COD Convenience Fee:* Rs.${codFee}` : ''}
 *Payment:* ${isCod ? 'CASH ON DELIVERY' : 'ONLINE (RAZORPAY)'}
 ---------------------------
 _Please confirm my order and share delivery details._
@@ -311,7 +316,7 @@ _Please confirm my order and share delivery details._
           orderId, name: formData.name, phone: formData.phone,
           city: formData.city, address: fullDeliveryAddress, email: formData.email,
           itemsSummary, totalWeight, subtotal: total,
-          shippingFee: shippingFee ?? 0, grandTotal, paymentId: paymentIdForOrder,
+          shippingFee: shippingFee ?? 0, codFee, grandTotal, paymentId: paymentIdForOrder,
           paymentMethod: isCod ? 'COD' : 'RAZORPAY',
         }),
       });
@@ -334,7 +339,7 @@ _Please confirm my order and share delivery details._
     // still shows everything correctly.
     setOrderSnapshot({
       items, total, couponDiscount,
-      shippingFee: shippingFee ?? 0, grandTotal,
+      shippingFee: shippingFee ?? 0, codFee, grandTotal,
       city: formData.city, address: fullDeliveryAddress, isAhmedabad,
       paymentMethod: method,
     });
@@ -560,6 +565,11 @@ _Please confirm my order and share delivery details._
                 <div className="flex justify-between items-center text-sm font-bold text-[#4A3728]/50">
                   <span>Delivery Fee</span><span>{snap.shippingFee === 0 ? 'FREE' : `₹${snap.shippingFee}`}</span>
                 </div>
+                {snap.codFee > 0 && (
+                  <div className="flex justify-between items-center text-sm font-bold text-[#4A3728]/50">
+                    <span>COD Convenience Fee</span><span>₹{snap.codFee}</span>
+                  </div>
+                )}
                 <div className="flex justify-between items-center pt-4 border-t border-[#4A3728]/5">
                   <span className="text-lg sm:text-2xl font-bold serif text-[#4A3728]">{snap.paymentMethod === 'cod' ? 'Grand Total (Pay on Delivery)' : 'Grand Total Paid'}</span>
                   <span className="text-2xl sm:text-3xl font-black text-[#F04E4E]">₹{snap.grandTotal}</span>
@@ -848,13 +858,14 @@ _Please confirm my order and share delivery details._
                   className={`w-full p-4 rounded-2xl border-2 flex items-center gap-3 shadow-sm transition-all text-left disabled:opacity-50 ${paymentMethod === 'cod' ? 'border-[#F04E4E] bg-[#F04E4E]/5' : 'border-[#4A3728]/10 hover:border-[#4A3728]/20'}`}
                 >
                   <Banknote size={22} className="text-green-600 flex-shrink-0" />
-                  <span className="text-[10px] font-black uppercase brand-rounded tracking-widest">Cash on Delivery (Ahmedabad Only)</span>
+                  <span className="text-[10px] font-black uppercase brand-rounded tracking-widest flex-1">Cash on Delivery (Ahmedabad Only)</span>
+                  <span className="text-[9px] font-black uppercase brand-rounded tracking-widest text-[#4A3728]/40 flex-shrink-0">+₹50 fee</span>
                 </button>
               ) : null}
 
               {isAhmedabad && paymentMethod === 'cod' && (
                 <p className="text-[11px] font-bold text-[#4A3728]/80 brand-rounded bg-[#4A3728]/5 p-2.5 rounded-lg border border-[#4A3728]/5">
-                  Please note: Cash on Delivery orders may take up to 1 extra day to be delivered compared to prepaid orders.
+                  Please note: Cash on Delivery orders have a ₹50 convenience fee and may take up to 1 extra day to be delivered compared to prepaid orders.
                 </p>
               )}
 
@@ -960,6 +971,12 @@ _Please confirm my order and share delivery details._
               <p className="text-[9px] text-[#4A3728]/40 italic brand-rounded bg-[#4A3728]/5 p-2.5 rounded-lg border border-[#4A3728]/5">
                 {fieldErrors.city ? "Correct city name to calculate shipping" : "Enter your city to calculate shipping fee."}
               </p>
+            )}
+            {codFee > 0 && (
+              <div className="flex justify-between text-sm items-center">
+                <span className="text-[#4A3728]/40 brand-rounded uppercase font-black text-[10px] tracking-widest">COD Convenience Fee</span>
+                <span className="font-bold text-[#4A3728] text-sm">₹{codFee}</span>
+              </div>
             )}
             <div className="flex justify-between items-center pt-4">
               <span className="text-lg font-bold serif text-[#4A3728]">Grand Total</span>
