@@ -19,6 +19,33 @@
       // PageView is fired once per route (incl. initial load) from App.tsx —
       // firing it here too would double-count every session's first pageview.
     </script>
+
+    <script>
+      // Fallback _fbc construction — fbevents.js above is supposed to set the
+      // _fbc cookie itself from a ?fbclid= param, but connect.facebook.net is
+      // commonly blocked by ad-blockers/tracking-protection, which silently
+      // stops that from ever happening even though the rest of the site (our
+      // own first-party domain) works fine. This constructs the same cookie
+      // format ourselves whenever an fbclid is present, so Meta CAPI Purchase
+      // events still carry ad-click attribution when the real Pixel script
+      // never loads. Persists fbclid in localStorage since checkout usually
+      // happens several SPA route changes after the ad-click landing page,
+      // by which point the query param is long gone from the URL.
+      (function () {
+        try {
+          var fbclid = new URLSearchParams(window.location.search).get('fbclid');
+          if (fbclid) {
+            localStorage.setItem('_fbclid_fallback', fbclid);
+          } else {
+            fbclid = localStorage.getItem('_fbclid_fallback');
+          }
+          var hasFbc = /(?:^|;\s*)_fbc=/.test(document.cookie);
+          if (fbclid && !hasFbc) {
+            document.cookie = '_fbc=fb.1.' + Date.now() + '.' + fbclid + ';path=/;max-age=7776000';
+          }
+        } catch (e) {}
+      })();
+    </script>
     <noscript><img height="1" width="1" style="display:none"
       src="https://www.facebook.com/tr?id=1974729913133100&ev=PageView&noscript=1"
     /></noscript>
