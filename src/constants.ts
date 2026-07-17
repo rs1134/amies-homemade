@@ -713,7 +713,7 @@ export const PRODUCTS: Product[] = [
     id: 'sm2',
     name: 'Chai Masala',
     category: Category.WELLNESS,
-    price: 320,
+    price: 399,
     weight: '250 G',
     description: 'Turn your ordinary daily tea into a rich and comforting ritual. This special homemade recipe focuses entirely on real freshness, deep spice flavor, and true authenticity. It is crafted to be completely different from regular, mass-market chai masalas, offering a unique and special way to elevate your morning cup and leave you feeling warm and refreshed.',
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(38).jpg',
@@ -726,7 +726,7 @@ export const PRODUCTS: Product[] = [
     ],
     ingredients: ['Dry Ginger', 'Cinnamon', 'Clove', 'Cardamom (Elaichi)', 'Black Pepper'],
     weights: ['250 G'],
-    prices: { '250 G': 320 },
+    prices: { '250 G': 399 },
     shelfLife: '1 year',
     rating: 4.5, reviewCount: 31
   }
