@@ -173,9 +173,9 @@ export const PRODUCTS: Product[] = [
     id: 'm4',
     name: 'Tender Coconut Vanilla Chips',
     category: Category.MUKHWAS,
-    price: 206,
-    weight: '125 G',
-    description: 'Sourced from the sun-drenched groves of Kerala, our tender coconuts are picked at peak freshness for a light, satisfying crunch. Naturally wholesome and irresistibly delicious, every bite is a tropical escape and the perfect post-meal treat.',
+    price: 198,
+    weight: '120 G',
+    description: 'Coconut sourced from the sun-drenched groves of Kerala, our tender coconuts are picked at peak freshness for a light, satisfying crunch. Naturally wholesome and irresistibly delicious, every bite is a tropical escape and the perfect post-meal treat.',
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(24)_HQvaLeprU.jpg',
     images: [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(24)_HQvaLeprU.jpg',
@@ -186,7 +186,7 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%202.43.00%E2%80%AFPM.png',
     ],
     ingredients: ['Coconut', 'Vanilla Extract', 'Salt', 'Sugar'],
-    prices: { '125 G': 206 },
+    prices: { '120 G': 198 },
     rating: 5, reviewCount: 60
   },
   {
@@ -334,8 +334,8 @@ export const PRODUCTS: Product[] = [
     id: 'm9',
     name: 'Tender Coconut Chocolate Chips',
     category: Category.MUKHWAS,
-    price: 206,
-    weight: '125 G',
+    price: 198,
+    weight: '120 G',
     description: 'Handpicked from Kerala\'s sun-drenched groves, our tender coconuts are blended with real cocoa for a rich, chocolatey crunch. High in fibre and naturally satisfying, it\'s the perfect post-meal treat or an energizing snack on the go.',
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(30)_lviUwnaufS.jpg',
     images: [
@@ -347,8 +347,9 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%202.18.46%E2%80%AFPM.png',
     ],
     ingredients: ['Coconut', 'Cocoa Powder', 'Salt', 'Sugar'],
-    prices: { '125 G': 206 },
-    rating: 4.5, reviewCount: 48
+    prices: { '120 G': 198 },
+    rating: 4.5, reviewCount: 48,
+    outOfStock: true
   },
   {
     id: 'm14',
