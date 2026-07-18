@@ -160,9 +160,14 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose, onSelect
           )}
           <button
             onClick={onClose}
-            className="ml-1 px-2.5 py-1 text-[11px] font-bold text-[#4A3728]/50 border border-[#4A3728]/20 rounded-md hover:bg-[#4A3728]/5 transition-colors tracking-wide"
+            aria-label="Close search"
+            className="ml-1 p-1.5 sm:px-2.5 sm:py-1 text-[11px] font-bold text-[#4A3728]/50 border border-[#4A3728]/20 rounded-md hover:bg-[#4A3728]/5 transition-colors tracking-wide"
           >
-            ESC
+            {/* "ESC" only means something with a physical keyboard — on mobile,
+                where this button is the only way to close the overlay, show
+                an X instead so it reads as tappable. */}
+            <X size={16} className="sm:hidden" />
+            <span className="hidden sm:inline">ESC</span>
           </button>
         </div>
 

@@ -98,7 +98,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, o
                 <div className="flex-1 flex flex-col">
                   <div className="flex justify-between mb-1">
                     <h4 className="font-bold text-[#4A3728] text-base sm:text-lg serif leading-tight">{item.name}</h4>
-                    <button onClick={() => onRemove(idx)} className="text-[#4A3728]/20 hover:text-coral transition-colors">
+                    <button onClick={() => onRemove(idx)} aria-label={`Remove ${item.name}`} className="p-2.5 -m-1 min-w-[36px] min-h-[36px] flex items-center justify-center text-[#4A3728]/20 hover:text-coral transition-colors">
                       <Trash2 size={16} />
                     </button>
                   </div>

@@ -917,16 +917,16 @@ _Please confirm my order and share delivery details._
                     <h4 className="text-sm font-bold text-[#4A3728] leading-tight">{item.name}</h4>
                     <p className="text-[11px] text-[#4A3728]/50 uppercase brand-rounded mt-0.5 font-bold tracking-wider">{item.selectedWeight || item.weight}</p>
                     <div className="flex items-center gap-2 mt-1.5 border border-coral/10 bg-white rounded-lg w-fit p-0.5">
-                      <button onClick={() => onUpdateQuantity(idx, -1)} className="p-1 hover:bg-coral/5 rounded text-coral transition-colors"><Minus size={11} /></button>
+                      <button onClick={() => onUpdateQuantity(idx, -1)} className="p-1.5 min-w-[28px] min-h-[28px] flex items-center justify-center hover:bg-coral/5 rounded text-coral transition-colors"><Minus size={11} /></button>
                       <span className="text-sm font-black brand-rounded text-[#4A3728] min-w-[18px] text-center">{item.quantity}</span>
-                      <button onClick={() => onUpdateQuantity(idx, 1)} className="p-1 hover:bg-coral/5 rounded text-coral transition-colors"><Plus size={11} /></button>
+                      <button onClick={() => onUpdateQuantity(idx, 1)} className="p-1.5 min-w-[28px] min-h-[28px] flex items-center justify-center hover:bg-coral/5 rounded text-coral transition-colors"><Plus size={11} /></button>
                     </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2.5">
                   <span className="font-bold text-[#4A3728] text-sm">₹{item.price * item.quantity}</span>
                   {/* Mobile: always-visible remove button (no hover on touch) */}
-                  <button onClick={() => onRemove(idx)} aria-label={`Remove ${item.name}`} className="sm:hidden p-1.5 text-[#4A3728]/30 hover:text-red-500 transition-colors">
+                  <button onClick={() => onRemove(idx)} aria-label={`Remove ${item.name}`} className="sm:hidden p-2.5 -m-1 min-w-[36px] min-h-[36px] flex items-center justify-center text-[#4A3728]/30 hover:text-red-500 transition-colors">
                     <Trash2 size={15} />
                   </button>
                 </div>
