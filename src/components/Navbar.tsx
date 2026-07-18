@@ -14,6 +14,21 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ cartCount, onCartClick, onNavigate, onSearchOpen, currentPage }) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
+  // Lock body scroll while the mobile menu is open — without this, the menu
+  // (rendered fixed to the top of the screen) stays put while the page
+  // scrolls underneath it, and the lack of a backdrop makes the page content
+  // look like it's bleeding through a broken overlay.
+  React.useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
   return (
     <nav className="fixed w-full bg-[#FFF8EE]/90 backdrop-blur-md z-50 border-b border-[#F04E4E]/10 top-[40px]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -56,15 +71,18 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount, onCartClick, onNavigate, onS
       </div>
 
       {isOpen && (
-        <div className="md:hidden bg-[#FFF8EE] border-b border-[#F04E4E]/10 animate-fade-in-down shadow-xl brand-rounded font-bold text-center py-8">
-          <a href="/" onClick={(e) => { e.preventDefault(); onNavigate('home'); setIsOpen(false); }} className="block w-full py-3">Home</a>
-          <a href="/shop" onClick={(e) => { e.preventDefault(); onNavigate('shop'); setIsOpen(false); }} className="block w-full py-3">Shop All</a>
-          <a href="/gifting" onClick={(e) => { e.preventDefault(); onNavigate('gifting'); setIsOpen(false); }} className="block w-full py-3">Gifting</a>
-          <a href="/about" onClick={(e) => { e.preventDefault(); onNavigate('about'); setIsOpen(false); }} className="block w-full py-3">Our Story</a>
-          <a href="/contact" onClick={(e) => { e.preventDefault(); onNavigate('contact'); setIsOpen(false); }} className="block w-full py-3">Contact</a>
-          <a href="/blog" onClick={(e) => { e.preventDefault(); onNavigate('blog'); setIsOpen(false); }} className="block w-full py-3">Blog</a>
-          <a href="/faq" onClick={(e) => { e.preventDefault(); onNavigate('faq'); setIsOpen(false); }} className="block w-full py-3">FAQ</a>
-        </div>
+        <>
+          <div className="md:hidden fixed inset-0 top-[104px] bg-black/40 backdrop-blur-sm z-40" onClick={() => setIsOpen(false)} />
+          <div className="md:hidden relative z-50 bg-[#FFF8EE] border-b border-[#F04E4E]/10 animate-fade-in-down shadow-xl brand-rounded font-bold text-center py-8">
+            <a href="/" onClick={(e) => { e.preventDefault(); onNavigate('home'); setIsOpen(false); }} className="block w-full py-3">Home</a>
+            <a href="/shop" onClick={(e) => { e.preventDefault(); onNavigate('shop'); setIsOpen(false); }} className="block w-full py-3">Shop All</a>
+            <a href="/gifting" onClick={(e) => { e.preventDefault(); onNavigate('gifting'); setIsOpen(false); }} className="block w-full py-3">Gifting</a>
+            <a href="/about" onClick={(e) => { e.preventDefault(); onNavigate('about'); setIsOpen(false); }} className="block w-full py-3">Our Story</a>
+            <a href="/contact" onClick={(e) => { e.preventDefault(); onNavigate('contact'); setIsOpen(false); }} className="block w-full py-3">Contact</a>
+            <a href="/blog" onClick={(e) => { e.preventDefault(); onNavigate('blog'); setIsOpen(false); }} className="block w-full py-3">Blog</a>
+            <a href="/faq" onClick={(e) => { e.preventDefault(); onNavigate('faq'); setIsOpen(false); }} className="block w-full py-3">FAQ</a>
+          </div>
+        </>
       )}
     </nav>
   );

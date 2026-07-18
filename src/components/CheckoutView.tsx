@@ -75,6 +75,18 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Removing the last item mid-checkout swaps this whole view for the much
+  // shorter "empty bag" card below. If the customer was scrolled down into
+  // the form, the browser clamps that same scroll position to the new
+  // (shorter) page height instead of resetting it — visually landing on the
+  // footer instead of the empty-bag message. Snap back to the top whenever
+  // the cart empties out from here.
+  useEffect(() => {
+    if (items.length === 0) {
+      window.scrollTo({ top: 0, behavior: 'auto' });
+    }
+  }, [items.length]);
+
   // ── Address autocomplete (new Places API — the legacy Autocomplete widget is
   //    not available to API keys created after March 2025, so we fetch
   //    suggestions ourselves and render a custom branded dropdown) ────────────
