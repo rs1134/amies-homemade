@@ -1001,11 +1001,20 @@ const App: React.FC = () => {
     // Full-page product view takes priority whenever a product is selected.
     if (selectedProduct) {
       const isGifting = selectedProduct.category === Category.GIFTING;
-      const related = PRODUCTS.filter(p =>
+      const sameCategory = PRODUCTS.filter(p =>
         p.id !== selectedProduct.id &&
         isProductVisible(p) &&
         p.category === selectedProduct.category
-      ).slice(0, 4);
+      );
+      // Everyday Mukhwas Trio: surface both gift hampers alongside other
+      // mukhwas, since customers browsing the trio are a natural fit for
+      // gifting upsells too.
+      const related = selectedProduct.id === 'm14'
+        ? [
+            ...PRODUCTS.filter(p => (p.id === 'g4' || p.id === 'g5') && isProductVisible(p)),
+            ...sameCategory,
+          ].slice(0, 4)
+        : sameCategory.slice(0, 4);
       return (
         <ProductDetail
           product={selectedProduct}
