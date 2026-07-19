@@ -69,7 +69,7 @@ async function sendOrderConfirmationEmail(params: {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${RESEND_KEY}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        from: "Amie's Homemade <orders@amieshomemade.com>",
+        from: "Amie's Homemade <hello@amieshomemade.com>",
         to: params.to,
         subject: `Order Confirmed - ${params.orderId} | Amie's Homemade`,
         html: buildOrderEmailHtml(params),
