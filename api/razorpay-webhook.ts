@@ -30,6 +30,75 @@ const hashField = (value: string | undefined, normalize: (v: string) => string):
   return normalized ? sha256Hex(normalized) : undefined;
 };
 
+// ── Order confirmation email (Resend) — duplicated from api/notify-order.ts,
+// same reason as the Meta CAPI helpers above (no cross-file module tracing).
+const escapeHtml = (s: any) =>
+  String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c] as string));
+
+function buildOrderEmailHtml(params: {
+  orderId: string; name: string; itemsSummary: string; address: string; city: string;
+  subtotal: number; couponDiscount: number; shippingFee: number; codFee: number;
+  grandTotal: number; isCod: boolean;
+}): string {
+  const itemRows = params.itemsSummary.split('\n').filter(Boolean).map(line =>
+    `<tr><td style="padding:6px 0;color:#4A3728;font-size:14px;">${escapeHtml(line)}</td></tr>`
+  ).join('');
+  const delivery = params.city.toLowerCase().includes('ahmedabad') ? '1-2 working days' : '3-5 working days';
+
+  return `
+<div style="font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;max-width:600px;margin:0 auto;background:#FFF8EE;">
+  <div style="background:#F04E4E;padding:32px 24px;text-align:center;">
+    <h1 style="color:#fff;font-size:24px;margin:0;">Order Confirmed!</h1>
+    <p style="color:#fff;opacity:0.85;font-size:13px;margin:8px 0 0;">Order ID: ${escapeHtml(params.orderId)}</p>
+  </div>
+  <div style="padding:24px;">
+    <p style="color:#4A3728;font-size:14px;">Hi ${escapeHtml(params.name)},</p>
+    <p style="color:#4A3728;font-size:14px;">Thank you for your order! Here's a summary of what you ordered:</p>
+    <table width="100%" style="border-top:1px solid #4A372820;border-bottom:1px solid #4A372820;margin:16px 0;">
+      ${itemRows}
+    </table>
+    <table width="100%" style="font-size:14px;color:#4A3728;">
+      <tr><td>Subtotal</td><td align="right">Rs.${params.subtotal}</td></tr>
+      ${params.couponDiscount > 0 ? `<tr><td>Coupon Discount</td><td align="right">-Rs.${params.couponDiscount}</td></tr>` : ''}
+      <tr><td>Delivery Fee</td><td align="right">${params.shippingFee === 0 ? 'FREE' : `Rs.${params.shippingFee}`}</td></tr>
+      ${params.codFee > 0 ? `<tr><td>COD Convenience Fee</td><td align="right">Rs.${params.codFee}</td></tr>` : ''}
+      <tr><td style="font-weight:bold;padding-top:8px;">${params.isCod ? 'Grand Total (Pay on Delivery)' : 'Grand Total Paid'}</td><td align="right" style="font-weight:bold;padding-top:8px;color:#F04E4E;">Rs.${params.grandTotal}</td></tr>
+    </table>
+    <p style="color:#4A3728;font-size:13px;margin-top:20px;"><strong>Delivering to:</strong><br/>${escapeHtml(params.address)}, ${escapeHtml(params.city)}</p>
+    <p style="color:#4A3728;font-size:13px;">Estimated delivery: ${delivery}</p>
+    <p style="color:#4A3728;font-size:13px;margin-top:20px;">Questions? Message us on WhatsApp: <a href="https://wa.me/919054038876" style="color:#F04E4E;">+91 90540 38876</a></p>
+  </div>
+</div>`.trim();
+}
+
+async function sendOrderConfirmationEmail(params: {
+  to: string; orderId: string; name: string; itemsSummary: string; address: string; city: string;
+  subtotal: number; couponDiscount: number; shippingFee: number; codFee: number;
+  grandTotal: number; isCod: boolean;
+}) {
+  const RESEND_KEY = process.env.RESEND_API_KEY;
+  if (!RESEND_KEY) return;
+
+  try {
+    const res = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${RESEND_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        from: "Amie's Homemade <orders@amieshomemade.com>",
+        to: params.to,
+        subject: `Order Confirmed - ${params.orderId} | Amie's Homemade`,
+        html: buildOrderEmailHtml(params),
+      }),
+    });
+    if (!res.ok) {
+      const text = await res.text().catch(() => '');
+      console.error(`[razorpay-webhook] Resend email failed: ${res.status} ${text}`);
+    }
+  } catch (err: any) {
+    console.error('[razorpay-webhook] Resend email error:', err.message);
+  }
+}
+
 async function sendMetaPurchaseBackstop(params: {
   eventId: string;
   value: number;
@@ -288,6 +357,15 @@ export default async function handler(req: any, res: any) {
       } catch (smsErr: any) {
         console.error('[razorpay-webhook] SMS error:', smsErr.message);
       }
+    }
+
+    // ── Customer order confirmation email via Resend ──────────────────────
+    if (email && email !== 'N/A') {
+      await sendOrderConfirmationEmail({
+        to: email, orderId, name, itemsSummary, address, city,
+        subtotal, couponDiscount: 0, shippingFee, codFee: 0,
+        grandTotal, isCod: false,
+      });
     }
 
     // ── Meta Conversions API Purchase — server-side backstop ──────────────
