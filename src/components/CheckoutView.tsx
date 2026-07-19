@@ -30,6 +30,7 @@ interface OrderSnapshot {
   address: string;
   isAhmedabad: boolean;
   paymentMethod: 'online' | 'cod';
+  email: string;
 }
 
 const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdateQuantity, onRemove, total, couponApplied = false, onShopClick, onOrderPlaced }) => {
@@ -353,7 +354,7 @@ _Please confirm my order and share delivery details._
       items, total, couponDiscount,
       shippingFee: shippingFee ?? 0, codFee, grandTotal,
       city: formData.city, address: fullDeliveryAddress, isAhmedabad,
-      paymentMethod: method,
+      paymentMethod: method, email: formData.email,
     });
     setPaymentId(paymentIdForOrder);
     setIsSuccess(true);
@@ -544,6 +545,9 @@ _Please confirm my order and share delivery details._
               <div className="space-y-1">
                 <p className="text-[13px] font-bold text-[#4A3728]">We have received your order details.</p>
                 <p className="text-[13px] font-bold text-[#F04E4E]">We'll confirm your order shortly via WhatsApp.</p>
+                {snap.email && (
+                  <p className="text-[13px] font-bold text-[#4A3728]/60">You'll receive your order confirmation at {snap.email}.</p>
+                )}
               </div>
             </div>
 
