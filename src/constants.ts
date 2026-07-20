@@ -187,7 +187,8 @@ export const PRODUCTS: Product[] = [
     ],
     ingredients: ['Coconut', 'Vanilla Extract', 'Salt', 'Sugar'],
     prices: { '120 G': 198 },
-    rating: 5, reviewCount: 60
+    rating: 5, reviewCount: 60,
+    outOfStock: true
   },
   {
     id: 'm10',
