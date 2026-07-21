@@ -904,8 +904,11 @@ const App: React.FC = () => {
   const filteredProducts = useMemo(() => {
     // Exclude gifting (kept exclusive) and any hidden categories/products
     const availableProducts = PRODUCTS.filter(p => p.category !== Category.GIFTING && isProductVisible(p));
-    if (activeCategory === 'All') return availableProducts;
-    return availableProducts.filter(p => p.category === activeCategory);
+    const inCategory = activeCategory === 'All' ? availableProducts : availableProducts.filter(p => p.category === activeCategory);
+    // Out-of-stock items sink to the bottom of the listing automatically —
+    // Array.sort is stable, so everything else keeps its normal order, and
+    // an item snaps back to its original spot the moment outOfStock clears.
+    return [...inCategory].sort((a, b) => (a.outOfStock ? 1 : 0) - (b.outOfStock ? 1 : 0));
   }, [activeCategory]);
 
   const addToCart = useCallback((product: Product, weight?: string, subOptionName?: string, openCart: boolean = true) => {
