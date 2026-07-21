@@ -297,6 +297,7 @@ export default async function handler(req: any, res: any) {
       `Phone: ${phone}`,
       `City: ${city}`,
       `Address: ${address}`,
+      `Pincode: ${pincode || 'N/A'}`,
       `Email: ${email || 'N/A'}`,
       ``,
       `Weight: ${totalWeight}g`,

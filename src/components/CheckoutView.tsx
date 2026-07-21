@@ -309,6 +309,7 @@ ${isCod ? '' : `*Payment ID:* ${id}\n`}*Customer:* ${formData.name}
 *Phone:* ${formData.phone}
 *City:* ${formData.city}
 *Address:* ${fullDeliveryAddress}
+*Pincode:* ${formData.pincode}
 
 *Items:*
 ${itemsSummary}
@@ -327,11 +328,17 @@ _Please confirm my order and share delivery details._
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           orderId, name: formData.name, phone: formData.phone,
-          city: formData.city, address: fullDeliveryAddress, email: formData.email,
+          city: formData.city, address: fullDeliveryAddress, pincode: formData.pincode, email: formData.email,
           itemsSummary, totalWeight, subtotal: total,
           shippingFee: shippingFee ?? 0, codFee, grandTotal, paymentId: paymentIdForOrder,
           paymentMethod: isCod ? 'COD' : 'RAZORPAY',
         }),
+        // Survives the page navigating/backgrounding right after this call
+        // fires — the same protection already used on the Meta CAPI Purchase
+        // fetch, since this request faces the exact same risk (customer
+        // switches to their UPI app to confirm payment, or closes the tab,
+        // in the instant right after this fires).
+        keepalive: true,
       });
       if (!res.ok) console.error('[notify-order] Failed:', await res.json().catch(() => ({})));
     } catch (err) {
@@ -472,7 +479,7 @@ _Please confirm my order and share delivery details._
             // Continue anyway so the order isn't lost — admin can verify manually
           }
 
-          submitOrderSilently(response.razorpay_payment_id, 'online');
+          await submitOrderSilently(response.razorpay_payment_id, 'online');
 
           // Deterministic event_id (not random) — the Razorpay webhook fires
           // this same Purchase event server-side as a backstop if the

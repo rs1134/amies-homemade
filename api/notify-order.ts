@@ -90,7 +90,7 @@ export default async function handler(req: any, res: any) {
   }
 
   const {
-    orderId, name, phone, city, address, email, itemsSummary,
+    orderId, name, phone, city, address, pincode, email, itemsSummary,
     totalWeight, subtotal, shippingFee, codFee, grandTotal, paymentId, couponDiscount,
     paymentMethod,
   } = req.body;
@@ -135,6 +135,7 @@ export default async function handler(req: any, res: any) {
       `Phone: ${phone}`,
       `City: ${city}`,
       `Address: ${address}`,
+      `Pincode: ${pincode || 'N/A'}`,
       `Email: ${email || 'N/A'}`,
       ``,
       `Weight: ${totalWeight}g`,
