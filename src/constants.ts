@@ -187,8 +187,7 @@ export const PRODUCTS: Product[] = [
     ],
     ingredients: ['Coconut', 'Vanilla Extract', 'Salt', 'Sugar'],
     prices: { '120 G': 198 },
-    rating: 5, reviewCount: 60,
-    outOfStock: true
+    rating: 5, reviewCount: 60
   },
   {
     id: 'm10',
@@ -349,8 +348,7 @@ export const PRODUCTS: Product[] = [
     ],
     ingredients: ['Coconut', 'Cocoa Powder', 'Salt', 'Sugar'],
     prices: { '120 G': 198 },
-    rating: 4.5, reviewCount: 48,
-    outOfStock: true
+    rating: 4.5, reviewCount: 48
   },
   {
     id: 'm14',
