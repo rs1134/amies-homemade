@@ -1378,12 +1378,14 @@ const App: React.FC = () => {
 
       <Footer onNavigate={navigate} />
 
-      {/* Fixed floating buttons live outside <main> so the footer's z-40 stacking context can't cover them */}
+      {/* Fixed floating buttons live outside <main> so the footer's z-40 stacking context can't cover them.
+          Hidden on mobile checkout — the sticky pay bar occupies that same bottom-of-screen
+          strip there, and the two would visually collide. */}
       <a
         href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-5 right-4 sm:bottom-6 sm:right-6 z-50 bg-[#25D366] text-white p-3.5 sm:p-5 sm:px-8 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center gap-3 group brand-rounded font-bold"
+        className={`fixed bottom-5 right-4 sm:bottom-6 sm:right-6 z-50 bg-[#25D366] text-white p-3.5 sm:p-5 sm:px-8 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center gap-3 group brand-rounded font-bold ${currentPage === 'checkout' ? 'hidden sm:flex' : ''}`}
       >
         <MessageCircle size={22} className="sm:hidden" />
         <MessageCircle size={24} className="hidden sm:block" />

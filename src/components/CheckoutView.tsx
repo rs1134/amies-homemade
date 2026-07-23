@@ -94,6 +94,9 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   const [addressQuery, setAddressQuery] = useState('');
   const [suggestions, setSuggestions] = useState<Array<{ id: string; main: string; secondary: string; prediction: any }>>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  // Collapses the address field to a compact confirmed summary right after
+  // autocomplete fills it in, instead of showing the same address twice.
+  const [addressConfirmed, setAddressConfirmed] = useState(false);
   const placesLibRef = useRef<any>(null);
   const sessionTokenRef = useRef<any>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -176,11 +179,13 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
       setFormData(prev => ({ ...prev, address, city: city || prev.city, pincode: pincode || prev.pincode }));
       setTouched(prev => ({ ...prev, address: true, city: true, ...(pincode ? { pincode: true } : {}) }));
       setFieldErrors(prev => ({ ...prev, address: '', city: '', ...(pincode ? { pincode: '' } : {}) }));
+      setAddressConfirmed(true);
     } catch {
       // Place details unavailable — still fill in what the suggestion showed
       const fallback = sug.secondary ? `${sug.main}, ${sug.secondary}` : sug.main;
       setFormData(prev => ({ ...prev, address: fallback }));
       setTouched(prev => ({ ...prev, address: true }));
+      setAddressConfirmed(true);
     }
     // New session token for the next search (billing best practice)
     if (placesLibRef.current) sessionTokenRef.current = new placesLibRef.current.AutocompleteSessionToken();
@@ -699,7 +704,7 @@ _Please confirm my order and share delivery details._
 
   // ── Checkout Form ───────────────────────────────────────────────────────────
   return (
-    <div className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 bg-cream min-h-screen">
+    <div className="pt-24 pb-28 sm:pb-12 px-4 sm:px-6 lg:px-8 bg-cream min-h-screen">
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6" ref={formRef}>
         <div className="space-y-5">
           {/* Delivery Details */}
@@ -762,7 +767,7 @@ _Please confirm my order and share delivery details._
                 <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Full Name</label>
                 <input
                   name="name" disabled={isSubmitting} value={formData.name}
-                  onChange={handleInputChange} onBlur={handleBlur} type="text" placeholder="e.g. Ami Shah"
+                  onChange={handleInputChange} onBlur={handleBlur} type="text" autoComplete="name" placeholder="e.g. Ami Shah"
                   className={`w-full p-3.5 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-sm transition-all ${touched.name && fieldErrors.name ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                 />
                 {touched.name && fieldErrors.name && (
@@ -776,7 +781,7 @@ _Please confirm my order and share delivery details._
                   <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Phone Number</label>
                   <input
                     name="phone" disabled={isSubmitting} value={formData.phone}
-                    onChange={handleInputChange} onBlur={handleBlur} type="text" placeholder="e.g. 90540 38876"
+                    onChange={handleInputChange} onBlur={handleBlur} type="tel" inputMode="tel" autoComplete="tel" placeholder="e.g. 90540 38876"
                     className={`w-full p-3.5 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-sm transition-all ${touched.phone && fieldErrors.phone ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                   />
                   {touched.phone && fieldErrors.phone && (
@@ -789,7 +794,7 @@ _Please confirm my order and share delivery details._
                   <div className="relative">
                     <input
                       name="city" disabled={isSubmitting} value={formData.city}
-                      onChange={handleInputChange} onBlur={handleBlur} type="text" placeholder="Ahmedabad"
+                      onChange={handleInputChange} onBlur={handleBlur} type="text" autoComplete="address-level2" placeholder="Ahmedabad"
                       className={`w-full p-3.5 pl-11 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-sm transition-all ${touched.city && fieldErrors.city ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                     />
                     <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 text-[#4A3728]/20" size={16} />
@@ -805,11 +810,47 @@ _Please confirm my order and share delivery details._
                 <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Email Address (Optional)</label>
                 <input
                   name="email" disabled={isSubmitting} value={formData.email}
-                  onChange={handleInputChange} onBlur={handleBlur} type="email" placeholder="yourname@gmail.com"
+                  onChange={handleInputChange} onBlur={handleBlur} type="email" autoComplete="email" placeholder="yourname@gmail.com"
                   className={`w-full p-3.5 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-sm transition-all ${touched.email && fieldErrors.email ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                 />
+                <p className="text-[9px] text-[#4A3728]/40 ml-3 brand-rounded font-bold">We'll send your order confirmation here</p>
                 {touched.email && fieldErrors.email && (
                   <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.email}</p>
+                )}
+              </div>
+
+              {/* Address — collapses to a confirmed summary right after autocomplete
+                  fills it in, instead of showing the same address twice (once in
+                  the search suggestion, once in a big editable textarea). Anyone
+                  who types their address manually (no autocomplete used) still
+                  sees the plain editable field, unchanged. */}
+              <div className="space-y-1.5" id="field-address">
+                <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Building / Society / Street Address</label>
+                {addressConfirmed && formData.address ? (
+                  <div className="w-full p-3.5 bg-[#F9F5EE] rounded-xl border-2 border-[#4A3728]/10 flex items-start justify-between gap-3">
+                    <div className="flex items-start gap-2.5 min-w-0">
+                      <CheckCircle size={16} className="text-green-600 mt-0.5 flex-shrink-0" />
+                      <span className="text-sm font-bold text-[#4A3728] leading-snug">{formData.address}</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setAddressConfirmed(false)}
+                      className="text-[10px] font-black uppercase brand-rounded text-[#F04E4E] tracking-widest flex-shrink-0 hover:underline"
+                    >
+                      Change
+                    </button>
+                  </div>
+                ) : (
+                  <textarea
+                    name="address" disabled={isSubmitting} value={formData.address}
+                    onChange={handleInputChange} onBlur={handleBlur}
+                    autoComplete="address-line1"
+                    placeholder="Building name, street, landmark" rows={2}
+                    className={`w-full p-3.5 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-sm transition-all resize-none ${touched.address && fieldErrors.address ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                  />
+                )}
+                {touched.address && fieldErrors.address && (
+                  <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.address}</p>
                 )}
               </div>
 
@@ -819,25 +860,11 @@ _Please confirm my order and share delivery details._
                 <input
                   name="flat" disabled={isSubmitting} value={formData.flat}
                   onChange={handleInputChange} onBlur={handleBlur}
-                  type="text" placeholder="e.g. A-102, Floor 3"
+                  type="text" autoComplete="address-line2" placeholder="e.g. A-102, Floor 3"
                   className={`w-full p-3.5 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-sm transition-all ${touched.flat && fieldErrors.flat ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                 />
                 {touched.flat && fieldErrors.flat && (
                   <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.flat}</p>
-                )}
-              </div>
-
-              {/* Address */}
-              <div className="space-y-1.5" id="field-address">
-                <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Building / Society / Street Address</label>
-                <textarea
-                  name="address" disabled={isSubmitting} value={formData.address}
-                  onChange={handleInputChange} onBlur={handleBlur}
-                  placeholder="Building name, street, landmark" rows={2}
-                  className={`w-full p-3.5 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-sm transition-all resize-none ${touched.address && fieldErrors.address ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
-                />
-                {touched.address && fieldErrors.address && (
-                  <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.address}</p>
                 )}
               </div>
 
@@ -847,7 +874,7 @@ _Please confirm my order and share delivery details._
                 <input
                   name="pincode" disabled={isSubmitting} value={formData.pincode}
                   onChange={handleInputChange} onBlur={handleBlur}
-                  type="text" inputMode="numeric" maxLength={6} placeholder="e.g. 380015"
+                  type="text" inputMode="numeric" autoComplete="postal-code" maxLength={6} placeholder="e.g. 380015"
                   className={`w-full p-3.5 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-sm transition-all ${touched.pincode && fieldErrors.pincode ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                 />
                 {touched.pincode && fieldErrors.pincode && (
@@ -1015,6 +1042,24 @@ _Please confirm my order and share delivery details._
             {isSubmitting ? <>Processing... <Loader2 className="animate-spin" size={20} /></> : paymentMethod === 'cod' ? <>Place Order (Cash on Delivery) <ChevronRight size={20} /></> : <>Complete My Order <ChevronRight size={20} /></>}
           </button>
         </div>
+      </div>
+
+      {/* Sticky mobile pay bar — the delivery-details form runs long on
+          mobile, so the total and submit action stay visible the whole time
+          instead of only existing once you've scrolled all the way past the
+          form to the summary card. */}
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#4A3728]/10 shadow-[0_-8px_30px_rgba(0,0,0,0.08)] px-4 py-3 flex items-center justify-between gap-3" style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}>
+        <div className="min-w-0">
+          <p className="text-[9px] font-black uppercase brand-rounded text-[#4A3728]/40 tracking-widest">Grand Total</p>
+          <p className="text-xl font-black text-[#F04E4E] truncate">₹{grandTotal}</p>
+        </div>
+        <button
+          disabled={isSubmitting}
+          onClick={handleProceed}
+          className={`flex-1 max-w-[220px] py-3.5 bg-[#F04E4E] text-white rounded-2xl font-bold brand-rounded uppercase tracking-[0.15em] text-[11px] transition-all shadow-lg flex items-center justify-center gap-2 ${isSubmitting ? 'opacity-70 cursor-wait' : 'active:scale-[0.97]'}`}
+        >
+          {isSubmitting ? <>Processing <Loader2 className="animate-spin" size={16} /></> : paymentMethod === 'cod' ? <>Place Order <ChevronRight size={16} /></> : <>Pay Now <ChevronRight size={16} /></>}
+        </button>
       </div>
     </div>
   );
