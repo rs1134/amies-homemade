@@ -147,6 +147,13 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
     }
   };
 
+  // Real layout shrink (not a CSS zoom/transform trick, which breaks touch
+  // hit-testing) while the on-screen keyboard is up — smaller field padding
+  // and tighter spacing between fields means more of the form stays visible
+  // above the keyboard instead of being pushed below the fold.
+  const fieldPad = keyboardOpen ? 'p-2.5' : 'p-3.5';
+  const fieldGap = keyboardOpen ? 'space-y-2' : 'space-y-4';
+
   useEffect(() => {
     const apiKey = import.meta.env.VITE_GOOGLE_PLACES_API_KEY;
     if (!apiKey) return;
@@ -758,7 +765,7 @@ _Please confirm my order and share delivery details._
             <h2 className="text-xl sm:text-2xl font-bold serif mb-5 flex items-center gap-3 text-[#4A3728]">
               <Truck className="text-[#F04E4E]" size={24} /> Delivery Details
             </h2>
-            <div className="space-y-4">
+            <div className={fieldGap}>
 
               {/* Address Search Autocomplete */}
               <div className="space-y-1.5">
@@ -778,7 +785,7 @@ _Please confirm my order and share delivery details._
                     placeholder="Type your society, street or landmark…"
                     disabled={isSubmitting}
                     autoComplete="off"
-                    className="w-full p-3.5 pl-11 bg-[#F9F5EE] rounded-xl border-2 border-[#4A3728]/10 text-[#4A3728] font-medium placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 focus:border-[#F04E4E] outline-none text-base transition-all disabled:opacity-50"
+                    className={`w-full ${fieldPad} pl-11 bg-[#F9F5EE] rounded-xl border-2 border-[#4A3728]/10 text-[#4A3728] font-medium placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 focus:border-[#F04E4E] outline-none text-base transition-all disabled:opacity-50`}
                   />
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#F04E4E]/60" size={16} />
 
@@ -814,7 +821,7 @@ _Please confirm my order and share delivery details._
                 <input
                   name="name" disabled={isSubmitting} value={formData.name}
                   onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="next" type="text" autoComplete="name" placeholder="e.g. Ami Shah"
-                  className={`w-full p-3.5 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.name && fieldErrors.name ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                  className={`w-full ${fieldPad} bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.name && fieldErrors.name ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                 />
                 {touched.name && fieldErrors.name && (
                   <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.name}</p>
@@ -828,7 +835,7 @@ _Please confirm my order and share delivery details._
                   <input
                     name="phone" disabled={isSubmitting} value={formData.phone}
                     onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="next" type="tel" inputMode="tel" autoComplete="tel" placeholder="e.g. 90540 38876"
-                    className={`w-full p-3.5 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.phone && fieldErrors.phone ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                    className={`w-full ${fieldPad} bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.phone && fieldErrors.phone ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                   />
                   {touched.phone && fieldErrors.phone && (
                     <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.phone}</p>
@@ -841,7 +848,7 @@ _Please confirm my order and share delivery details._
                     <input
                       name="city" disabled={isSubmitting} value={formData.city}
                       onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="next" type="text" autoComplete="address-level2" placeholder="Ahmedabad"
-                      className={`w-full p-3.5 pl-11 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.city && fieldErrors.city ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                      className={`w-full ${fieldPad} pl-11 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.city && fieldErrors.city ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                     />
                     <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 text-[#4A3728]/20" size={16} />
                   </div>
@@ -857,7 +864,7 @@ _Please confirm my order and share delivery details._
                 <input
                   name="email" disabled={isSubmitting} value={formData.email}
                   onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="next" type="email" autoComplete="email" placeholder="yourname@gmail.com"
-                  className={`w-full p-3.5 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.email && fieldErrors.email ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                  className={`w-full ${fieldPad} bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.email && fieldErrors.email ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                 />
                 <p className="text-[9px] text-[#4A3728]/40 ml-3 brand-rounded font-bold">We'll send your order confirmation here</p>
                 {touched.email && fieldErrors.email && (
@@ -873,7 +880,7 @@ _Please confirm my order and share delivery details._
               <div className="space-y-1.5" id="field-address">
                 <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Building / Society / Street Address</label>
                 {addressConfirmed && formData.address ? (
-                  <div className="w-full p-3.5 bg-[#F9F5EE] rounded-xl border-2 border-[#4A3728]/10 flex items-start justify-between gap-3">
+                  <div className={`w-full ${fieldPad} bg-[#F9F5EE] rounded-xl border-2 border-[#4A3728]/10 flex items-start justify-between gap-3`}>
                     <div className="flex items-start gap-2.5 min-w-0">
                       <CheckCircle size={16} className="text-green-600 mt-0.5 flex-shrink-0" />
                       <span className="text-sm font-bold text-[#4A3728] leading-snug">{formData.address}</span>
@@ -892,7 +899,7 @@ _Please confirm my order and share delivery details._
                     onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="next"
                     autoComplete="address-line1"
                     placeholder="Building name, street, landmark" rows={2}
-                    className={`w-full p-3.5 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all resize-none ${touched.address && fieldErrors.address ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                    className={`w-full ${fieldPad} bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all resize-none ${touched.address && fieldErrors.address ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                   />
                 )}
                 {touched.address && fieldErrors.address && (
@@ -907,7 +914,7 @@ _Please confirm my order and share delivery details._
                   name="flat" disabled={isSubmitting} value={formData.flat}
                   onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="next"
                   type="text" autoComplete="address-line2" placeholder="e.g. A-102, Floor 3"
-                  className={`w-full p-3.5 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.flat && fieldErrors.flat ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                  className={`w-full ${fieldPad} bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.flat && fieldErrors.flat ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                 />
                 {touched.flat && fieldErrors.flat && (
                   <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.flat}</p>
@@ -921,7 +928,7 @@ _Please confirm my order and share delivery details._
                   name="pincode" disabled={isSubmitting} value={formData.pincode}
                   onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="done"
                   type="text" inputMode="numeric" autoComplete="postal-code" maxLength={6} placeholder="e.g. 380015"
-                  className={`w-full p-3.5 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.pincode && fieldErrors.pincode ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                  className={`w-full ${fieldPad} bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.pincode && fieldErrors.pincode ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                 />
                 {touched.pincode && fieldErrors.pincode && (
                   <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.pincode}</p>
