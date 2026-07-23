@@ -1104,7 +1104,7 @@ _Please confirm my order and share delivery details._
           keyboardOpen above) since iOS Safari renders fixed elements above
           the keyboard rather than below it, making the bar float mid-screen. */}
       {!keyboardOpen && (
-      <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#4A3728]/10 shadow-[0_-8px_30px_rgba(0,0,0,0.08)] px-4 py-3 flex items-center justify-between gap-3" style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}>
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-[#4A3728]/10 shadow-[0_-8px_30px_rgba(0,0,0,0.08)] px-4 py-3 flex items-center justify-between gap-3" style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}>
         <div className="min-w-0">
           <p className="text-[9px] font-black uppercase brand-rounded text-[#4A3728]/40 tracking-widest">Grand Total</p>
           <p className="text-xl font-black text-[#F04E4E] truncate">₹{grandTotal}</p>
