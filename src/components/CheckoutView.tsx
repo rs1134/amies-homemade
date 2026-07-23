@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Truck, Wallet, ChevronRight, Smartphone, Loader2, MessageCircle, CheckCircle, MapPin, Calendar, Building2, Minus, Plus, Trash2, Scale, Search, Banknote } from 'lucide-react';
 import { CartItem } from '../types.ts';
 import { WHATSAPP_NUMBER } from '../constants.ts';
@@ -1102,21 +1103,31 @@ _Please confirm my order and share delivery details._
           instead of only existing once you've scrolled all the way past the
           form to the summary card. Hidden while the keyboard is open (see
           keyboardOpen above) since iOS Safari renders fixed elements above
-          the keyboard rather than below it, making the bar float mid-screen. */}
-      {!keyboardOpen && (
-      <div className="sm:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-[#4A3728]/10 shadow-[0_-8px_30px_rgba(0,0,0,0.08)] px-4 py-3 flex items-center justify-between gap-3" style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}>
-        <div className="min-w-0">
-          <p className="text-[9px] font-black uppercase brand-rounded text-[#4A3728]/40 tracking-widest">Grand Total</p>
-          <p className="text-xl font-black text-[#F04E4E] truncate">₹{grandTotal}</p>
-        </div>
-        <button
-          disabled={isSubmitting}
-          onClick={handleProceed}
-          className={`flex-1 max-w-[220px] py-3.5 bg-[#F04E4E] text-white rounded-2xl font-bold brand-rounded uppercase tracking-[0.15em] text-[11px] transition-all shadow-lg flex items-center justify-center gap-2 ${isSubmitting ? 'opacity-70 cursor-wait' : 'active:scale-[0.97]'}`}
-        >
-          {isSubmitting ? <>Processing <Loader2 className="animate-spin" size={16} /></> : paymentMethod === 'cod' ? <>Place Order <ChevronRight size={16} /></> : <>Pay Now <ChevronRight size={16} /></>}
-        </button>
-      </div>
+          the keyboard rather than below it, making the bar float mid-screen.
+
+          Portaled straight to <body> rather than rendered in place: this
+          component sits inside <main className="relative z-10">, which is
+          its own stacking context, so no z-index here could ever out-rank
+          the site <footer> (z-40) once scrolled that far -- a child's
+          z-index only competes within its own stacking context, not its
+          ancestor's. The footer was painting completely over this bar.
+          Escaping to <body> (same trick already used for the floating
+          WhatsApp button) sidesteps the whole problem. */}
+      {!keyboardOpen && createPortal(
+        <div className="sm:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-[#4A3728]/10 shadow-[0_-8px_30px_rgba(0,0,0,0.08)] px-4 py-3 flex items-center justify-between gap-3" style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}>
+          <div className="min-w-0">
+            <p className="text-[9px] font-black uppercase brand-rounded text-[#4A3728]/40 tracking-widest">Grand Total</p>
+            <p className="text-xl font-black text-[#F04E4E] truncate">₹{grandTotal}</p>
+          </div>
+          <button
+            disabled={isSubmitting}
+            onClick={handleProceed}
+            className={`flex-1 max-w-[220px] py-3.5 bg-[#F04E4E] text-white rounded-2xl font-bold brand-rounded uppercase tracking-[0.15em] text-[11px] transition-all shadow-lg flex items-center justify-center gap-2 ${isSubmitting ? 'opacity-70 cursor-wait' : 'active:scale-[0.97]'}`}
+          >
+            {isSubmitting ? <>Processing <Loader2 className="animate-spin" size={16} /></> : paymentMethod === 'cod' ? <>Place Order <ChevronRight size={16} /></> : <>Pay Now <ChevronRight size={16} /></>}
+          </button>
+        </div>,
+        document.body
       )}
     </div>
   );
