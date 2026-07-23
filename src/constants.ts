@@ -30,11 +30,12 @@ export const PRODUCTS: Product[] = [
     price: 999,
     weight: 'Gift Hamper',
     description: 'Three of our most-loved blends in one elegant box — nutrient-rich Dryfruit & Seeds, tangy-sweet Chatpati Mango, and delicate Tender Coconut Vanilla Chips. A perfect introduction to Amie\'s handcrafted mukhwas, beautifully presented for gifting.',
-    image: 'https://ik.imagekit.io/amieshomemade/067A4269.JPG?updatedAt=1782443782848',
+    image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(46).jpg',
     images: [
-      'https://ik.imagekit.io/amieshomemade/067A4269.JPG?updatedAt=1782443782848',
-      'https://ik.imagekit.io/amieshomemade/067A4280.JPG?updatedAt=1782443779558',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(46).jpg',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(47).jpg',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jul%204,%202026,%2011_56_22%20AM.png',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(48).jpg',
     ],
     ingredients: ['Dryfruit & Seeds (200g)', 'Chatpati Mango (200g)', 'Tender Coconut Vanilla Chips (125g)'],
     isGift: true
