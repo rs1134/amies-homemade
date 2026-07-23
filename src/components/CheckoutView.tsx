@@ -101,6 +101,27 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   const sessionTokenRef = useRef<any>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // iOS Safari doesn't reposition `fixed` elements above the on-screen
+  // keyboard — the sticky mobile pay bar ends up floating in the middle of
+  // the screen instead of sitting below the keyboard. Hiding it while a text
+  // field is focused (debounced so tabbing between fields doesn't flicker
+  // it) sidesteps the issue entirely.
+  const [keyboardOpen, setKeyboardOpen] = useState(false);
+  const keyboardCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isTextEntryElement = (el: EventTarget | null) => {
+    const tag = (el as HTMLElement)?.tagName;
+    return tag === 'INPUT' || tag === 'TEXTAREA';
+  };
+  const handleFormFocus = (e: React.FocusEvent) => {
+    if (!isTextEntryElement(e.target)) return;
+    if (keyboardCloseTimer.current) clearTimeout(keyboardCloseTimer.current);
+    setKeyboardOpen(true);
+  };
+  const handleFormBlur = (e: React.FocusEvent) => {
+    if (!isTextEntryElement(e.target)) return;
+    keyboardCloseTimer.current = setTimeout(() => setKeyboardOpen(false), 100);
+  };
+
   useEffect(() => {
     const apiKey = import.meta.env.VITE_GOOGLE_PLACES_API_KEY;
     if (!apiKey) return;
@@ -704,7 +725,7 @@ _Please confirm my order and share delivery details._
 
   // ── Checkout Form ───────────────────────────────────────────────────────────
   return (
-    <div className="pt-24 pb-28 sm:pb-12 px-4 sm:px-6 lg:px-8 bg-cream min-h-screen">
+    <div className="pt-24 pb-28 sm:pb-12 px-4 sm:px-6 lg:px-8 bg-cream min-h-screen" onFocus={handleFormFocus} onBlur={handleFormBlur}>
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6" ref={formRef}>
         <div className="space-y-5">
           {/* Delivery Details */}
@@ -1047,7 +1068,10 @@ _Please confirm my order and share delivery details._
       {/* Sticky mobile pay bar — the delivery-details form runs long on
           mobile, so the total and submit action stay visible the whole time
           instead of only existing once you've scrolled all the way past the
-          form to the summary card. */}
+          form to the summary card. Hidden while the keyboard is open (see
+          keyboardOpen above) since iOS Safari renders fixed elements above
+          the keyboard rather than below it, making the bar float mid-screen. */}
+      {!keyboardOpen && (
       <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-[#4A3728]/10 shadow-[0_-8px_30px_rgba(0,0,0,0.08)] px-4 py-3 flex items-center justify-between gap-3" style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}>
         <div className="min-w-0">
           <p className="text-[9px] font-black uppercase brand-rounded text-[#4A3728]/40 tracking-widest">Grand Total</p>
@@ -1061,6 +1085,7 @@ _Please confirm my order and share delivery details._
           {isSubmitting ? <>Processing <Loader2 className="animate-spin" size={16} /></> : paymentMethod === 'cod' ? <>Place Order <ChevronRight size={16} /></> : <>Pay Now <ChevronRight size={16} /></>}
         </button>
       </div>
+      )}
     </div>
   );
 };
