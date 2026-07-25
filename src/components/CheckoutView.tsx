@@ -185,12 +185,20 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
     document.head.appendChild(script);
   }, []);
 
+  // Guards against a slower, older search response landing after a newer
+  // one — without this, a customer who types, pauses, then keeps typing
+  // before the first search finishes could see a stale suggestion list
+  // that doesn't match what's currently in the box, and tap the wrong
+  // (older) result without realizing it.
+  const latestRequestIdRef = useRef(0);
+
   const fetchSuggestions = (input: string) => {
     const lib = placesLibRef.current;
     if (!lib?.AutocompleteSuggestion || input.trim().length < 3) {
       setSuggestions([]);
       return;
     }
+    const requestId = ++latestRequestIdRef.current;
     lib.AutocompleteSuggestion.fetchAutocompleteSuggestions({
       input,
       sessionToken: sessionTokenRef.current,
@@ -198,6 +206,7 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
       // Bias towards Ahmedabad without excluding the rest of India
       locationBias: { north: 23.15, south: 22.90, east: 72.75, west: 72.45 },
     }).then(({ suggestions: sugs }: any) => {
+      if (requestId !== latestRequestIdRef.current) return; // a newer search has since fired — discard this stale response
       setSuggestions((sugs || []).slice(0, 5).map((s: any) => ({
         id: s.placePrediction.placeId,
         main: s.placePrediction.mainText?.text ?? s.placePrediction.text?.text ?? '',
@@ -206,6 +215,7 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
       })));
       setShowSuggestions(true);
     }).catch((e: any) => {
+      if (requestId !== latestRequestIdRef.current) return;
       console.error('Address suggestions failed:', e);
       setSuggestions([]);
     });
