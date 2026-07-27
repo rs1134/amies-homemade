@@ -111,24 +111,24 @@ export const PRODUCTS: Product[] = [
 
   // --- MUKHWAS ---
   {
-    id: 'm5',
-    name: 'Cranberry Mix',
+    id: 'm3',
+    name: 'Black Grape & Til Goli',
     category: Category.MUKHWAS,
-    price: 355,
-    weight: '215 G',
-    description: 'Tart cranberries and crunchy almonds come together in this nutrient-rich blend for a naturally energizing snack. A perfect balance of wholesome goodness and refreshing flavour.',
-    image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(9)_HGXuT3C1DV.jpg',
+    price: 264,
+    weight: '200 G',
+    description: 'Rooted in tradition, this unique blend of black grapes, black sesame, and anardana delivers a delicious balance of sweet, tangy, and nutty flavours. A wholesome mukhwas that makes every meal end on a satisfying note.',
+    image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(2)_e5mmhtnnT-.jpg',
     images: [
-      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(9)_HGXuT3C1DV.jpg',
-      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(10)_AjzQ441zG.jpg',
-      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(11)_2xAATu0Uct.jpg',
-      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2010_56_04%20AM.png?updatedAt=1782444349678',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(2)_e5mmhtnnT-.jpg',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(4)_3jr5gc-pv.jpg',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(5)_aKliqkxfWT.jpg',
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2010_41_48%20AM.png?updatedAt=1782444349735',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png',
-      'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%202.21.10%E2%80%AFPM.png',
+      'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%202.20.50%E2%80%AFPM.png?updatedAt=1782463855011',
     ],
-    ingredients: ['Cranberries', 'Black Grapes', 'Kismis', 'Almonds', 'Anardana Churan'],
-    prices: { '215 G': 355 },
-    rating: 4.5, reviewCount: 34
+    ingredients: ['Black Grapes', 'Black Sesame Seeds', 'Homemade Anardana Churan'],
+    prices: { '200 G': 264 },
+    rating: 4.5, reviewCount: 39
   },
   {
     id: 'm2',
@@ -151,24 +151,24 @@ export const PRODUCTS: Product[] = [
     rating: 5, reviewCount: 64
   },
   {
-    id: 'm3',
-    name: 'Black Grape & Til Goli',
+    id: 'm5',
+    name: 'Cranberry Mix',
     category: Category.MUKHWAS,
-    price: 264,
-    weight: '200 G',
-    description: 'Rooted in tradition, this unique blend of black grapes, black sesame, and anardana delivers a delicious balance of sweet, tangy, and nutty flavours. A wholesome mukhwas that makes every meal end on a satisfying note.',
-    image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(2)_e5mmhtnnT-.jpg',
+    price: 355,
+    weight: '215 G',
+    description: 'Tart cranberries and crunchy almonds come together in this nutrient-rich blend for a naturally energizing snack. A perfect balance of wholesome goodness and refreshing flavour.',
+    image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(9)_HGXuT3C1DV.jpg',
     images: [
-      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(2)_e5mmhtnnT-.jpg',
-      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(4)_3jr5gc-pv.jpg',
-      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(5)_aKliqkxfWT.jpg',
-      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2010_41_48%20AM.png?updatedAt=1782444349735',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(9)_HGXuT3C1DV.jpg',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(10)_AjzQ441zG.jpg',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(11)_2xAATu0Uct.jpg',
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2010_56_04%20AM.png?updatedAt=1782444349678',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png',
-      'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%202.20.50%E2%80%AFPM.png?updatedAt=1782463855011',
+      'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%202.21.10%E2%80%AFPM.png',
     ],
-    ingredients: ['Black Grapes', 'Black Sesame Seeds', 'Homemade Anardana Churan'],
-    prices: { '200 G': 264 },
-    rating: 4.5, reviewCount: 39
+    ingredients: ['Cranberries', 'Black Grapes', 'Kismis', 'Almonds', 'Anardana Churan'],
+    prices: { '215 G': 355 },
+    rating: 4.5, reviewCount: 34
   },
   {
     id: 'm4',
