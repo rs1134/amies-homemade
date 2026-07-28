@@ -329,25 +329,26 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   }, [items]);
 
   // Shipping Fee — Ahmedabad: always FREE
-  // Pan-India: a single unit of a single product → ₹60 flat (cheap to pack
-  // & ship) | otherwise ₹1500+ (after coupon) → FREE | else ₹100
-  const totalQuantity = useMemo(() => items.reduce((sum, item) => sum + item.quantity, 0), [items]);
+  // Pan-India: under 300g total → ₹60 flat (cheap to pack & ship, and based
+  // on actual weight rather than item count so it can't be gamed by
+  // splitting one order into several single-item ones) | otherwise ₹999+
+  // (after coupon) → FREE | else ₹100
   const subtotalAfterDiscount = total - couponDiscount;
-  const isSingleItemOrder = items.length === 1 && totalQuantity === 1;
+  const isLightOrder = totalWeight < 300;
   const shippingFee = useMemo(() => {
     if (!formData.city || validateField('city', formData.city)) return null;
     if (AHMEDABAD_VARIANTS.includes(formData.city.trim().toLowerCase())) return 0;
-    if (isSingleItemOrder) return 60;
-    if (subtotalAfterDiscount >= 1500) return 0;
+    if (isLightOrder) return 60;
+    if (subtotalAfterDiscount >= 999) return 0;
     return 100;
-  }, [formData.city, isSingleItemOrder, subtotalAfterDiscount]);
+  }, [formData.city, isLightOrder, subtotalAfterDiscount]);
 
-  // Amount needed to unlock free shipping (pan-India, multi-item orders only —
-  // a single-item order always ships at the flat ₹60 rate regardless of value)
+  // Amount needed to unlock free shipping (pan-India, orders 300g+ only —
+  // anything under 300g always ships at the flat ₹60 rate regardless of value)
   const amountToFreeShipping = useMemo(() => {
-    if (isAhmedabad || isSingleItemOrder) return 0;
-    return Math.max(0, 1500 - subtotalAfterDiscount);
-  }, [isAhmedabad, isSingleItemOrder, subtotalAfterDiscount]);
+    if (isAhmedabad || isLightOrder) return 0;
+    return Math.max(0, 999 - subtotalAfterDiscount);
+  }, [isAhmedabad, isLightOrder, subtotalAfterDiscount]);
 
   // Flat convenience fee for Cash on Delivery — covers the extra handling
   // cost of collecting cash at the doorstep vs. prepaid online orders.
@@ -1041,32 +1042,32 @@ _Please confirm my order and share delivery details._
 
           {/* Free shipping unlock nudge — only after city is fully entered (blurred),
               not Ahmedabad, and not a single-item order (those ship flat at ₹60) */}
-          {touched.city && !fieldErrors.city && !isAhmedabad && !isSingleItemOrder && amountToFreeShipping > 0 && shippingFee !== null && (
+          {touched.city && !fieldErrors.city && !isAhmedabad && !isLightOrder && amountToFreeShipping > 0 && shippingFee !== null && (
             <div className="mb-4 p-3 rounded-2xl bg-gradient-to-br from-[#FFF1E5] to-[#FFE5D0] border border-[#F04E4E]/15">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-[11px] font-bold text-[#4A3728] brand-rounded">
                   🚚 Add <span className="text-[#F04E4E] font-black">₹{amountToFreeShipping}</span> more for FREE shipping
                 </span>
-                <span className="text-[10px] font-black text-[#4A3728]/50 brand-rounded">₹{subtotalAfterDiscount}/₹1500</span>
+                <span className="text-[10px] font-black text-[#4A3728]/50 brand-rounded">₹{subtotalAfterDiscount}/₹999</span>
               </div>
               <div className="h-2 bg-white/70 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-gradient-to-r from-[#F04E4E] to-[#F6C94C] rounded-full transition-all duration-500"
-                  style={{ width: `${Math.min(100, (subtotalAfterDiscount / 1500) * 100)}%` }}
+                  style={{ width: `${Math.min(100, (subtotalAfterDiscount / 999) * 100)}%` }}
                 />
               </div>
             </div>
           )}
-          {touched.city && !fieldErrors.city && !isAhmedabad && !isSingleItemOrder && amountToFreeShipping === 0 && shippingFee === 0 && formData.city && (
+          {touched.city && !fieldErrors.city && !isAhmedabad && !isLightOrder && amountToFreeShipping === 0 && shippingFee === 0 && formData.city && (
             <div className="mb-4 p-3 rounded-2xl bg-green-50 border border-green-200 flex items-center gap-2">
               <span className="text-base">🎉</span>
               <span className="text-[12px] font-bold text-green-700 brand-rounded">You've unlocked FREE shipping!</span>
             </div>
           )}
-          {touched.city && !fieldErrors.city && !isAhmedabad && isSingleItemOrder && (
+          {touched.city && !fieldErrors.city && !isAhmedabad && isLightOrder && (
             <div className="mb-4 p-3 rounded-2xl bg-[#F9F5EE] border border-[#4A3728]/10 flex items-center gap-2">
               <span className="text-base">📦</span>
-              <span className="text-[11px] font-bold text-[#4A3728]/70 brand-rounded">Single-item orders ship at a flat ₹60 delivery fee</span>
+              <span className="text-[11px] font-bold text-[#4A3728]/70 brand-rounded">Orders under 300g ship at a flat ₹60 delivery fee</span>
             </div>
           )}
 
