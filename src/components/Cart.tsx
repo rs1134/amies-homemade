@@ -4,6 +4,9 @@ import { CartItem } from '../types.ts';
 
 const COUPON_CODE = 'Thanks10';
 const COUPON_STORAGE_KEY = 'thanks10_used_phones';
+// Pan-India shipping is free from ₹1500 (matches CheckoutView's fee slabs) —
+// doesn't apply to single-item orders, which always ship at a flat ₹60.
+const FREE_SHIPPING_THRESHOLD = 1500;
 
 interface CartProps {
   isOpen: boolean;
@@ -22,6 +25,8 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, o
 
   const couponDiscount = couponApplied ? Math.round(subtotal * 0.1) : 0;
   const orderTotal = subtotal - couponDiscount;
+  const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
+  const isSingleItemOrder = items.length === 1 && totalQuantity === 1;
 
   const handleApplyCoupon = () => {
     const code = couponInput.trim();
@@ -129,14 +134,40 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, o
 
         {items.length > 0 && (
           <div className="p-4 sm:p-8 bg-white rounded-t-[1.75rem] sm:rounded-t-[3rem] border-t border-[#F04E4E]/10 space-y-3.5 sm:space-y-6 shadow-[0_-20px_50px_rgba(240,78,78,0.05)]">
-            {/* Delivery note — flat fee outside Ahmedabad, so there's no
-                "add more to unlock" tier to show here anymore. */}
-            <div className="flex items-center gap-2.5 bg-green-50 border border-green-200 rounded-xl sm:rounded-2xl px-3.5 sm:px-4 py-2.5 sm:py-3">
-              <CheckCircle size={16} className="text-green-600 flex-shrink-0" />
-              <p className="text-[11px] font-bold brand-rounded text-green-800">
-                Free delivery in Ahmedabad · <span className="font-black">₹100</span> delivery elsewhere in India
-              </p>
-            </div>
+            {/* Free shipping progress — based on the after-coupon total so it
+                exactly matches the shipping calculation shown at checkout.
+                Single-item orders skip this entirely: they always ship at a
+                flat ₹60 regardless of value. */}
+            {isSingleItemOrder ? (
+              <div className="flex items-center gap-2.5 bg-[#F9F5EE] border border-[#4A3728]/10 rounded-xl sm:rounded-2xl px-3.5 sm:px-4 py-2.5 sm:py-3">
+                <span className="text-base flex-shrink-0">📦</span>
+                <p className="text-[11px] font-bold brand-rounded text-[#4A3728]/70">
+                  Single-item orders ship at a flat <span className="font-black">₹60</span> delivery fee outside Ahmedabad
+                </p>
+              </div>
+            ) : orderTotal >= FREE_SHIPPING_THRESHOLD ? (
+              <div className="flex items-center gap-2.5 bg-green-50 border border-green-200 rounded-xl sm:rounded-2xl px-3.5 sm:px-4 py-2.5 sm:py-3">
+                <CheckCircle size={16} className="text-green-600 flex-shrink-0" />
+                <p className="text-[11px] font-bold brand-rounded text-green-800">
+                  Yay! You've unlocked <span className="font-black">FREE pan-India shipping</span> 🎉
+                </p>
+              </div>
+            ) : (
+              <div className="bg-green-50 border border-green-200 rounded-xl sm:rounded-2xl px-3.5 sm:px-4 py-2.5 sm:py-3">
+                <p className="text-[11px] font-bold brand-rounded text-green-800 mb-1.5 sm:mb-2">
+                  🚚 Add <span className="font-black">₹{FREE_SHIPPING_THRESHOLD - orderTotal}</span> more for <span className="font-black">FREE pan-India shipping</span>
+                </p>
+                <div className="h-1.5 sm:h-2 bg-white rounded-full overflow-hidden border border-green-200">
+                  <div
+                    className="h-full bg-green-500 rounded-full transition-all duration-500"
+                    style={{ width: `${Math.min(100, Math.round((orderTotal / FREE_SHIPPING_THRESHOLD) * 100))}%` }}
+                  />
+                </div>
+                <p className="text-[9px] text-green-700/70 brand-rounded font-bold mt-1 sm:mt-1.5">
+                  Delivery in Ahmedabad is always free
+                </p>
+              </div>
+            )}
 
             {/* Coupon input */}
             {!couponApplied ? (
