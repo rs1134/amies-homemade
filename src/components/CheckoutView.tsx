@@ -328,23 +328,12 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
     }, 0);
   }, [items]);
 
-  // Dynamic Shipping Fee — price-based tiers (incentivises bigger carts)
-  // Ahmedabad: always FREE
-  // Pan-India: < ₹499 → ₹60 | ₹500–1499 → ₹100 | ₹1500+ → FREE
-  const subtotalAfterDiscount = total - couponDiscount;
+  // Shipping Fee — Ahmedabad: always FREE | Pan-India: flat ₹100
   const shippingFee = useMemo(() => {
     if (!formData.city || validateField('city', formData.city)) return null;
     if (AHMEDABAD_VARIANTS.includes(formData.city.trim().toLowerCase())) return 0;
-    if (subtotalAfterDiscount >= 1500) return 0;
-    if (subtotalAfterDiscount >= 500) return 100;
-    return 60;
-  }, [formData.city, subtotalAfterDiscount]);
-
-  // Amount needed to unlock free shipping (pan-India only)
-  const amountToFreeShipping = useMemo(() => {
-    if (isAhmedabad) return 0;
-    return Math.max(0, 1500 - subtotalAfterDiscount);
-  }, [isAhmedabad, subtotalAfterDiscount]);
+    return 100;
+  }, [formData.city]);
 
   // Flat convenience fee for Cash on Delivery — covers the extra handling
   // cost of collecting cash at the doorstep vs. prepaid online orders.
@@ -1035,30 +1024,6 @@ _Please confirm my order and share delivery details._
               </div>
             ))}
           </div>
-
-          {/* Free shipping unlock nudge — only after city is fully entered (blurred) and not Ahmedabad */}
-          {touched.city && !fieldErrors.city && !isAhmedabad && amountToFreeShipping > 0 && shippingFee !== null && (
-            <div className="mb-4 p-3 rounded-2xl bg-gradient-to-br from-[#FFF1E5] to-[#FFE5D0] border border-[#F04E4E]/15">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-[11px] font-bold text-[#4A3728] brand-rounded">
-                  🚚 Add <span className="text-[#F04E4E] font-black">₹{amountToFreeShipping}</span> more for FREE shipping
-                </span>
-                <span className="text-[10px] font-black text-[#4A3728]/50 brand-rounded">₹{subtotalAfterDiscount}/₹1500</span>
-              </div>
-              <div className="h-2 bg-white/70 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-gradient-to-r from-[#F04E4E] to-[#F6C94C] rounded-full transition-all duration-500"
-                  style={{ width: `${Math.min(100, (subtotalAfterDiscount / 1500) * 100)}%` }}
-                />
-              </div>
-            </div>
-          )}
-          {touched.city && !fieldErrors.city && !isAhmedabad && amountToFreeShipping === 0 && shippingFee === 0 && formData.city && (
-            <div className="mb-4 p-3 rounded-2xl bg-green-50 border border-green-200 flex items-center gap-2">
-              <span className="text-base">🎉</span>
-              <span className="text-[12px] font-bold text-green-700 brand-rounded">You've unlocked FREE shipping!</span>
-            </div>
-          )}
 
           <div className="space-y-2 pt-4 border-t border-[#4A3728]/5 mb-5">
             <div className="flex justify-between text-sm">
