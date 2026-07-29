@@ -323,7 +323,7 @@ export default async function handler(req: any, res: any) {
       `Subtotal: Rs.${subtotal}`,
       `Delivery: Rs.${shippingFee}`,
       `GRAND TOTAL: Rs.${grandTotal}`,
-      `Payment Method: RAZORPAY (via webhook — client-side call likely failed)`,
+      `Payment Method: RAZORPAY`,
       `Payment ID: ${paymentId}`,
       `---------------------------`,
     ].join('\n');
