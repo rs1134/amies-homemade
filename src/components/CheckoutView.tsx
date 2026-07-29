@@ -848,7 +848,7 @@ _Please confirm my order and share delivery details._
                     </div>
                   )}
                 </div>
-                <p className="text-[9px] text-[#4A3728]/40 ml-3 brand-rounded font-bold">Pick a suggestion to auto-fill your address &amp; city — then add your flat number below</p>
+                <p className="text-[9px] text-[#4A3728]/40 ml-3 brand-rounded font-bold">Pick a suggestion to auto-fill your address &amp; city</p>
               </div>
 
               <div className="border-t border-[#4A3728]/5" />
