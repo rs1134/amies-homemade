@@ -107,6 +107,7 @@ async function sendMetaPurchaseBackstop(params: {
   phone: string;
   email: string;
   city: string;
+  state: string;
   zip: string;
 }) {
   const PIXEL_ID = process.env.META_PIXEL_ID;
@@ -121,6 +122,7 @@ async function sendMetaPurchaseBackstop(params: {
   const fn = hashField(firstName, normName);
   const ln = hashField(lastNameParts.join(' '), normName);
   const ct = hashField(params.city, normLocation);
+  const st = hashField(params.state, normLocation);
   const zp = hashField(params.zip, normLocation);
   const country = hashField('in', normName); // site is India-only right now
   if (em) userData.em = [em];
@@ -128,6 +130,7 @@ async function sendMetaPurchaseBackstop(params: {
   if (fn) userData.fn = [fn];
   if (ln) userData.ln = [ln];
   if (ct) userData.ct = [ct];
+  if (st) userData.st = [st];
   if (zp) userData.zp = [zp];
   if (country) userData.country = [country];
   // Phone doubles as external_id here — this backstop has no access to the
@@ -260,6 +263,7 @@ export default async function handler(req: any, res: any) {
   const razorpayEmail = payment.email && payment.email !== 'void@razorpay.com' ? payment.email : '';
   const email = notes.email && notes.email !== 'N/A' ? notes.email : razorpayEmail;
   const city = notes.city || '';
+  const state = notes.state || '';
   const pincode = notes.pincode || '';
   const address = notes.address || '';
   const itemsSummary = notes.items || '';
@@ -389,7 +393,7 @@ export default async function handler(req: any, res: any) {
       eventId: `purchase-${paymentId}`,
       value: grandTotal,
       contentIds: [],
-      name, phone, email, city, zip: pincode,
+      name, phone, email, city, state, zip: pincode,
     });
 
     console.log(`[razorpay-webhook] payment ${paymentId}: logged + notified`);

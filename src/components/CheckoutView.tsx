@@ -18,7 +18,7 @@ interface CheckoutViewProps {
   onOrderPlaced?: () => void;
 }
 
-type FieldName = 'name' | 'phone' | 'email' | 'city' | 'address' | 'flat' | 'pincode';
+type FieldName = 'name' | 'phone' | 'email' | 'city' | 'state' | 'address' | 'flat' | 'pincode';
 
 interface OrderSnapshot {
   items: CartItem[];
@@ -52,6 +52,7 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
     phone: '',
     email: '',
     city: '',
+    state: '',
     address: '',
     flat: '',
     pincode: '',
@@ -136,7 +137,7 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   // customers can fill the whole form without ever tapping a field
   // directly. Addresses here are a single line in practice, so Enter
   // advances there too rather than inserting a newline.
-  const FIELD_ADVANCE_ORDER: FieldName[] = ['name', 'phone', 'city', 'email', 'address', 'flat', 'pincode'];
+  const FIELD_ADVANCE_ORDER: FieldName[] = ['name', 'phone', 'city', 'state', 'email', 'address', 'flat', 'pincode'];
   const handleAdvanceOnEnter = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (e.key !== 'Enter') return;
     e.preventDefault();
@@ -229,21 +230,22 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
     try {
       const place = sug.prediction.toPlace();
       await place.fetchFields({ fields: ['addressComponents', 'formattedAddress', 'displayName'] });
-      let streetNumber = '', route = '', sublocality = '', city = '', pincode = '';
+      let streetNumber = '', route = '', sublocality = '', city = '', pincode = '', state = '';
       (place.addressComponents || []).forEach((c: any) => {
         const types: string[] = c.types || [];
-        if (types.includes('street_number'))       streetNumber = c.longText;
-        if (types.includes('route'))               route = c.longText;
-        if (types.includes('sublocality_level_1')) sublocality = c.longText;
-        if (types.includes('locality'))            city = c.longText;
-        if (types.includes('postal_code'))          pincode = c.longText;
+        if (types.includes('street_number'))              streetNumber = c.longText;
+        if (types.includes('route'))                      route = c.longText;
+        if (types.includes('sublocality_level_1'))         sublocality = c.longText;
+        if (types.includes('locality'))                    city = c.longText;
+        if (types.includes('postal_code'))                 pincode = c.longText;
+        if (types.includes('administrative_area_level_1')) state = c.longText;
       });
       const namePart = place.displayName && !route.includes(place.displayName) ? place.displayName : '';
       const addressParts = [namePart, streetNumber, route, sublocality].filter(Boolean);
       const address = addressParts.length > 0 ? addressParts.join(', ') : (place.formattedAddress || sug.main);
-      setFormData(prev => ({ ...prev, address, city: city || prev.city, pincode: pincode || prev.pincode }));
-      setTouched(prev => ({ ...prev, address: true, city: true, ...(pincode ? { pincode: true } : {}) }));
-      setFieldErrors(prev => ({ ...prev, address: '', city: '', ...(pincode ? { pincode: '' } : {}) }));
+      setFormData(prev => ({ ...prev, address, city: city || prev.city, state: state || prev.state, pincode: pincode || prev.pincode }));
+      setTouched(prev => ({ ...prev, address: true, city: true, ...(state ? { state: true } : {}), ...(pincode ? { pincode: true } : {}) }));
+      setFieldErrors(prev => ({ ...prev, address: '', city: '', ...(state ? { state: '' } : {}), ...(pincode ? { pincode: '' } : {}) }));
       setAddressConfirmed(true);
     } catch {
       // Place details unavailable — still fill in what the suggestion showed
@@ -282,6 +284,10 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
       case 'city':
         if (value.trim().length < 3 || !/^[a-zA-Z\s]+$/.test(value))
           return "Please enter a valid city name";
+        return "";
+      case 'state':
+        if (value.trim().length < 3 || !/^[a-zA-Z\s]+$/.test(value))
+          return "Please enter a valid state name";
         return "";
       case 'email':
         if (value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
@@ -456,7 +462,7 @@ _Please confirm my order and share delivery details._
 
   const handleProceed = async () => {
     if (items.length === 0) return; // nothing to pay for
-    const fieldNames: FieldName[] = ['name', 'phone', 'city', 'email', 'address', 'flat', 'pincode'];
+    const fieldNames: FieldName[] = ['name', 'phone', 'city', 'state', 'email', 'address', 'flat', 'pincode'];
     const newErrors: Partial<Record<FieldName, string>> = {};
     let firstErrorField: FieldName | null = null;
 
@@ -510,6 +516,7 @@ _Please confirm my order and share delivery details._
           firstName,
           lastName: lastNameParts.join(' '),
           city: formData.city,
+          state: formData.state,
           zip: formData.pincode,
           country: 'in', // site is India-only right now
         },
@@ -563,6 +570,7 @@ _Please confirm my order and share delivery details._
               firstName,
               lastName: lastNameParts.join(' '),
               city: formData.city,
+              state: formData.state,
               zip: formData.pincode,
               country: 'in', // site is India-only right now
             },
@@ -595,7 +603,7 @@ _Please confirm my order and share delivery details._
         prefill: { name: formData.name, email: formData.email, contact: formData.phone },
         notes: {
           customer_name: formData.name, phone: formData.phone,
-          city: formData.city, address: fullDeliveryAddress, email: formData.email || 'N/A',
+          city: formData.city, state: formData.state, address: fullDeliveryAddress, email: formData.email || 'N/A',
           pincode: formData.pincode,
           items: items.map(i => `${i.quantity}x ${i.name} (${i.selectedWeight || i.weight})`).join(', ').slice(0, 250),
           subtotal: `Rs.${total}`, shipping: `Rs.${shippingFee ?? 0}`,
@@ -886,6 +894,20 @@ _Please confirm my order and share delivery details._
                     <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.city}</p>
                   )}
                 </div>
+              </div>
+
+              {/* State — auto-fills from the address search above when available,
+                  otherwise typed in directly like City. */}
+              <div className="space-y-1.5" id="field-state">
+                <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">State</label>
+                <input
+                  name="state" disabled={isSubmitting} value={formData.state}
+                  onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="next" type="text" autoComplete="address-level1" placeholder="Gujarat"
+                  className={`w-full ${fieldPad} bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.state && fieldErrors.state ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                />
+                {touched.state && fieldErrors.state && (
+                  <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.state}</p>
+                )}
               </div>
 
               {/* Email */}
