@@ -880,7 +880,10 @@ const App: React.FC = () => {
   // Fire Meta Pixel PageView (browser + server-side Conversions API) on every
   // SPA route change, sharing one event_id between both so Meta dedupes them.
   useEffect(() => {
-    trackMetaEvent('PageView');
+    // country is safe to send even before we know anything else about the
+    // visitor — the site only serves India, so it's true for every event
+    // regardless of identity.
+    trackMetaEvent('PageView', { userData: { country: 'in' } });
   }, [currentPage, currentArea, currentCity, currentBlogSlug]);
 
   useEffect(() => {
@@ -951,6 +954,7 @@ const App: React.FC = () => {
         content_ids: [product.id],
         content_type: 'product',
       },
+      userData: { country: 'in' },
     });
 
     if (openCart) {

@@ -73,6 +73,7 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
         content_type: 'product',
         num_items: items.reduce((sum, i) => sum + i.quantity, 0),
       },
+      userData: { country: 'in' },
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

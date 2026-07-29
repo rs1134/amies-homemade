@@ -75,6 +75,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
         content_ids: [product.id],
         content_type: 'product',
       },
+      userData: { country: 'in' },
     });
   }, [product.id]);
 
