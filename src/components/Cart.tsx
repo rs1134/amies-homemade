@@ -4,10 +4,8 @@ import { CartItem } from '../types.ts';
 
 const COUPON_CODE = 'Thanks10';
 const COUPON_STORAGE_KEY = 'thanks10_used_phones';
-// Pan-India shipping is free from ₹999 (matches CheckoutView's fee slabs) —
-// doesn't apply to orders under 300g, which always ship at a flat ₹60.
+// Pan-India shipping is free from ₹999 (matches CheckoutView's fee slabs)
 const FREE_SHIPPING_THRESHOLD = 999;
-const LIGHT_ORDER_THRESHOLD_GRAMS = 300;
 
 interface CartProps {
   isOpen: boolean;
@@ -26,19 +24,6 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, o
 
   const couponDiscount = couponApplied ? Math.round(subtotal * 0.1) : 0;
   const orderTotal = subtotal - couponDiscount;
-  // Same weight parsing as CheckoutView's totalWeight, kept in sync so this
-  // preview banner always matches what checkout will actually charge.
-  const totalWeight = items.reduce((sum, item) => {
-    let weightInGrams = 250;
-    const weightStr = (item.selectedWeight || item.weight).toUpperCase();
-    if (weightStr.includes('KG')) weightInGrams = parseFloat(weightStr) * 1000;
-    else if (weightStr.includes('G')) weightInGrams = parseFloat(weightStr);
-    else if (weightStr.includes('LARGE HAMPER')) weightInGrams = 2500;
-    else if (weightStr.includes('MEDIUM BOX')) weightInGrams = 1200;
-    else if (weightStr.includes('GIFT BOX')) weightInGrams = 800;
-    return sum + (weightInGrams * item.quantity);
-  }, 0);
-  const isLightOrder = totalWeight < LIGHT_ORDER_THRESHOLD_GRAMS;
 
   const handleApplyCoupon = () => {
     const code = couponInput.trim();
@@ -148,16 +133,10 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, o
           <div className="p-4 sm:p-8 bg-white rounded-t-[1.75rem] sm:rounded-t-[3rem] border-t border-[#F04E4E]/10 space-y-3.5 sm:space-y-6 shadow-[0_-20px_50px_rgba(240,78,78,0.05)]">
             {/* Free shipping progress — based on the after-coupon total so it
                 exactly matches the shipping calculation shown at checkout.
-                Orders under 300g skip this entirely: they always ship at a
-                flat ₹60 regardless of value. */}
-            {isLightOrder ? (
-              <div className="flex items-center gap-2.5 bg-[#F9F5EE] border border-[#4A3728]/10 rounded-xl sm:rounded-2xl px-3.5 sm:px-4 py-2.5 sm:py-3">
-                <span className="text-base flex-shrink-0">📦</span>
-                <p className="text-[11px] font-bold brand-rounded text-[#4A3728]/70">
-                  Orders under 300g ship at a flat <span className="font-black">₹60</span> delivery fee outside Ahmedabad
-                </p>
-              </div>
-            ) : orderTotal >= FREE_SHIPPING_THRESHOLD ? (
+                Shown regardless of which fee tier the order is actually in;
+                the weight-based ₹60 rate is internal pricing logic, not
+                something surfaced to the customer. */}
+            {orderTotal >= FREE_SHIPPING_THRESHOLD ? (
               <div className="flex items-center gap-2.5 bg-green-50 border border-green-200 rounded-xl sm:rounded-2xl px-3.5 sm:px-4 py-2.5 sm:py-3">
                 <CheckCircle size={16} className="text-green-600 flex-shrink-0" />
                 <p className="text-[11px] font-bold brand-rounded text-green-800">
