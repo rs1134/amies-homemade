@@ -246,7 +246,13 @@ export default async function handler(req: any, res: any) {
   const orderId = `AM-WH${String(payment.id).slice(-5)}`;
   const name = notes.customer_name || 'Unknown';
   const phone = notes.phone || payment.contact || '';
-  const email = notes.email && notes.email !== 'N/A' ? notes.email : (payment.email || '');
+  // Razorpay returns "void@razorpay.com" as a system placeholder for UPI
+  // payments where no real email was captured -- treat it the same as a
+  // genuinely missing email rather than storing/sending it as if it were
+  // real customer data (a hashed junk email sent to Meta CAPI just wastes
+  // the field instead of improving match quality).
+  const razorpayEmail = payment.email && payment.email !== 'void@razorpay.com' ? payment.email : '';
+  const email = notes.email && notes.email !== 'N/A' ? notes.email : razorpayEmail;
   const city = notes.city || '';
   const pincode = notes.pincode || '';
   const address = notes.address || '';
