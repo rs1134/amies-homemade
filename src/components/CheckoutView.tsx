@@ -533,6 +533,40 @@ _Please confirm my order and share delivery details._
         image: "https://ik.imagekit.io/amieshomemade/Whats-App-Image-2026-02-12-at-18-57-42-1.jpg",
         order_id: order.id,
         handler: async function (response: any) {
+          // Fire Meta Purchase tracking first, before anything else in this
+          // handler. Razorpay only invokes this callback after the payment
+          // already succeeded on its own side, so this doesn't need to wait
+          // on our own signature check below — and every millisecond this
+          // is delayed is a millisecond closer to the customer's tab
+          // backgrounding or closing right after paying (e.g. returning
+          // from their UPI app), which can kill this fetch entirely even
+          // with keepalive. Firing it as early as possible in the handler
+          // gives it the best chance of completing with full browser
+          // signals (IP/user agent/fbp) before that happens, rather than
+          // relying solely on the Razorpay webhook backstop, which has no
+          // browser context to supply those from.
+          //
+          // Deterministic event_id (not random) — the webhook backstop
+          // shares this same id, so Meta dedupes the two into one counted
+          // purchase instead of two.
+          const [firstName, ...lastNameParts] = formData.name.trim().split(/\s+/);
+          trackMetaEvent('Purchase', {
+            customData: {
+              value: grandTotal, currency: 'INR',
+              content_ids: items.map(i => i.id), content_type: 'product',
+              num_items: items.reduce((sum, i) => sum + i.quantity, 0),
+            },
+            userData: {
+              email: formData.email,
+              phone: formData.phone,
+              firstName,
+              lastName: lastNameParts.join(' '),
+              city: formData.city,
+              zip: formData.pincode,
+              country: 'in', // site is India-only right now
+            },
+          }, `purchase-${response.razorpay_payment_id}`);
+
           // Verify signature server-side before confirming order
           try {
             const verifyRes = await fetch('/api/verify-payment', {
@@ -556,29 +590,6 @@ _Please confirm my order and share delivery details._
           }
 
           await submitOrderSilently(response.razorpay_payment_id, 'online');
-
-          // Deterministic event_id (not random) — the Razorpay webhook fires
-          // this same Purchase event server-side as a backstop if the
-          // customer's browser never gets this far (closed tab, dropped
-          // connection right after paying). Sharing the id lets Meta
-          // dedupe the two into a single counted purchase instead of two.
-          const [firstName, ...lastNameParts] = formData.name.trim().split(/\s+/);
-          trackMetaEvent('Purchase', {
-            customData: {
-              value: grandTotal, currency: 'INR',
-              content_ids: items.map(i => i.id), content_type: 'product',
-              num_items: items.reduce((sum, i) => sum + i.quantity, 0),
-            },
-            userData: {
-              email: formData.email,
-              phone: formData.phone,
-              firstName,
-              lastName: lastNameParts.join(' '),
-              city: formData.city,
-              zip: formData.pincode,
-              country: 'in', // site is India-only right now
-            },
-          }, `purchase-${response.razorpay_payment_id}`);
         },
         prefill: { name: formData.name, email: formData.email, contact: formData.phone },
         notes: {
