@@ -41,6 +41,7 @@ export interface RawUserData {
   state?: string;
   zip?: string;
   country?: string;
+  externalId?: string;
 }
 
 function buildHashedUserData(raw: RawUserData): Record<string, string[]> {
@@ -53,6 +54,10 @@ function buildHashedUserData(raw: RawUserData): Record<string, string[]> {
   const st = hashField(raw.state, normLocation);
   const zp = hashField(raw.zip, normLocation);
   const country = hashField(raw.country, normLocation);
+  // external_id isn't PII (it's a random per-browser id we generate
+  // ourselves, not derived from anything personal), but hashed anyway for
+  // consistency with the rest of this payload's handling.
+  const externalId = hashField(raw.externalId, (v) => v.trim());
   if (em) out.em = [em];
   if (ph) out.ph = [ph];
   if (fn) out.fn = [fn];
@@ -61,6 +66,7 @@ function buildHashedUserData(raw: RawUserData): Record<string, string[]> {
   if (st) out.st = [st];
   if (zp) out.zp = [zp];
   if (country) out.country = [country];
+  if (externalId) out.external_id = [externalId];
   return out;
 }
 

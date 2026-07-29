@@ -130,6 +130,12 @@ async function sendMetaPurchaseBackstop(params: {
   if (ct) userData.ct = [ct];
   if (zp) userData.zp = [zp];
   if (country) userData.country = [country];
+  // Phone doubles as external_id here — this backstop has no access to the
+  // persistent per-browser id the client-side path uses (that only exists
+  // in the customer's own browser storage), so phone is the only stable
+  // identifier available server-to-server.
+  const externalId = hashField(params.phone, normPhone);
+  if (externalId) userData.external_id = [externalId];
   // No fbp/fbc/client IP here — this call originates from Razorpay's server,
   // not the customer's browser, so those signals genuinely don't exist for
   // this path. Weaker match quality than the client-fired event is expected;
