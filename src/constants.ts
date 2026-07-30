@@ -47,10 +47,10 @@ export const PRODUCTS: Product[] = [
     price: 1499,
     weight: 'Premium Hamper',
     description: 'A premium trio for the discerning palate — wholesome Dryfruit & Seeds, our 12-ingredient Homemade Granola, and the indulgent Almond Motichoor Ladoo. A thoughtfully curated hamper that balances everyday nourishment with a touch of celebration.',
-    image: 'https://ik.imagekit.io/amieshomemade/067A4292.JPG?updatedAt=1782443782402',
+    image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(49).jpg',
     images: [
-      'https://ik.imagekit.io/amieshomemade/067A4292.JPG?updatedAt=1782443782402',
-      'https://ik.imagekit.io/amieshomemade/067A4296.JPG?updatedAt=1782443781977',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(49).jpg',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(50).jpg',
     ],
     ingredients: ['Dryfruit & Seeds (200g)', 'Homemade Granola (250g)', 'Almond Motichoor Ladoo (250g)'],
     isGift: true
