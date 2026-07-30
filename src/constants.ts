@@ -111,24 +111,24 @@ export const PRODUCTS: Product[] = [
 
   // --- MUKHWAS ---
   {
-    id: 'm3',
-    name: 'Black Grape & Til Goli',
+    id: 'm10',
+    name: 'Dryfruit and Seeds',
     category: Category.MUKHWAS,
-    price: 264,
+    price: 299,
     weight: '200 G',
-    description: 'Rooted in tradition, this unique blend of black grapes, black sesame, and anardana delivers a delicious balance of sweet, tangy, and nutty flavours. A wholesome mukhwas that makes every meal end on a satisfying note.',
-    image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(2)_e5mmhtnnT-.jpg',
+    description: 'More than just a mukhwas, this premium blend combines roasted almonds, cashews, dates, rose petals, and wholesome seeds for the perfect balance of crunch and natural sweetness. Rich, satisfying, and crafted to keep you energized throughout the day.',
+    image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(36)_aAxJbrDew.jpg',
     images: [
-      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(2)_e5mmhtnnT-.jpg',
-      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(4)_3jr5gc-pv.jpg',
-      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(5)_aKliqkxfWT.jpg',
-      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2010_41_48%20AM.png?updatedAt=1782444349735',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(36)_aAxJbrDew.jpg',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design_volkK0Htd.jpg',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(1)_N-Z_9ip9C5.jpg',
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2027,%202026,%2009_47_04%20AM.png',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png',
-      'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%202.20.50%E2%80%AFPM.png?updatedAt=1782463855011',
+      'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%209.00.41%E2%80%AFAM.png',
     ],
-    ingredients: ['Black Grapes', 'Black Sesame Seeds', 'Homemade Anardana Churan'],
-    prices: { '200 G': 264 },
-    rating: 4.5, reviewCount: 39
+    ingredients: ['Almond', 'Cashews', 'Dry Dates', 'Coconut', 'Pumpkin Seeds', 'Sunflower Seeds', 'Saunf', 'Dhana Dal', 'Rose Petals', 'Natural Flavouring Substance'],
+    prices: { '200 G': 299 },
+    rating: 4.5, reviewCount: 56
   },
   {
     id: 'm2',
@@ -191,24 +191,24 @@ export const PRODUCTS: Product[] = [
     rating: 5, reviewCount: 60
   },
   {
-    id: 'm10',
-    name: 'Dryfruit and Seeds',
+    id: 'm3',
+    name: 'Black Grape & Til Goli',
     category: Category.MUKHWAS,
-    price: 299,
+    price: 264,
     weight: '200 G',
-    description: 'More than just a mukhwas, this premium blend combines roasted almonds, cashews, dates, rose petals, and wholesome seeds for the perfect balance of crunch and natural sweetness. Rich, satisfying, and crafted to keep you energized throughout the day.',
-    image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(36)_aAxJbrDew.jpg',
+    description: 'Rooted in tradition, this unique blend of black grapes, black sesame, and anardana delivers a delicious balance of sweet, tangy, and nutty flavours. A wholesome mukhwas that makes every meal end on a satisfying note.',
+    image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(2)_e5mmhtnnT-.jpg',
     images: [
-      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(36)_aAxJbrDew.jpg',
-      'https://ik.imagekit.io/amieshomemade/Untitled%20design_volkK0Htd.jpg',
-      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(1)_N-Z_9ip9C5.jpg',
-      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2027,%202026,%2009_47_04%20AM.png',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(2)_e5mmhtnnT-.jpg',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(4)_3jr5gc-pv.jpg',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(5)_aKliqkxfWT.jpg',
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2010_41_48%20AM.png?updatedAt=1782444349735',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png',
-      'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%209.00.41%E2%80%AFAM.png',
+      'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%202.20.50%E2%80%AFPM.png?updatedAt=1782463855011',
     ],
-    ingredients: ['Almond', 'Cashews', 'Dry Dates', 'Coconut', 'Pumpkin Seeds', 'Sunflower Seeds', 'Saunf', 'Dhana Dal', 'Rose Petals', 'Natural Flavouring Substance'],
-    prices: { '200 G': 299 },
-    rating: 4.5, reviewCount: 56
+    ingredients: ['Black Grapes', 'Black Sesame Seeds', 'Homemade Anardana Churan'],
+    prices: { '200 G': 264 },
+    rating: 4.5, reviewCount: 39
   },
   {
     id: 'm1',
