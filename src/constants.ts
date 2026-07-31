@@ -111,24 +111,24 @@ export const PRODUCTS: Product[] = [
 
   // --- MUKHWAS ---
   {
-    id: 'm10',
-    name: 'Dryfruit and Seeds',
+    id: 'm5',
+    name: 'Cranberry Mix',
     category: Category.MUKHWAS,
-    price: 299,
-    weight: '200 G',
-    description: 'More than just a mukhwas, this premium blend combines roasted almonds, cashews, dates, rose petals, and wholesome seeds for the perfect balance of crunch and natural sweetness. Rich, satisfying, and crafted to keep you energized throughout the day.',
-    image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(36)_aAxJbrDew.jpg',
+    price: 355,
+    weight: '215 G',
+    description: 'Tart cranberries and crunchy almonds come together in this nutrient-rich blend for a naturally energizing snack. A perfect balance of wholesome goodness and refreshing flavour.',
+    image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(9)_HGXuT3C1DV.jpg',
     images: [
-      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(36)_aAxJbrDew.jpg',
-      'https://ik.imagekit.io/amieshomemade/Untitled%20design.png',
-      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(1)_N-Z_9ip9C5.jpg',
-      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2027,%202026,%2009_47_04%20AM.png',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(9)_HGXuT3C1DV.jpg',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(2).png',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(11)_2xAATu0Uct.jpg',
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2010_56_04%20AM.png?updatedAt=1782444349678',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png',
-      'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%209.00.41%E2%80%AFAM.png',
+      'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%202.21.10%E2%80%AFPM.png',
     ],
-    ingredients: ['Almond', 'Cashews', 'Dry Dates', 'Coconut', 'Pumpkin Seeds', 'Sunflower Seeds', 'Saunf', 'Dhana Dal', 'Rose Petals', 'Natural Flavouring Substance'],
-    prices: { '200 G': 299 },
-    rating: 4.5, reviewCount: 56
+    ingredients: ['Cranberries', 'Black Grapes', 'Kismis', 'Almonds', 'Anardana Churan'],
+    prices: { '215 G': 355 },
+    rating: 4.5, reviewCount: 34
   },
   {
     id: 'm2',
@@ -151,24 +151,24 @@ export const PRODUCTS: Product[] = [
     rating: 5, reviewCount: 64
   },
   {
-    id: 'm5',
-    name: 'Cranberry Mix',
+    id: 'm10',
+    name: 'Dryfruit and Seeds',
     category: Category.MUKHWAS,
-    price: 355,
-    weight: '215 G',
-    description: 'Tart cranberries and crunchy almonds come together in this nutrient-rich blend for a naturally energizing snack. A perfect balance of wholesome goodness and refreshing flavour.',
-    image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(9)_HGXuT3C1DV.jpg',
+    price: 299,
+    weight: '200 G',
+    description: 'More than just a mukhwas, this premium blend combines roasted almonds, cashews, dates, rose petals, and wholesome seeds for the perfect balance of crunch and natural sweetness. Rich, satisfying, and crafted to keep you energized throughout the day.',
+    image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(36)_aAxJbrDew.jpg',
     images: [
-      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(9)_HGXuT3C1DV.jpg',
-      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(2).png',
-      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(11)_2xAATu0Uct.jpg',
-      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2010_56_04%20AM.png?updatedAt=1782444349678',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(36)_aAxJbrDew.jpg',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design.png',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(1)_N-Z_9ip9C5.jpg',
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2027,%202026,%2009_47_04%20AM.png',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png',
-      'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%202.21.10%E2%80%AFPM.png',
+      'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%209.00.41%E2%80%AFAM.png',
     ],
-    ingredients: ['Cranberries', 'Black Grapes', 'Kismis', 'Almonds', 'Anardana Churan'],
-    prices: { '215 G': 355 },
-    rating: 4.5, reviewCount: 34
+    ingredients: ['Almond', 'Cashews', 'Dry Dates', 'Coconut', 'Pumpkin Seeds', 'Sunflower Seeds', 'Saunf', 'Dhana Dal', 'Rose Petals', 'Natural Flavouring Substance'],
+    prices: { '200 G': 299 },
+    rating: 4.5, reviewCount: 56
   },
   {
     id: 'm4',
