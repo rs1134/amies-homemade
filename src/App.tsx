@@ -188,11 +188,9 @@ interface CategoryFilterBarProps {
   activeCategory: Category | 'All';
   onSelect: (cat: Category | 'All') => void;
   onSelectProduct: (product: Product) => void;
-  onGifting: () => void;
-  isGiftingActive: boolean;
 }
 
-const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, onSelect, onSelectProduct, onGifting, isGiftingActive }) => {
+const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, onSelect, onSelectProduct }) => {
   const [openCat, setOpenCat] = React.useState<Category | null>(null);
   const closeTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -291,20 +289,6 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, o
             </div>
           );
         })}
-
-        {/* Gifting — links out to the dedicated /gifting page rather than
-            filtering the shop grid, since hampers live in their own view. */}
-        <a
-          href="/gifting"
-          onClick={(e) => { e.preventDefault(); onGifting(); }}
-          className={`brand-rounded text-[10px] uppercase tracking-[0.1em] sm:tracking-[0.2em] font-bold transition-all px-4 sm:px-8 py-2.5 sm:py-3 rounded-full border-2 flex items-center gap-1.5 cursor-pointer ${
-            isGiftingActive
-              ? 'bg-[#F04E4E] border-[#F04E4E] text-white shadow-xl shadow-[#F04E4E]/30 scale-105'
-              : 'border-[#F04E4E]/10 text-[#4A3728]/50 hover:text-coral hover:bg-[#F04E4E]/5'
-          }`}
-        >
-          Gifting
-        </a>
       </div>
 
       {/* Mobile bottom sheet — shown when any category is open */}
@@ -1098,8 +1082,6 @@ const App: React.FC = () => {
                 window.history.pushState(null, '', slug ? `/shop/${slug}` : '/shop');
               }}
               onSelectProduct={(p) => openProduct(p)}
-              onGifting={() => navigate('gifting')}
-              isGiftingActive={false}
             />
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6 lg:gap-10">
