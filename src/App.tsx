@@ -227,17 +227,8 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, o
               onPointerEnter={(e) => { if (e.pointerType === 'mouse' && !isAll) openMenu(cat as Category); }}
               onPointerLeave={(e) => { if (e.pointerType === 'mouse' && !isAll) scheduleClose(); }}
             >
-              <a
-                href={isAll ? '/shop' : `/shop/${CATEGORY_SLUG[cat as Category]}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (isAll) {
-                    onSelect('All');
-                  } else {
-                    toggleMenu(cat as Category);
-                  }
-                }}
-                className={`brand-rounded text-[10px] uppercase tracking-[0.1em] sm:tracking-[0.2em] font-bold transition-all px-4 sm:px-8 py-2.5 sm:py-3 rounded-full border-2 flex items-center gap-1.5 cursor-pointer ${
+              <div
+                className={`brand-rounded transition-all rounded-full border-2 flex items-center ${
                   isActive
                     ? 'bg-[#F04E4E] border-[#F04E4E] text-white shadow-xl shadow-[#F04E4E]/30 scale-105'
                     : isOpen
@@ -245,17 +236,38 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, o
                     : 'border-[#F04E4E]/10 text-[#4A3728]/50 hover:text-coral hover:bg-[#F04E4E]/5'
                 }`}
               >
-                {cat}
+                {/* Tapping the label navigates straight to that category's full listing */}
+                <a
+                  href={isAll ? '/shop' : `/shop/${CATEGORY_SLUG[cat as Category]}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onSelect(cat);
+                    setOpenCat(null);
+                  }}
+                  className={`text-[10px] uppercase tracking-[0.1em] sm:tracking-[0.2em] font-bold cursor-pointer ${
+                    isAll ? 'px-4 sm:px-8 py-2.5 sm:py-3' : 'pl-4 sm:pl-8 py-2.5 sm:py-3 pr-1'
+                  }`}
+                >
+                  {cat}
+                </a>
+                {/* Chevron opens the product-preview dropdown without navigating */}
                 {!isAll && (
-                  <svg
-                    width="10" height="10" viewBox="0 0 10 10"
-                    className={`transition-transform duration-200 flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}
-                    fill="currentColor"
+                  <button
+                    type="button"
+                    onClick={() => toggleMenu(cat as Category)}
+                    aria-label={`Preview ${cat} products`}
+                    className="pl-1 pr-4 sm:pr-8 py-2.5 sm:py-3 cursor-pointer flex items-center"
                   >
-                    <path d="M1 3l4 4 4-4" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
+                    <svg
+                      width="10" height="10" viewBox="0 0 10 10"
+                      className={`transition-transform duration-200 flex-shrink-0 ${isOpen ? 'rotate-180' : ''}`}
+                      fill="currentColor"
+                    >
+                      <path d="M1 3l4 4 4-4" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </button>
                 )}
-              </a>
+              </div>
 
               {/* Desktop floating dropdown */}
               {isOpen && (
