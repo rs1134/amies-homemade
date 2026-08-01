@@ -144,12 +144,14 @@ const CATEGORY_SLUG: Partial<Record<Category | 'All', string>> = {
   [Category.WELLNESS]: 'health-wellness',
   [Category.SNACKS]:   'snacks',
   [Category.SWEETS]:   'traditional-sweets',
+  [Category.GIFTING]:  'hampers',
 };
 const SLUG_TO_CATEGORY: Record<string, Category | 'All'> = {
   'mukhwas':           Category.MUKHWAS,
   'health-wellness':   Category.WELLNESS,
   'snacks':            Category.SNACKS,
   'traditional-sweets': Category.SWEETS,
+  'hampers':           Category.GIFTING,
 };
 const getCategoryFromPath = (path: string): Category | 'All' => {
   const m = path.match(/^\/shop\/([^/]+)$/);
@@ -206,9 +208,9 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, o
   };
 
   const productsFor = (cat: Category) =>
-    PRODUCTS.filter(p => p.category === cat && !p.outOfStock && !p.isGift && isProductVisible(p));
+    PRODUCTS.filter(p => p.category === cat && !p.outOfStock && (cat === Category.GIFTING || !p.isGift) && isProductVisible(p));
 
-  const categories: Array<Category | 'All'> = ['All', ...Object.values(Category).filter(c => c !== Category.GIFTING && isCategoryVisible(c))];
+  const categories: Array<Category | 'All'> = ['All', ...Object.values(Category).filter(c => isCategoryVisible(c))];
 
   return (
     <>
@@ -274,7 +276,7 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, o
                       {productsFor(cat as Category).map(product => (
                         <a
                           key={product.id}
-                          href={`/shop/${slugify(product.name)}`}
+                          href={`/${product.category === Category.GIFTING ? 'gifting' : 'shop'}/${slugify(product.name)}`}
                           onClick={(e) => { e.preventDefault(); onSelectProduct(product); setOpenCat(null); }}
                           className="w-full text-left px-4 py-2.5 text-[13px] text-[#4A3728]/80 hover:text-[#F04E4E] hover:bg-[#F04E4E]/5 transition-colors font-medium flex items-center gap-2 group/item"
                         >
@@ -326,7 +328,7 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, o
               {productsFor(openCat).map(product => (
                 <a
                   key={product.id}
-                  href={`/shop/${slugify(product.name)}`}
+                  href={`/${product.category === Category.GIFTING ? 'gifting' : 'shop'}/${slugify(product.name)}`}
                   onClick={(e) => { e.preventDefault(); onSelectProduct(product); setOpenCat(null); }}
                   className="w-full text-left py-3.5 border-b border-[#4A3728]/6 text-[15px] text-[#4A3728]/80 font-medium flex items-center gap-3 active:text-[#F04E4E]"
                 >
@@ -890,8 +892,9 @@ const App: React.FC = () => {
   }, [currentPage]);
 
   const filteredProducts = useMemo(() => {
-    // Exclude gifting (kept exclusive) and any hidden categories/products
-    const availableProducts = PRODUCTS.filter(p => p.category !== Category.GIFTING && isProductVisible(p));
+    // Gifting hampers only show up in the "All" grid when the Gifting tab
+    // itself is active — kept out of the general listing otherwise.
+    const availableProducts = PRODUCTS.filter(p => (p.category !== Category.GIFTING || activeCategory === Category.GIFTING) && isProductVisible(p));
     const inCategory = activeCategory === 'All' ? availableProducts : availableProducts.filter(p => p.category === activeCategory);
     // Out-of-stock items sink to the bottom of the listing automatically —
     // Array.sort is stable, so everything else keeps its normal order, and
