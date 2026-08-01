@@ -38,7 +38,8 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(48).jpg',
     ],
     ingredients: ['Dryfruit & Seeds (200g)', 'Chatpati Mango (200g)', 'Tender Coconut Vanilla Chips (125g)'],
-    isGift: true
+    isGift: true,
+    rating: 4.5, reviewCount: 26
   },
   {
     id: 'g5',
@@ -53,7 +54,8 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(50).jpg',
     ],
     ingredients: ['Dryfruit & Seeds (200g)', 'Homemade Granola (250g)', 'Almond Motichoor Ladoo (250g)'],
-    isGift: true
+    isGift: true,
+    rating: 5, reviewCount: 32
   },
   {
     id: 'g1',
