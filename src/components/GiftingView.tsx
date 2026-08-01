@@ -298,11 +298,11 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
           ))}
         </div>
 
-        <div className="space-y-10 sm:space-y-32">
+        <div className="space-y-6 sm:space-y-14">
           {/* HIGH-APPEAL CUSTOM HAMPER CALLOUT CARD */}
-          <div className="relative overflow-hidden bg-white rounded-[4rem] flex flex-col lg:flex-row border-2 border-[#D4AF37]/20 shadow-2xl group transition-all duration-700 hover:shadow-[#D4AF37]/25">
+          <div className="relative overflow-hidden bg-white rounded-[2rem] sm:rounded-[2.5rem] flex flex-col lg:flex-row border-2 border-[#D4AF37]/20 shadow-xl group transition-all duration-700 hover:shadow-[#D4AF37]/25">
             {/* Rich Image Collage Section */}
-            <div className="lg:w-1/2 grid grid-cols-2 grid-rows-2 h-[500px] lg:h-auto overflow-hidden">
+            <div className="lg:w-2/5 grid grid-cols-2 grid-rows-2 h-56 sm:h-72 lg:h-auto overflow-hidden">
                {/* WEDDINGS */}
                <div className="relative overflow-hidden group/img border-r border-b border-[#D4AF37]/10">
                   <img
@@ -354,57 +354,57 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
             </div>
 
             {/* Content Section */}
-            <div className="lg:w-1/2 p-6 sm:p-12 lg:p-20 relative flex flex-col justify-center bg-white">
-              <div className="absolute top-0 right-0 w-80 h-80 bg-[#D4AF37]/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2"></div>
-              <div className="absolute bottom-0 left-0 w-80 h-80 bg-coral/5 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2"></div>
-              
+            <div className="lg:w-3/5 p-5 sm:p-8 lg:p-10 relative flex flex-col justify-center bg-white">
+              <div className="absolute top-0 right-0 w-56 h-56 bg-[#D4AF37]/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
+              <div className="absolute bottom-0 left-0 w-56 h-56 bg-coral/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2"></div>
+
               <div className="relative z-10">
-                <div className="inline-flex items-center gap-3 px-5 py-2 bg-coral/5 rounded-full mb-8 border border-coral/10">
-                  <Sparkle size={16} className="text-coral animate-spin-slow" />
-                  <span className="text-[10px] font-black brand-rounded text-coral uppercase tracking-widest">Bespoke Curation</span>
+                <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-coral/5 rounded-full mb-4 border border-coral/10">
+                  <Sparkle size={13} className="text-coral animate-spin-slow" />
+                  <span className="text-[9px] font-black brand-rounded text-coral uppercase tracking-widest">Bespoke Curation</span>
                 </div>
-                
-                <h2 className="text-2xl sm:text-4xl lg:text-6xl font-bold serif text-[#4A3728] mb-4 sm:mb-8 leading-[1.15]">
-                  Want Something Truly <br/><span className="text-coral brand-script">One-of-a-Kind?</span>
+
+                <h2 className="text-lg sm:text-2xl lg:text-3xl font-bold serif text-[#4A3728] mb-2 sm:mb-3 leading-[1.15]">
+                  Want Something Truly <span className="text-coral brand-script">One-of-a-Kind?</span>
                 </h2>
-                
-                <p className="text-sm sm:text-lg text-[#4A3728]/60 leading-relaxed mb-6 sm:mb-12 brand-rounded font-medium max-w-lg">
-                  Beyond our signature collections, we specialize in fully bespoke hampers tailored precisely to your vision. Whether you wish to combine our finest mukhwas with external luxury goods or curate a box of specific artisanal favorites for a grand wedding, we are here to help you gift something unforgettable.
+
+                <p className="text-xs sm:text-sm text-[#4A3728]/60 leading-relaxed mb-4 sm:mb-5 brand-rounded font-medium max-w-lg">
+                  Beyond our signature collections, we specialize in fully bespoke hampers tailored precisely to your vision — combine our finest mukhwas with external luxury goods, or curate a box of specific favorites for a grand wedding.
                 </p>
-                
-                <div className="flex flex-col sm:flex-row items-center gap-6">
-                  <a 
+
+                <div className="flex flex-col sm:flex-row items-center gap-3">
+                  <a
                     href={`https://wa.me/919054038876`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full sm:w-auto px-12 py-6 bg-[#25D366] text-white rounded-full font-black brand-rounded uppercase tracking-[0.3em] text-[11px] flex items-center justify-center gap-4 hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-[#25D366]/30"
+                    className="w-full sm:w-auto px-7 py-3 bg-[#25D366] text-white rounded-full font-black brand-rounded uppercase tracking-[0.2em] text-[10px] flex items-center justify-center gap-2.5 hover:scale-105 active:scale-95 transition-all shadow-lg shadow-[#25D366]/30"
                   >
-                    <MessageCircle size={20} /> WhatsApp Us
+                    <MessageCircle size={16} /> WhatsApp Us
                   </a>
-                  <a 
+                  <a
                     href="mailto:hello@amieshomemade.com?subject=Custom Hamper Inquiry"
-                    className="w-full sm:w-auto px-12 py-6 border-2 border-[#D4AF37]/30 text-[#D4AF37] rounded-full font-black brand-rounded uppercase tracking-[0.3em] text-[11px] flex items-center justify-center gap-4 hover:bg-[#D4AF37] hover:text-white transition-all shadow-lg"
+                    className="w-full sm:w-auto px-7 py-3 border-2 border-[#D4AF37]/30 text-[#D4AF37] rounded-full font-black brand-rounded uppercase tracking-[0.2em] text-[10px] flex items-center justify-center gap-2.5 hover:bg-[#D4AF37] hover:text-white transition-all"
                   >
-                    <Mail size={20} /> Send an Email
+                    <Mail size={16} /> Send an Email
                   </a>
                 </div>
-                
+
               </div>
             </div>
           </div>
 
           {/* LIVE MUKHWAS BAR SECTION */}
-          <div className="relative overflow-hidden bg-[#2A1E14] rounded-[4rem] flex flex-col lg:flex-row shadow-2xl">
+          <div className="relative overflow-hidden bg-[#2A1E14] rounded-[2rem] sm:rounded-[2.5rem] flex flex-col lg:flex-row shadow-xl">
             {/* Photos */}
-            <div className="lg:w-1/2 flex flex-col overflow-hidden">
-              <div className="relative overflow-hidden flex-1 border-b border-white/10" style={{minHeight: '240px'}}>
+            <div className="lg:w-2/5 flex overflow-hidden h-40 sm:h-56 lg:h-auto">
+              <div className="relative overflow-hidden flex-1 border-r border-white/10">
                 <img
                   src="https://ik.imagekit.io/amieshomemade/Whats_App_Image_2026_03_10_at_23_09_28.jpg"
                   className="w-full h-full object-cover object-center"
                   alt="Mukhwas Bar at Mehndi"
                 />
               </div>
-              <div className="relative overflow-hidden flex-1" style={{minHeight: '240px'}}>
+              <div className="relative overflow-hidden flex-1">
                 <img
                   src="https://ik.imagekit.io/amieshomemade/Whats_App_Image_2026_03_10_at_23_09_28_1.jpg"
                   className="w-full h-full object-cover object-center"
@@ -414,23 +414,23 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
             </div>
 
             {/* Content */}
-            <div className="lg:w-1/2 p-8 sm:p-12 lg:p-20 flex flex-col justify-center">
-              <div className="inline-flex items-center gap-3 px-5 py-2 bg-white/10 rounded-full mb-8 border border-white/20 w-fit">
-                <Sparkles size={14} className="text-[#D4AF37]" />
-                <span className="text-[10px] font-black brand-rounded text-white/80 uppercase tracking-widest">Live Experience</span>
+            <div className="lg:w-3/5 p-5 sm:p-8 lg:p-10 flex flex-col justify-center">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 rounded-full mb-4 border border-white/20 w-fit">
+                <Sparkles size={13} className="text-[#D4AF37]" />
+                <span className="text-[9px] font-black brand-rounded text-white/80 uppercase tracking-widest">Live Experience</span>
               </div>
 
-              <h2 className="text-3xl sm:text-5xl lg:text-6xl font-bold serif text-white mb-4 sm:mb-6 leading-tight">
-                Book a <span className="text-[#D4AF37] brand-script">Mukhwas Bar</span><br/>for Your Event
+              <h2 className="text-lg sm:text-2xl lg:text-3xl font-bold serif text-white mb-2 sm:mb-3 leading-tight">
+                Book a <span className="text-[#D4AF37] brand-script">Mukhwas Bar</span> for Your Event
               </h2>
 
-              <p className="text-sm sm:text-base text-white/60 leading-relaxed mb-8 sm:mb-12 brand-rounded font-medium max-w-lg">
-                We set up a beautiful live Mukhwas Bar at your wedding, mehndi, reception, or corporate event — a curated spread of our finest mukhwas for your guests to pick and enjoy. A unique touch that leaves a lasting impression.
+              <p className="text-xs sm:text-sm text-white/60 leading-relaxed mb-4 sm:mb-5 brand-rounded font-medium max-w-lg">
+                We set up a beautiful live Mukhwas Bar at your wedding, mehndi, reception, or corporate event — a curated spread of our finest mukhwas for your guests to pick and enjoy.
               </p>
 
-              <div className="flex flex-wrap gap-3 mb-10">
+              <div className="flex flex-wrap gap-2 mb-5">
                 {['Weddings', 'Mehndi Functions', 'Receptions', 'Corporate Events', 'Festivals'].map(tag => (
-                  <span key={tag} className="px-4 py-2 bg-white/10 text-white/70 text-[10px] font-bold brand-rounded rounded-full border border-white/10">
+                  <span key={tag} className="px-3 py-1.5 bg-white/10 text-white/70 text-[9px] font-bold brand-rounded rounded-full border border-white/10">
                     {tag}
                   </span>
                 ))}
@@ -440,9 +440,9 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
                 href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=${encodeURIComponent("Hey Amie's Homemade! I'd love to book a Live Mukhwas Bar for my event. Could you please share more details on availability, setup, and pricing?")}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full sm:w-auto px-10 py-5 bg-[#25D366] text-white rounded-full font-black brand-rounded uppercase tracking-[0.3em] text-[11px] flex items-center justify-center gap-4 hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-[#25D366]/30 sm:self-start"
+                className="w-full sm:w-auto px-7 py-3 bg-[#25D366] text-white rounded-full font-black brand-rounded uppercase tracking-[0.2em] text-[10px] flex items-center justify-center gap-2.5 hover:scale-105 active:scale-95 transition-all shadow-lg shadow-[#25D366]/30 sm:self-start"
               >
-                <MessageCircle size={18} /> Enquire on WhatsApp
+                <MessageCircle size={16} /> Enquire on WhatsApp
               </a>
             </div>
           </div>

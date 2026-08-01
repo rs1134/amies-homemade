@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { Category, Product, CartItem } from './types.ts';
 import { PRODUCTS, WHATSAPP_NUMBER, isProductVisible, isCategoryVisible } from './constants.ts';
 import { AREA_MAP } from './deliveryAreas.ts';
@@ -389,6 +389,10 @@ const App: React.FC = () => {
     const slug = getProductSlugFromPath(window.location.pathname);
     return slug ? getVisibleProductFromSlug(slug) : null;
   });
+  // Remembers which page/category a product was opened from, so closing it
+  // (or hitting back) returns there — e.g. Shop's Gifting & Hampers tab —
+  // instead of always falling back to the product's own category page.
+  const productOriginRef = useRef<{ page: string; category: Category | 'All' } | null>(null);
   const [orderComplete, setOrderComplete] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [addedToast, setAddedToast] = useState<string | null>(null);
@@ -465,19 +469,41 @@ const App: React.FC = () => {
   }, []);
 
   const openProduct = useCallback((product: Product) => {
+    // Remember where we're opening this from, so closing it returns to the
+    // same tab/category instead of guessing from the product's own category
+    // (e.g. a hamper opened from Shop's Gifting & Hampers tab should return
+    // there, not to the separate /gifting marketing page).
+    productOriginRef.current = { page: currentPage, category: activeCategory };
     const slug = slugify(product.name);
     const isGifting = product.category === Category.GIFTING;
     const basePath = isGifting ? '/gifting' : '/shop';
     window.history.pushState(null, '', `${basePath}/${slug}`);
     setSelectedProduct(product);
     setCurrentPage(isGifting ? 'gifting' : 'shop');
-  }, []);
+  }, [currentPage, activeCategory]);
 
   const closeProduct = useCallback(() => {
-    const isGifting = window.location.pathname.startsWith('/gifting/');
-    window.history.pushState(null, '', isGifting ? '/gifting' : '/shop');
+    const origin = productOriginRef.current;
+    productOriginRef.current = null;
+    if (origin && origin.page === 'shop') {
+      const cat = origin.category;
+      const slug = cat !== 'All' ? CATEGORY_SLUG[cat as Category] : undefined;
+      window.history.pushState(null, '', slug ? `/shop/${slug}` : '/shop');
+      setActiveCategory(cat);
+      setCurrentPage('shop');
+    } else if (origin && origin.page === 'gifting') {
+      window.history.pushState(null, '', '/gifting');
+      setCurrentPage('gifting');
+    } else {
+      // No known origin (e.g. product opened via a direct deep link) —
+      // fall back to the product's own category, same as before.
+      const isGifting = selectedProduct?.category === Category.GIFTING;
+      window.history.pushState(null, '', isGifting ? '/gifting' : '/shop');
+      if (!isGifting) setActiveCategory('All');
+      setCurrentPage(isGifting ? 'gifting' : 'shop');
+    }
     setSelectedProduct(null);
-  }, []);
+  }, [selectedProduct]);
 
   // Sync page state with browser back/forward buttons
   useEffect(() => {
@@ -1007,7 +1033,6 @@ const App: React.FC = () => {
   const renderPage = () => {
     // Full-page product view takes priority whenever a product is selected.
     if (selectedProduct) {
-      const isGifting = selectedProduct.category === Category.GIFTING;
       const sameCategory = PRODUCTS.filter(p =>
         p.id !== selectedProduct.id &&
         isProductVisible(p) &&
@@ -1026,7 +1051,7 @@ const App: React.FC = () => {
         <ProductDetail
           product={selectedProduct}
           onAddToCart={addToCart}
-          onClose={() => navigate(isGifting ? 'gifting' : 'shop')}
+          onClose={closeProduct}
           onNavigateHome={() => navigate('home')}
           related={related}
           onSelectProduct={(p) => openProduct(p)}
