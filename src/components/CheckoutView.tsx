@@ -1142,10 +1142,15 @@ _Please confirm my order and share delivery details._
             </div>
           </div>
 
+          {/* Hidden on mobile — the sticky "Pay Now" bar below already covers
+              this role there, always visible regardless of scroll. Showing
+              both meant two differently-labeled buttons for the same action
+              on screen at once. Desktop has no sticky bar, so it keeps this
+              one. */}
           <button
             disabled={isSubmitting}
             onClick={handleProceed}
-            className={`w-full py-4 bg-[#F04E4E] shadow-[#F04E4E]/30 text-white rounded-2xl font-bold brand-rounded uppercase tracking-[0.25em] text-[11px] transition-all shadow-xl flex items-center justify-center gap-3 ${isSubmitting ? 'opacity-70 cursor-wait' : 'hover:scale-[1.02] active:scale-[0.97]'}`}
+            className={`hidden sm:flex w-full py-4 bg-[#F04E4E] shadow-[#F04E4E]/30 text-white rounded-2xl font-bold brand-rounded uppercase tracking-[0.25em] text-[11px] transition-all shadow-xl items-center justify-center gap-3 ${isSubmitting ? 'opacity-70 cursor-wait' : 'hover:scale-[1.02] active:scale-[0.97]'}`}
           >
             {isSubmitting ? <>Processing... <Loader2 className="animate-spin" size={20} /></> : paymentMethod === 'cod' ? <>Place Order (Cash on Delivery) <ChevronRight size={20} /></> : <>Complete My Order <ChevronRight size={20} /></>}
           </button>
