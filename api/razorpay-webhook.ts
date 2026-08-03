@@ -354,7 +354,7 @@ export default async function handler(req: any, res: any) {
         const mobile = String(phone).replace(/[\s\-\(\)]/g, '').replace(/^\+?91/, '').slice(-10);
         const itemsShort = String(itemsSummary)
           .split('\n').map((l: string) => l.trim()).filter(Boolean).join(', ').slice(0, 80);
-        const delivery = String(city).toLowerCase() === 'ahmedabad' ? '1 working day' : '3-5 business days';
+        const delivery = String(city).toLowerCase() === 'ahmedabad' ? '1 working day' : '3-5 working days';
         const smsText =
           `Amie's Homemade: Order ${orderId} confirmed! ` +
           `Amount: Rs.${grandTotal}. ` +

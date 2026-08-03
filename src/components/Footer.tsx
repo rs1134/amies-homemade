@@ -250,7 +250,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           <ul className="space-y-4 list-none p-0 text-xs text-[#4A3728]/70">
             <li className="flex gap-3">
               <Clock className="text-coral shrink-0 mt-0.5" size={16} />
-              <span>Orders outside Ahmedabad typically take <span className="font-bold">3-5 business days</span> to arrive.</span>
+              <span>Orders outside Ahmedabad typically take <span className="font-bold">3-5 working days</span> to arrive.</span>
             </li>
             <li className="flex gap-3">
               <CheckCircle className="text-coral shrink-0 mt-0.5" size={16} />
