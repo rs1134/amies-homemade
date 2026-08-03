@@ -84,7 +84,7 @@ const FAQ_DATA: FAQCategory[] = [
     items: [
       {
         q: 'Do you deliver across India?',
-        a: 'Yes, we deliver pan-India. Ahmedabad orders arrive within 2 working days. All other cities receive orders within 3–5 working days via courier.',
+        a: 'Yes, we deliver pan-India. Ahmedabad orders arrive within 1 working day. All other cities receive orders within 3–5 working days via courier.',
       },
       {
         q: 'What are the delivery charges?',

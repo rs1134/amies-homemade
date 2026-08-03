@@ -43,7 +43,7 @@ function buildOrderEmailHtml(params: {
   const itemRows = params.itemsSummary.split('\n').filter(Boolean).map(line =>
     `<tr><td style="padding:6px 0;color:#4A3728;font-size:14px;">${escapeHtml(line)}</td></tr>`
   ).join('');
-  const delivery = params.city.toLowerCase().includes('ahmedabad') ? '1-2 working days' : '3-5 working days';
+  const delivery = params.city.toLowerCase().includes('ahmedabad') ? '1 working day' : '3-5 working days';
 
   return `
 <div style="font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;max-width:600px;margin:0 auto;background:#FFF8EE;">

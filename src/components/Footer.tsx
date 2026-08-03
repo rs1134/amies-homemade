@@ -218,7 +218,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </div>
             <div>
               <h4 className="font-bold text-green-800 text-sm brand-rounded uppercase tracking-widest mb-1">Ahmedabad Delivery</h4>
-              <p className="text-green-700/80 text-xs">Enjoy <span className="font-bold">FREE Home Delivery</span> within Ahmedabad city limits. Typical arrival: 2 working days.</p>
+              <p className="text-green-700/80 text-xs">Enjoy <span className="font-bold">FREE Home Delivery</span> within Ahmedabad city limits. Typical arrival: 1 working day.</p>
             </div>
           </div>
 

@@ -708,7 +708,7 @@ _Please confirm my order and share delivery details._
                 <Calendar className="text-[#F04E4E] flex-shrink-0" size={20} />
                 <div>
                   <p className="text-[9px] font-black brand-rounded uppercase text-[#4A3728]/40 tracking-widest mb-1">Estimated Arrival</p>
-                  <p className="text-[12px] font-bold text-[#4A3728]">{snap.isAhmedabad ? '2 Working Days' : '3-5 Working Days'}</p>
+                  <p className="text-[12px] font-bold text-[#4A3728]">{snap.isAhmedabad ? '1 Working Day' : '3-5 Working Days'}</p>
                 </div>
               </div>
             </div>
