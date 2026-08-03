@@ -940,7 +940,7 @@ const App: React.FC = () => {
     return [...inCategory].sort((a, b) => (a.outOfStock ? 1 : 0) - (b.outOfStock ? 1 : 0));
   }, [activeCategory]);
 
-  const addToCart = useCallback((product: Product, weight?: string, subOptionName?: string, openCart: boolean = true) => {
+  const addToCart = useCallback((product: Product, weight?: string, subOptionName?: string, openCart: boolean = false) => {
     const finalWeight = weight || product.weight;
     
     // Determine the active price based on variety selection or defaults
