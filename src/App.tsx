@@ -904,12 +904,17 @@ const App: React.FC = () => {
 
   }, [currentPage, currentArea, currentCity, currentBlogSlug, selectedProduct]);
 
-  // Scroll to top on every page/area/city/blog change (instant to avoid smooth-scroll delay)
+  // Scroll to top on every page/area/city/blog/product change (instant to
+  // avoid smooth-scroll delay). Includes selectedProduct because opening or
+  // closing a product view often doesn't change currentPage on its own
+  // (e.g. closing a hamper opened from /gifting returns to 'gifting' ->
+  // 'gifting', no page transition) -- without it, the page would land
+  // wherever the product detail happened to be scrolled instead of the top.
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
-  }, [currentPage, currentArea, currentCity, currentBlogSlug]);
+  }, [currentPage, currentArea, currentCity, currentBlogSlug, selectedProduct]);
 
   // Fire GA4 page_view on every SPA route change (incl. initial load — this is
   // the sole page_view source since send_page_view:false in index.html).
