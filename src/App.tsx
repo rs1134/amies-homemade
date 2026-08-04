@@ -153,6 +153,12 @@ const SLUG_TO_CATEGORY: Record<string, Category | 'All'> = {
   'traditional-sweets': Category.SWEETS,
   'hampers':           Category.GIFTING,
 };
+// Display override for the Shop category tab only — the underlying
+// Category value stays 'Gifting & Hampers' everywhere else (routing,
+// SEO, schema), this just changes what shoppers see on the pill/dropdown.
+const CATEGORY_DISPLAY_LABEL: Partial<Record<Category, string>> = {
+  [Category.GIFTING]: 'Rakhi Hampers',
+};
 const getCategoryFromPath = (path: string): Category | 'All' => {
   const m = path.match(/^\/shop\/([^/]+)$/);
   if (!m) return 'All';
@@ -219,6 +225,7 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, o
           const isAll = cat === 'All';
           const isActive = activeCategory === cat;
           const isOpen = !isAll && openCat === cat;
+          const catLabel = isAll ? 'All' : (CATEGORY_DISPLAY_LABEL[cat as Category] ?? cat);
 
           return (
             <div
@@ -248,14 +255,14 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, o
                     isAll ? 'px-4 sm:px-8 py-2.5 sm:py-3' : 'pl-4 sm:pl-8 py-2.5 sm:py-3 pr-1'
                   }`}
                 >
-                  {cat}
+                  {catLabel}
                 </a>
                 {/* Chevron opens the product-preview dropdown without navigating */}
                 {!isAll && (
                   <button
                     type="button"
                     onClick={() => toggleMenu(cat as Category)}
-                    aria-label={`Preview ${cat} products`}
+                    aria-label={`Preview ${catLabel} products`}
                     className="pl-1 pr-4 sm:pr-8 py-2.5 sm:py-3 cursor-pointer flex items-center"
                   >
                     <svg
@@ -281,7 +288,7 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, o
                       onClick={() => { onSelect(cat); setOpenCat(null); }}
                       className="w-full text-left px-4 py-3 text-[10px] font-black brand-rounded uppercase tracking-widest text-[#F04E4E] bg-[#F04E4E]/5 hover:bg-[#F04E4E]/10 transition-colors border-b border-[#F04E4E]/10 flex items-center justify-between"
                     >
-                      <span>View All {cat}</span>
+                      <span>View All {catLabel}</span>
                       <span>→</span>
                     </button>
                     <div className="py-1.5">
@@ -321,7 +328,7 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, o
             </div>
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-3 border-b border-[#4A3728]/8 flex-shrink-0">
-              <span className="text-sm font-black brand-rounded uppercase tracking-widest text-[#4A3728]">{openCat}</span>
+              <span className="text-sm font-black brand-rounded uppercase tracking-widest text-[#4A3728]">{openCat ? (CATEGORY_DISPLAY_LABEL[openCat] ?? openCat) : ''}</span>
               <button onClick={() => setOpenCat(null)} className="p-1 text-[#4A3728]/40">
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                   <path d="M2 2l14 14M16 2L2 16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
@@ -333,7 +340,7 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, o
               onClick={() => { onSelect(openCat); setOpenCat(null); }}
               className="mx-4 mt-3 mb-1 py-3 rounded-2xl bg-[#F04E4E] text-white font-black brand-rounded text-xs uppercase tracking-widest flex-shrink-0"
             >
-              View All {openCat} →
+              View All {openCat ? (CATEGORY_DISPLAY_LABEL[openCat] ?? openCat) : ''} →
             </button>
             {/* Product list */}
             <div className="overflow-y-auto flex-1 px-4 pb-8 pt-2">
