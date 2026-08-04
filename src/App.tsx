@@ -21,7 +21,7 @@ import BlogView from './components/BlogView.tsx';
 import BlogPostView from './components/BlogPostView.tsx';
 import FAQView from './components/FAQView.tsx';
 import { getPostBySlug } from './blogs.ts';
-import { Sparkles, ArrowRight, MessageCircle, CheckCircle, Users, Mail, Building2, PartyPopper } from 'lucide-react';
+import { Sparkles, ArrowRight, MessageCircle, CheckCircle, Users, Mail, Building2 } from 'lucide-react';
 
 const PAGE_SEO: Record<string, { title: string; description: string; canonical: string; ogTitle: string; ogDescription: string }> = {
   home: {
@@ -1229,32 +1229,45 @@ const App: React.FC = () => {
               </div>
             </div>
 
-            {/* Live Mukhwas Bar Card */}
-            <div className="bg-white p-7 sm:p-14 rounded-[2rem] sm:rounded-[3.5rem] shadow-2xl border border-[#D4AF37]/20 flex flex-col items-center group hover:-translate-y-2 transition-all duration-500 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#D4AF37]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-
-              <div className="w-20 h-20 bg-[#D4AF37]/10 rounded-[2rem] flex items-center justify-center text-[#D4AF37] mb-8 group-hover:scale-110 group-hover:bg-[#D4AF37] group-hover:text-white transition-all duration-500">
-                <PartyPopper size={36} />
+            {/* Live Mukhwas Bar Card — real event photos instead of a
+                generic icon, since this is an experiential service best
+                shown, not illustrated. */}
+            <div className="bg-white rounded-[2rem] sm:rounded-[3.5rem] shadow-2xl border border-[#D4AF37]/20 flex flex-col items-center group hover:-translate-y-2 transition-all duration-500 overflow-hidden">
+              <div className="w-full h-40 sm:h-48 grid grid-cols-2 gap-0.5 bg-[#D4AF37]/10">
+                <img
+                  src="https://ik.imagekit.io/amieshomemade/Whats_App_Image_2026_03_10_at_23_09_28.jpg?tr=w-500,q-80,f-auto"
+                  className="w-full h-full object-cover"
+                  alt="Live Mukhwas Bar setup at a mehndi function"
+                  loading="lazy" decoding="async"
+                />
+                <img
+                  src="https://ik.imagekit.io/amieshomemade/Whats_App_Image_2026_03_10_at_23_09_28_1.jpg?tr=w-500,q-80,f-auto"
+                  className="w-full h-full object-cover"
+                  alt="Live Mukhwas Bar setup at a wedding"
+                  loading="lazy" decoding="async"
+                />
               </div>
-              <h3 className="text-3xl font-bold serif mb-4 text-[#4A3728]">Live Mukhwas Bar</h3>
-              <p className="text-[#4A3728]/60 mb-10 font-medium leading-relaxed max-w-xs">
-                A curated spread of our finest mukhwas, set up live at your wedding, mehndi, reception, or corporate event.
-              </p>
-              <div className="w-full space-y-6">
-                <a
-                  href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=${encodeURIComponent("Hey Amie's Homemade! I'd love to book a Live Mukhwas Bar for my event. Could you please share more details on availability, setup, and pricing?")}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-3 w-full py-5 bg-[#25D366] text-white rounded-[1.5rem] font-bold brand-rounded uppercase tracking-[0.2em] text-[10px] hover:shadow-2xl hover:shadow-[#25D366]/30 transition-all active:scale-95"
-                >
-                  <MessageCircle size={20} /> Enquire on WhatsApp
-                </a>
-                <div className="grid grid-cols-1 gap-2">
-                  {["Weddings & Mehndi Functions", "Corporate Events", "Receptions & Festivals"].map((feature, i) => (
-                    <div key={i} className="flex items-center gap-3 text-[10px] font-bold text-[#4A3728]/70 brand-rounded uppercase tracking-widest bg-[#D4AF37]/5 py-2 px-4 rounded-xl border border-[#D4AF37]/10">
-                      <CheckCircle size={14} className="text-[#D4AF37]" /> {feature}
-                    </div>
-                  ))}
+              <div className="p-7 sm:p-14 pt-8 sm:pt-10 flex flex-col items-center w-full">
+                <h3 className="text-3xl font-bold serif mb-4 text-[#4A3728]">Live Mukhwas Bar</h3>
+                <p className="text-[#4A3728]/60 mb-10 font-medium leading-relaxed max-w-xs text-center">
+                  A curated spread of our finest mukhwas, set up live at your wedding, mehndi, reception, or corporate event.
+                </p>
+                <div className="w-full space-y-6">
+                  <a
+                    href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=${encodeURIComponent("Hey Amie's Homemade! I'd love to book a Live Mukhwas Bar for my event. Could you please share more details on availability, setup, and pricing?")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-3 w-full py-5 bg-[#25D366] text-white rounded-[1.5rem] font-bold brand-rounded uppercase tracking-[0.2em] text-[10px] hover:shadow-2xl hover:shadow-[#25D366]/30 transition-all active:scale-95"
+                  >
+                    <MessageCircle size={20} /> Enquire on WhatsApp
+                  </a>
+                  <div className="grid grid-cols-1 gap-2">
+                    {["Weddings & Mehndi Functions", "Corporate Events", "Receptions & Festivals"].map((feature, i) => (
+                      <div key={i} className="flex items-center gap-3 text-[10px] font-bold text-[#4A3728]/70 brand-rounded uppercase tracking-widest bg-[#D4AF37]/5 py-2 px-4 rounded-xl border border-[#D4AF37]/10">
+                        <CheckCircle size={14} className="text-[#D4AF37]" /> {feature}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
