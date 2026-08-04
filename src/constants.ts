@@ -34,7 +34,6 @@ export const PRODUCTS: Product[] = [
     images: [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(46).jpg',
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(47).jpg',
-      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jul%204,%202026,%2011_56_22%20AM.png',
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(48).jpg',
     ],
     ingredients: ['Dryfruit & Seeds (200g)', 'Chatpati Mango (200g)', 'Tender Coconut Vanilla Chips (125g)'],
