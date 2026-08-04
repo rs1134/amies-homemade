@@ -268,7 +268,7 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
         />
         <div className="relative z-20 text-center px-4 max-w-4xl mx-auto">
           <div className="inline-flex items-center gap-2 px-6 py-2 bg-white/10 backdrop-blur-xl rounded-full border border-white/20 text-white brand-rounded text-xs font-black uppercase tracking-[0.4em] mb-8 animate-in slide-in-from-top duration-700 shadow-2xl">
-            <Sparkles size={14} className="text-[#D4AF37]" /> This Rakhi, Gift Something Real
+            <Sparkles size={14} className="text-[#D4AF37]" /> This Rakhi, Gift Something Special
           </div>
           <h1 className="text-4xl sm:text-6xl lg:text-8xl font-bold text-white serif mb-4 sm:mb-6 leading-tight drop-shadow-2xl animate-in fade-in zoom-in duration-1000">
             Celebrate Rakhi, <span className="text-[#D4AF37] brand-script">Beautifully.</span>
