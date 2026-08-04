@@ -254,7 +254,19 @@ const HamperCard: React.FC<HamperCardProps> = ({ item, onAddToCart, onSelectProd
 
 const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct }) => {
   const giftItems = useMemo(() => PRODUCTS.filter(p => p.category === Category.GIFTING && isProductVisible(p)), []);
+  const [customName, setCustomName] = useState('');
+  const [customPhone, setCustomPhone] = useState('');
+  const [customDetails, setCustomDetails] = useState('');
 
+  const customizeWhatsAppUrl = useMemo(() => {
+    const lines = [
+      "Hey Amie's Homemade! I'd like a custom hamper.",
+      customName ? `Name: ${customName}` : '',
+      customPhone ? `Phone: ${customPhone}` : '',
+      customDetails ? `What I'm looking for: ${customDetails}` : '',
+    ].filter(Boolean).join('\n');
+    return `https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=${encodeURIComponent(lines)}`;
+  }, [customName, customPhone, customDetails]);
 
   return (
     <div className="pt-24 sm:pt-20 bg-[#FFF8EE] min-h-screen">
@@ -298,153 +310,53 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
           ))}
         </div>
 
-        <div className="space-y-6 sm:space-y-14">
-          {/* HIGH-APPEAL CUSTOM HAMPER CALLOUT CARD */}
-          <div className="relative overflow-hidden bg-white rounded-[2rem] sm:rounded-[2.5rem] flex flex-col lg:flex-row border-2 border-[#D4AF37]/20 shadow-xl group transition-all duration-700 hover:shadow-[#D4AF37]/25">
-            {/* Rich Image Collage Section */}
-            <div className="lg:w-2/5 grid grid-cols-2 grid-rows-2 h-56 sm:h-72 lg:h-auto overflow-hidden">
-               {/* WEDDINGS */}
-               <div className="relative overflow-hidden group/img border-r border-b border-[#D4AF37]/10">
-                  <img
-                    src="https://ik.imagekit.io/amieshomemade/amish-thakkar-7O422y-G-b80-unsplash.jpg?tr=w-600,q-80,f-auto"
-                    className="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-110"
-                    alt="Weddings at Amie's"
-                    loading="lazy" decoding="async"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-6">
-                    <span className="text-white text-[11px] font-black brand-rounded uppercase tracking-[0.3em]">Weddings</span>
-                  </div>
-               </div>
-               {/* FESTIVALS */}
-               <div className="relative overflow-hidden group/img border-b border-[#D4AF37]/10">
-                  <img
-                    src="https://ik.imagekit.io/amieshomemade/bh6cmv93h5rmt0cwehc94w18rr.png?tr=w-600,q-80,f-auto"
-                    className="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-110"
-                    alt="Festivals at Amie's"
-                    loading="lazy" decoding="async"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-6">
-                    <span className="text-white text-[11px] font-black brand-rounded uppercase tracking-[0.3em]">Festivals</span>
-                  </div>
-               </div>
-               {/* CORPORATE GIFTS */}
-               <div className="relative overflow-hidden group/img border-r border-[#D4AF37]/10">
-                  <img
-                    src="https://ik.imagekit.io/amieshomemade/3mx66mz99srmr0cwehfssqfz10.png?tr=w-600,q-80,f-auto"
-                    className="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-110"
-                    alt="Corporate Gifting"
-                    loading="lazy" decoding="async"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-6">
-                    <span className="text-white text-[11px] font-black brand-rounded uppercase tracking-[0.3em]">Corporate</span>
-                  </div>
-               </div>
-               {/* CELEBRATIONS */}
-               <div className="relative overflow-hidden group/img">
-                  <img
-                    src="https://ik.imagekit.io/amieshomemade/nescmvzyzhrmw0cweh988hsnk0.png?tr=w-600,q-80,f-auto"
-                    className="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-110"
-                    alt="Celebrations"
-                    loading="lazy" decoding="async"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-6">
-                    <span className="text-white text-[11px] font-black brand-rounded uppercase tracking-[0.3em]">Celebrations</span>
-                  </div>
-               </div>
+        {/* Custom hamper enquiry — a lightweight form instead of a big promo
+            card; submits as a pre-filled WhatsApp message since that's the
+            site's existing enquiry channel (no separate form backend). */}
+        <div className="max-w-2xl mx-auto bg-white rounded-[2rem] sm:rounded-[2.5rem] border-2 border-[#D4AF37]/20 shadow-xl p-6 sm:p-10">
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-coral/5 rounded-full mb-4 border border-coral/10">
+              <Sparkle size={13} className="text-coral" />
+              <span className="text-[9px] font-black brand-rounded text-coral uppercase tracking-widest">Bespoke Curation</span>
             </div>
-
-            {/* Content Section */}
-            <div className="lg:w-3/5 p-5 sm:p-8 lg:p-10 relative flex flex-col justify-center bg-white">
-              <div className="absolute top-0 right-0 w-56 h-56 bg-[#D4AF37]/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2"></div>
-              <div className="absolute bottom-0 left-0 w-56 h-56 bg-coral/5 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2"></div>
-
-              <div className="relative z-10">
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-coral/5 rounded-full mb-4 border border-coral/10">
-                  <Sparkle size={13} className="text-coral animate-spin-slow" />
-                  <span className="text-[9px] font-black brand-rounded text-coral uppercase tracking-widest">Bespoke Curation</span>
-                </div>
-
-                <h2 className="text-lg sm:text-2xl lg:text-3xl font-bold serif text-[#4A3728] mb-2 sm:mb-3 leading-[1.15]">
-                  Want Something Truly <span className="text-coral brand-script">One-of-a-Kind?</span>
-                </h2>
-
-                <p className="text-xs sm:text-sm text-[#4A3728]/60 leading-relaxed mb-4 sm:mb-5 brand-rounded font-medium max-w-lg">
-                  Beyond our signature collections, we specialize in fully bespoke hampers tailored precisely to your vision — combine our finest mukhwas with external luxury goods, or curate a box of specific favorites for a grand wedding.
-                </p>
-
-                <div className="flex flex-col sm:flex-row items-center gap-3">
-                  <a
-                    href={`https://wa.me/919054038876`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-full sm:w-auto px-7 py-3 bg-[#25D366] text-white rounded-full font-black brand-rounded uppercase tracking-[0.2em] text-[10px] flex items-center justify-center gap-2.5 hover:scale-105 active:scale-95 transition-all shadow-lg shadow-[#25D366]/30"
-                  >
-                    <MessageCircle size={16} /> WhatsApp Us
-                  </a>
-                  <a
-                    href="mailto:hello@amieshomemade.com?subject=Custom Hamper Inquiry"
-                    className="w-full sm:w-auto px-7 py-3 border-2 border-[#D4AF37]/30 text-[#D4AF37] rounded-full font-black brand-rounded uppercase tracking-[0.2em] text-[10px] flex items-center justify-center gap-2.5 hover:bg-[#D4AF37] hover:text-white transition-all"
-                  >
-                    <Mail size={16} /> Send an Email
-                  </a>
-                </div>
-
-              </div>
-            </div>
+            <h2 className="text-xl sm:text-2xl font-bold serif text-[#4A3728] mb-2">Want a Custom Hamper?</h2>
+            <p className="text-xs sm:text-sm text-[#4A3728]/60 leading-relaxed max-w-md mx-auto">
+              Tell us what you have in mind and we'll put together something bespoke for you.
+            </p>
           </div>
 
-          {/* LIVE MUKHWAS BAR SECTION */}
-          <div className="relative overflow-hidden bg-[#2A1E14] rounded-[2rem] sm:rounded-[2.5rem] flex flex-col lg:flex-row shadow-xl">
-            {/* Photos */}
-            <div className="lg:w-2/5 flex overflow-hidden h-40 sm:h-56 lg:h-auto">
-              <div className="relative overflow-hidden flex-1 border-r border-white/10">
-                <img
-                  src="https://ik.imagekit.io/amieshomemade/Whats_App_Image_2026_03_10_at_23_09_28.jpg"
-                  className="w-full h-full object-cover object-center"
-                  alt="Mukhwas Bar at Mehndi"
-                />
-              </div>
-              <div className="relative overflow-hidden flex-1">
-                <img
-                  src="https://ik.imagekit.io/amieshomemade/Whats_App_Image_2026_03_10_at_23_09_28_1.jpg"
-                  className="w-full h-full object-cover object-center"
-                  alt="Mukhwas Bar setup at wedding"
-                />
-              </div>
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <input
+                type="text"
+                value={customName}
+                onChange={(e) => setCustomName(e.target.value)}
+                placeholder="Your name"
+                className="w-full px-4 py-3 bg-[#FDFBF7] rounded-xl border border-[#4A3728]/10 text-sm text-[#4A3728] placeholder:text-[#4A3728]/40 outline-none focus:border-coral transition-colors"
+              />
+              <input
+                type="tel"
+                value={customPhone}
+                onChange={(e) => setCustomPhone(e.target.value)}
+                placeholder="Phone number"
+                className="w-full px-4 py-3 bg-[#FDFBF7] rounded-xl border border-[#4A3728]/10 text-sm text-[#4A3728] placeholder:text-[#4A3728]/40 outline-none focus:border-coral transition-colors"
+              />
             </div>
-
-            {/* Content */}
-            <div className="lg:w-3/5 p-5 sm:p-8 lg:p-10 flex flex-col justify-center">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-white/10 rounded-full mb-4 border border-white/20 w-fit">
-                <Sparkles size={13} className="text-[#D4AF37]" />
-                <span className="text-[9px] font-black brand-rounded text-white/80 uppercase tracking-widest">Live Experience</span>
-              </div>
-
-              <h2 className="text-lg sm:text-2xl lg:text-3xl font-bold serif text-white mb-2 sm:mb-3 leading-tight">
-                Book a <span className="text-[#D4AF37] brand-script">Mukhwas Bar</span> for Your Event
-              </h2>
-
-              <p className="text-xs sm:text-sm text-white/60 leading-relaxed mb-4 sm:mb-5 brand-rounded font-medium max-w-lg">
-                We set up a beautiful live Mukhwas Bar at your wedding, mehndi, reception, or corporate event — a curated spread of our finest mukhwas for your guests to pick and enjoy.
-              </p>
-
-              <div className="flex flex-wrap gap-2 mb-5">
-                {['Weddings', 'Mehndi Functions', 'Receptions', 'Corporate Events', 'Festivals'].map(tag => (
-                  <span key={tag} className="px-3 py-1.5 bg-white/10 text-white/70 text-[9px] font-bold brand-rounded rounded-full border border-white/10">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
-              <a
-                href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=${encodeURIComponent("Hey Amie's Homemade! I'd love to book a Live Mukhwas Bar for my event. Could you please share more details on availability, setup, and pricing?")}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full sm:w-auto px-7 py-3 bg-[#25D366] text-white rounded-full font-black brand-rounded uppercase tracking-[0.2em] text-[10px] flex items-center justify-center gap-2.5 hover:scale-105 active:scale-95 transition-all shadow-lg shadow-[#25D366]/30 sm:self-start"
-              >
-                <MessageCircle size={16} /> Enquire on WhatsApp
-              </a>
-            </div>
+            <textarea
+              value={customDetails}
+              onChange={(e) => setCustomDetails(e.target.value)}
+              placeholder="What are you looking for? (occasion, budget, quantity, any specific items)"
+              rows={3}
+              className="w-full px-4 py-3 bg-[#FDFBF7] rounded-xl border border-[#4A3728]/10 text-sm text-[#4A3728] placeholder:text-[#4A3728]/40 outline-none focus:border-coral transition-colors resize-none"
+            />
+            <a
+              href={customizeWhatsAppUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full px-7 py-3.5 bg-[#25D366] text-white rounded-full font-black brand-rounded uppercase tracking-[0.2em] text-[10px] flex items-center justify-center gap-2.5 hover:scale-[1.02] active:scale-95 transition-all shadow-lg shadow-[#25D366]/30"
+            >
+              <MessageCircle size={16} /> Send on WhatsApp
+            </a>
           </div>
         </div>
       </section>
