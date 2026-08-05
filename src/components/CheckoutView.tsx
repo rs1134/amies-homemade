@@ -910,30 +910,35 @@ _Please confirm my order and share delivery details._
   // ── Checkout Form ───────────────────────────────────────────────────────────
   return (
     <div className="pt-24 pb-28 sm:pb-12 px-4 sm:px-6 lg:px-8 bg-cream min-h-screen" onFocus={handleFormFocus} onBlur={handleFormBlur}>
-      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6" ref={formRef}>
-        <div className="space-y-5">
-          {/* Mobile-only step progress indicator */}
-          <div className="flex items-center justify-center gap-2 lg:hidden">
-            {(['address', 'details', 'summary'] as const).map((s, i) => (
-              <React.Fragment key={s}>
-                {i > 0 && (
-                  <div className={`h-0.5 w-8 rounded-full transition-colors ${
-                    (['address', 'details', 'summary'].indexOf(checkoutStep) >= i) ? 'bg-[#F04E4E]' : 'bg-[#4A3728]/10'
-                  }`} />
-                )}
-                <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest brand-rounded transition-colors ${
-                  checkoutStep === s
-                    ? 'bg-[#F04E4E] text-white'
-                    : (['address', 'details', 'summary'].indexOf(checkoutStep) > i)
-                    ? 'bg-[#F04E4E]/10 text-[#F04E4E]'
-                    : 'bg-[#4A3728]/5 text-[#4A3728]/30'
-                }`}>
-                  {s === 'address' ? '1. Address' : s === 'details' ? '2. Details' : '3. Payment'}
-                </div>
-              </React.Fragment>
-            ))}
-          </div>
+      {/* Mobile-only step progress indicator — sits outside the reorderable
+          grid below so it always stays at the top regardless of which
+          grid item (form vs summary) is visually first for the current step. */}
+      <div className="max-w-6xl mx-auto flex items-center justify-center gap-2 mb-5 lg:hidden">
+        {(['address', 'details', 'summary'] as const).map((s, i) => (
+          <React.Fragment key={s}>
+            {i > 0 && (
+              <div className={`h-0.5 w-8 rounded-full transition-colors ${
+                (['address', 'details', 'summary'].indexOf(checkoutStep) >= i) ? 'bg-[#F04E4E]' : 'bg-[#4A3728]/10'
+              }`} />
+            )}
+            <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest brand-rounded transition-colors ${
+              checkoutStep === s
+                ? 'bg-[#F04E4E] text-white'
+                : (['address', 'details', 'summary'].indexOf(checkoutStep) > i)
+                ? 'bg-[#F04E4E]/10 text-[#F04E4E]'
+                : 'bg-[#4A3728]/5 text-[#4A3728]/30'
+            }`}>
+              {s === 'address' ? '1. Address' : s === 'details' ? '2. Details' : '3. Payment'}
+            </div>
+          </React.Fragment>
+        ))}
+      </div>
 
+      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6" ref={formRef}>
+        {/* On step 3 (mobile only) the Order Summary card should read first,
+            above Payment Method — order-2 pushes this column (which only
+            has Payment Method visible by then) below the summary card. */}
+        <div className={`space-y-5 ${checkoutStep === 'summary' ? 'order-2' : ''} lg:order-none`}>
           {/* Delivery Details */}
           <div className="bg-white p-5 sm:p-7 rounded-[2rem] shadow-xl border border-[#F04E4E]/5">
             <h2 className="text-xl sm:text-2xl font-bold serif mb-5 flex items-center gap-3 text-[#4A3728]">
@@ -1217,16 +1222,16 @@ _Please confirm my order and share delivery details._
 
           {/* ── STEP 3: Payment & Summary (mobile) — always visible on desktop ── */}
           {/* Payment Method */}
-          <div className={`bg-white p-5 sm:p-7 rounded-[2rem] shadow-xl border border-[#F04E4E]/5 ${checkoutStep === 'summary' ? '' : 'hidden'} lg:block`}>
-            <h2 className="text-lg font-bold serif mb-4 flex items-center gap-3 text-[#4A3728]">
+          <div className={`bg-white p-4 sm:p-7 rounded-[2rem] shadow-xl border border-[#F04E4E]/5 ${checkoutStep === 'summary' ? '' : 'hidden'} lg:block`}>
+            <h2 className="text-base lg:text-lg font-bold serif mb-3 lg:mb-4 flex items-center gap-3 text-[#4A3728]">
               <Wallet className="text-[#F04E4E]" size={22} /> Payment Method
             </h2>
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-2.5 lg:gap-3">
               <button
                 type="button"
                 onClick={() => setPaymentMethod('online')}
                 disabled={isSubmitting}
-                className={`w-full p-4 rounded-2xl border-2 flex items-center gap-3 shadow-sm transition-all text-left disabled:opacity-50 ${paymentMethod === 'online' ? 'border-[#F04E4E] bg-[#F04E4E]/5' : 'border-[#4A3728]/10 hover:border-[#4A3728]/20'}`}
+                className={`w-full p-3 lg:p-4 rounded-2xl border-2 flex items-center gap-3 shadow-sm transition-all text-left disabled:opacity-50 ${paymentMethod === 'online' ? 'border-[#F04E4E] bg-[#F04E4E]/5' : 'border-[#4A3728]/10 hover:border-[#4A3728]/20'}`}
               >
                 <Smartphone size={22} className="text-blue-500 flex-shrink-0" />
                 <span className="text-[10px] font-black uppercase brand-rounded tracking-widest">Secure Online Payment (UPI, Cards, Netbanking)</span>
@@ -1237,7 +1242,7 @@ _Please confirm my order and share delivery details._
                   type="button"
                   onClick={() => setPaymentMethod('cod')}
                   disabled={isSubmitting}
-                  className={`w-full p-4 rounded-2xl border-2 flex items-center gap-3 shadow-sm transition-all text-left disabled:opacity-50 ${paymentMethod === 'cod' ? 'border-[#F04E4E] bg-[#F04E4E]/5' : 'border-[#4A3728]/10 hover:border-[#4A3728]/20'}`}
+                  className={`w-full p-3 lg:p-4 rounded-2xl border-2 flex items-center gap-3 shadow-sm transition-all text-left disabled:opacity-50 ${paymentMethod === 'cod' ? 'border-[#F04E4E] bg-[#F04E4E]/5' : 'border-[#4A3728]/10 hover:border-[#4A3728]/20'}`}
                 >
                   <Banknote size={22} className="text-green-600 flex-shrink-0" />
                   <span className="text-[10px] font-black uppercase brand-rounded tracking-widest flex-1">Cash on Delivery (Ahmedabad Only)</span>
@@ -1263,16 +1268,16 @@ _Please confirm my order and share delivery details._
         </div>
 
         {/* Sticky Summary Card */}
-        <div className={`bg-white p-5 sm:p-7 rounded-[2rem] shadow-xl border border-[#F04E4E]/5 h-fit lg:sticky lg:top-24 ${checkoutStep === 'summary' ? '' : 'hidden'} lg:block`}>
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="text-xl font-bold serif text-[#4A3728]">Order Summary</h2>
+        <div className={`bg-white p-4 sm:p-7 rounded-[2rem] shadow-xl border border-[#F04E4E]/5 h-fit lg:sticky lg:top-24 ${checkoutStep === 'summary' ? 'order-1' : 'hidden'} lg:order-none lg:block`}>
+          <div className="flex items-center justify-between mb-3 lg:mb-5">
+            <h2 className="text-lg lg:text-xl font-bold serif text-[#4A3728]">Order Summary</h2>
             <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full border border-[#4A3728]/10 shadow-sm">
               <Scale size={14} className="text-[#F04E4E]" />
               <span className="text-[10px] font-black uppercase brand-rounded tracking-[0.1em] text-[#F04E4E]">{totalWeight}G TOTAL</span>
             </div>
           </div>
 
-          <div className="space-y-4 mb-5 max-h-[280px] overflow-y-auto no-scrollbar pr-2">
+          <div className="space-y-3 lg:space-y-4 mb-3 lg:mb-5 max-h-[280px] overflow-y-auto no-scrollbar pr-2">
             {items.map((item, idx) => (
               <div key={`${item.id}-${idx}`} className="flex justify-between items-center group">
                 <div className="flex items-center gap-3">
@@ -1340,7 +1345,7 @@ _Please confirm my order and share delivery details._
             </div>
           )}
 
-          <div className="space-y-2 pt-4 border-t border-[#4A3728]/5 mb-5">
+          <div className="space-y-1.5 lg:space-y-2 pt-3 lg:pt-4 border-t border-[#4A3728]/5 mb-3 lg:mb-5">
             <div className="flex justify-between text-sm">
               <span className="text-[#4A3728]/40 brand-rounded uppercase font-black text-[10px] tracking-widest">Subtotal</span>
               <span className="font-bold text-[#4A3728] text-sm">₹{total}</span>
@@ -1372,10 +1377,10 @@ _Please confirm my order and share delivery details._
                 <span className="font-bold text-[#4A3728] text-sm">₹{codFee}</span>
               </div>
             )}
-            <div className="flex justify-between items-center pt-4">
-              <span className="text-lg font-bold serif text-[#4A3728]">Grand Total</span>
+            <div className="flex justify-between items-center pt-3 lg:pt-4">
+              <span className="text-base lg:text-lg font-bold serif text-[#4A3728]">Grand Total</span>
               <div className="flex flex-col items-end">
-                <span className="text-2xl sm:text-3xl font-black text-[#F04E4E]">₹{grandTotal}</span>
+                <span className="text-xl lg:text-3xl font-black text-[#F04E4E]">₹{grandTotal}</span>
                 {mrpTotal > total && (
                   <span className="text-[10px] font-bold text-green-600 brand-rounded">You saved ₹{mrpTotal - total + couponDiscount}!</span>
                 )}
