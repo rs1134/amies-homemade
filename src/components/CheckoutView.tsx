@@ -104,6 +104,16 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   const sessionTokenRef = useRef<any>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Exact delivery pin — set from the geocoded location of whatever address
+  // suggestion was picked, then draggable so the customer can nudge it to
+  // their precise building/gate. Text address stays as selected; this is
+  // purely extra precision for the delivery team, same idea as apps like
+  // Tiruma/Swiggy confirming a map pin after address search.
+  const [pinLocation, setPinLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapInstanceRef = useRef<any>(null);
+  const markerRef = useRef<any>(null);
+
   // iOS Safari doesn't reposition `fixed` elements above the on-screen
   // keyboard — the sticky mobile pay bar ends up floating in the middle of
   // the screen instead of sitting below the keyboard. Hiding it while a text
@@ -229,7 +239,10 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
     setAddressQuery(sug.main);
     try {
       const place = sug.prediction.toPlace();
-      await place.fetchFields({ fields: ['addressComponents', 'formattedAddress', 'displayName'] });
+      await place.fetchFields({ fields: ['addressComponents', 'formattedAddress', 'displayName', 'location'] });
+      if (place.location) {
+        setPinLocation({ lat: place.location.lat(), lng: place.location.lng() });
+      }
       let streetNumber = '', route = '', sublocality = '', city = '', pincode = '', state = '';
       (place.addressComponents || []).forEach((c: any) => {
         const types: string[] = c.types || [];
@@ -257,6 +270,44 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
     // New session token for the next search (billing best practice)
     if (placesLibRef.current) sessionTokenRef.current = new placesLibRef.current.AutocompleteSessionToken();
   };
+
+  // Renders (or re-centers) the pin-confirmation map once a location is
+  // known and its container is mounted. Classic Marker (not Advanced
+  // Marker) deliberately — it doesn't need a Map ID, and the base Maps JS
+  // script is already loaded for Places above.
+  useEffect(() => {
+    if (!pinLocation || !mapContainerRef.current) return;
+    const google = (window as any).google;
+    if (!google?.maps?.importLibrary) return;
+
+    if (mapInstanceRef.current) {
+      mapInstanceRef.current.setCenter(pinLocation);
+      markerRef.current?.setPosition(pinLocation);
+      return;
+    }
+
+    // loading=async only bootstraps the loader — google.maps.Map/Marker
+    // aren't guaranteed to exist until their library is explicitly imported.
+    google.maps.importLibrary('maps').then(({ Map }: any) => {
+      if (!mapContainerRef.current || mapInstanceRef.current) return;
+      mapInstanceRef.current = new Map(mapContainerRef.current, {
+        center: pinLocation,
+        zoom: 17,
+        disableDefaultUI: true,
+        zoomControl: true,
+        gestureHandling: 'greedy',
+      });
+      markerRef.current = new google.maps.Marker({
+        position: pinLocation,
+        map: mapInstanceRef.current,
+        draggable: true,
+      });
+      markerRef.current.addListener('dragend', () => {
+        const pos = markerRef.current.getPosition();
+        if (pos) setPinLocation({ lat: pos.lat(), lng: pos.lng() });
+      });
+    }).catch((e: any) => console.error('Failed to load Maps library:', e));
+  }, [pinLocation]);
 
   // Accept common spellings/variants of Ahmedabad (Gujarati: Amdavad)
   const AHMEDABAD_VARIANTS = ['ahmedabad', 'amdavad', 'amdaavad', 'ahmadabad', 'ahemdabad', 'ahembdabad'];
@@ -418,6 +469,7 @@ _Please confirm my order and share delivery details._
           itemsSummary, totalWeight, subtotal: total,
           shippingFee: shippingFee ?? 0, codFee, grandTotal, paymentId: paymentIdForOrder,
           paymentMethod: isCod ? 'COD' : 'RAZORPAY',
+          mapPin: pinLocation ? `${pinLocation.lat},${pinLocation.lng}` : '',
         }),
         // Survives the page navigating/backgrounding right after this call
         // fires — the same protection already used on the Meta CAPI Purchase
@@ -608,6 +660,7 @@ _Please confirm my order and share delivery details._
           customer_name: formData.name, phone: formData.phone,
           city: formData.city, state: formData.state, address: fullDeliveryAddress, email: formData.email || 'N/A',
           pincode: formData.pincode,
+          map_pin: pinLocation ? `${pinLocation.lat},${pinLocation.lng}` : '',
           items: items.map(i => `${i.quantity}x ${i.name} (${i.selectedWeight || i.weight})`).join(', ').slice(0, 250),
           subtotal: `Rs.${total}`, shipping: `Rs.${shippingFee ?? 0}`,
           grand_total: `Rs.${grandTotal}`, total_weight: `${totalWeight}g`,
@@ -941,19 +994,31 @@ _Please confirm my order and share delivery details._
               <div className="space-y-1.5" id="field-address">
                 <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Building / Society / Street Address</label>
                 {addressConfirmed && formData.address ? (
-                  <div className={`w-full ${fieldPad} bg-[#F9F5EE] rounded-xl border-2 border-[#4A3728]/10 flex items-start justify-between gap-3`}>
-                    <div className="flex items-start gap-2.5 min-w-0">
-                      <CheckCircle size={16} className="text-green-600 mt-0.5 flex-shrink-0" />
-                      <span className="text-sm font-bold text-[#4A3728] leading-snug">{formData.address}</span>
+                  <>
+                    <div className={`w-full ${fieldPad} bg-[#F9F5EE] rounded-xl border-2 border-[#4A3728]/10 flex items-start justify-between gap-3`}>
+                      <div className="flex items-start gap-2.5 min-w-0">
+                        <CheckCircle size={16} className="text-green-600 mt-0.5 flex-shrink-0" />
+                        <span className="text-sm font-bold text-[#4A3728] leading-snug">{formData.address}</span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => { setAddressConfirmed(false); setPinLocation(null); mapInstanceRef.current = null; markerRef.current = null; }}
+                        className="text-[10px] font-black uppercase brand-rounded text-[#F04E4E] tracking-widest flex-shrink-0 hover:underline"
+                      >
+                        Change
+                      </button>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => setAddressConfirmed(false)}
-                      className="text-[10px] font-black uppercase brand-rounded text-[#F04E4E] tracking-widest flex-shrink-0 hover:underline"
-                    >
-                      Change
-                    </button>
-                  </div>
+                    {/* Pin-confirmation map — precise drop location for delivery,
+                        independent of the text address above. Draggable. */}
+                    {pinLocation && (
+                      <div className="rounded-xl overflow-hidden border-2 border-[#4A3728]/10 relative">
+                        <div ref={mapContainerRef} className="w-full h-40" />
+                        <p className="absolute bottom-1.5 left-1.5 right-1.5 text-center text-[9px] font-bold text-white bg-black/50 backdrop-blur-sm rounded-md py-1 px-2 pointer-events-none">
+                          📍 Drag the pin to your exact location
+                        </p>
+                      </div>
+                    )}
+                  </>
                 ) : (
                   <textarea
                     name="address" disabled={isSubmitting} value={formData.address}

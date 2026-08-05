@@ -92,7 +92,7 @@ export default async function handler(req: any, res: any) {
   const {
     orderId, name, phone, city, address, pincode, email, itemsSummary,
     totalWeight, subtotal, shippingFee, codFee, grandTotal, paymentId, couponDiscount,
-    paymentMethod,
+    paymentMethod, mapPin,
   } = req.body;
   // Backward-compatible default — older client builds don't send this field.
   const method = paymentMethod || 'RAZORPAY';
@@ -136,6 +136,7 @@ export default async function handler(req: any, res: any) {
       `City: ${city}`,
       `Address: ${address}`,
       `Pincode: ${pincode || 'N/A'}`,
+      ...(mapPin ? [`Pin: https://maps.google.com/?q=${mapPin}`] : []),
       `Email: ${email || 'N/A'}`,
       ``,
       `Weight: ${totalWeight}g`,

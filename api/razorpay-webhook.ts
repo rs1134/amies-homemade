@@ -265,6 +265,7 @@ export default async function handler(req: any, res: any) {
   const city = notes.city || '';
   const state = notes.state || '';
   const pincode = notes.pincode || '';
+  const mapPin = notes.map_pin || '';
   const address = notes.address || '';
   const itemsSummary = notes.items || '';
   const totalWeight = parseInt(String(notes.total_weight || '0').replace(/[^\d]/g, ''), 10) || 0;
@@ -314,6 +315,7 @@ export default async function handler(req: any, res: any) {
       `City: ${city}`,
       `Address: ${address}`,
       `Pincode: ${pincode || 'N/A'}`,
+      ...(mapPin ? [`Pin: https://maps.google.com/?q=${mapPin}`] : []),
       `Email: ${email || 'N/A'}`,
       ``,
       `Weight: ${totalWeight}g`,
