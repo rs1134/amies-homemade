@@ -181,7 +181,7 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   // Tighter by default on mobile (where each step needs to fit on one
   // screen without scrolling), full spacing restored at lg.
   const fieldPad = keyboardOpen ? 'p-2.5' : 'p-3 lg:p-3.5';
-  const fieldGap = keyboardOpen ? 'space-y-2' : 'space-y-2.5 lg:space-y-4';
+  const fieldGap = keyboardOpen ? 'space-y-2' : 'space-y-2 lg:space-y-4';
 
   useEffect(() => {
     const apiKey = import.meta.env.VITE_GOOGLE_PLACES_API_KEY;
@@ -911,11 +911,11 @@ _Please confirm my order and share delivery details._
 
   // ── Checkout Form ───────────────────────────────────────────────────────────
   return (
-    <div className="pt-24 pb-28 sm:pb-12 px-4 sm:px-6 lg:px-8 bg-cream min-h-screen" onFocus={handleFormFocus} onBlur={handleFormBlur}>
+    <div className="pt-[86px] lg:pt-24 pb-28 sm:pb-12 px-4 sm:px-6 lg:px-8 bg-cream min-h-screen" onFocus={handleFormFocus} onBlur={handleFormBlur}>
       {/* Mobile-only step progress indicator — sits outside the reorderable
           grid below so it always stays at the top regardless of which
           grid item (form vs summary) is visually first for the current step. */}
-      <div className="max-w-6xl mx-auto flex items-center justify-center gap-2 mb-5 lg:hidden">
+      <div className="max-w-6xl mx-auto flex items-center justify-center gap-2 mb-3 lg:hidden">
         {(['address', 'details', 'summary'] as const).map((s, i) => (
           <React.Fragment key={s}>
             {i > 0 && (
@@ -923,7 +923,7 @@ _Please confirm my order and share delivery details._
                 (['address', 'details', 'summary'].indexOf(checkoutStep) >= i) ? 'bg-[#F04E4E]' : 'bg-[#4A3728]/10'
               }`} />
             )}
-            <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest brand-rounded transition-colors ${
+            <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest brand-rounded transition-colors ${
               checkoutStep === s
                 ? 'bg-[#F04E4E] text-white'
                 : (['address', 'details', 'summary'].indexOf(checkoutStep) > i)
