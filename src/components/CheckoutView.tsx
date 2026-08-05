@@ -668,7 +668,13 @@ _Please confirm my order and share delivery details._
                         <p className="text-[10px] text-[#4A3728]/50 brand-rounded uppercase mt-0.5">{item.quantity} x {item.selectedWeight || item.weight}</p>
                       </div>
                     </div>
-                    <p className="text-sm font-bold text-[#4A3728]">₹{item.price * item.quantity}</p>
+                    <div className="flex flex-col items-end">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[10px] text-[#4A3728]/30 line-through">₹{Math.ceil(item.price / 0.9 / 5) * 5 * item.quantity}</span>
+                        <p className="text-sm font-bold text-[#4A3728]">₹{item.price * item.quantity}</p>
+                      </div>
+                      <span className="text-[8px] font-black text-green-600 uppercase tracking-wide">Save ₹{(Math.ceil(item.price / 0.9 / 5) * 5 - item.price) * item.quantity}</span>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -1067,7 +1073,16 @@ _Please confirm my order and share delivery details._
                   </div>
                 </div>
                 <div className="flex items-center gap-2.5">
-                  <span className="font-bold text-[#4A3728] text-sm">₹{item.price * item.quantity}</span>
+                  {/* MRP = price before the site-wide 10% discount, backed out
+                      the same way ProductCard computes it, so line items match
+                      the strikethrough shown on product pages. */}
+                  <div className="flex flex-col items-end">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[10px] text-[#4A3728]/30 line-through">₹{Math.ceil(item.price / 0.9 / 5) * 5 * item.quantity}</span>
+                      <span className="font-bold text-[#4A3728] text-sm">₹{item.price * item.quantity}</span>
+                    </div>
+                    <span className="text-[8px] font-black text-green-600 uppercase tracking-wide">Save ₹{(Math.ceil(item.price / 0.9 / 5) * 5 - item.price) * item.quantity}</span>
+                  </div>
                   {/* Mobile: always-visible remove button (no hover on touch) */}
                   <button onClick={() => onRemove(idx)} aria-label={`Remove ${item.name}`} className="sm:hidden p-2.5 -m-1 min-w-[36px] min-h-[36px] flex items-center justify-center text-[#4A3728]/30 hover:text-red-500 transition-colors">
                     <Trash2 size={15} />
