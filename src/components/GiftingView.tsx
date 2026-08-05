@@ -274,7 +274,7 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
       <section className="relative h-[35vh] sm:h-[55vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-[#2A1E14]/45 z-10"></div>
         <img 
-          src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?q=80&w=2000&auto=format&fit=crop" 
+          src="https://ik.imagekit.io/amieshomemade/067A4292.JPG?updatedAt=1782443782402"
           className="absolute inset-0 w-full h-full object-cover animate-slow-zoom"
           alt="Gifting Hampers"
         />
