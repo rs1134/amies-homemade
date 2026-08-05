@@ -178,8 +178,10 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   // hit-testing) while the on-screen keyboard is up — smaller field padding
   // and tighter spacing between fields means more of the form stays visible
   // above the keyboard instead of being pushed below the fold.
-  const fieldPad = keyboardOpen ? 'p-2.5' : 'p-3.5';
-  const fieldGap = keyboardOpen ? 'space-y-2' : 'space-y-4';
+  // Tighter by default on mobile (where each step needs to fit on one
+  // screen without scrolling), full spacing restored at lg.
+  const fieldPad = keyboardOpen ? 'p-2.5' : 'p-3 lg:p-3.5';
+  const fieldGap = keyboardOpen ? 'space-y-2' : 'space-y-2.5 lg:space-y-4';
 
   useEffect(() => {
     const apiKey = import.meta.env.VITE_GOOGLE_PLACES_API_KEY;
@@ -939,10 +941,12 @@ _Please confirm my order and share delivery details._
             above Payment Method — order-2 pushes this column (which only
             has Payment Method visible by then) below the summary card. */}
         <div className={`space-y-5 ${checkoutStep === 'summary' ? 'order-2' : ''} lg:order-none`}>
-          {/* Delivery Details */}
-          <div className="bg-white p-5 sm:p-7 rounded-[2rem] shadow-xl border border-[#F04E4E]/5">
-            <h2 className="text-xl sm:text-2xl font-bold serif mb-5 flex items-center gap-3 text-[#4A3728]">
-              <Truck className="text-[#F04E4E]" size={24} /> Delivery Details
+          {/* Delivery Details — every field inside is step-gated, so on the
+              payment step this card would otherwise render as an empty
+              heading-only shell, pushing Payment Method below the fold. */}
+          <div className={`bg-white p-4 sm:p-7 rounded-[2rem] shadow-xl border border-[#F04E4E]/5 ${checkoutStep === 'summary' ? 'hidden' : ''} lg:block`}>
+            <h2 className="text-lg lg:text-2xl font-bold serif mb-3 lg:mb-5 flex items-center gap-2.5 text-[#4A3728]">
+              <Truck className="text-[#F04E4E]" size={22} /> Delivery Details
             </h2>
             <div className={fieldGap}>
 
@@ -1068,11 +1072,13 @@ _Please confirm my order and share delivery details._
                   real address field is already right there in view. */}
               {formData.address && (
                 <div className={`${checkoutStep === 'details' ? '' : 'hidden'} lg:hidden`}>
-                  <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest block mb-1.5">Building / Society / Street Address</label>
-                  <div className={`w-full ${fieldPad} bg-[#F9F5EE] rounded-xl border-2 border-[#4A3728]/10 flex items-start justify-between gap-3`}>
-                    <div className="flex items-start gap-2.5 min-w-0">
-                      <CheckCircle size={16} className="text-green-600 mt-0.5 flex-shrink-0" />
-                      <span className="text-sm font-bold text-[#4A3728] leading-snug">{formData.address}</span>
+                  {/* Single truncated line — the full address was already
+                      shown and confirmed on step 1, so this only needs to
+                      be a recognisable reminder, not the whole thing. */}
+                  <div className={`w-full ${fieldPad} bg-[#F9F5EE] rounded-xl border-2 border-[#4A3728]/10 flex items-center justify-between gap-3`}>
+                    <div className="flex items-center gap-2 min-w-0">
+                      <CheckCircle size={15} className="text-green-600 flex-shrink-0" />
+                      <span className="text-[13px] font-bold text-[#4A3728] truncate">{formData.address}</span>
                     </div>
                     <button
                       type="button"
