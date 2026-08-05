@@ -103,6 +103,7 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   const placesLibRef = useRef<any>(null);
   const sessionTokenRef = useRef<any>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const addressInputRef = useRef<HTMLInputElement>(null);
 
   // Exact delivery pin — set from the geocoded location of whatever address
   // suggestion was picked. Shown as a fixed confirmation pin (not draggable)
@@ -243,6 +244,12 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
     setShowSuggestions(false);
     setSuggestions([]);
     setAddressQuery(sug.main);
+    // Selecting a suggestion uses onMouseDown+preventDefault (so the tap
+    // registers before the input's own blur closes the dropdown first) —
+    // but that same preventDefault also stops the browser's default blur,
+    // so the on-screen keyboard was staying open after a pick. Blur it
+    // explicitly instead.
+    addressInputRef.current?.blur();
     try {
       const place = sug.prediction.toPlace();
       await place.fetchFields({ fields: ['addressComponents', 'formattedAddress', 'displayName', 'location'] });
@@ -873,6 +880,7 @@ _Please confirm my order and share delivery details._
                 <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Search Your Address</label>
                 <div className="relative">
                   <input
+                    ref={addressInputRef}
                     type="text"
                     value={addressQuery}
                     onChange={(e) => {
