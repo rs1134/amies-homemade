@@ -24,6 +24,11 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, o
 
   const couponDiscount = couponApplied ? Math.round(subtotal * 0.1) : 0;
   const orderTotal = subtotal - couponDiscount;
+  // MRP = price before the site-wide 10% discount, backed out the same way
+  // ProductCard/CheckoutView compute it, so the savings shown here match
+  // what's shown everywhere else.
+  const mrpSubtotal = items.reduce((sum, item) => sum + (Math.ceil(item.price / 0.9 / 5) * 5) * item.quantity, 0);
+  const totalSavings = mrpSubtotal - orderTotal;
 
   const handleApplyCoupon = () => {
     const code = couponInput.trim();
@@ -212,7 +217,17 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, o
               </div>
               <div className="pt-2.5 sm:pt-4 border-t border-[#4A3728]/5 flex justify-between items-center">
                 <span className="text-base sm:text-xl font-bold serif">Order Value</span>
-                <span className="text-2xl sm:text-4xl font-black text-[#4A3728]">₹{orderTotal}</span>
+                <div className="flex flex-col items-end">
+                  <div className="flex items-baseline gap-2">
+                    {totalSavings > 0 && (
+                      <span className="text-sm sm:text-base text-[#4A3728]/30 line-through">₹{mrpSubtotal}</span>
+                    )}
+                    <span className="text-2xl sm:text-4xl font-black text-[#4A3728]">₹{orderTotal}</span>
+                  </div>
+                  {totalSavings > 0 && (
+                    <span className="text-[10px] sm:text-xs font-bold text-green-600 brand-rounded">You saved ₹{totalSavings}!</span>
+                  )}
+                </div>
               </div>
             </div>
 
