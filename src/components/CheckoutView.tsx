@@ -125,8 +125,14 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
     const tag = (el as HTMLElement)?.tagName;
     return tag === 'INPUT' || tag === 'TEXTAREA';
   };
+  // This whole compact-layout-for-keyboard behavior only makes sense on
+  // touch devices with an actual on-screen keyboard to make room for —
+  // on desktop (mouse/trackpad, no keyboard overlay) it was firing on
+  // every click into any field, shrinking and re-expanding the whole form
+  // for no reason and making the page visibly jiggle.
+  const isTouchDevice = () => typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
   const handleFormFocus = (e: React.FocusEvent) => {
-    if (!isTextEntryElement(e.target)) return;
+    if (!isTextEntryElement(e.target) || !isTouchDevice()) return;
     if (keyboardCloseTimer.current) clearTimeout(keyboardCloseTimer.current);
     setKeyboardOpen(true);
     // Give the on-screen keyboard's slide-up animation time to finish before
@@ -138,7 +144,7 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
     setTimeout(() => target.scrollIntoView({ block: 'center', behavior: 'smooth' }), 300);
   };
   const handleFormBlur = (e: React.FocusEvent) => {
-    if (!isTextEntryElement(e.target)) return;
+    if (!isTextEntryElement(e.target) || !isTouchDevice()) return;
     keyboardCloseTimer.current = setTimeout(() => setKeyboardOpen(false), 100);
   };
 
