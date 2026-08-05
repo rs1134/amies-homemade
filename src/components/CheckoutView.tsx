@@ -105,10 +105,10 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Exact delivery pin — set from the geocoded location of whatever address
-  // suggestion was picked, then draggable so the customer can nudge it to
-  // their precise building/gate. Text address stays as selected; this is
-  // purely extra precision for the delivery team, same idea as apps like
-  // Tiruma/Swiggy confirming a map pin after address search.
+  // suggestion was picked. Shown as a fixed confirmation pin (not draggable)
+  // so it reads as "this is where you'll be delivered", not something
+  // uncertain the customer needs to fix themselves. Threaded through to the
+  // delivery team as extra precision alongside the text address.
   const [pinLocation, setPinLocation] = useState<{ lat: number; lng: number } | null>(null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
@@ -306,11 +306,6 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
       markerRef.current = new google.maps.Marker({
         position: pinLocation,
         map: mapInstanceRef.current,
-        draggable: true,
-      });
-      markerRef.current.addListener('dragend', () => {
-        const pos = markerRef.current.getPosition();
-        if (pos) setPinLocation({ lat: pos.lat(), lng: pos.lng() });
       });
     }).catch((e: any) => console.error('Failed to load Maps library:', e));
   }, [pinLocation]);
@@ -1014,14 +1009,14 @@ _Please confirm my order and share delivery details._
                         Change
                       </button>
                     </div>
-                    {/* Pin-confirmation map — precise drop location for delivery,
-                        independent of the text address above. Draggable. */}
+                    {/* Pin-confirmation map — shows the precise geocoded drop
+                        location for delivery, independent of the text address
+                        above. Fixed pin, no drag affordance shown — reads as
+                        a confirmation, not something uncertain the customer
+                        has to fix. Still pannable/zoomable to look around. */}
                     {pinLocation && (
-                      <div className="rounded-xl overflow-hidden border-2 border-[#4A3728]/10 relative">
+                      <div className="rounded-xl overflow-hidden border-2 border-[#4A3728]/10">
                         <div ref={mapContainerRef} className="w-full h-40" />
-                        <p className="absolute bottom-1.5 left-1.5 right-1.5 text-center text-[9px] font-bold text-white bg-black/50 backdrop-blur-sm rounded-md py-1 px-2 pointer-events-none">
-                          📍 Drag the pin to your exact location
-                        </p>
                       </div>
                     )}
                   </>
