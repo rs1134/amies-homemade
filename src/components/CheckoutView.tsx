@@ -1049,6 +1049,29 @@ _Please confirm my order and share delivery details._
               <div className="border-t border-[#4A3728]/5 hidden lg:block" />
 
               {/* ── STEP 2: Details (mobile) — always visible on desktop ── */}
+              {/* Mobile-only recap of the address confirmed in step 1 —
+                  otherwise it's invisible for the rest of checkout once you
+                  move past that step. Desktop doesn't need this since the
+                  real address field is already right there in view. */}
+              {formData.address && (
+                <div className={`${checkoutStep === 'details' ? '' : 'hidden'} lg:hidden`}>
+                  <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest block mb-1.5">Building / Society / Street Address</label>
+                  <div className={`w-full ${fieldPad} bg-[#F9F5EE] rounded-xl border-2 border-[#4A3728]/10 flex items-start justify-between gap-3`}>
+                    <div className="flex items-start gap-2.5 min-w-0">
+                      <CheckCircle size={16} className="text-green-600 mt-0.5 flex-shrink-0" />
+                      <span className="text-sm font-bold text-[#4A3728] leading-snug">{formData.address}</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setCheckoutStep('address')}
+                      className="text-[10px] font-black uppercase brand-rounded text-[#F04E4E] tracking-widest flex-shrink-0 hover:underline"
+                    >
+                      Change
+                    </button>
+                  </div>
+                </div>
+              )}
+
               {/* Full Name */}
               <div className={`space-y-1.5 ${checkoutStep === 'details' ? '' : 'hidden'} lg:block`} id="field-name">
                 <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Full Name</label>
