@@ -365,6 +365,9 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   const codFee = paymentMethod === 'cod' ? 50 : 0;
 
   const grandTotal = total - couponDiscount + (shippingFee || 0) + codFee;
+  // MRP = price before the site-wide 10% discount, backed out the same way
+  // ProductCard/Cart compute it, so the "You saved" figure here matches.
+  const mrpTotal = items.reduce((sum, item) => sum + (Math.ceil(item.price / 0.9 / 5) * 5) * item.quantity, 0);
 
   // `paymentId` is the Razorpay payment id for online orders, or a synthetic
   // `COD-<orderId>` marker for cash-on-delivery orders (the orders table
@@ -673,7 +676,7 @@ _Please confirm my order and share delivery details._
                         <span className="text-[10px] text-[#4A3728]/30 line-through">₹{Math.ceil(item.price / 0.9 / 5) * 5 * item.quantity}</span>
                         <p className="text-sm font-bold text-[#4A3728]">₹{item.price * item.quantity}</p>
                       </div>
-                      <span className="text-[8px] font-black text-green-600 uppercase tracking-wide">Save ₹{(Math.ceil(item.price / 0.9 / 5) * 5 - item.price) * item.quantity}</span>
+                      <span className="text-[8px] font-black text-green-600 uppercase tracking-wide">Saved ₹{(Math.ceil(item.price / 0.9 / 5) * 5 - item.price) * item.quantity}</span>
                     </div>
                   </div>
                 ))}
@@ -1081,7 +1084,7 @@ _Please confirm my order and share delivery details._
                       <span className="text-[10px] text-[#4A3728]/30 line-through">₹{Math.ceil(item.price / 0.9 / 5) * 5 * item.quantity}</span>
                       <span className="font-bold text-[#4A3728] text-sm">₹{item.price * item.quantity}</span>
                     </div>
-                    <span className="text-[8px] font-black text-green-600 uppercase tracking-wide">Save ₹{(Math.ceil(item.price / 0.9 / 5) * 5 - item.price) * item.quantity}</span>
+                    <span className="text-[8px] font-black text-green-600 uppercase tracking-wide">Saved ₹{(Math.ceil(item.price / 0.9 / 5) * 5 - item.price) * item.quantity}</span>
                   </div>
                   {/* Mobile: always-visible remove button (no hover on touch) */}
                   <button onClick={() => onRemove(idx)} aria-label={`Remove ${item.name}`} className="sm:hidden p-2.5 -m-1 min-w-[36px] min-h-[36px] flex items-center justify-center text-[#4A3728]/30 hover:text-red-500 transition-colors">
@@ -1153,7 +1156,12 @@ _Please confirm my order and share delivery details._
             )}
             <div className="flex justify-between items-center pt-4">
               <span className="text-lg font-bold serif text-[#4A3728]">Grand Total</span>
-              <span className="text-2xl sm:text-3xl font-black text-[#F04E4E]">₹{grandTotal}</span>
+              <div className="flex flex-col items-end">
+                <span className="text-2xl sm:text-3xl font-black text-[#F04E4E]">₹{grandTotal}</span>
+                {mrpTotal > total && (
+                  <span className="text-[10px] font-bold text-green-600 brand-rounded">You saved ₹{mrpTotal - total + couponDiscount}!</span>
+                )}
+              </div>
             </div>
           </div>
 
