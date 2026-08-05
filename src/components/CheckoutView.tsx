@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Truck, Wallet, ChevronRight, Smartphone, Loader2, MessageCircle, CheckCircle, MapPin, Calendar, Building2, Minus, Plus, Trash2, Scale, Search, Banknote } from 'lucide-react';
+import { Truck, Wallet, ChevronRight, ChevronLeft, Smartphone, Loader2, MessageCircle, CheckCircle, MapPin, Calendar, Building2, Minus, Plus, Trash2, Scale, Search, Banknote } from 'lucide-react';
 import { CartItem } from '../types.ts';
 import { WHATSAPP_NUMBER } from '../constants.ts';
 import { trackMetaEvent } from '../metaTracking.ts';
@@ -100,6 +100,13 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   // Collapses the address field to a compact confirmed summary right after
   // autocomplete fills it in, instead of showing the same address twice.
   const [addressConfirmed, setAddressConfirmed] = useState(false);
+  // Mobile-only step wizard (Address -> Details -> Payment & Summary) so the
+  // whole form isn't one long scroll on a small screen. Desktop keeps the
+  // existing single-page layout unchanged — every step's content is always
+  // visible there via `lg:block` overriding the mobile step-gated `hidden`,
+  // so this never removes anything from the desktop DOM/behavior.
+  type CheckoutStep = 'address' | 'details' | 'summary';
+  const [checkoutStep, setCheckoutStep] = useState<CheckoutStep>('address');
   const placesLibRef = useRef<any>(null);
   const sessionTokenRef = useRef<any>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -364,6 +371,43 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
       default:
         return "";
     }
+  };
+
+  // Validates just the fields relevant to the mobile step being left,
+  // blocking advance (and scrolling to the first error) if any fail.
+  // handleProceed still re-validates everything at final submit regardless
+  // — this is purely a step-local UX gate, not the source of truth.
+  const validateStepFields = (fields: FieldName[]): boolean => {
+    const newErrors: Partial<Record<FieldName, string>> = {};
+    let firstErrorField: FieldName | null = null;
+    fields.forEach(name => {
+      const error = validateField(name, formData[name as keyof typeof formData]);
+      if (error) { newErrors[name] = error; if (!firstErrorField) firstErrorField = name; }
+    });
+    setFieldErrors(prev => ({ ...prev, ...newErrors }));
+    setTouched(prev => ({ ...prev, ...fields.reduce((acc, name) => ({ ...acc, [name]: true }), {}) }));
+    if (firstErrorField) {
+      document.getElementById(`field-${firstErrorField}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return false;
+    }
+    return true;
+  };
+
+  const goToDetailsStep = () => {
+    if (!validateStepFields(['address'])) return;
+    setCheckoutStep('details');
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+  };
+
+  const goToSummaryStep = () => {
+    if (!validateStepFields(['name', 'phone', 'city', 'state', 'flat', 'pincode'])) return;
+    setCheckoutStep('summary');
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+  };
+
+  const goToPreviousStep = () => {
+    setCheckoutStep(prev => prev === 'summary' ? 'details' : 'address');
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -868,6 +912,28 @@ _Please confirm my order and share delivery details._
     <div className="pt-24 pb-28 sm:pb-12 px-4 sm:px-6 lg:px-8 bg-cream min-h-screen" onFocus={handleFormFocus} onBlur={handleFormBlur}>
       <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6" ref={formRef}>
         <div className="space-y-5">
+          {/* Mobile-only step progress indicator */}
+          <div className="flex items-center justify-center gap-2 lg:hidden">
+            {(['address', 'details', 'summary'] as const).map((s, i) => (
+              <React.Fragment key={s}>
+                {i > 0 && (
+                  <div className={`h-0.5 w-8 rounded-full transition-colors ${
+                    (['address', 'details', 'summary'].indexOf(checkoutStep) >= i) ? 'bg-[#F04E4E]' : 'bg-[#4A3728]/10'
+                  }`} />
+                )}
+                <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest brand-rounded transition-colors ${
+                  checkoutStep === s
+                    ? 'bg-[#F04E4E] text-white'
+                    : (['address', 'details', 'summary'].indexOf(checkoutStep) > i)
+                    ? 'bg-[#F04E4E]/10 text-[#F04E4E]'
+                    : 'bg-[#4A3728]/5 text-[#4A3728]/30'
+                }`}>
+                  {s === 'address' ? '1. Address' : s === 'details' ? '2. Details' : '3. Payment'}
+                </div>
+              </React.Fragment>
+            ))}
+          </div>
+
           {/* Delivery Details */}
           <div className="bg-white p-5 sm:p-7 rounded-[2rem] shadow-xl border border-[#F04E4E]/5">
             <h2 className="text-xl sm:text-2xl font-bold serif mb-5 flex items-center gap-3 text-[#4A3728]">
@@ -875,8 +941,8 @@ _Please confirm my order and share delivery details._
             </h2>
             <div className={fieldGap}>
 
-              {/* Address Search Autocomplete */}
-              <div className="space-y-1.5">
+              {/* ── STEP 1: Address (mobile) — always visible on desktop ── */}
+              <div className={`space-y-1.5 ${checkoutStep === 'address' ? '' : 'hidden'} lg:block`}>
                 <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Search Your Address</label>
                 <div className="relative">
                   <input
@@ -922,85 +988,14 @@ _Please confirm my order and share delivery details._
                 <p className="text-[9px] text-[#4A3728]/40 ml-3 brand-rounded font-bold">Pick a suggestion to auto-fill your address &amp; city</p>
               </div>
 
-              <div className="border-t border-[#4A3728]/5" />
-
-              {/* Full Name */}
-              <div className="space-y-1.5" id="field-name">
-                <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Full Name</label>
-                <input
-                  name="name" disabled={isSubmitting} value={formData.name}
-                  onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="next" type="text" autoComplete="name" placeholder="e.g. Ami Shah"
-                  className={`w-full ${fieldPad} bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.name && fieldErrors.name ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
-                />
-                {touched.name && fieldErrors.name && (
-                  <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.name}</p>
-                )}
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {/* Phone */}
-                <div className="space-y-1.5" id="field-phone">
-                  <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Phone Number</label>
-                  <input
-                    name="phone" disabled={isSubmitting} value={formData.phone}
-                    onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="next" type="tel" inputMode="tel" autoComplete="tel" placeholder="e.g. 90540 38876"
-                    className={`w-full ${fieldPad} bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.phone && fieldErrors.phone ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
-                  />
-                  {touched.phone && fieldErrors.phone && (
-                    <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.phone}</p>
-                  )}
-                </div>
-                {/* City */}
-                <div className="space-y-1.5" id="field-city">
-                  <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">City</label>
-                  <div className="relative">
-                    <input
-                      name="city" disabled={isSubmitting} value={formData.city}
-                      onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="next" type="text" autoComplete="address-level2" placeholder="Ahmedabad"
-                      className={`w-full ${fieldPad} pl-11 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.city && fieldErrors.city ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
-                    />
-                    <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 text-[#4A3728]/20" size={16} />
-                  </div>
-                  {touched.city && fieldErrors.city && (
-                    <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.city}</p>
-                  )}
-                </div>
-              </div>
-
-              {/* State — auto-fills from the address search above when available,
-                  otherwise typed in directly like City. */}
-              <div className="space-y-1.5" id="field-state">
-                <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">State</label>
-                <input
-                  name="state" disabled={isSubmitting} value={formData.state}
-                  onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="next" type="text" autoComplete="address-level1" placeholder="Gujarat"
-                  className={`w-full ${fieldPad} bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.state && fieldErrors.state ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
-                />
-                {touched.state && fieldErrors.state && (
-                  <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.state}</p>
-                )}
-              </div>
-
-              {/* Email */}
-              <div className="space-y-1.5" id="field-email">
-                <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Email Address (Optional)</label>
-                <input
-                  name="email" disabled={isSubmitting} value={formData.email}
-                  onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="next" type="email" autoComplete="email" placeholder="yourname@gmail.com"
-                  className={`w-full ${fieldPad} bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.email && fieldErrors.email ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
-                />
-                <p className="text-[9px] text-[#4A3728]/40 ml-3 brand-rounded font-bold">We'll send your order confirmation here</p>
-                {touched.email && fieldErrors.email && (
-                  <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.email}</p>
-                )}
-              </div>
-
               {/* Address — collapses to a confirmed summary right after autocomplete
                   fills it in, instead of showing the same address twice (once in
                   the search suggestion, once in a big editable textarea). Anyone
                   who types their address manually (no autocomplete used) still
-                  sees the plain editable field, unchanged. */}
-              <div className="space-y-1.5" id="field-address">
+                  sees the plain editable field, unchanged. Sits right under the
+                  search box (both mobile step 1 and desktop) since they're the
+                  same logical task. */}
+              <div className={`space-y-1.5 ${checkoutStep === 'address' ? '' : 'hidden'} lg:block`} id="field-address">
                 <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Building / Society / Street Address</label>
                 {addressConfirmed && formData.address ? (
                   <>
@@ -1042,8 +1037,91 @@ _Please confirm my order and share delivery details._
                 )}
               </div>
 
+              {/* Mobile-only: advance to the Details step */}
+              <button
+                type="button"
+                onClick={goToDetailsStep}
+                className={`w-full py-4 bg-[#F04E4E] text-white rounded-2xl font-bold brand-rounded uppercase tracking-[0.2em] text-[11px] flex items-center justify-center gap-2 active:scale-[0.98] transition-all lg:hidden ${checkoutStep === 'address' ? '' : 'hidden'}`}
+              >
+                Continue <ChevronRight size={18} />
+              </button>
+
+              <div className="border-t border-[#4A3728]/5 hidden lg:block" />
+
+              {/* ── STEP 2: Details (mobile) — always visible on desktop ── */}
+              {/* Full Name */}
+              <div className={`space-y-1.5 ${checkoutStep === 'details' ? '' : 'hidden'} lg:block`} id="field-name">
+                <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Full Name</label>
+                <input
+                  name="name" disabled={isSubmitting} value={formData.name}
+                  onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="next" type="text" autoComplete="name" placeholder="e.g. Ami Shah"
+                  className={`w-full ${fieldPad} bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.name && fieldErrors.name ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                />
+                {touched.name && fieldErrors.name && (
+                  <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.name}</p>
+                )}
+              </div>
+
+              <div className={`grid grid-cols-1 sm:grid-cols-2 gap-3 ${checkoutStep === 'details' ? '' : 'hidden'} lg:grid`}>
+                {/* Phone */}
+                <div className="space-y-1.5" id="field-phone">
+                  <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Phone Number</label>
+                  <input
+                    name="phone" disabled={isSubmitting} value={formData.phone}
+                    onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="next" type="tel" inputMode="tel" autoComplete="tel" placeholder="e.g. 90540 38876"
+                    className={`w-full ${fieldPad} bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.phone && fieldErrors.phone ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                  />
+                  {touched.phone && fieldErrors.phone && (
+                    <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.phone}</p>
+                  )}
+                </div>
+                {/* City */}
+                <div className="space-y-1.5" id="field-city">
+                  <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">City</label>
+                  <div className="relative">
+                    <input
+                      name="city" disabled={isSubmitting} value={formData.city}
+                      onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="next" type="text" autoComplete="address-level2" placeholder="Ahmedabad"
+                      className={`w-full ${fieldPad} pl-11 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.city && fieldErrors.city ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                    />
+                    <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 text-[#4A3728]/20" size={16} />
+                  </div>
+                  {touched.city && fieldErrors.city && (
+                    <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.city}</p>
+                  )}
+                </div>
+              </div>
+
+              {/* State — auto-fills from the address search above when available,
+                  otherwise typed in directly like City. */}
+              <div className={`space-y-1.5 ${checkoutStep === 'details' ? '' : 'hidden'} lg:block`} id="field-state">
+                <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">State</label>
+                <input
+                  name="state" disabled={isSubmitting} value={formData.state}
+                  onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="next" type="text" autoComplete="address-level1" placeholder="Gujarat"
+                  className={`w-full ${fieldPad} bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.state && fieldErrors.state ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                />
+                {touched.state && fieldErrors.state && (
+                  <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.state}</p>
+                )}
+              </div>
+
+              {/* Email */}
+              <div className={`space-y-1.5 ${checkoutStep === 'details' ? '' : 'hidden'} lg:block`} id="field-email">
+                <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Email Address (Optional)</label>
+                <input
+                  name="email" disabled={isSubmitting} value={formData.email}
+                  onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="next" type="email" autoComplete="email" placeholder="yourname@gmail.com"
+                  className={`w-full ${fieldPad} bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.email && fieldErrors.email ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                />
+                <p className="text-[9px] text-[#4A3728]/40 ml-3 brand-rounded font-bold">We'll send your order confirmation here</p>
+                {touched.email && fieldErrors.email && (
+                  <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.email}</p>
+                )}
+              </div>
+
               {/* Flat / House No */}
-              <div className="space-y-1.5" id="field-flat">
+              <div className={`space-y-1.5 ${checkoutStep === 'details' ? '' : 'hidden'} lg:block`} id="field-flat">
                 <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Flat / House / Office No. <span className="text-[#F04E4E]">*</span></label>
                 <input
                   name="flat" disabled={isSubmitting} value={formData.flat}
@@ -1057,7 +1135,7 @@ _Please confirm my order and share delivery details._
               </div>
 
               {/* Pincode — required */}
-              <div className="space-y-1.5" id="field-pincode">
+              <div className={`space-y-1.5 ${checkoutStep === 'details' ? '' : 'hidden'} lg:block`} id="field-pincode">
                 <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Pincode <span className="text-[#F04E4E]">*</span></label>
                 <input
                   name="pincode" disabled={isSubmitting} value={formData.pincode}
@@ -1069,11 +1147,39 @@ _Please confirm my order and share delivery details._
                   <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.pincode}</p>
                 )}
               </div>
+
+              {/* Mobile-only: back to Address, or advance to Payment & Summary */}
+              <div className={`flex gap-3 lg:hidden ${checkoutStep === 'details' ? '' : 'hidden'}`}>
+                <button
+                  type="button"
+                  onClick={goToPreviousStep}
+                  className="px-6 py-4 bg-[#4A3728]/5 text-[#4A3728] rounded-2xl font-bold brand-rounded uppercase tracking-[0.2em] text-[11px] flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
+                >
+                  <ChevronLeft size={18} />
+                </button>
+                <button
+                  type="button"
+                  onClick={goToSummaryStep}
+                  className="flex-1 py-4 bg-[#F04E4E] text-white rounded-2xl font-bold brand-rounded uppercase tracking-[0.2em] text-[11px] flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
+                >
+                  Continue to Payment <ChevronRight size={18} />
+                </button>
+              </div>
             </div>
           </div>
 
+          {/* Mobile-only: back to Details, shown above Payment Method at step 3 */}
+          <button
+            type="button"
+            onClick={goToPreviousStep}
+            className={`px-6 py-3 bg-[#4A3728]/5 text-[#4A3728] rounded-2xl font-bold brand-rounded uppercase tracking-[0.2em] text-[11px] flex items-center gap-2 active:scale-[0.98] transition-all w-fit lg:hidden ${checkoutStep === 'summary' ? '' : 'hidden'}`}
+          >
+            <ChevronLeft size={16} /> Back to Details
+          </button>
+
+          {/* ── STEP 3: Payment & Summary (mobile) — always visible on desktop ── */}
           {/* Payment Method */}
-          <div className="bg-white p-5 sm:p-7 rounded-[2rem] shadow-xl border border-[#F04E4E]/5">
+          <div className={`bg-white p-5 sm:p-7 rounded-[2rem] shadow-xl border border-[#F04E4E]/5 ${checkoutStep === 'summary' ? '' : 'hidden'} lg:block`}>
             <h2 className="text-lg font-bold serif mb-4 flex items-center gap-3 text-[#4A3728]">
               <Wallet className="text-[#F04E4E]" size={22} /> Payment Method
             </h2>
@@ -1119,7 +1225,7 @@ _Please confirm my order and share delivery details._
         </div>
 
         {/* Sticky Summary Card */}
-        <div className="bg-white p-5 sm:p-7 rounded-[2rem] shadow-xl border border-[#F04E4E]/5 h-fit lg:sticky lg:top-24">
+        <div className={`bg-white p-5 sm:p-7 rounded-[2rem] shadow-xl border border-[#F04E4E]/5 h-fit lg:sticky lg:top-24 ${checkoutStep === 'summary' ? '' : 'hidden'} lg:block`}>
           <div className="flex items-center justify-between mb-5">
             <h2 className="text-xl font-bold serif text-[#4A3728]">Order Summary</h2>
             <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full border border-[#4A3728]/10 shadow-sm">
@@ -1269,7 +1375,7 @@ _Please confirm my order and share delivery details._
           ancestor's. The footer was painting completely over this bar.
           Escaping to <body> (same trick already used for the floating
           WhatsApp button) sidesteps the whole problem. */}
-      {!keyboardOpen && createPortal(
+      {!keyboardOpen && checkoutStep === 'summary' && createPortal(
         <div className="sm:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-[#4A3728]/10 shadow-[0_-8px_30px_rgba(0,0,0,0.08)] px-4 py-3 flex items-center justify-between gap-3" style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}>
           <div className="min-w-0">
             <p className="text-[9px] font-black uppercase brand-rounded text-[#4A3728]/40 tracking-widest">Grand Total</p>
