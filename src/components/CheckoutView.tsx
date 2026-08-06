@@ -7,6 +7,41 @@ import { trackMetaEvent } from '../metaTracking.ts';
 
 const COUPON_STORAGE_KEY = 'thanks10_used_phones';
 
+// Persists in-progress checkout details across reloads/tab-restarts — mobile
+// browsers routinely discard and reload a backgrounded tab under memory
+// pressure, which was silently wiping everything a customer had typed.
+// Expires after a day so a stale draft doesn't linger on a shared device.
+const DRAFT_STORAGE_KEY = 'amie_checkout_draft_v1';
+const DRAFT_MAX_AGE_MS = 24 * 60 * 60 * 1000;
+
+interface CheckoutDraft {
+  formData: { name: string; phone: string; email: string; city: string; state: string; address: string; flat: string; pincode: string };
+  addressQuery: string;
+  addressConfirmed: boolean;
+  checkoutStep: 'address' | 'details' | 'summary';
+  pinLocation: { lat: number; lng: number } | null;
+  savedAt: number;
+}
+
+const loadCheckoutDraft = (): CheckoutDraft | null => {
+  try {
+    const raw = localStorage.getItem(DRAFT_STORAGE_KEY);
+    if (!raw) return null;
+    const draft: CheckoutDraft = JSON.parse(raw);
+    if (!draft.savedAt || Date.now() - draft.savedAt > DRAFT_MAX_AGE_MS) {
+      localStorage.removeItem(DRAFT_STORAGE_KEY);
+      return null;
+    }
+    return draft;
+  } catch {
+    return null;
+  }
+};
+
+const clearCheckoutDraft = () => {
+  try { localStorage.removeItem(DRAFT_STORAGE_KEY); } catch { /* non-fatal */ }
+};
+
 interface CheckoutViewProps {
   items: CartItem[];
   onComplete: () => void;
@@ -47,7 +82,11 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   // quantities at checkout can never desync it from the items shown.
   const couponDiscount = couponApplied ? Math.round(total * 0.1) : 0;
 
-  const [formData, setFormData] = useState({
+  // Loaded once and reused for every field below, rather than re-reading
+  // localStorage per-field, so they all hydrate from the exact same draft.
+  const initialDraft = useRef(loadCheckoutDraft()).current;
+
+  const [formData, setFormData] = useState(initialDraft?.formData || {
     name: '',
     phone: '',
     email: '',
@@ -94,19 +133,19 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   // ── Address autocomplete (new Places API — the legacy Autocomplete widget is
   //    not available to API keys created after March 2025, so we fetch
   //    suggestions ourselves and render a custom branded dropdown) ────────────
-  const [addressQuery, setAddressQuery] = useState('');
+  const [addressQuery, setAddressQuery] = useState(initialDraft?.addressQuery || '');
   const [suggestions, setSuggestions] = useState<Array<{ id: string; main: string; secondary: string; prediction: any }>>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   // Collapses the address field to a compact confirmed summary right after
   // autocomplete fills it in, instead of showing the same address twice.
-  const [addressConfirmed, setAddressConfirmed] = useState(false);
+  const [addressConfirmed, setAddressConfirmed] = useState(initialDraft?.addressConfirmed || false);
   // Mobile-only step wizard (Address -> Details -> Payment & Summary) so the
   // whole form isn't one long scroll on a small screen. Desktop keeps the
   // existing single-page layout unchanged — every step's content is always
   // visible there via `lg:block` overriding the mobile step-gated `hidden`,
   // so this never removes anything from the desktop DOM/behavior.
   type CheckoutStep = 'address' | 'details' | 'summary';
-  const [checkoutStep, setCheckoutStep] = useState<CheckoutStep>('address');
+  const [checkoutStep, setCheckoutStep] = useState<CheckoutStep>(initialDraft?.checkoutStep || 'address');
   const placesLibRef = useRef<any>(null);
   const sessionTokenRef = useRef<any>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -117,10 +156,21 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   // so it reads as "this is where you'll be delivered", not something
   // uncertain the customer needs to fix themselves. Threaded through to the
   // delivery team as extra precision alongside the text address.
-  const [pinLocation, setPinLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [pinLocation, setPinLocation] = useState<{ lat: number; lng: number } | null>(initialDraft?.pinLocation || null);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
   const markerRef = useRef<any>(null);
+
+  // Save the in-progress draft on every change so a reload/tab-restart
+  // restores it (see loadCheckoutDraft above). Cleared on successful order
+  // placement further down.
+  useEffect(() => {
+    try {
+      localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify({
+        formData, addressQuery, addressConfirmed, checkoutStep, pinLocation, savedAt: Date.now(),
+      }));
+    } catch { /* storage full or blocked — non-fatal, just won't persist */ }
+  }, [formData, addressQuery, addressConfirmed, checkoutStep, pinLocation]);
 
   // iOS Safari doesn't reposition `fixed` elements above the on-screen
   // keyboard — the sticky mobile pay bar ends up floating in the middle of
@@ -557,6 +607,7 @@ _Please confirm my order and share delivery details._
     });
     setPaymentId(paymentIdForOrder);
     setIsSuccess(true);
+    clearCheckoutDraft();
     onOrderPlaced?.(); // clears the live cart + coupon so paid items can't linger
     window.history.pushState(null, '', '/order-confirmed');
     window.scrollTo({ top: 0, behavior: 'smooth' });
