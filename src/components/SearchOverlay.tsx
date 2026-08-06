@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Search, X, ArrowRight, Tag } from 'lucide-react';
 import { Product, Category } from '../types.ts';
-import { PRODUCTS, isProductVisible } from '../constants.ts';
+import { PRODUCTS, isProductVisible, categoryLabel } from '../constants.ts';
 
 interface SearchOverlayProps {
   isOpen: boolean;
@@ -255,7 +255,7 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose, onSelect
                       </div>
                       <div className="flex items-center gap-2 mt-1">
                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${CATEGORY_COLORS[product.category] || 'bg-gray-100 text-gray-600'}`}>
-                          {product.category}
+                          {categoryLabel(product.category)}
                         </span>
                         <p className="text-[#4A3728]/50 text-xs truncate">{product.weight}</p>
                       </div>

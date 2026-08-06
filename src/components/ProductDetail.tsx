@@ -2,7 +2,7 @@
 import React, { useState, useMemo } from 'react';
 import { Heart, ShieldCheck, Clock, Truck, ImageOff, ChevronLeft, ChevronRight, ChevronDown, Minus, Plus, ChevronRight as Crumb } from 'lucide-react';
 import { Product } from '../types.ts';
-import { FSSAI_LICENSE } from '../constants.ts';
+import { FSSAI_LICENSE, categoryLabel } from '../constants.ts';
 import { trackMetaEvent } from '../metaTracking.ts';
 import ProductCard from './ProductCard.tsx';
 
@@ -118,7 +118,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
         <nav className="flex items-center gap-1.5 text-xs sm:text-sm text-[#4A3728]/50 brand-rounded mb-6 sm:mb-8">
           <button onClick={() => onNavigateHome?.()} className="hover:text-coral transition-colors">Home</button>
           <Crumb size={14} className="opacity-50" />
-          <button onClick={onClose} className="hover:text-coral transition-colors">{product.category}</button>
+          <button onClick={onClose} className="hover:text-coral transition-colors">{categoryLabel(product.category)}</button>
           <Crumb size={14} className="opacity-50" />
           <span className="text-[#4A3728] font-semibold truncate">{product.name}</span>
         </nav>
@@ -208,7 +208,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
 
           {/* ── Right: product info ── */}
           <div className="min-w-0">
-            <span className="text-coral font-bold brand-rounded text-xs uppercase tracking-widest">{product.category}</span>
+            <span className="text-coral font-bold brand-rounded text-xs uppercase tracking-widest">{categoryLabel(product.category)}</span>
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#4A3728] serif mt-1 mb-4">{product.name}</h1>
 
             {/* Price block (JoySpoon style) */}
@@ -366,7 +366,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
               <Accordion title="Additional Information">
                 <ul className="space-y-1.5">
                   <li><span className="font-semibold text-[#4A3728]">Available sizes:</span> {(product.weights || [product.weight]).join(', ')}</li>
-                  <li><span className="font-semibold text-[#4A3728]">Category:</span> {product.category}</li>
+                  <li><span className="font-semibold text-[#4A3728]">Category:</span> {categoryLabel(product.category)}</li>
                   <li><span className="font-semibold text-[#4A3728]">Best before:</span> {product.shelfLife || '6 months'} from the date of packaging.</li>
                   <li>Handcrafted in small batches in Ahmedabad.</li>
                   <li>No artificial colours, flavours, or preservatives.</li>

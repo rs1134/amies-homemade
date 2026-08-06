@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { Category, Product, CartItem } from './types.ts';
-import { PRODUCTS, WHATSAPP_NUMBER, isProductVisible, isCategoryVisible } from './constants.ts';
+import { PRODUCTS, WHATSAPP_NUMBER, isProductVisible, isCategoryVisible, CATEGORY_DISPLAY_LABEL } from './constants.ts';
 import { AREA_MAP } from './deliveryAreas.ts';
 import { CITY_MAP } from './cities.ts';
 import { trackMetaEvent } from './metaTracking.ts';
@@ -152,12 +152,6 @@ const SLUG_TO_CATEGORY: Record<string, Category | 'All'> = {
   'snacks':            Category.SNACKS,
   'traditional-sweets': Category.SWEETS,
   'hampers':           Category.GIFTING,
-};
-// Display override for the Shop category tab only — the underlying
-// Category value stays 'Gifting & Hampers' everywhere else (routing,
-// SEO, schema), this just changes what shoppers see on the pill/dropdown.
-const CATEGORY_DISPLAY_LABEL: Partial<Record<Category, string>> = {
-  [Category.GIFTING]: 'Rakhi Hampers',
 };
 const getCategoryFromPath = (path: string): Category | 'All' => {
   const m = path.match(/^\/shop\/([^/]+)$/);

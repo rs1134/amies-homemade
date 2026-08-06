@@ -21,6 +21,14 @@ export const isProductVisible = (p: Product): boolean =>
 export const isCategoryVisible = (c: Category): boolean =>
   !HIDDEN_CATEGORIES.includes(c);
 
+// Display override for shopper-facing category text — the underlying
+// Category value stays 'Gifting & Hampers' everywhere else (routing, SEO,
+// schema), this just changes what's actually shown on screen.
+export const CATEGORY_DISPLAY_LABEL: Partial<Record<Category, string>> = {
+  [Category.GIFTING]: 'Rakhi Hampers',
+};
+export const categoryLabel = (c: Category): string => CATEGORY_DISPLAY_LABEL[c] ?? c;
+
 export const PRODUCTS: Product[] = [
   // --- GIFTING ---
   {
