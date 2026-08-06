@@ -1429,7 +1429,7 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen pt-10">
       {/* Top scrolling announcement banner — Cinnamon Kitchen style (serif + pipes), Amie's coral */}
-      <div className="fixed top-0 left-0 right-0 z-[60] w-full overflow-hidden" style={{ height: '40px', background: '#F04E4E' }}>
+      <div className="fixed top-0 left-0 right-0 z-[60] w-full overflow-hidden" style={{ height: '40px', background: '#F04E4E', transform: 'translateZ(0)', WebkitTransform: 'translateZ(0)', willChange: 'transform' }}>
         <div className="h-full flex items-center">
           <div className="flex animate-marquee-left whitespace-nowrap">
             {[0, 1].map(i => (
@@ -1478,7 +1478,7 @@ const App: React.FC = () => {
         href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}`}
         target="_blank"
         rel="noopener noreferrer"
-        className={`fixed bottom-5 right-4 sm:bottom-6 sm:right-6 z-50 bg-[#25D366] text-white p-3.5 sm:p-5 sm:px-8 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center gap-3 group brand-rounded font-bold ${currentPage === 'checkout' ? 'hidden sm:flex' : ''}`}
+        className={`fixed bottom-5 right-4 sm:bottom-6 sm:right-6 z-50 bg-[#25D366] text-white p-3.5 sm:p-5 sm:px-8 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center gap-3 group brand-rounded font-bold will-change-transform ${currentPage === 'checkout' ? 'hidden sm:flex' : ''}`}
       >
         <MessageCircle size={22} className="sm:hidden" />
         <MessageCircle size={24} className="hidden sm:block" />

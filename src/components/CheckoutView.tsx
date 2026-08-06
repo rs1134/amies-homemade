@@ -1479,7 +1479,14 @@ _Please confirm my order and share delivery details._
           Escaping to <body> (same trick already used for the floating
           WhatsApp button) sidesteps the whole problem. */}
       {!keyboardOpen && checkoutStep === 'summary' && createPortal(
-        <div className="sm:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-[#4A3728]/10 shadow-[0_-8px_30px_rgba(0,0,0,0.08)] px-4 py-3 flex items-center justify-between gap-3" style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))' }}>
+        <div
+          className="sm:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-[#4A3728]/10 shadow-[0_-8px_30px_rgba(0,0,0,0.08)] px-4 py-3 flex items-center justify-between gap-3"
+          // iOS Safari repaints `position: fixed` elements against a stale
+          // viewport size while its address bar collapses/expands mid-scroll,
+          // which reads as the bar jittering up and down. Forcing it onto its
+          // own GPU compositing layer stops Safari from doing that repaint.
+          style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))', transform: 'translateZ(0)', WebkitTransform: 'translateZ(0)', willChange: 'transform' }}
+        >
           <div className="min-w-0">
             <p className="text-[9px] font-black uppercase brand-rounded text-[#4A3728]/40 tracking-widest">Grand Total</p>
             <p className="text-xl font-black text-[#F04E4E] truncate">₹{grandTotal}</p>
