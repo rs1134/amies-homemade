@@ -1284,7 +1284,9 @@ _Please confirm my order and share delivery details._
             </div>
           </div>
 
-          <div className="space-y-3 lg:space-y-4 mb-3 lg:mb-5 max-h-[280px] overflow-y-auto no-scrollbar pr-2">
+          {/* Capped shorter on mobile so a large cart scrolls inside this
+              list instead of pushing Payment Method below the fold. */}
+          <div className="space-y-2.5 lg:space-y-4 mb-2.5 lg:mb-5 max-h-[148px] lg:max-h-[280px] overflow-y-auto no-scrollbar pr-2">
             {items.map((item, idx) => (
               <div key={`${item.id}-${idx}`} className="flex justify-between items-center group">
                 <div className="flex items-center gap-3">
