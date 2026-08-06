@@ -12,14 +12,19 @@
 }
 
 @layer base {
+  /* `overflow-x: hidden` is deliberately NOT set on html/body — doing so
+     triggers a WebKit bug where iOS Safari computes `position: fixed`
+     descendants relative to that overflowing element instead of the true
+     visual viewport, making anything fixed (the sticky mobile pay bar,
+     nav, banner) visibly jitter/drift during scroll. Horizontal-scroll
+     protection lives on #root instead, which covers the entire app without
+     making html/body itself a scroll container. */
   html {
-    overflow-x: hidden;
     max-width: 100vw;
   }
 
   body {
     @apply bg-cream text-[#4A3728] font-inter;
-    overflow-x: hidden;
     max-width: 100vw;
     /* Restrict touch gestures to vertical scroll only — prevents left/right page swipe on mobile */
     touch-action: pan-y;
