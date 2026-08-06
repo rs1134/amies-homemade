@@ -1217,15 +1217,6 @@ _Please confirm my order and share delivery details._
             </div>
           </div>
 
-          {/* Mobile-only: back to Details, shown above Payment Method at step 3 */}
-          <button
-            type="button"
-            onClick={goToPreviousStep}
-            className={`px-6 py-3 bg-[#4A3728]/5 text-[#4A3728] rounded-2xl font-bold brand-rounded uppercase tracking-[0.2em] text-[11px] flex items-center gap-2 active:scale-[0.98] transition-all w-fit lg:hidden ${checkoutStep === 'summary' ? '' : 'hidden'}`}
-          >
-            <ChevronLeft size={16} /> Back to Details
-          </button>
-
           {/* ── STEP 3: Payment & Summary (mobile) — always visible on desktop ── */}
           {/* Payment Method */}
           <div className={`bg-white p-4 sm:p-7 rounded-[2rem] shadow-xl border border-[#F04E4E]/5 ${checkoutStep === 'summary' ? '' : 'hidden'} lg:block`}>
@@ -1271,6 +1262,16 @@ _Please confirm my order and share delivery details._
               )}
             </div>
           </div>
+
+          {/* Mobile-only: back to Details — placed after Payment Method so it
+              doesn't push the payment options below the fold. */}
+          <button
+            type="button"
+            onClick={goToPreviousStep}
+            className={`px-5 py-2.5 bg-[#4A3728]/5 text-[#4A3728] rounded-2xl font-bold brand-rounded uppercase tracking-[0.2em] text-[10px] flex items-center gap-2 active:scale-[0.98] transition-all w-fit lg:hidden ${checkoutStep === 'summary' ? '' : 'hidden'}`}
+          >
+            <ChevronLeft size={15} /> Back to Details
+          </button>
         </div>
 
         {/* Sticky Summary Card */}
@@ -1287,7 +1288,7 @@ _Please confirm my order and share delivery details._
             {items.map((item, idx) => (
               <div key={`${item.id}-${idx}`} className="flex justify-between items-center group">
                 <div className="flex items-center gap-3">
-                  <div className="w-14 h-14 rounded-xl overflow-hidden bg-cream shadow-sm flex-shrink-0 border border-[#4A3728]/5 relative">
+                  <div className="w-11 h-11 lg:w-14 lg:h-14 rounded-xl overflow-hidden bg-cream shadow-sm flex-shrink-0 border border-[#4A3728]/5 relative">
                     <img src={item.image} className="w-full h-full object-cover" />
                     {/* Desktop: hover-reveal overlay on the thumbnail */}
                     <button onClick={() => onRemove(idx)} aria-label={`Remove ${item.name}`} className="hidden sm:flex absolute inset-0 bg-red-600/80 text-white items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
