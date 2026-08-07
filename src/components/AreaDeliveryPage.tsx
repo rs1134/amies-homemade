@@ -2,7 +2,8 @@ import React from 'react';
 import { PRODUCTS, WHATSAPP_NUMBER } from '../constants.ts';
 import { DELIVERY_AREAS, DeliveryArea } from '../deliveryAreas.ts';
 import { Category } from '../types.ts';
-import { MapPin, ShieldCheck, Heart, Package, MessageCircle, ArrowRight, CheckCircle, Truck } from 'lucide-react';
+import { MapPin, MessageCircle, ArrowRight, CheckCircle } from 'lucide-react';
+import { JarHeart, Sprout, Crate, Compass } from './HandIcons.tsx';
 
 interface Props {
   area: DeliveryArea | null;
@@ -20,10 +21,10 @@ const STEPS = [
 ];
 
 const USPS = [
-  { title: '100% Homemade',     desc: 'Made personally by Ami Shah — no factory, no shortcuts.',           color: 'bg-[#FFF1F1]', textColor: 'text-[#F04E4E]', icon: <Heart size={20} /> },
-  { title: 'No Preservatives',  desc: 'Pure ingredients, zero artificial additives.',                     color: 'bg-[#FFF8E7]', textColor: 'text-[#D97706]', icon: <ShieldCheck size={20} /> },
-  { title: 'Small Batches',     desc: 'Made fresh in limited quantities for maximum quality.',             color: 'bg-[#F0FFF4]', textColor: 'text-[#059669]', icon: <Package size={20} /> },
-  { title: 'Pan-India Delivery',desc: 'We ship to every corner of India, not just Ahmedabad.',            color: 'bg-[#F0F4FF]', textColor: 'text-[#4F46E5]', icon: <Truck size={20} /> },
+  { title: '100% Homemade',     desc: 'Made personally by Ami Shah — no factory, no shortcuts.',           color: 'bg-[#FFF1F1]', textColor: 'text-[#F04E4E]', Icon: JarHeart },
+  { title: 'No Preservatives',  desc: 'Pure ingredients, zero artificial additives.',                     color: 'bg-[#FFF8E7]', textColor: 'text-[#D97706]', Icon: Sprout },
+  { title: 'Small Batches',     desc: 'Made fresh in limited quantities for maximum quality.',             color: 'bg-[#F0FFF4]', textColor: 'text-[#059669]', Icon: Crate },
+  { title: 'Pan-India Delivery',desc: 'We ship to every corner of India, not just Ahmedabad.',            color: 'bg-[#F0F4FF]', textColor: 'text-[#4F46E5]', Icon: Compass },
 ];
 
 /* ─── Hub Page ────────────────────────────────────────────────────────────── */
@@ -178,8 +179,8 @@ const AreaPage: React.FC<{ area: DeliveryArea; onShopClick: () => void; onNaviga
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {USPS.map((u, i) => (
               <div key={i} className={`${u.color} p-6 sm:p-10 rounded-[2.5rem] text-center hover:shadow-xl hover:-translate-y-1 transition-all`}>
-                <div className={`w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center ${u.textColor} mb-4 mx-auto`}>
-                  {u.icon}
+                <div className="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center mb-4 mx-auto">
+                  <u.Icon className="w-6 h-6" />
                 </div>
                 <h3 className={`font-bold brand-rounded text-xs uppercase tracking-widest ${u.textColor} mb-3`}>{u.title}</h3>
                 <p className="text-[#4A3728]/70 text-sm leading-relaxed">{u.desc}</p>

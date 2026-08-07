@@ -21,7 +21,8 @@ import BlogView from './components/BlogView.tsx';
 import BlogPostView from './components/BlogPostView.tsx';
 import FAQView from './components/FAQView.tsx';
 import { getPostBySlug } from './blogs.ts';
-import { Sparkles, ArrowRight, MessageCircle, CheckCircle, Users, Mail, Building2 } from 'lucide-react';
+import { Sparkles, ArrowRight, MessageCircle, CheckCircle, Users, Mail } from 'lucide-react';
+import { ChatBubble, Crate } from './components/HandIcons.tsx';
 
 const PAGE_SEO: Record<string, { title: string; description: string; canonical: string; ogTitle: string; ogDescription: string }> = {
   home: {
@@ -1165,8 +1166,8 @@ const App: React.FC = () => {
           <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-12">
             {/* General Inquiry Card */}
             <div className="bg-white p-7 sm:p-14 rounded-[2rem] sm:rounded-[3.5rem] shadow-2xl border border-coral/5 flex flex-col items-center group hover:-translate-y-2 transition-all duration-500">
-              <div className="w-20 h-20 bg-coral/5 rounded-[2rem] flex items-center justify-center text-coral mb-8 group-hover:scale-110 group-hover:bg-coral group-hover:text-white transition-all duration-500">
-                <MessageCircle size={36} />
+              <div className="w-20 h-20 bg-coral/5 rounded-[2rem] flex items-center justify-center mb-8 group-hover:scale-110 transition-all duration-500">
+                <ChatBubble className="w-10 h-10" />
               </div>
               <h3 className="text-3xl font-bold serif mb-4 text-[#4A3728]">General Inquiry</h3>
               <p className="text-[#4A3728]/60 mb-10 font-medium leading-relaxed max-w-xs">
@@ -1191,8 +1192,8 @@ const App: React.FC = () => {
             <div className="bg-white p-7 sm:p-14 rounded-[2rem] sm:rounded-[3.5rem] shadow-2xl border border-[#F6C94C]/20 flex flex-col items-center group hover:-translate-y-2 transition-all duration-500 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#F6C94C]/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
               
-              <div className="w-20 h-20 bg-[#F6C94C]/10 rounded-[2rem] flex items-center justify-center text-[#D97706] mb-8 group-hover:scale-110 group-hover:bg-[#F6C94C] group-hover:text-[#4A3728] transition-all duration-500">
-                <Building2 size={36} />
+              <div className="w-20 h-20 bg-[#F6C94C]/10 rounded-[2rem] flex items-center justify-center mb-8 group-hover:scale-110 transition-all duration-500">
+                <Crate className="w-10 h-10" />
               </div>
               <h3 className="text-3xl font-bold serif mb-4 text-[#4A3728]">Bulk & Wholesale</h3>
               <p className="text-[#4A3728]/60 mb-10 font-medium leading-relaxed max-w-xs">

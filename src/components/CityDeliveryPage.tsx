@@ -2,7 +2,8 @@ import React from 'react';
 import { PRODUCTS, WHATSAPP_NUMBER } from '../constants.ts';
 import { CITIES, City } from '../cities.ts';
 import { Category } from '../types.ts';
-import { MapPin, ShieldCheck, Heart, Package, MessageCircle, ArrowRight, CheckCircle, Truck, Globe } from 'lucide-react';
+import { MapPin, MessageCircle, ArrowRight, CheckCircle } from 'lucide-react';
+import { JarHeart, Sprout, Crate, Compass, HandTruck, CheckBadge } from './HandIcons.tsx';
 
 interface Props {
   city: City | null;
@@ -20,10 +21,10 @@ const STEPS = [
 ];
 
 const USPS = [
-  { title: '100% Homemade',      desc: 'Made personally by Ami Shah — no factory, no shortcuts.',                      color: 'bg-[#FFF1F1]', textColor: 'text-[#F04E4E]', icon: <Heart size={20} /> },
-  { title: 'No Preservatives',   desc: 'Pure ingredients, zero artificial additives — safe for the whole family.',      color: 'bg-[#FFF8E7]', textColor: 'text-[#D97706]', icon: <ShieldCheck size={20} /> },
-  { title: 'Small Batches',      desc: 'Made fresh in limited quantities for maximum quality and freshness.',           color: 'bg-[#F0FFF4]', textColor: 'text-[#059669]', icon: <Package size={20} /> },
-  { title: 'Pan-India Shipping', desc: 'We ship to every corner of India via trusted couriers — securely packed.',     color: 'bg-[#F0F4FF]', textColor: 'text-[#4F46E5]', icon: <Globe size={20} /> },
+  { title: '100% Homemade',      desc: 'Made personally by Ami Shah — no factory, no shortcuts.',                      color: 'bg-[#FFF1F1]', textColor: 'text-[#F04E4E]', Icon: JarHeart },
+  { title: 'No Preservatives',   desc: 'Pure ingredients, zero artificial additives — safe for the whole family.',      color: 'bg-[#FFF8E7]', textColor: 'text-[#D97706]', Icon: Sprout },
+  { title: 'Small Batches',      desc: 'Made fresh in limited quantities for maximum quality and freshness.',           color: 'bg-[#F0FFF4]', textColor: 'text-[#059669]', Icon: Crate },
+  { title: 'Pan-India Shipping', desc: 'We ship to every corner of India via trusted couriers — securely packed.',     color: 'bg-[#F0F4FF]', textColor: 'text-[#4F46E5]', Icon: Compass },
 ];
 
 /* ─── Hub Page ────────────────────────────────────────────────────────────── */
@@ -65,7 +66,7 @@ const HubPage: React.FC<{ onNavigateToCity: (s: string) => void; onShopClick: ()
       </div>
 
       <div className="bg-white rounded-[3rem] p-10 sm:p-16 text-center border border-coral/10 mb-10">
-        <Truck size={36} className="text-coral mx-auto mb-6" />
+        <HandTruck className="w-14 h-9 mx-auto mb-6" />
         <h2 className="text-2xl sm:text-3xl font-bold serif text-[#4A3728] mb-4">Don't see your city?</h2>
         <p className="text-[#4A3728]/60 mb-8 max-w-lg mx-auto">
           We ship to every pin code in India. WhatsApp us with your location and we'll arrange delivery right to your door.
@@ -148,12 +149,12 @@ const CityPage: React.FC<{ city: City; onShopClick: () => void; onNavigateToCity
       <section className="py-8 px-4 bg-white border-b border-coral/5">
         <div className="max-w-3xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-12 text-center">
           {[
-            { icon: <Truck size={20} />, label: 'Pan-India Shipping', sub: 'Delivered to ' + city.name },
-            { icon: <Package size={20} />, label: 'Secure Packaging', sub: 'Travel-safe & fresh' },
-            { icon: <CheckCircle size={20} />, label: '2–5 Business Days', sub: 'Estimated delivery time' },
+            { Icon: HandTruck, label: 'Pan-India Shipping', sub: 'Delivered to ' + city.name },
+            { Icon: Crate, label: 'Secure Packaging', sub: 'Travel-safe & fresh' },
+            { Icon: CheckBadge, label: '2–5 Business Days', sub: 'Estimated delivery time' },
           ].map((item, i) => (
             <div key={i} className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-coral/10 text-coral flex items-center justify-center shrink-0">{item.icon}</div>
+              <div className="w-10 h-10 rounded-2xl bg-coral/10 flex items-center justify-center shrink-0"><item.Icon className="w-5 h-5" /></div>
               <div className="text-left">
                 <p className="font-bold brand-rounded text-xs uppercase tracking-widest text-[#4A3728]">{item.label}</p>
                 <p className="text-xs text-[#4A3728]/50">{item.sub}</p>
@@ -214,8 +215,8 @@ const CityPage: React.FC<{ city: City; onShopClick: () => void; onNavigateToCity
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {USPS.map((u, i) => (
               <div key={i} className={`${u.color} p-6 sm:p-10 rounded-[2.5rem] text-center hover:shadow-xl hover:-translate-y-1 transition-all`}>
-                <div className={`w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center ${u.textColor} mb-4 mx-auto`}>
-                  {u.icon}
+                <div className="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center mb-4 mx-auto">
+                  <u.Icon className="w-6 h-6" />
                 </div>
                 <h3 className={`font-bold brand-rounded text-xs uppercase tracking-widest ${u.textColor} mb-3`}>{u.title}</h3>
                 <p className="text-[#4A3728]/70 text-sm leading-relaxed">{u.desc}</p>

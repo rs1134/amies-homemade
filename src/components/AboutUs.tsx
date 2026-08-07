@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
+import { JarHeart, Sprout, GrainStalk, Droplet } from './HandIcons.tsx';
 
 interface AboutUsProps {
   onNavigate?: (page: string) => void;
@@ -32,42 +33,6 @@ const Petal: React.FC<IconProps> = ({ className, style }) => (
   <svg viewBox="0 0 50 46" className={className} style={style} aria-hidden>
     <path d="M25 44C7 37 5 15 23 5 24 4 26 4 27 5 45 15 43 37 25 44Z" fill="#DDA0A8" stroke="#C57E88" strokeWidth="1.2" />
     <path d="M25 41C25 28 25 14 25 7" fill="none" stroke="#C57E88" strokeWidth="1" opacity="0.45" />
-  </svg>
-);
-
-// ── Hand-drawn value icons (same bespoke SVG language as the ingredient
-//    illustrations above, instead of generic stock icons) ──
-const JarHeart: React.FC<IconProps> = ({ className, style }) => (
-  <svg viewBox="0 0 44 44" className={className} style={style} aria-hidden>
-    <path d="M14 16h16l-2 22a3 3 0 0 1-3 3H19a3 3 0 0 1-3-3L14 16Z" fill="#F3D9B1" stroke="#C79B68" strokeWidth="1.4" />
-    <path d="M12 16h20" stroke="#C79B68" strokeWidth="1.4" strokeLinecap="round" />
-    <path d="M18 16v-3a4 4 0 0 1 8 0v3" fill="none" stroke="#C79B68" strokeWidth="1.4" />
-    <path d="M22 23c-3.2 2.6-3.2 6 0 8 3.2-2 3.2-5.4 0-8Z" fill="#F04E4E" opacity="0.85" />
-  </svg>
-);
-const Sprout: React.FC<IconProps> = ({ className, style }) => (
-  <svg viewBox="0 0 40 44" className={className} style={style} aria-hidden>
-    <path d="M20 40V22" stroke="#85974C" strokeWidth="1.6" strokeLinecap="round" />
-    <path d="M20 24C10 24 6 16 8 8 16 8 22 14 20 24Z" fill="#AEBE74" stroke="#85974C" strokeWidth="1.2" />
-    <path d="M20 20C28 18 32 10 30 4 22 6 17 12 20 20Z" fill="#C3D28C" stroke="#85974C" strokeWidth="1.2" />
-  </svg>
-);
-const GrainStalk: React.FC<IconProps> = ({ className, style }) => (
-  <svg viewBox="0 0 34 44" className={className} style={style} aria-hidden>
-    <path d="M17 42V6" stroke="#C79B68" strokeWidth="1.4" strokeLinecap="round" />
-    <g fill="#E7C9A1" stroke="#C79B68" strokeWidth="1">
-      <ellipse cx="12" cy="10" rx="4" ry="6" transform="rotate(-25 12 10)" />
-      <ellipse cx="22" cy="10" rx="4" ry="6" transform="rotate(25 22 10)" />
-      <ellipse cx="10" cy="20" rx="4" ry="6" transform="rotate(-25 10 20)" />
-      <ellipse cx="24" cy="20" rx="4" ry="6" transform="rotate(25 24 20)" />
-      <ellipse cx="17" cy="4" rx="3.4" ry="5" />
-    </g>
-  </svg>
-);
-const Droplet: React.FC<IconProps> = ({ className, style }) => (
-  <svg viewBox="0 0 34 44" className={className} style={style} aria-hidden>
-    <path d="M17 4C25 16 30 24 30 30a13 13 0 0 1-26 0C4 24 9 16 17 4Z" fill="#CDE3EE" stroke="#6FA6C4" strokeWidth="1.4" />
-    <path d="M12 27c-1 4 1 7 4 8" fill="none" stroke="#6FA6C4" strokeWidth="1.2" strokeLinecap="round" opacity="0.6" />
   </svg>
 );
 
