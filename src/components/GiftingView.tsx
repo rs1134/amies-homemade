@@ -296,7 +296,11 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
           </p>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6 lg:gap-10 mb-10 sm:mb-32">
+        {/* Only 2 hampers exist right now — capped at 2 columns (instead of
+            reusing the shop grid's 3/4-column breakpoints) so each card
+            actually gets wider on desktop instead of sitting narrow with a
+            large empty gap where a 3rd/4th card would've gone. */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-10 max-w-4xl mx-auto mb-10 sm:mb-32">
           {giftItems.map(item => (
             <ProductCard
               key={item.id}
