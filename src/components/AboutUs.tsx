@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, Sparkles, Utensils, ShieldCheck, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 interface AboutUsProps {
   onNavigate?: (page: string) => void;
@@ -35,6 +35,42 @@ const Petal: React.FC<IconProps> = ({ className, style }) => (
   </svg>
 );
 
+// ── Hand-drawn value icons (same bespoke SVG language as the ingredient
+//    illustrations above, instead of generic stock icons) ──
+const JarHeart: React.FC<IconProps> = ({ className, style }) => (
+  <svg viewBox="0 0 44 44" className={className} style={style} aria-hidden>
+    <path d="M14 16h16l-2 22a3 3 0 0 1-3 3H19a3 3 0 0 1-3-3L14 16Z" fill="#F3D9B1" stroke="#C79B68" strokeWidth="1.4" />
+    <path d="M12 16h20" stroke="#C79B68" strokeWidth="1.4" strokeLinecap="round" />
+    <path d="M18 16v-3a4 4 0 0 1 8 0v3" fill="none" stroke="#C79B68" strokeWidth="1.4" />
+    <path d="M22 23c-3.2 2.6-3.2 6 0 8 3.2-2 3.2-5.4 0-8Z" fill="#F04E4E" opacity="0.85" />
+  </svg>
+);
+const Sprout: React.FC<IconProps> = ({ className, style }) => (
+  <svg viewBox="0 0 40 44" className={className} style={style} aria-hidden>
+    <path d="M20 40V22" stroke="#85974C" strokeWidth="1.6" strokeLinecap="round" />
+    <path d="M20 24C10 24 6 16 8 8 16 8 22 14 20 24Z" fill="#AEBE74" stroke="#85974C" strokeWidth="1.2" />
+    <path d="M20 20C28 18 32 10 30 4 22 6 17 12 20 20Z" fill="#C3D28C" stroke="#85974C" strokeWidth="1.2" />
+  </svg>
+);
+const GrainStalk: React.FC<IconProps> = ({ className, style }) => (
+  <svg viewBox="0 0 34 44" className={className} style={style} aria-hidden>
+    <path d="M17 42V6" stroke="#C79B68" strokeWidth="1.4" strokeLinecap="round" />
+    <g fill="#E7C9A1" stroke="#C79B68" strokeWidth="1">
+      <ellipse cx="12" cy="10" rx="4" ry="6" transform="rotate(-25 12 10)" />
+      <ellipse cx="22" cy="10" rx="4" ry="6" transform="rotate(25 22 10)" />
+      <ellipse cx="10" cy="20" rx="4" ry="6" transform="rotate(-25 10 20)" />
+      <ellipse cx="24" cy="20" rx="4" ry="6" transform="rotate(25 24 20)" />
+      <ellipse cx="17" cy="4" rx="3.4" ry="5" />
+    </g>
+  </svg>
+);
+const Droplet: React.FC<IconProps> = ({ className, style }) => (
+  <svg viewBox="0 0 34 44" className={className} style={style} aria-hidden>
+    <path d="M17 4C25 16 30 24 30 30a13 13 0 0 1-26 0C4 24 9 16 17 4Z" fill="#CDE3EE" stroke="#6FA6C4" strokeWidth="1.4" />
+    <path d="M12 27c-1 4 1 7 4 8" fill="none" stroke="#6FA6C4" strokeWidth="1.2" strokeLinecap="round" opacity="0.6" />
+  </svg>
+);
+
 // Small ornamental divider
 const Ornament: React.FC<{ tone?: string }> = ({ tone = '#C79B68' }) => (
   <div className="flex items-center justify-center gap-3 my-2" aria-hidden>
@@ -52,10 +88,10 @@ const JOURNEY = [
 ];
 
 const VALUES = [
-  { icon: <ShieldCheck size={22} />, title: '100% Homemade', desc: 'No factories. Just our kitchen.' },
-  { icon: <Sparkles size={22} />, title: 'No Preservatives', desc: 'Always fresh, always natural.' },
-  { icon: <Utensils size={22} />, title: 'Premium Ingredients', desc: 'Only the finest make the jar.' },
-  { icon: <Heart size={22} />, title: 'Hygienically Prepared', desc: 'Your health, our first priority.' },
+  { Icon: JarHeart, bg: '#F3D9B1', title: '100% Homemade', desc: 'No factories. Just our kitchen.' },
+  { Icon: Sprout, bg: '#DCE6C4', title: 'No Preservatives', desc: 'Always fresh, always natural.' },
+  { Icon: GrainStalk, bg: '#EEDDBE', title: 'Premium Ingredients', desc: 'Only the finest make the jar.' },
+  { Icon: Droplet, bg: '#D6E7F0', title: 'Hygienically Prepared', desc: 'Your health, our first priority.' },
 ];
 
 const AboutUs: React.FC<AboutUsProps> = ({ onNavigate }) => {
@@ -200,10 +236,21 @@ const AboutUs: React.FC<AboutUsProps> = ({ onNavigate }) => {
             <h2 className="serif font-bold text-[#4A3728] text-3xl sm:text-5xl mt-3">Why families choose <span className="brand-script text-coral whitespace-nowrap">Amie's Homemade</span></h2>
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-7">
-            {VALUES.map((v) => (
+            {VALUES.map((v, i) => (
               <div key={v.title} className="group bg-white rounded-[1.75rem] p-6 sm:p-8 text-center shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 border border-[#4A3728]/5">
-                <div className="mx-auto mb-5 w-14 h-14 rounded-2xl bg-[#F6C94C]/20 text-[#C79B68] flex items-center justify-center group-hover:bg-[#F6C94C] group-hover:text-[#3D2D1F] group-hover:scale-110 transition-all duration-300">
-                  {v.icon}
+                {/* Hand-drawn illustration in a soft rounded blob, each on a
+                    slight alternating tilt — a still, perfectly centered
+                    icon-in-a-square is the thing that reads as generic/
+                    AI-template; a little asymmetry reads as made, not generated. */}
+                <div
+                  className="mx-auto mb-5 w-16 h-16 flex items-center justify-center group-hover:scale-110 transition-all duration-300"
+                  style={{
+                    background: v.bg,
+                    borderRadius: i % 2 === 0 ? '42% 58% 63% 37% / 41% 44% 56% 59%' : '58% 42% 37% 63% / 55% 60% 40% 45%',
+                    transform: `rotate(${i % 2 === 0 ? -4 : 4}deg)`,
+                  }}
+                >
+                  <v.Icon className="w-7 h-7 sm:w-8 sm:h-8" style={{ transform: `rotate(${i % 2 === 0 ? 4 : -4}deg)` }} />
                 </div>
                 <h4 className="serif font-bold text-[#4A3728] text-base sm:text-lg mb-2">{v.title}</h4>
                 <p className="text-[12px] sm:text-sm text-[#4A3728]/60 leading-relaxed">{v.desc}</p>
