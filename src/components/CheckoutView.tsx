@@ -150,7 +150,6 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   const sessionTokenRef = useRef<any>(null);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const addressInputRef = useRef<HTMLInputElement>(null);
-  const payBarRef = useRef<HTMLDivElement>(null);
 
   // Exact delivery pin — set from the geocoded location of whatever address
   // suggestion was picked. Shown as a fixed confirmation pin (not draggable)
@@ -233,34 +232,6 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   // screen without scrolling), full spacing restored at lg.
   const fieldPad = keyboardOpen ? 'p-2.5' : 'p-3 lg:p-3.5';
   const fieldGap = keyboardOpen ? 'space-y-2' : 'space-y-2 lg:space-y-4';
-
-  // `position: fixed` on iOS Safari is still animated against a lagging
-  // viewport rect while the dynamic toolbar hides/shows mid-scroll, which is
-  // what reads as the pay bar "traveling up and down" even with the
-  // compositing-layer + containing-block fixes already in place below.
-  // window.visualViewport reports the TRUE current visible viewport on every
-  // frame of that animation, so instead of trusting native fixed positioning
-  // we read it directly and push the bar down by however much the layout
-  // viewport currently exceeds the visual one — keeping it glued to the real
-  // bottom edge instead of the animating one.
-  useEffect(() => {
-    const bar = payBarRef.current;
-    const vv = window.visualViewport;
-    if (!bar || !vv) return;
-
-    const sync = () => {
-      const offset = window.innerHeight - (vv.height + vv.offsetTop);
-      bar.style.transform = `translate3d(0, ${-Math.max(0, offset)}px, 0)`;
-    };
-
-    sync();
-    vv.addEventListener('resize', sync);
-    vv.addEventListener('scroll', sync);
-    return () => {
-      vv.removeEventListener('resize', sync);
-      vv.removeEventListener('scroll', sync);
-    };
-  }, [checkoutStep, keyboardOpen]);
 
   useEffect(() => {
     const apiKey = import.meta.env.VITE_GOOGLE_PLACES_API_KEY;
@@ -1509,14 +1480,12 @@ _Please confirm my order and share delivery details._
           WhatsApp button) sidesteps the whole problem. */}
       {!keyboardOpen && checkoutStep === 'summary' && createPortal(
         <div
-          ref={payBarRef}
           className="sm:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-[#4A3728]/10 shadow-[0_-8px_30px_rgba(0,0,0,0.08)] px-4 py-3 flex items-center justify-between gap-3"
-          // Baseline GPU compositing hint (own layer, no repaint jump) plus
-          // translate3d(0,0,0) as the initial transform value — the
-          // visualViewport effect above overwrites this transform on every
-          // resize/scroll frame to keep the bar glued to the true visible
-          // bottom edge during iOS Safari's toolbar collapse/expand animation.
-          style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))', transform: 'translate3d(0,0,0)', WebkitTransform: 'translate3d(0,0,0)', willChange: 'transform' }}
+          // iOS Safari repaints `position: fixed` elements against a stale
+          // viewport size while its address bar collapses/expands mid-scroll,
+          // which reads as the bar jittering up and down. Forcing it onto its
+          // own GPU compositing layer stops Safari from doing that repaint.
+          style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom))', transform: 'translateZ(0)', WebkitTransform: 'translateZ(0)', willChange: 'transform' }}
         >
           <div className="min-w-0">
             <p className="text-[9px] font-black uppercase brand-rounded text-[#4A3728]/40 tracking-widest">Grand Total</p>
