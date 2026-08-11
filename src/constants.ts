@@ -713,7 +713,7 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(41).jpg',
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(42).jpg',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jul%204,%202026,%2006_08_13%20PM.png',
-      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2011_45_06%20AM.png?updatedAt=1782444349708',
+      'https://ik.imagekit.io/amieshomemade/amies_ingredients_2000x2000_v9.png',
       'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%203.05.18%E2%80%AFPM.png',
     ],
     ingredients: ['Almonds', 'Cashews', 'Pistachios', 'Cardamom (Elaichi)', 'Saffron (Kesar)', 'Nutmeg'],
