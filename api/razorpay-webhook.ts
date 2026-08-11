@@ -109,6 +109,8 @@ async function sendMetaPurchaseBackstop(params: {
   city: string;
   state: string;
   zip: string;
+  fbp: string;
+  fbc: string;
 }) {
   const PIXEL_ID = process.env.META_PIXEL_ID;
   const ACCESS_TOKEN = process.env.META_CAPI_ACCESS_TOKEN;
@@ -139,10 +141,14 @@ async function sendMetaPurchaseBackstop(params: {
   // identifier available server-to-server.
   const externalId = hashField(params.phone, normPhone);
   if (externalId) userData.external_id = [externalId];
-  // No fbp/fbc/client IP here — this call originates from Razorpay's server,
-  // not the customer's browser, so those signals genuinely don't exist for
-  // this path. Weaker match quality than the client-fired event is expected;
-  // this only fires at all when the client-fired one never reached us.
+  // fbp/fbc travel through Razorpay's `notes` (set client-side at checkout,
+  // where the browser can read its own cookies) since this call itself
+  // originates from Razorpay's server, not the customer's browser, and has
+  // no cookies of its own to read. client_ip_address/client_user_agent have
+  // no equivalent path — Razorpay's servers don't know the customer's IP —
+  // so those two remain genuinely unavailable on this backstop path.
+  if (params.fbp) userData.fbp = params.fbp;
+  if (params.fbc) userData.fbc = params.fbc;
 
   const payload = {
     data: [{
@@ -266,6 +272,8 @@ export default async function handler(req: any, res: any) {
   const state = notes.state || '';
   const pincode = notes.pincode || '';
   const mapPin = notes.map_pin || '';
+  const fbp = notes.fbp || '';
+  const fbc = notes.fbc || '';
   const address = notes.address || '';
   const itemsSummary = notes.items || '';
   const totalWeight = parseInt(String(notes.total_weight || '0').replace(/[^\d]/g, ''), 10) || 0;
@@ -396,6 +404,7 @@ export default async function handler(req: any, res: any) {
       value: grandTotal,
       contentIds: [],
       name, phone, email, city, state, zip: pincode,
+      fbp, fbc,
     });
 
     console.log(`[razorpay-webhook] payment ${paymentId}: logged + notified`);

@@ -95,6 +95,7 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
     address: '',
     flat: '',
     pincode: '',
+    gender: '',
   });
 
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<FieldName, string>>>({});
@@ -546,7 +547,7 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
 *New Order from Amie's Homemade*
 ---------------------------
 *Order ID:* ${orderId}
-${isCod ? '' : `*Payment ID:* ${id}\n`}*Customer:* ${formData.name}
+${isCod ? '' : `*Payment ID:* ${id}\n`}*Customer:* ${formData.name}${formData.gender ? ` (${formData.gender})` : ''}
 *Phone:* ${formData.phone}
 *City:* ${formData.city}
 *Address:* ${fullDeliveryAddress}
@@ -574,6 +575,7 @@ _Please confirm my order and share delivery details._
           shippingFee: shippingFee ?? 0, codFee, grandTotal, paymentId: paymentIdForOrder,
           paymentMethod: isCod ? 'COD' : 'RAZORPAY',
           mapPin: pinLocation ? `${pinLocation.lat},${pinLocation.lng}` : '',
+          gender: formData.gender || '',
         }),
         // Survives the page navigating/backgrounding right after this call
         // fires — the same protection already used on the Meta CAPI Purchase
@@ -766,6 +768,16 @@ _Please confirm my order and share delivery details._
           city: formData.city, state: formData.state, address: fullDeliveryAddress, email: formData.email || 'N/A',
           pincode: formData.pincode,
           map_pin: pinLocation ? `${pinLocation.lat},${pinLocation.lng}` : '',
+          gender: formData.gender || '',
+          // Meta's _fbp/_fbc cookies only exist in the browser — the
+          // Razorpay webhook backstop below fires server-to-server with no
+          // access to them at all, so if it wins the race against the
+          // client-fired Purchase event (common on slow mobile connections
+          // right as the customer returns from their UPI app), those two
+          // match-quality signals are lost for that event. Stashing them in
+          // notes here means the webhook has them either way.
+          fbp: (/(?:^|;\s*)_fbp=([^;]+)/.exec(document.cookie)?.[1]) || '',
+          fbc: (/(?:^|;\s*)_fbc=([^;]+)/.exec(document.cookie)?.[1]) || '',
           items: items.map(i => `${i.quantity}x ${i.name} (${i.selectedWeight || i.weight})`).join(', ').slice(0, 250),
           subtotal: `Rs.${total}`, shipping: `Rs.${shippingFee ?? 0}`,
           grand_total: `Rs.${grandTotal}`, total_weight: `${totalWeight}g`,
@@ -1153,6 +1165,22 @@ _Please confirm my order and share delivery details._
                 {touched.name && fieldErrors.name && (
                   <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.name}</p>
                 )}
+              </div>
+
+              {/* Gender — optional, not part of the required-field validation
+                  chain (FieldName) since it doesn't block checkout. */}
+              <div className={`space-y-1.5 ${checkoutStep === 'details' ? '' : 'hidden'} lg:block`} id="field-gender">
+                <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Gender (Optional)</label>
+                <select
+                  name="gender" disabled={isSubmitting} value={formData.gender || ''}
+                  onChange={(e) => setFormData(prev => ({ ...prev, gender: e.target.value }))}
+                  className={`w-full ${fieldPad} bg-white rounded-xl border-2 text-[#4A3728] font-bold focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all border-[#4A3728]/10 focus:border-[#F04E4E] disabled:opacity-50`}
+                >
+                  <option value="">Prefer not to say</option>
+                  <option value="Female">Female</option>
+                  <option value="Male">Male</option>
+                  <option value="Other">Other</option>
+                </select>
               </div>
 
               <div className={`grid grid-cols-2 gap-3 ${checkoutStep === 'details' ? '' : 'hidden'} lg:grid`}>

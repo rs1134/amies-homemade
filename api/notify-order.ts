@@ -92,7 +92,7 @@ export default async function handler(req: any, res: any) {
   const {
     orderId, name, phone, city, address, pincode, email, itemsSummary,
     totalWeight, subtotal, shippingFee, codFee, grandTotal, paymentId, couponDiscount,
-    paymentMethod, mapPin,
+    paymentMethod, mapPin, gender,
   } = req.body;
   // Backward-compatible default — older client builds don't send this field.
   const method = paymentMethod || 'RAZORPAY';
@@ -131,7 +131,7 @@ export default async function handler(req: any, res: any) {
     const message = [
       isCod ? `💰 CASH ON DELIVERY — COLLECT Rs.${grandTotal}` : `NEW ORDER: ${orderId}`,
       `---------------------------`,
-      `Customer: ${name}`,
+      `Customer: ${name}${gender ? ` (${gender})` : ''}`,
       `Phone: ${phone}`,
       `City: ${city}`,
       `Address: ${address}`,
