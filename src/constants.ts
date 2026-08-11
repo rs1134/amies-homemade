@@ -694,7 +694,7 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(43).jpg',
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(44).jpg',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jul%204,%202026,%2005_59_49%20PM.png?updatedAt=1783168320890',
-      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2023,%202026,%2011_38_47%20AM.png?updatedAt=1782444349716',
+      'https://ik.imagekit.io/amieshomemade/amies_ingredients_2000x2000_v8.png',
       'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%203.01.54%E2%80%AFPM.png',
     ],
     ingredients: ['Pumpkin Seeds', 'Sunflower Seeds', 'White Sesame Seeds', 'Black Sesame Seeds', 'Walnut', 'Cashew', 'Almond', 'Pistachios', 'Medjool Dates', 'Peanut Butter', 'Vanilla Extract', 'Oats'],
