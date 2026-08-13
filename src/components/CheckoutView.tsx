@@ -764,11 +764,12 @@ _Please confirm my order and share delivery details._
         },
         prefill: { name: formData.name, email: formData.email, contact: formData.phone },
         notes: {
+          // Razorpay allows at most 15 key-value pairs in `notes` — keep this
+          // object at or under that count, combining fields below as needed.
           customer_name: formData.name, phone: formData.phone,
           city: formData.city, state: formData.state, address: fullDeliveryAddress, email: formData.email || 'N/A',
           pincode: formData.pincode,
           map_pin: pinLocation ? `${pinLocation.lat},${pinLocation.lng}` : '',
-          gender: formData.gender || '',
           // Meta's _fbp/_fbc cookies only exist in the browser — the
           // Razorpay webhook backstop below fires server-to-server with no
           // access to them at all, so if it wins the race against the
@@ -779,8 +780,7 @@ _Please confirm my order and share delivery details._
           fbp: (/(?:^|;\s*)_fbp=([^;]+)/.exec(document.cookie)?.[1]) || '',
           fbc: (/(?:^|;\s*)_fbc=([^;]+)/.exec(document.cookie)?.[1]) || '',
           items: items.map(i => `${i.quantity}x ${i.name} (${i.selectedWeight || i.weight})`).join(', ').slice(0, 250),
-          subtotal: `Rs.${total}`, shipping: `Rs.${shippingFee ?? 0}`,
-          grand_total: `Rs.${grandTotal}`, total_weight: `${totalWeight}g`,
+          amounts: `subtotal=Rs.${total};shipping=Rs.${shippingFee ?? 0};grand_total=Rs.${grandTotal};weight=${totalWeight}g;gender=${formData.gender || 'N/A'}`,
         },
         theme: { color: "#F04E4E" },
         modal: { ondismiss: function() { setIsSubmitting(false); } }

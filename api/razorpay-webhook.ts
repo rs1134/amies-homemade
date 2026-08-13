@@ -276,10 +276,17 @@ export default async function handler(req: any, res: any) {
   const fbc = notes.fbc || '';
   const address = notes.address || '';
   const itemsSummary = notes.items || '';
-  const totalWeight = parseInt(String(notes.total_weight || '0').replace(/[^\d]/g, ''), 10) || 0;
-  const subtotal = parseRs(notes.subtotal) || (payment.amount / 100);
-  const shippingFee = parseRs(notes.shipping);
-  const grandTotal = parseRs(notes.grand_total) || (payment.amount / 100);
+  // The client packs these into a single `amounts` note (Razorpay caps
+  // `notes` at 15 key-value pairs) as `key=value;key=value;...`.
+  const amountParts: Record<string, string> = {};
+  String(notes.amounts || '').split(';').forEach(part => {
+    const [key, ...rest] = part.split('=');
+    if (key) amountParts[key.trim()] = rest.join('=').trim();
+  });
+  const totalWeight = parseInt(String(amountParts.weight || '0').replace(/[^\d]/g, ''), 10) || 0;
+  const subtotal = parseRs(amountParts.subtotal) || (payment.amount / 100);
+  const shippingFee = parseRs(amountParts.shipping);
+  const grandTotal = parseRs(amountParts.grand_total) || (payment.amount / 100);
   const paymentId = payment.id;
 
   try {
