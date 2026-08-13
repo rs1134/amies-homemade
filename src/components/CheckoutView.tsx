@@ -764,11 +764,13 @@ _Please confirm my order and share delivery details._
         },
         prefill: { name: formData.name, email: formData.email, contact: formData.phone },
         notes: {
+          // Razorpay allows at most 15 key-value pairs in `notes` — gender is
+          // dropped here to stay under that cap (it's still sent via the
+          // WhatsApp order message and admin notification).
           customer_name: formData.name, phone: formData.phone,
           city: formData.city, state: formData.state, address: fullDeliveryAddress, email: formData.email || 'N/A',
           pincode: formData.pincode,
           map_pin: pinLocation ? `${pinLocation.lat},${pinLocation.lng}` : '',
-          gender: formData.gender || '',
           // Meta's _fbp/_fbc cookies only exist in the browser — the
           // Razorpay webhook backstop below fires server-to-server with no
           // access to them at all, so if it wins the race against the
