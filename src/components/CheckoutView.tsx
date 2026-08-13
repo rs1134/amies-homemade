@@ -764,8 +764,9 @@ _Please confirm my order and share delivery details._
         },
         prefill: { name: formData.name, email: formData.email, contact: formData.phone },
         notes: {
-          // Razorpay allows at most 15 key-value pairs in `notes` — keep this
-          // object at or under that count, combining fields below as needed.
+          // Razorpay allows at most 15 key-value pairs in `notes` — gender is
+          // dropped here to stay under that cap (it's still sent via the
+          // WhatsApp order message and admin notification).
           customer_name: formData.name, phone: formData.phone,
           city: formData.city, state: formData.state, address: fullDeliveryAddress, email: formData.email || 'N/A',
           pincode: formData.pincode,
@@ -780,7 +781,8 @@ _Please confirm my order and share delivery details._
           fbp: (/(?:^|;\s*)_fbp=([^;]+)/.exec(document.cookie)?.[1]) || '',
           fbc: (/(?:^|;\s*)_fbc=([^;]+)/.exec(document.cookie)?.[1]) || '',
           items: items.map(i => `${i.quantity}x ${i.name} (${i.selectedWeight || i.weight})`).join(', ').slice(0, 250),
-          amounts: `subtotal=Rs.${total};shipping=Rs.${shippingFee ?? 0};grand_total=Rs.${grandTotal};weight=${totalWeight}g;gender=${formData.gender || 'N/A'}`,
+          subtotal: `Rs.${total}`, shipping: `Rs.${shippingFee ?? 0}`,
+          grand_total: `Rs.${grandTotal}`, total_weight: `${totalWeight}g`,
         },
         theme: { color: "#F04E4E" },
         modal: { ondismiss: function() { setIsSubmitting(false); } }
