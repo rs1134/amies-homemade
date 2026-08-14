@@ -212,7 +212,7 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   // customers can fill the whole form without ever tapping a field
   // directly. Addresses here are a single line in practice, so Enter
   // advances there too rather than inserting a newline.
-  const FIELD_ADVANCE_ORDER: FieldName[] = ['name', 'phone', 'city', 'state', 'email', 'address', 'flat', 'pincode'];
+  const FIELD_ADVANCE_ORDER: FieldName[] = ['address', 'city', 'state', 'flat', 'pincode', 'name', 'phone', 'email'];
   const handleAdvanceOnEnter = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (e.key !== 'Enter') return;
     e.preventDefault();
@@ -1156,6 +1156,75 @@ _Please confirm my order and share delivery details._
                 </div>
               )}
 
+              {/* City + State — grouped right after the confirmed address
+                  above (both auto-fill from the address search) rather than
+                  being split apart by the contact fields further down, so
+                  every address-completion field reads as one continuous
+                  block before switching to "who is this for". */}
+              <div className={`grid grid-cols-2 gap-3 ${checkoutStep === 'details' ? '' : 'hidden'} lg:grid`}>
+                {/* City */}
+                <div className="space-y-1.5" id="field-city">
+                  <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">City</label>
+                  <div className="relative">
+                    <input
+                      name="city" disabled={isSubmitting} value={formData.city}
+                      onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="next" type="text" autoComplete="address-level2" placeholder="Ahmedabad"
+                      className={`w-full ${fieldPad} pl-11 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.city && fieldErrors.city ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                    />
+                    <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 text-[#4A3728]/20" size={16} />
+                  </div>
+                  {touched.city && fieldErrors.city && (
+                    <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.city}</p>
+                  )}
+                </div>
+                {/* State — auto-fills from the address search above when
+                    available, otherwise typed in directly like City. */}
+                <div className="space-y-1.5" id="field-state">
+                  <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">State</label>
+                  <input
+                    name="state" disabled={isSubmitting} value={formData.state}
+                    onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="next" type="text" autoComplete="address-level1" placeholder="Gujarat"
+                    className={`w-full ${fieldPad} bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.state && fieldErrors.state ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                  />
+                  {touched.state && fieldErrors.state && (
+                    <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.state}</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Flat/House + Pincode — the two required fields that finish
+                  the address, kept in the same address block instead of
+                  trailing after the contact fields. */}
+              <div className={`grid grid-cols-2 gap-3 ${checkoutStep === 'details' ? '' : 'hidden'} lg:grid`}>
+                {/* Flat / House No */}
+                <div className="space-y-1.5" id="field-flat">
+                  <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Flat / House No. <span className="text-[#F04E4E]">*</span></label>
+                  <input
+                    name="flat" disabled={isSubmitting} value={formData.flat}
+                    onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="next"
+                    type="text" autoComplete="address-line2" placeholder="e.g. A-102, Floor 3"
+                    className={`w-full ${fieldPad} bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.flat && fieldErrors.flat ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                  />
+                  {touched.flat && fieldErrors.flat && (
+                    <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.flat}</p>
+                  )}
+                </div>
+
+                {/* Pincode — required */}
+                <div className="space-y-1.5" id="field-pincode">
+                  <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Pincode <span className="text-[#F04E4E]">*</span></label>
+                  <input
+                    name="pincode" disabled={isSubmitting} value={formData.pincode}
+                    onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="next"
+                    type="text" inputMode="numeric" autoComplete="postal-code" maxLength={6} placeholder="e.g. 380015"
+                    className={`w-full ${fieldPad} bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.pincode && fieldErrors.pincode ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
+                  />
+                  {touched.pincode && fieldErrors.pincode && (
+                    <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.pincode}</p>
+                  )}
+                </div>
+              </div>
+
               {/* Full Name */}
               <div className={`space-y-1.5 ${checkoutStep === 'details' ? '' : 'hidden'} lg:block`} id="field-name">
                 <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Full Name</label>
@@ -1185,6 +1254,9 @@ _Please confirm my order and share delivery details._
                 </select>
               </div>
 
+              {/* Phone + Email — contact fields, now grouped together after
+                  the address block instead of being split across two rows
+                  with City/State in between. */}
               <div className={`grid grid-cols-2 gap-3 ${checkoutStep === 'details' ? '' : 'hidden'} lg:grid`}>
                 {/* Phone */}
                 <div className="space-y-1.5" id="field-phone">
@@ -1198,82 +1270,17 @@ _Please confirm my order and share delivery details._
                     <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.phone}</p>
                   )}
                 </div>
-                {/* City */}
-                <div className="space-y-1.5" id="field-city">
-                  <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">City</label>
-                  <div className="relative">
-                    <input
-                      name="city" disabled={isSubmitting} value={formData.city}
-                      onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="next" type="text" autoComplete="address-level2" placeholder="Ahmedabad"
-                      className={`w-full ${fieldPad} pl-11 bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.city && fieldErrors.city ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
-                    />
-                    <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 text-[#4A3728]/20" size={16} />
-                  </div>
-                  {touched.city && fieldErrors.city && (
-                    <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.city}</p>
-                  )}
-                </div>
-              </div>
-
-              {/* State + Email — paired into one row (like Phone/City above)
-                  so the Details step fits on one screen without scrolling,
-                  which is the whole point of having it as a separate step. */}
-              <div className={`grid grid-cols-2 gap-3 ${checkoutStep === 'details' ? '' : 'hidden'} lg:grid`}>
-                {/* State — auto-fills from the address search above when
-                    available, otherwise typed in directly like City. */}
-                <div className="space-y-1.5" id="field-state">
-                  <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">State</label>
-                  <input
-                    name="state" disabled={isSubmitting} value={formData.state}
-                    onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="next" type="text" autoComplete="address-level1" placeholder="Gujarat"
-                    className={`w-full ${fieldPad} bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.state && fieldErrors.state ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
-                  />
-                  {touched.state && fieldErrors.state && (
-                    <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.state}</p>
-                  )}
-                </div>
 
                 {/* Email */}
                 <div className="space-y-1.5" id="field-email">
                   <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Email (Optional)</label>
                   <input
                     name="email" disabled={isSubmitting} value={formData.email}
-                    onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="next" type="email" autoComplete="email" placeholder="yourname@gmail.com"
+                    onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="done" type="email" autoComplete="email" placeholder="yourname@gmail.com"
                     className={`w-full ${fieldPad} bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.email && fieldErrors.email ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
                   />
                   {touched.email && fieldErrors.email && (
                     <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.email}</p>
-                  )}
-                </div>
-              </div>
-
-              {/* Flat/House + Pincode — paired for the same reason. */}
-              <div className={`grid grid-cols-2 gap-3 ${checkoutStep === 'details' ? '' : 'hidden'} lg:grid`}>
-                {/* Flat / House No */}
-                <div className="space-y-1.5" id="field-flat">
-                  <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Flat / House No. <span className="text-[#F04E4E]">*</span></label>
-                  <input
-                    name="flat" disabled={isSubmitting} value={formData.flat}
-                    onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="next"
-                    type="text" autoComplete="address-line2" placeholder="e.g. A-102, Floor 3"
-                    className={`w-full ${fieldPad} bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.flat && fieldErrors.flat ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
-                  />
-                  {touched.flat && fieldErrors.flat && (
-                    <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.flat}</p>
-                  )}
-                </div>
-
-                {/* Pincode — required */}
-                <div className="space-y-1.5" id="field-pincode">
-                  <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Pincode <span className="text-[#F04E4E]">*</span></label>
-                  <input
-                    name="pincode" disabled={isSubmitting} value={formData.pincode}
-                    onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="done"
-                    type="text" inputMode="numeric" autoComplete="postal-code" maxLength={6} placeholder="e.g. 380015"
-                    className={`w-full ${fieldPad} bg-white rounded-xl border-2 text-[#4A3728] font-bold placeholder:text-[#4A3728]/40 focus:ring-2 focus:ring-[#F04E4E]/10 outline-none text-base transition-all ${touched.pincode && fieldErrors.pincode ? 'border-red-500' : 'border-[#4A3728]/10 focus:border-[#F04E4E]'} disabled:opacity-50`}
-                  />
-                  {touched.pincode && fieldErrors.pincode && (
-                    <p className="text-red-500 text-[10px] font-bold ml-3 mt-1 brand-rounded animate-in fade-in slide-in-from-top-1">{fieldErrors.pincode}</p>
                   )}
                 </div>
               </div>
