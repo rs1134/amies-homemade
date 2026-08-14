@@ -1366,9 +1366,13 @@ _Please confirm my order and share delivery details._
           </div>
 
           {/* Capped shorter on mobile so a large cart scrolls inside this
-              list instead of pushing Payment Method below the fold. */}
-          <div className="space-y-2.5 lg:space-y-4 mb-2.5 lg:mb-5 max-h-[148px] lg:max-h-[280px] overflow-y-auto no-scrollbar pr-2">
-            {items.map((item, idx) => (
+              list instead of pushing Payment Method below the fold. Kept
+              scrollable (not no-scrollbar) with a bottom fade cue below when
+              there's more than fits — a hidden scrollbar with no other hint
+              left customers unaware there were more items to see. */}
+          <div className="relative mb-2.5 lg:mb-5">
+            <div className="space-y-2.5 lg:space-y-4 max-h-[148px] lg:max-h-[280px] overflow-y-auto pr-2">
+              {items.map((item, idx) => (
               <div key={`${item.id}-${idx}`} className="flex justify-between items-center group">
                 <div className="flex items-center gap-3">
                   <div className="w-11 h-11 lg:w-14 lg:h-14 rounded-xl overflow-hidden bg-cream shadow-sm flex-shrink-0 border border-[#4A3728]/5 relative">
@@ -1405,7 +1409,11 @@ _Please confirm my order and share delivery details._
                   </button>
                 </div>
               </div>
-            ))}
+              ))}
+            </div>
+            {items.length > 1 && (
+              <div className="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-white to-transparent pointer-events-none lg:hidden" />
+            )}
           </div>
 
           {/* Free shipping unlock nudge — only after city is fully entered
