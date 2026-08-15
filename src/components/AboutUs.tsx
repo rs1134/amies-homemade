@@ -47,8 +47,8 @@ const Ornament: React.FC<{ tone?: string }> = ({ tone = '#C79B68' }) => (
 
 const JOURNEY = [
   { year: '2019', title: 'It began at home', desc: 'A family recipe box, a small kitchen in Ahmedabad, and Ami\'s quiet belief that the food she grew up on deserved to be shared beyond her own table.' },
-  { year: 'Then', title: 'Word began to spread', desc: 'Neighbours knocked. Friends called. The way it always does in Ahmedabad — quietly, genuinely, one household at a time.' },
-  { year: 'Every season', title: 'Packed by hand', desc: 'Festive boxes, everyday jars, special requests — each one filled fresh, by the same hands, with the same care.' },
+  { year: 'Then', title: 'Word began to spread', desc: 'Neighbours knocked. Friends called. The way it always does in Ahmedabad: quietly, genuinely, one household at a time.' },
+  { year: 'Every season', title: 'Packed by hand', desc: 'Festive boxes, everyday jars, special requests: each one filled fresh, by the same hands, with the same care.' },
   { year: 'Today', title: 'Known by heart', desc: 'A name hundreds of Ahmedabad homes now keep on their shelves. And through it all, nothing has changed.' },
 ];
 
@@ -117,13 +117,13 @@ const AboutUs: React.FC<AboutUsProps> = ({ onNavigate }) => {
               It started with<br /><span className="brand-script text-coral text-4xl sm:text-6xl">a mother's hands</span>
             </h2>
             <p className="text-[#4A3728]/75 text-lg leading-relaxed mb-5 first-letter:float-left first-letter:serif first-letter:font-bold first-letter:text-coral first-letter:text-6xl sm:first-letter:text-7xl first-letter:leading-[0.7] first-letter:mr-3 first-letter:mt-1">
-              In 2019, in a small kitchen in Ahmedabad, Ami began making the mukhwas and snacks she'd grown up on — recipes passed down through her family, made exactly the way they always had been. What started as something she made for her own home soon became something she couldn't stop making.
+              In 2019, in a small kitchen in Ahmedabad, Ami began making the mukhwas and snacks she'd grown up on. They were recipes passed down through her family, made exactly the way they always had been. What started as something she made for her own home soon became something she couldn't stop making.
             </p>
             <p className="text-[#4A3728]/75 text-lg leading-relaxed mb-5">
-              Neighbours began knocking. Friends started calling. Word spread the way it always does in Ahmedabad — quietly, genuinely, one household at a time.
+              Neighbours began knocking. Friends started calling. Word spread the way it always does in Ahmedabad: quietly, genuinely, one household at a time.
             </p>
             <p className="text-[#4A3728]/75 text-lg leading-relaxed">
-              All these years later, Amie's is a name hundreds of Ahmedabad homes now know by heart. Through every batch, every season, every festive box — nothing has changed.
+              All these years later, Amie's is a name hundreds of Ahmedabad homes now know by heart. Through every batch, every season, every festive box, nothing has changed.
             </p>
 
             <div className="mt-8 pt-6 border-t border-[#4A3728]/10">
@@ -152,7 +152,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onNavigate }) => {
           <div className="text-center lg:text-left">
             <span className="serif text-7xl sm:text-8xl text-[#F6C94C] leading-[0.5] block mb-4">&ldquo;</span>
             <p className="serif text-2xl sm:text-4xl lg:text-[2.6rem] leading-[1.2] text-[#FFF8EE]">
-              No shortcuts. No compromises. Food made the way it always should be —
+              No shortcuts. No compromises. Food made the way it always should be:
               <span className="text-[#F6C94C]"> the same hands, the same recipes, the same love.</span>
             </p>
             <p className="brand-rounded text-[10px] sm:text-xs font-black uppercase tracking-[0.3em] text-[#FFF8EE]/50 mt-8">
