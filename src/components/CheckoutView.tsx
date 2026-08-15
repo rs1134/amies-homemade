@@ -432,7 +432,8 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
           return "Please enter a valid state name";
         return "";
       case 'email':
-        if (value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
+        if (!value.trim()) return "Email is required";
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
           return "Please enter a valid email address";
         return "";
       case 'address':
@@ -1331,7 +1332,7 @@ _Please confirm my order and share delivery details._
 
                 {/* Email */}
                 <div className="space-y-1.5" id="field-email">
-                  <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Email (Optional)</label>
+                  <label className="text-[11px] font-black uppercase brand-rounded text-[#4A3728]/50 ml-1 tracking-widest">Email <span className="text-[#F04E4E]">*</span></label>
                   <input
                     name="email" disabled={isSubmitting} value={formData.email}
                     onChange={handleInputChange} onBlur={handleBlur} onKeyDown={handleAdvanceOnEnter} enterKeyHint="done" type="email" autoComplete="email" placeholder="yourname@gmail.com"
