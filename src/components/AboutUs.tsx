@@ -46,7 +46,7 @@ const Ornament: React.FC<{ tone?: string }> = ({ tone = '#C79B68' }) => (
 );
 
 const JOURNEY = [
-  { year: '2020', title: 'It began in lockdown', desc: 'When the world shut its doors, Ami opened ours — to the kitchen. A way to fill quiet afternoons with the recipes she grew up on.' },
+  { year: '2019', title: 'It began at home', desc: 'A family recipe box, a small kitchen in Ahmedabad, and Ami\'s quiet belief that the food she grew up on deserved to be shared beyond her own table.' },
   { year: 'Then', title: 'Word began to spread', desc: 'Neighbours knocked. Friends called. The way it always does in Ahmedabad — quietly, genuinely, one household at a time.' },
   { year: 'Every season', title: 'Packed by hand', desc: 'Festive boxes, everyday jars, special requests — each one filled fresh, by the same hands, with the same care.' },
   { year: 'Today', title: 'Known by heart', desc: 'A name hundreds of Ahmedabad homes now keep on their shelves. And through it all, nothing has changed.' },
@@ -72,7 +72,7 @@ const AboutUs: React.FC<AboutUsProps> = ({ onNavigate }) => {
 
         <div className="relative max-w-3xl mx-auto">
           <p className="brand-rounded text-[#4A3728]/55 font-black text-[10px] sm:text-xs uppercase tracking-[0.35em] mb-5">
-            Est. 2020 · Ahmedabad · Handmade
+            Est. 2019 · Ahmedabad · Handmade
           </p>
           <span className="inline-flex items-center gap-2.5 text-coral brand-rounded uppercase tracking-[0.35em] font-black text-[10px] sm:text-xs mb-5">
             <span className="w-6 h-px bg-coral/50" /> The Story of Amie's Homemade <span className="w-6 h-px bg-coral/50" />
@@ -117,13 +117,13 @@ const AboutUs: React.FC<AboutUsProps> = ({ onNavigate }) => {
               It started with<br /><span className="brand-script text-coral text-4xl sm:text-6xl">a mother's hands</span>
             </h2>
             <p className="text-[#4A3728]/75 text-lg leading-relaxed mb-5 first-letter:float-left first-letter:serif first-letter:font-bold first-letter:text-coral first-letter:text-6xl sm:first-letter:text-7xl first-letter:leading-[0.7] first-letter:mr-3 first-letter:mt-1">
-              In 2020, when the world shut its doors, we opened ours to our kitchen. What started as a way to fill quiet afternoons during lockdown became something none of us expected.
+              In 2019, in a small kitchen in Ahmedabad, Ami began making the mukhwas and snacks she'd grown up on — recipes passed down through her family, made exactly the way they always had been. What started as something she made for her own home soon became something she couldn't stop making.
             </p>
             <p className="text-[#4A3728]/75 text-lg leading-relaxed mb-5">
               Neighbours began knocking. Friends started calling. Word spread the way it always does in Ahmedabad — quietly, genuinely, one household at a time.
             </p>
             <p className="text-[#4A3728]/75 text-lg leading-relaxed">
-              Five years on, Amie's is a name hundreds of Ahmedabad homes now know by heart. Through every batch, every season, every festive box — nothing has changed.
+              All these years later, Amie's is a name hundreds of Ahmedabad homes now know by heart. Through every batch, every season, every festive box — nothing has changed.
             </p>
 
             <div className="mt-8 pt-6 border-t border-[#4A3728]/10">
