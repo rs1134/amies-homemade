@@ -42,6 +42,29 @@ const clearCheckoutDraft = () => {
   try { localStorage.removeItem(DRAFT_STORAGE_KEY); } catch { /* non-fatal */ }
 };
 
+// Identifies one checkout attempt for the abandoned-cart reminder emails
+// (api/save-abandoned-cart.ts / api/cron/send-abandoned-cart-reminders.ts).
+// Reset after a successful order so the next cart this browser starts is a
+// fresh attempt, not treated as a continuation of one that already
+// converted.
+const CART_SESSION_KEY = 'amie_cart_session_id';
+const getOrCreateCartSessionId = (): string => {
+  try {
+    const existing = localStorage.getItem(CART_SESSION_KEY);
+    if (existing) return existing;
+    const fresh = (typeof crypto !== 'undefined' && 'randomUUID' in crypto)
+      ? crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+    localStorage.setItem(CART_SESSION_KEY, fresh);
+    return fresh;
+  } catch {
+    return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  }
+};
+const resetCartSessionId = () => {
+  try { localStorage.removeItem(CART_SESSION_KEY); } catch { /* non-fatal */ }
+};
+
 interface CheckoutViewProps {
   items: CartItem[];
   onComplete: () => void;
@@ -525,6 +548,31 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   // ProductCard/Cart compute it, so the "You saved" figure here matches.
   const mrpTotal = items.reduce((sum, item) => sum + (Math.ceil(item.price / 0.9 / 5) * 5) * item.quantity, 0);
 
+  // Abandoned-cart reminder: once there's a valid email and items in the
+  // cart, keep the server's record of "what to remind them about" in sync
+  // as they keep editing — debounced so it's one save per pause in typing,
+  // not one per keystroke. If they complete the order, this row gets
+  // deleted via clearAbandonedCart() instead of ever being emailed.
+  const abandonedCartDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    if (isSuccess || items.length === 0 || !formData.email || validateField('email', formData.email)) return;
+    if (abandonedCartDebounceRef.current) clearTimeout(abandonedCartDebounceRef.current);
+    abandonedCartDebounceRef.current = setTimeout(() => {
+      const itemsSummary = items.map(i => `${i.quantity}x ${i.name} (${i.selectedWeight || i.weight})`).join('\n');
+      fetch('/api/save-abandoned-cart', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sessionId: getOrCreateCartSessionId(),
+          email: formData.email, name: formData.name, phone: formData.phone, city: formData.city,
+          itemsSummary, grandTotal,
+        }),
+      }).catch(() => { /* non-fatal — background nicety, never blocks checkout */ });
+    }, 2000);
+    return () => { if (abandonedCartDebounceRef.current) clearTimeout(abandonedCartDebounceRef.current); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData.email, formData.name, formData.phone, formData.city, items, grandTotal, isSuccess]);
+
   // `paymentId` is the Razorpay payment id for online orders, or a synthetic
   // `COD-<orderId>` marker for cash-on-delivery orders (the orders table
   // has a UNIQUE constraint on payment_id for de-duplication, so COD orders
@@ -610,6 +658,16 @@ _Please confirm my order and share delivery details._
     setPaymentId(paymentIdForOrder);
     setIsSuccess(true);
     clearCheckoutDraft();
+    // Order completed — don't let the abandoned-cart reminder cron email
+    // them about something they already bought, and start the next cart
+    // this browser builds as a fresh attempt rather than a continuation.
+    fetch('/api/clear-abandoned-cart', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ sessionId: getOrCreateCartSessionId() }),
+      keepalive: true,
+    }).catch(() => { /* non-fatal */ });
+    resetCartSessionId();
     onOrderPlaced?.(); // clears the live cart + coupon so paid items can't linger
     window.history.pushState(null, '', '/order-confirmed');
     window.scrollTo({ top: 0, behavior: 'smooth' });

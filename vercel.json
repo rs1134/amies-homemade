@@ -18,5 +18,11 @@
   ],
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/send-abandoned-cart-reminders",
+      "schedule": "30 12 * * *"
+    }
   ]
 }
