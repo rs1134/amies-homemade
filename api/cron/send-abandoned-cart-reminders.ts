@@ -103,6 +103,12 @@ export default async function handler(req: any, res: any) {
     // purpose and would otherwise accumulate forever.
     await sql`DELETE FROM abandoned_carts WHERE updated_at < now() - interval '3 days'`;
 
+    // Records that this run actually happened — Vercel's Hobby plan log
+    // retention is too short to check execution history after more than
+    // ~30 minutes, so this is the only reliable way to confirm the cron
+    // fired on a given day without paying for Pro's longer log retention.
+    await sql`INSERT INTO cron_runs (job_name, checked, sent) VALUES ('send-abandoned-cart-reminders', ${due.length}, ${sent})`;
+
     return res.status(200).json({ ok: true, checked: due.length, sent });
   } catch (err: any) {
     console.error('[abandoned-cart-cron] Failed:', err.message);
