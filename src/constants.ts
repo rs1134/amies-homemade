@@ -240,7 +240,8 @@ export const PRODUCTS: Product[] = [
     ],
     ingredients: ['Amla', 'Ginger', 'Salt', 'Sugar', 'Black Pepper', 'Black Salt'],
     prices: { '125 G': 165 },
-    rating: 4.5, reviewCount: 39
+    rating: 4.5, reviewCount: 39,
+    outOfStock: true
   },
   {
     id: 'm8',
