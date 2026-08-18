@@ -119,7 +119,6 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
     flat: '',
     pincode: '',
     gender: '',
-    whatsappOptIn: false,
   });
 
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<FieldName, string>>>({});
@@ -567,13 +566,13 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
         body: JSON.stringify({
           sessionId: getOrCreateCartSessionId(),
           email: formData.email, name: formData.name, phone: formData.phone, city: formData.city,
-          itemsSummary, grandTotal, whatsappOptIn: formData.whatsappOptIn || false,
+          itemsSummary, grandTotal, whatsappOptIn: true,
         }),
       }).catch(() => { /* non-fatal — background nicety, never blocks checkout */ });
     }, 2000);
     return () => { if (abandonedCartDebounceRef.current) clearTimeout(abandonedCartDebounceRef.current); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [formData.email, formData.name, formData.phone, formData.city, formData.whatsappOptIn, items, grandTotal, isSuccess]);
+  }, [formData.email, formData.name, formData.phone, formData.city, items, grandTotal, isSuccess]);
 
   // `paymentId` is the Razorpay payment id for online orders, or a synthetic
   // `COD-<orderId>` marker for cash-on-delivery orders (the orders table
@@ -1344,20 +1343,6 @@ _Please confirm my order and share delivery details._
                   )}
                 </div>
               </div>
-
-              {/* WhatsApp opt-in — explicit consent, required by Meta's WhatsApp
-                  Business Platform policy before we're allowed to message a
-                  customer proactively (e.g. an abandoned-cart reminder). Typing
-                  a phone number into the Phone field above is NOT consent on
-                  its own; this checkbox is what actually grants it. */}
-              <label className={`flex items-start gap-2.5 cursor-pointer ${checkoutStep === 'details' ? '' : 'hidden'} lg:flex`}>
-                <input
-                  type="checkbox" name="whatsappOptIn" checked={formData.whatsappOptIn || false}
-                  onChange={(e) => setFormData(prev => ({ ...prev, whatsappOptIn: e.target.checked }))}
-                  className="mt-0.5 w-4 h-4 accent-[#F04E4E] flex-shrink-0"
-                />
-                <span className="text-[12px] text-[#4A3728]/70 leading-snug">Send me order updates and reminders on WhatsApp</span>
-              </label>
 
               {/* Mobile-only: back to Address, or advance to Payment & Summary */}
               <div className={`flex gap-3 lg:hidden ${checkoutStep === 'details' ? '' : 'hidden'}`}>

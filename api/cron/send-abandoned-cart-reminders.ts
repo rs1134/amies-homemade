@@ -38,10 +38,10 @@ function buildReminderEmailHtml(params: { name: string; itemsSummary: string; gr
 </div>`.trim();
 }
 
-// WhatsApp reminder via AiSensy — only fires for carts where the customer
-// explicitly opted in at checkout (Meta's WhatsApp Business Platform policy
-// requires genuine consent before sending a proactive "Marketing" template;
-// typing a phone number into the Phone field is NOT consent on its own).
+// WhatsApp reminder via AiSensy — fires for every abandoned cart with a
+// phone number (no separate opt-in checkbox; removed per owner's call to
+// prioritize reach over the stricter consent Meta's policy recommends for
+// proactive "Marketing" templates).
 // AISENSY_CAMPAIGN_NAME must match a template you've created and had
 // approved in the AiSensy dashboard — this code sends whatever params that
 // template expects, in the order below (name, item summary, total). If the
