@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Gift, Sparkles, Heart, ChevronRight, MessageSquareText, PackageCheck, SendHorizontal, Image as ImageIcon, Home, ShieldCheck, Package, MessageCircle, Clock, Star, Users, Trophy, Mail, Sparkle } from 'lucide-react';
+import { Gift, Sparkles, Heart, ChevronRight, MessageSquareText, PackageCheck, SendHorizontal, Image as ImageIcon, Home, ShieldCheck, Package, MessageCircle, Clock, Star, Users, Trophy, Mail, Sparkle, Truck } from 'lucide-react';
 import { PRODUCTS, WHATSAPP_NUMBER, isProductVisible } from '../constants.ts';
 import { Category, Product } from '../types.ts';
 import PersonalizationModal from './PersonalizationModal.tsx';
@@ -126,10 +126,21 @@ const HamperCard: React.FC<HamperCardProps> = ({ item, onAddToCart, onSelectProd
               </span>
             )}
           </div>
-          <p className="text-sm sm:text-base text-[#4A3728]/70 leading-relaxed mb-4 sm:mb-10 max-w-xl">
+          <p className="text-sm sm:text-base text-[#4A3728]/70 leading-relaxed mb-4 sm:mb-6 max-w-xl">
             {item.description}
           </p>
-          
+
+          {/* Raksha Bandhan delivery reassurance — this whole page is the
+              Rakhi Hampers listing, so it applies to every card on it.
+              Kept accurate to the real promise (Ahmedabad 1 day, pan-India
+              3-5 days) rather than a blanket "next-day" claim. */}
+          <div className="flex items-start gap-2.5 mb-6 sm:mb-10 p-3.5 rounded-2xl bg-[#F6C94C]/10 border border-[#F6C94C]/30 max-w-xl">
+            <Truck size={18} className="text-coral flex-shrink-0 mt-0.5" />
+            <p className="text-[13px] text-[#4A3728]/80 leading-snug">
+              <span className="font-bold text-[#4A3728]">Order now for Raksha Bandhan.</span> Same-day dispatch — delivered within 1 day in Ahmedabad, 3-5 days pan-India, so it reaches well before Rakhi.
+            </p>
+          </div>
+
           <div className="space-y-6 sm:space-y-12">
             {/* The Collection Includes - Ingredient Pills */}
             <div className="space-y-4">
