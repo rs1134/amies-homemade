@@ -10,7 +10,7 @@ export default async function handler(req: any, res: any) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { sessionId, email, name, phone, city, itemsSummary, grandTotal } = req.body || {};
+  const { sessionId, email, name, phone, city, itemsSummary, grandTotal, whatsappOptIn } = req.body || {};
 
   // Nothing worth reminding about without an email to send to or items in
   // the cart — silently no-op rather than erroring, since this fires
@@ -28,8 +28,8 @@ export default async function handler(req: any, res: any) {
 
     const sql = neon(dbUrl);
     await sql`
-      INSERT INTO abandoned_carts (session_id, email, name, phone, city, items_summary, grand_total, updated_at)
-      VALUES (${sessionId}, ${email}, ${name || ''}, ${phone || ''}, ${city || ''}, ${itemsSummary}, ${grandTotal || 0}, now())
+      INSERT INTO abandoned_carts (session_id, email, name, phone, city, items_summary, grand_total, whatsapp_opt_in, updated_at)
+      VALUES (${sessionId}, ${email}, ${name || ''}, ${phone || ''}, ${city || ''}, ${itemsSummary}, ${grandTotal || 0}, ${!!whatsappOptIn}, now())
       ON CONFLICT (session_id) DO UPDATE SET
         email = excluded.email,
         name = excluded.name,
@@ -37,6 +37,7 @@ export default async function handler(req: any, res: any) {
         city = excluded.city,
         items_summary = excluded.items_summary,
         grand_total = excluded.grand_total,
+        whatsapp_opt_in = excluded.whatsapp_opt_in,
         updated_at = now()
     `;
 

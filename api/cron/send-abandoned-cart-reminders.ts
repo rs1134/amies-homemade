@@ -38,6 +38,55 @@ function buildReminderEmailHtml(params: { name: string; itemsSummary: string; gr
 </div>`.trim();
 }
 
+// WhatsApp reminder via AiSensy — only fires for carts where the customer
+// explicitly opted in at checkout (Meta's WhatsApp Business Platform policy
+// requires genuine consent before sending a proactive "Marketing" template;
+// typing a phone number into the Phone field is NOT consent on its own).
+// AISENSY_CAMPAIGN_NAME must match a template you've created and had
+// approved in the AiSensy dashboard — this code sends whatever params that
+// template expects, in the order below (name, item summary, total). If the
+// approved template's placeholder count/order differs, update templateParams
+// to match. Silently no-ops if AiSensy isn't configured yet, same pattern
+// as the email path when RESEND_API_KEY is missing.
+async function sendReminderWhatsApp(phone: string, name: string, itemsSummary: string, grandTotal: number): Promise<boolean> {
+  const API_KEY = process.env.AISENSY_API_KEY;
+  const CAMPAIGN_NAME = process.env.AISENSY_CAMPAIGN_NAME;
+  if (!API_KEY || !CAMPAIGN_NAME || !phone) return false;
+
+  // Normalize to bare digits with a leading country code, same convention
+  // used elsewhere in this codebase (api/meta-capi.ts normPhone) — AiSensy
+  // expects destination numbers with country code, no '+' or spaces.
+  let digits = phone.replace(/\D/g, '');
+  if (digits.length === 10) digits = '91' + digits;
+  else if (digits.length === 11 && digits.startsWith('0')) digits = '91' + digits.slice(1);
+
+  const greetingName = name ? name.split(' ')[0] : 'there';
+  const itemsShort = itemsSummary.split('\n').filter(Boolean).join(', ').slice(0, 200);
+
+  try {
+    const res = await fetch('https://backend.aisensy.com/campaign/t1/api/v2', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        apiKey: API_KEY,
+        campaignName: CAMPAIGN_NAME,
+        destination: digits,
+        userName: greetingName,
+        templateParams: [greetingName, itemsShort, `Rs.${grandTotal}`],
+      }),
+    });
+    if (!res.ok) {
+      const text = await res.text().catch(() => '');
+      console.error(`[abandoned-cart-cron] AiSensy failed for ${digits}: ${res.status} ${text}`);
+      return false;
+    }
+    return true;
+  } catch (err: any) {
+    console.error(`[abandoned-cart-cron] AiSensy error for ${digits}:`, err.message);
+    return false;
+  }
+}
+
 async function sendReminderEmail(to: string, name: string, itemsSummary: string, grandTotal: number): Promise<boolean> {
   const RESEND_KEY = process.env.RESEND_API_KEY;
   if (!RESEND_KEY) return false;
@@ -84,18 +133,26 @@ export default async function handler(req: any, res: any) {
     const sql = neon(dbUrl);
 
     const due = await sql`
-      SELECT id, email, name, items_summary, grand_total
+      SELECT id, email, name, phone, items_summary, grand_total, whatsapp_opt_in
       FROM abandoned_carts
       WHERE reminder_sent_at IS NULL
         AND updated_at < now() - interval '2 hours'
     `;
 
     let sent = 0;
+    let whatsappSent = 0;
     for (const cart of due) {
       const ok = await sendReminderEmail(cart.email, cart.name, cart.items_summary, cart.grand_total);
       if (ok) {
         await sql`UPDATE abandoned_carts SET reminder_sent_at = now() WHERE id = ${cart.id}`;
         sent++;
+      }
+      if (cart.whatsapp_opt_in) {
+        const waOk = await sendReminderWhatsApp(cart.phone, cart.name, cart.items_summary, cart.grand_total);
+        if (waOk) {
+          await sql`UPDATE abandoned_carts SET whatsapp_sent_at = now() WHERE id = ${cart.id}`;
+          whatsappSent++;
+        }
       }
     }
 
@@ -109,7 +166,7 @@ export default async function handler(req: any, res: any) {
     // fired on a given day without paying for Pro's longer log retention.
     await sql`INSERT INTO cron_runs (job_name, checked, sent) VALUES ('send-abandoned-cart-reminders', ${due.length}, ${sent})`;
 
-    return res.status(200).json({ ok: true, checked: due.length, sent });
+    return res.status(200).json({ ok: true, checked: due.length, sent, whatsappSent });
   } catch (err: any) {
     console.error('[abandoned-cart-cron] Failed:', err.message);
     return res.status(500).json({ error: err.message });
