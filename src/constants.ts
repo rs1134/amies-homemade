@@ -706,7 +706,7 @@ export const PRODUCTS: Product[] = [
     id: 'sm1',
     name: 'Dry Fruit Milk Masala',
     category: Category.WELLNESS,
-    price: 400,
+    price: 399,
     weight: '100 G',
     description: 'Bring a luxurious touch of traditional warmth to your everyday routine. This premium, nutrient-rich blend pairs rich nuts with pure saffron to turn a simple glass of warm milk into a deeply comforting treat. Made with zero added sugar and packed with natural protein, it is the perfect wholesome ritual to help your body relax at the end of a busy day.',
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(41).jpg',
@@ -718,7 +718,7 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%203.05.18%E2%80%AFPM.png',
     ],
     ingredients: ['Almonds', 'Cashews', 'Pistachios', 'Cardamom (Elaichi)', 'Saffron (Kesar)', 'Nutmeg'],
-    prices: { '100 G': 400 },
+    prices: { '100 G': 399 },
     rating: 4.5, reviewCount: 22,
     shelfLife: '1 year'
   },
