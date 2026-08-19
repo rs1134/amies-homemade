@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Truck, Wallet, ChevronRight, ChevronLeft, Smartphone, Loader2, MessageCircle, CheckCircle, MapPin, Calendar, Building2, Minus, Plus, Trash2, Scale, Search, Banknote } from 'lucide-react';
+import { Truck, Wallet, ChevronRight, ChevronLeft, Smartphone, Loader2, MessageCircle, CheckCircle, MapPin, Calendar, Building2, Minus, Plus, Trash2, Scale, Search, Banknote, ShieldCheck } from 'lucide-react';
 import { CartItem } from '../types.ts';
 import { WHATSAPP_NUMBER } from '../constants.ts';
 import { trackMetaEvent } from '../metaTracking.ts';
@@ -1407,6 +1407,34 @@ _Please confirm my order and share delivery details._
                   </p>
                 )
               )}
+
+              {/* Trust row — online payment goes through Razorpay's own
+                  hosted checkout (not our servers), but first-time visitors
+                  don't know that; naming the processor + showing familiar
+                  payment-method marks reduces "is this safe" hesitation
+                  right where they're about to tap Pay Now. */}
+              <div className="flex items-center justify-between gap-3 pt-3 mt-1 border-t border-[#4A3728]/5">
+                <div className="flex items-center gap-1.5 text-[#4A3728]/50">
+                  <ShieldCheck size={14} className="text-green-600 flex-shrink-0" />
+                  <span className="text-[9px] font-bold uppercase brand-rounded tracking-wider">100% Secure · Powered by Razorpay</span>
+                </div>
+                <div className="flex -space-x-1.5 flex-shrink-0">
+                  <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-sm ring-1 ring-black/5 overflow-hidden">
+                    <img src="https://ik.imagekit.io/amieshomemade/paytm-logo.svg" alt="Paytm" className="w-4 h-auto" />
+                  </div>
+                  <div className="w-6 h-6 rounded-full bg-[#5F259F] flex items-center justify-center shadow-sm ring-1 ring-black/5">
+                    <span className="text-white text-[10px] font-black italic leading-none">पे</span>
+                  </div>
+                  <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-sm ring-1 ring-black/5">
+                    <svg width="12" height="12" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                      <path fill="#4285F4" d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"/>
+                      <path fill="#34A853" d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"/>
+                      <path fill="#FBBC05" d="M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34C2.85 17.09 2 20.45 2 24c0 3.55.85 6.91 2.34 9.88l7.35-5.7z"/>
+                      <path fill="#EA4335" d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
