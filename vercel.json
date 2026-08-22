@@ -18,6 +18,10 @@
   ],
   "rewrites": [
     { "source": "/favicon.ico", "destination": "/favicon.png" },
+    { "source": "/terms", "destination": "/terms.html" },
+    { "source": "/privacy-policy", "destination": "/privacy-policy.html" },
+    { "source": "/refund-policy", "destination": "/refund-policy.html" },
+    { "source": "/cancellation-policy", "destination": "/cancellation-policy.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "crons": [
