@@ -38,7 +38,9 @@ export default async function handler(req: any, res: any) {
         items_summary = excluded.items_summary,
         grand_total = excluded.grand_total,
         whatsapp_opt_in = excluded.whatsapp_opt_in,
-        updated_at = now()
+        updated_at = now(),
+        reminder_sent_at = NULL,
+        whatsapp_sent_at = NULL
     `;
 
     return res.status(200).json({ ok: true });
