@@ -10,15 +10,14 @@ interface PolicyPageProps {
 // Shared shell — real, crawlable pages (not JS modals) so third-party
 // compliance checks (e.g. Razorpay's page verification) can actually read
 // the content, instead of a client-side-only hash route they never see.
-const PolicyShell: React.FC<{ title: string; icon: React.ReactNode; updated: string; children: React.ReactNode }> = ({ title, icon, updated, children }) => (
+const PolicyShell: React.FC<{ title: string; icon: React.ReactNode; children: React.ReactNode }> = ({ title, icon, children }) => (
   <div className="pt-24 pb-20 sm:pt-32 sm:pb-28 px-4 min-h-screen" style={{ background: '#FFF8EE' }}>
     <div className="max-w-3xl mx-auto">
       <div className="text-center mb-12">
         <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-coral shadow-sm mx-auto mb-5 border border-coral/10">
           {icon}
         </div>
-        <h1 className="text-3xl sm:text-5xl font-bold serif text-[#4A3728] mb-3">{title}</h1>
-        <p className="text-xs text-[#4A3728]/40 brand-rounded font-bold uppercase tracking-widest">Last updated: {updated}</p>
+        <h1 className="text-3xl sm:text-5xl font-bold serif text-[#4A3728]">{title}</h1>
       </div>
       <div className="bg-white rounded-[2.5rem] p-6 sm:p-12 border border-coral/10 shadow-sm space-y-8 text-[#4A3728]/80 leading-relaxed">
         {children}
@@ -33,7 +32,7 @@ const H2: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 
 /* ─── Terms and Conditions ──────────────────────────────────────────────── */
 export const TermsPage: React.FC<PolicyPageProps> = () => (
-  <PolicyShell title="Terms & Conditions" icon={<FileText size={24} />} updated="21 August 2026">
+  <PolicyShell title="Terms & Conditions" icon={<FileText size={24} />}>
     <div>
       <H2>1. About Us</H2>
       <p>Amie's Homemade ("we", "us", "our") is a home-based food business operating from Ahmedabad, Gujarat, India, selling handcrafted mukhwas, wellness snacks, granola, and gift hampers through amieshomemade.com. FSSAI Licence No. {FSSAI_LICENSE}.</p>
@@ -44,7 +43,7 @@ export const TermsPage: React.FC<PolicyPageProps> = () => (
     </div>
     <div>
       <H2>3. Products & Pricing</H2>
-      <p>All products are handcrafted in small batches and quantities may vary slightly. We reserve the right to change prices, weights, or discontinue any product listed on the site at any time, without prior notice. Prices shown are inclusive of applicable taxes unless stated otherwise.</p>
+      <p>All products are handcrafted in small batches, so there may be slight natural variation in appearance or quantity from batch to batch. Prices and product availability are updated from time to time to reflect our ingredient costs. Prices shown are inclusive of applicable taxes unless stated otherwise.</p>
     </div>
     <div>
       <H2>4. Orders & Payment</H2>
@@ -79,10 +78,10 @@ export const TermsPage: React.FC<PolicyPageProps> = () => (
 
 /* ─── Privacy Policy ────────────────────────────────────────────────────── */
 export const PrivacyPolicyPage: React.FC<PolicyPageProps> = () => (
-  <PolicyShell title="Privacy Policy" icon={<ShieldCheck size={24} />} updated="21 August 2026">
+  <PolicyShell title="Privacy Policy" icon={<ShieldCheck size={24} />}>
     <div>
       <H2>Information We Collect</H2>
-      <p>When you place an order, we collect your name, phone number, delivery address, and (optionally) email address, solely to process, deliver, and communicate with you about your order.</p>
+      <p>When you place an order, we collect your name, phone number, email address, and delivery address, solely to process, deliver, and communicate with you about your order.</p>
     </div>
     <div>
       <H2>How We Use It</H2>
@@ -91,10 +90,6 @@ export const PrivacyPolicyPage: React.FC<PolicyPageProps> = () => (
         <li className="flex gap-3 items-start"><CheckCircle className="text-coral shrink-0 mt-0.5" size={18} /><span>To process payment securely through our payment partner, Razorpay, which handles your card/bank details directly, we never see or store them.</span></li>
         <li className="flex gap-3 items-start"><CheckCircle className="text-coral shrink-0 mt-0.5" size={18} /><span>To hand your address and phone number to our delivery partners solely for fulfilling your delivery.</span></li>
       </ul>
-    </div>
-    <div>
-      <H2>Analytics & Advertising</H2>
-      <p>We use Google Analytics and the Meta (Facebook/Instagram) Pixel to understand site traffic and measure the performance of our ads. These tools may receive limited, often hashed, information such as your device type or a hashed version of your email or phone number. We do not sell your personal data to anyone.</p>
     </div>
     <div>
       <H2>Your Rights</H2>
@@ -109,7 +104,7 @@ export const PrivacyPolicyPage: React.FC<PolicyPageProps> = () => (
 
 /* ─── Refund Policy ─────────────────────────────────────────────────────── */
 export const RefundPolicyPage: React.FC<PolicyPageProps> = () => (
-  <PolicyShell title="Refund Policy" icon={<CheckCircle size={24} />} updated="21 August 2026">
+  <PolicyShell title="Refund Policy" icon={<CheckCircle size={24} />}>
     <div>
       <H2>When We Offer a Refund</H2>
       <p>Since all our products are freshly prepared, perishable food items, we do not accept returns or refunds for change of mind, incorrect selection, or personal taste preference. We <span className="font-bold text-[#4A3728]">do</span> offer a refund or replacement (at our discretion) if your order arrives:</p>
@@ -132,7 +127,7 @@ export const RefundPolicyPage: React.FC<PolicyPageProps> = () => (
 
 /* ─── Cancellation Policy ───────────────────────────────────────────────── */
 export const CancellationPolicyPage: React.FC<PolicyPageProps> = () => (
-  <PolicyShell title="Cancellation Policy" icon={<XCircle size={24} />} updated="21 August 2026">
+  <PolicyShell title="Cancellation Policy" icon={<XCircle size={24} />}>
     <div>
       <H2>Before Dispatch</H2>
       <p>You can cancel your order for a full refund any time before it has been prepared and dispatched. Message us on <a href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}`} className="text-coral font-bold hover:underline">WhatsApp at {WHATSAPP_NUMBER}</a> with your Order ID as soon as possible, since orders are typically dispatched within 1-2 business days of confirmation.</p>
