@@ -140,7 +140,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               </li>
               <li className="flex gap-4">
                 <MapPin size={18} className="text-[#F14E4E] flex-shrink-0" />
-                <span>Ahmedabad, Gujarat, India</span>
+                <span>1st Floor, A-102 Samasta Apartments, Opp. AMA, Near IIM Road, Ambawadi, Ahmedabad, Gujarat - 380015</span>
               </li>
               <li className="flex gap-4">
                 <Mail size={18} className="text-[#F14E4E] flex-shrink-0" />
@@ -148,6 +148,11 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               </li>
             </ul>
           </div>
+        </div>
+
+        {/* Proprietor line — required by Razorpay for SBI/Bandhan Bank netbanking activation, remove once confirmed */}
+        <div className="pb-4 text-center text-white/40 text-xs tracking-wide">
+          Amie's Homemade is a proprietorship owned by Amiben Bhadreshbhai Shah
         </div>
         
         {/* Payment Trust Strip */}
