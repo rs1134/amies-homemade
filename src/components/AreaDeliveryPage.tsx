@@ -63,6 +63,27 @@ const HubPage: React.FC<{ onNavigateToArea: (s: string) => void; onShopClick: ()
         ))}
       </div>
 
+      {/* "Don't see your area?" reassurance — the grid above only lists ~20
+          named neighbourhoods, which could otherwise read as an exhaustive
+          list and make a visitor from an unlisted area think we don't
+          deliver there, when we actually cover all of Ahmedabad. Mirrors
+          the same pattern already used on the Cities page. */}
+      <div className="bg-white rounded-[3rem] p-10 sm:p-16 text-center border border-coral/10 mb-10">
+        <MapPin className="w-10 h-10 mx-auto mb-6 text-coral" />
+        <h2 className="text-2xl sm:text-3xl font-bold serif text-[#4A3728] mb-4">Don't see your area?</h2>
+        <p className="text-[#4A3728]/60 mb-8 max-w-lg mx-auto">
+          This isn't the full list — we deliver to every neighbourhood across Ahmedabad. WhatsApp us your location and we'll arrange delivery right to your door.
+        </p>
+        <a
+          href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=${encodeURIComponent("Hi Ami! I'd like to order mukhwas & snacks for delivery in Ahmedabad. Can you help?")}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-3 px-10 py-5 bg-[#25D366] text-white rounded-full font-bold brand-rounded text-xs uppercase tracking-[0.2em] hover:shadow-2xl hover:shadow-[#25D366]/30 hover:scale-105 transition-all"
+        >
+          <MessageCircle size={18} /> WhatsApp Us
+        </a>
+      </div>
+
       <div className="text-center">
         <button
           onClick={onShopClick}
