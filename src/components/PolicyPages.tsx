@@ -43,7 +43,7 @@ export const TermsPage: React.FC<PolicyPageProps> = () => (
     </div>
     <div>
       <H2>3. Products & Pricing</H2>
-      <p>All products are handcrafted in small batches, so there may be slight natural variation in appearance or quantity from batch to batch. Prices and product availability are updated from time to time to reflect our ingredient costs. Prices shown are inclusive of applicable taxes unless stated otherwise.</p>
+      <p>All products are handcrafted in small batches. Prices and product availability are updated from time to time to reflect our ingredient costs. Prices shown are inclusive of applicable taxes unless stated otherwise.</p>
     </div>
     <div>
       <H2>4. Orders & Payment</H2>
