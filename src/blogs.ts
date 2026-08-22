@@ -1025,7 +1025,7 @@ export const BLOG_POSTS: BlogPost[] = [
 // Anything dated after it stays hidden — no more blogs auto-publish on their own.
 // To publish new posts later: raise this date (or set it to a far-future date to
 // re-enable automatic scheduling).
-const PUBLISH_CUTOFF = '2026-06-15';
+const PUBLISH_CUTOFF = '2026-08-22';
 
 // Returns only posts published on/before the frozen cutoff date
 export const getPublishedPosts = (): BlogPost[] => {
