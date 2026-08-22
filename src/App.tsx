@@ -20,6 +20,7 @@ import CityDeliveryPage from './components/CityDeliveryPage.tsx';
 import BlogView from './components/BlogView.tsx';
 import BlogPostView from './components/BlogPostView.tsx';
 import FAQView from './components/FAQView.tsx';
+import { TermsPage, PrivacyPolicyPage, RefundPolicyPage, CancellationPolicyPage } from './components/PolicyPages.tsx';
 import { getPostBySlug } from './blogs.ts';
 import { Sparkles, ArrowRight, MessageCircle, CheckCircle, Users, Mail } from 'lucide-react';
 import { ChatBubble, Crate } from './components/HandIcons.tsx';
@@ -81,6 +82,34 @@ const PAGE_SEO: Record<string, { title: string; description: string; canonical: 
     ogTitle: "Frequently Asked Questions | Amie's Homemade",
     ogDescription: "Everything you need to know about Amie's Homemade — ingredients, ordering, delivery, and corporate gifting.",
   },
+  terms: {
+    title: "Terms & Conditions | Amie's Homemade",
+    description: "Terms and conditions for using amieshomemade.com and ordering from Amie's Homemade.",
+    canonical: "https://amieshomemade.com/terms",
+    ogTitle: "Terms & Conditions | Amie's Homemade",
+    ogDescription: "Terms and conditions for using amieshomemade.com and ordering from Amie's Homemade.",
+  },
+  privacyPolicy: {
+    title: "Privacy Policy | Amie's Homemade",
+    description: "How Amie's Homemade collects, uses, and protects your personal information.",
+    canonical: "https://amieshomemade.com/privacy-policy",
+    ogTitle: "Privacy Policy | Amie's Homemade",
+    ogDescription: "How Amie's Homemade collects, uses, and protects your personal information.",
+  },
+  refundPolicy: {
+    title: "Refund Policy | Amie's Homemade",
+    description: "When and how Amie's Homemade offers refunds or replacements on your order.",
+    canonical: "https://amieshomemade.com/refund-policy",
+    ogTitle: "Refund Policy | Amie's Homemade",
+    ogDescription: "When and how Amie's Homemade offers refunds or replacements on your order.",
+  },
+  cancellationPolicy: {
+    title: "Cancellation Policy | Amie's Homemade",
+    description: "How and when you can cancel an order placed on amieshomemade.com.",
+    canonical: "https://amieshomemade.com/cancellation-policy",
+    ogTitle: "Cancellation Policy | Amie's Homemade",
+    ogDescription: "How and when you can cancel an order placed on amieshomemade.com.",
+  },
 };
 
 const BREADCRUMBS: Record<string, Array<{ name: string; item: string }>> = {
@@ -92,6 +121,10 @@ const BREADCRUMBS: Record<string, Array<{ name: string; item: string }>> = {
   checkout: [{ name: 'Home', item: 'https://amieshomemade.com' }, { name: 'Checkout', item: 'https://amieshomemade.com/checkout' }],
   blog:     [{ name: 'Home', item: 'https://amieshomemade.com' }, { name: 'The Journal', item: 'https://amieshomemade.com/blog' }],
   faq:      [{ name: 'Home', item: 'https://amieshomemade.com' }, { name: 'FAQs', item: 'https://amieshomemade.com/faq' }],
+  terms:              [{ name: 'Home', item: 'https://amieshomemade.com' }, { name: 'Terms & Conditions', item: 'https://amieshomemade.com/terms' }],
+  privacyPolicy:      [{ name: 'Home', item: 'https://amieshomemade.com' }, { name: 'Privacy Policy', item: 'https://amieshomemade.com/privacy-policy' }],
+  refundPolicy:       [{ name: 'Home', item: 'https://amieshomemade.com' }, { name: 'Refund Policy', item: 'https://amieshomemade.com/refund-policy' }],
+  cancellationPolicy: [{ name: 'Home', item: 'https://amieshomemade.com' }, { name: 'Cancellation Policy', item: 'https://amieshomemade.com/cancellation-policy' }],
 };
 
 const PAGE_TO_PATH: Record<string, string> = {
@@ -105,6 +138,10 @@ const PAGE_TO_PATH: Record<string, string> = {
   cities: '/cities',
   blog: '/blog',
   faq: '/faq',
+  terms: '/terms',
+  privacyPolicy: '/privacy-policy',
+  refundPolicy: '/refund-policy',
+  cancellationPolicy: '/cancellation-policy',
 };
 
 const PATH_TO_PAGE: Record<string, string> = Object.fromEntries(
@@ -1108,6 +1145,10 @@ const App: React.FC = () => {
           ? <BlogPostView slug={currentBlogSlug} onBack={() => navigateToBlog()} onSelectPost={(s) => navigateToBlog(s)} onNavigate={navigate} />
           : <BlogView onSelectPost={(s) => navigateToBlog(s)} />;
       case 'faq': return <FAQView onNavigate={navigate} />;
+      case 'terms': return <TermsPage onNavigate={navigate} />;
+      case 'privacyPolicy': return <PrivacyPolicyPage onNavigate={navigate} />;
+      case 'refundPolicy': return <RefundPolicyPage onNavigate={navigate} />;
+      case 'cancellationPolicy': return <CancellationPolicyPage onNavigate={navigate} />;
       case 'about': return <AboutUs onNavigate={navigate} />;
       case 'gifting': return <GiftingView onAddToCart={(p) => addToCart(p)} onSelectProduct={(p) => openProduct(p)} />;
       case 'shop': return (

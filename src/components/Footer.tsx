@@ -185,14 +185,20 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
 
         <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-xs uppercase tracking-widest text-white/40 font-semibold text-center md:text-left">
           <p>© 2026 Amie's Homemade. All rights reserved.</p>
-          <div className="flex gap-8">
-            <button 
-              onClick={() => openModal('privacy')}
-              className="hover:text-white transition-colors cursor-pointer"
-            >
+          <div className="flex flex-wrap justify-center gap-6 md:gap-8">
+            <a href="/terms" onClick={(e) => { e.preventDefault(); handleNav('terms'); }} className="hover:text-white transition-colors cursor-pointer">
+              Terms & Conditions
+            </a>
+            <a href="/privacy-policy" onClick={(e) => { e.preventDefault(); handleNav('privacyPolicy'); }} className="hover:text-white transition-colors cursor-pointer">
               Privacy Policy
-            </button>
-            <button 
+            </a>
+            <a href="/refund-policy" onClick={(e) => { e.preventDefault(); handleNav('refundPolicy'); }} className="hover:text-white transition-colors cursor-pointer">
+              Refund Policy
+            </a>
+            <a href="/cancellation-policy" onClick={(e) => { e.preventDefault(); handleNav('cancellationPolicy'); }} className="hover:text-white transition-colors cursor-pointer">
+              Cancellation Policy
+            </a>
+            <button
               onClick={() => openModal('shipping')}
               className="hover:text-white transition-colors cursor-pointer"
             >
@@ -258,7 +264,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </li>
             <li className="flex gap-3">
               <CheckCircle className="text-coral shrink-0 mt-0.5" size={16} />
-              <span>We accept <span className="font-bold">UPI, cards, net banking, PhonePe & Google Pay</span> via Razorpay — no Cash on Delivery.</span>
+              <span>We accept <span className="font-bold">UPI, cards, net banking, PhonePe & Google Pay</span> via Razorpay, plus <span className="font-bold">Cash on Delivery</span> for orders within Ahmedabad.</span>
             </li>
             <li className="flex gap-3">
               <CheckCircle className="text-coral shrink-0 mt-0.5" size={16} />

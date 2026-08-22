@@ -43,6 +43,30 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://amieshomemade.com/terms</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://amieshomemade.com/privacy-policy</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://amieshomemade.com/refund-policy</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://amieshomemade.com/cancellation-policy</loc>
+    <lastmod>2026-08-21</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
     <loc>https://amieshomemade.com/delivery</loc>
     <lastmod>2026-07-24</lastmod>
     <changefreq>monthly</changefreq>
