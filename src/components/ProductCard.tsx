@@ -171,17 +171,17 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onOpen,
         </p>
 
         {!isOOS && !needsOptions && cartQuantity > 0 ? (
-          <div className="flex items-center justify-center border-2 border-coral/10 rounded-full bg-white p-1">
+          <div className="flex items-center justify-center rounded-full bg-[#F14E4E] text-white shadow-md shadow-[#F14E4E]/30 p-1">
             <button
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDecrement?.(); }}
-              className="p-2 hover:text-coral hover:bg-coral/5 rounded-full transition-all"
+              className="p-2 hover:bg-white/15 rounded-full transition-all"
             >
               <Minus size={16} />
             </button>
             <span className="flex-1 text-center text-sm font-bold brand-rounded">{cartQuantity}</span>
             <button
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleAdd(); }}
-              className="p-2 hover:text-coral hover:bg-coral/5 rounded-full transition-all"
+              className="p-2 hover:bg-white/15 rounded-full transition-all"
             >
               <Plus size={16} />
             </button>
