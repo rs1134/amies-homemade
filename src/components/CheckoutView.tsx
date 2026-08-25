@@ -12,7 +12,10 @@ const COUPON_STORAGE_KEY = 'thanks10_used_phones';
 // pressure, which was silently wiping everything a customer had typed.
 // Expires after a day so a stale draft doesn't linger on a shared device.
 const DRAFT_STORAGE_KEY = 'amie_checkout_draft_v1';
-const DRAFT_MAX_AGE_MS = 24 * 60 * 60 * 1000;
+// Long-lived on purpose: this draft also prefills a repeat customer's next
+// order (name/address/phone/email), not just an in-progress checkout, so it
+// needs to survive weeks between orders, not just a same-day reload.
+const DRAFT_MAX_AGE_MS = 90 * 24 * 60 * 60 * 1000;
 
 interface CheckoutDraft {
   formData: { name: string; phone: string; email: string; city: string; state: string; address: string; flat: string; pincode: string };
@@ -36,10 +39,6 @@ const loadCheckoutDraft = (): CheckoutDraft | null => {
   } catch {
     return null;
   }
-};
-
-const clearCheckoutDraft = () => {
-  try { localStorage.removeItem(DRAFT_STORAGE_KEY); } catch { /* non-fatal */ }
 };
 
 // Identifies one checkout attempt for the abandoned-cart reminder emails
@@ -186,8 +185,8 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   const markerRef = useRef<any>(null);
 
   // Save the in-progress draft on every change so a reload/tab-restart
-  // restores it (see loadCheckoutDraft above). Cleared on successful order
-  // placement further down.
+  // restores it (see loadCheckoutDraft above). Refreshed (not cleared) on
+  // successful order placement further down, so it also prefills next time.
   useEffect(() => {
     try {
       localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify({
@@ -658,7 +657,15 @@ _Please confirm my order and share delivery details._
     });
     setPaymentId(paymentIdForOrder);
     setIsSuccess(true);
-    clearCheckoutDraft();
+    // Keep the draft (name/address/phone/email) so this customer's next order
+    // starts pre-filled instead of blank — just reset it back to the address
+    // step and refresh the timestamp so the retention window restarts from
+    // this order rather than whenever they first typed it in.
+    try {
+      localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify({
+        formData, addressQuery, addressConfirmed, checkoutStep: 'address', pinLocation, savedAt: Date.now(),
+      }));
+    } catch { /* non-fatal */ }
     // Order completed — don't let the abandoned-cart reminder cron email
     // them about something they already bought, and start the next cart
     // this browser builds as a fresh attempt rather than a continuation.
