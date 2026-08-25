@@ -1072,7 +1072,13 @@ _Please confirm my order and share delivery details._
             <h2 className="text-lg lg:text-2xl font-bold serif mb-3 lg:mb-5 flex items-center gap-2.5 text-[#4A3728]">
               <Truck className="text-[#F04E4E]" size={22} /> Delivery Details
             </h2>
-            <div className={fieldGap}>
+            {/* A real <form> (not just a <div> of inputs) — mobile browsers,
+                Chrome on Android especially, only offer the address/contact
+                autofill suggestion bar for inputs grouped inside an actual
+                form element. onSubmit is a no-op preventDefault since actual
+                submission is handled by the Proceed/Pay buttons below, which
+                live outside this form and are already type="button". */}
+            <form className={fieldGap} onSubmit={(e) => e.preventDefault()}>
 
               {/* ── STEP 1: Address (mobile) — always visible on desktop ── */}
               <div className={`space-y-1.5 ${checkoutStep === 'address' ? '' : 'hidden'} lg:block`}>
@@ -1361,7 +1367,7 @@ _Please confirm my order and share delivery details._
                   Continue to Payment <ChevronRight size={18} />
                 </button>
               </div>
-            </div>
+            </form>
           </div>
 
           {/* ── STEP 3: Payment & Summary (mobile) — always visible on desktop ── */}
