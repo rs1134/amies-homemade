@@ -1099,6 +1099,8 @@ const App: React.FC = () => {
           onNavigateHome={() => navigate('home')}
           related={related}
           onSelectProduct={(p) => openProduct(p)}
+          cart={cart}
+          onUpdateQuantity={updateQuantity}
         />
       );
     }
@@ -1150,7 +1152,7 @@ const App: React.FC = () => {
       case 'refundPolicy': return <RefundPolicyPage onNavigate={navigate} />;
       case 'cancellationPolicy': return <CancellationPolicyPage onNavigate={navigate} />;
       case 'about': return <AboutUs onNavigate={navigate} />;
-      case 'gifting': return <GiftingView onAddToCart={(p) => addToCart(p)} onSelectProduct={(p) => openProduct(p)} />;
+      case 'gifting': return <GiftingView onAddToCart={(p) => addToCart(p)} onSelectProduct={(p) => openProduct(p)} cart={cart} onUpdateQuantity={updateQuantity} />;
       case 'shop': return (
         <section id="shop" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 sm:pt-32 sm:pb-32 relative z-10">
 
@@ -1173,14 +1175,19 @@ const App: React.FC = () => {
             />
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6 lg:gap-10">
-            {filteredProducts.map(product => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                onAddToCart={(p) => addToCart(p, undefined, undefined, false)}
-                onOpen={(p) => openProduct(p)}
-              />
-            ))}
+            {filteredProducts.map(product => {
+              const cartIndex = cart.findIndex(item => item.id === product.id && item.selectedWeight === product.weight && !item.selectedSubOption);
+              return (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  onAddToCart={(p) => addToCart(p, undefined, undefined, false)}
+                  onOpen={(p) => openProduct(p)}
+                  cartQuantity={cartIndex >= 0 ? cart[cartIndex].quantity : 0}
+                  onDecrement={() => cartIndex >= 0 && updateQuantity(cartIndex, -1)}
+                />
+              );
+            })}
           </div>
         </section>
       );

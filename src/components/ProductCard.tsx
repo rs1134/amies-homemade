@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, ImageOff, Images } from 'lucide-react';
+import { Plus, Minus, ImageOff, Images } from 'lucide-react';
 import { Product } from '../types.ts';
 
 const BESTSELLER_IDS = new Set(['m5', 'm2', 'm4', 'sf3', 'hw1', 'sm1', 'm1']);
@@ -14,12 +14,16 @@ interface ProductCardProps {
   product: Product;
   onAddToCart: (product: Product) => void;
   onOpen: (product: Product) => void;
+  /** Current quantity of this product (default weight, no variety) already in the bag. */
+  cartQuantity?: number;
+  /** Only called once cartQuantity > 0 — lets the card show a stepper instead of "Add to Cart". */
+  onDecrement?: () => void;
 }
 
 const slugify = (name: string) =>
   name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onOpen }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onOpen, cartQuantity = 0, onDecrement }) => {
   const [imageError, setImageError] = useState(false);
   const availableWeights = product.weights || [product.weight];
   // Real href so search engines can crawl product pages from the grid
@@ -166,17 +170,35 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onOpen 
           {product.description}
         </p>
 
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            if (isOOS) { onOpen(product); return; } // still let them read the product
-            handleAdd();
-          }}
-          className={`w-full py-3 sm:py-3.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 flex items-center justify-center gap-1.5 border ${isOOS ? 'border-[#4A3728]/20 text-[#4A3728]/60 hover:bg-[#4A3728]/5' : 'border-[#F14E4E] bg-[#F14E4E] text-white shadow-md shadow-[#F14E4E]/30 hover:bg-[#d43d3d] hover:border-[#d43d3d] hover:shadow-lg hover:shadow-[#F14E4E]/40 active:scale-[0.98]'}`}
-        >
-          {isOOS ? 'Out of Stock · View Details' : needsOptions ? 'Choose Options' : '+ Add to Cart'}
-        </button>
+        {!isOOS && !needsOptions && cartQuantity > 0 ? (
+          <div className="flex items-center justify-center border-2 border-coral/10 rounded-full bg-white p-1">
+            <button
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDecrement?.(); }}
+              className="p-2 hover:text-coral hover:bg-coral/5 rounded-full transition-all"
+            >
+              <Minus size={16} />
+            </button>
+            <span className="flex-1 text-center text-sm font-bold brand-rounded">{cartQuantity}</span>
+            <button
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleAdd(); }}
+              className="p-2 hover:text-coral hover:bg-coral/5 rounded-full transition-all"
+            >
+              <Plus size={16} />
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (isOOS) { onOpen(product); return; } // still let them read the product
+              handleAdd();
+            }}
+            className={`w-full py-3 sm:py-3.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 flex items-center justify-center gap-1.5 border ${isOOS ? 'border-[#4A3728]/20 text-[#4A3728]/60 hover:bg-[#4A3728]/5' : 'border-[#F14E4E] bg-[#F14E4E] text-white shadow-md shadow-[#F14E4E]/30 hover:bg-[#d43d3d] hover:border-[#d43d3d] hover:shadow-lg hover:shadow-[#F14E4E]/40 active:scale-[0.98]'}`}
+          >
+            {isOOS ? 'Out of Stock · View Details' : needsOptions ? 'Choose Options' : '+ Add to Cart'}
+          </button>
+        )}
       </div>
     </a>
   );

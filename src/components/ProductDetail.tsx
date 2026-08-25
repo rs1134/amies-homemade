@@ -1,7 +1,7 @@
 
 import React, { useState, useMemo } from 'react';
 import { Heart, ShieldCheck, Clock, Truck, ImageOff, ChevronLeft, ChevronRight, ChevronDown, Minus, Plus, ChevronRight as Crumb } from 'lucide-react';
-import { Product } from '../types.ts';
+import { Product, CartItem } from '../types.ts';
 import { FSSAI_LICENSE, categoryLabel } from '../constants.ts';
 import { trackMetaEvent } from '../metaTracking.ts';
 import ProductCard from './ProductCard.tsx';
@@ -24,6 +24,8 @@ interface ProductDetailProps {
   related?: Product[];
   /** Open another product (from the related row). */
   onSelectProduct?: (product: Product) => void;
+  cart?: CartItem[];
+  onUpdateQuantity?: (index: number, delta: number) => void;
 }
 
 /** Small collapsible section used for Ingredients / Usage Info / Additional Information. */
@@ -48,7 +50,7 @@ const Accordion: React.FC<{ title: string; defaultOpen?: boolean; children: Reac
   );
 };
 
-const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onClose, onNavigateHome, related = [], onSelectProduct }) => {
+const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onClose, onNavigateHome, related = [], onSelectProduct, cart = [], onUpdateQuantity }) => {
   const [selectedWeight, setSelectedWeight] = useState(product.weights?.[0] || product.weight);
   const [selectedSubOption, setSelectedSubOption] = useState(product.subOptions?.[0]?.name || '');
   const [quantity, setQuantity] = useState(1);
@@ -401,14 +403,19 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
           <section className="mt-16 sm:mt-24">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#4A3728] serif mb-8">You May Also Like</h2>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
-              {related.slice(0, 4).map(p => (
-                <ProductCard
-                  key={p.id}
-                  product={p}
-                  onAddToCart={(prod) => onAddToCart(prod, prod.weights?.[0] || prod.weight)}
-                  onOpen={(prod) => onSelectProduct?.(prod)}
-                />
-              ))}
+              {related.slice(0, 4).map(p => {
+                const cartIndex = cart.findIndex(ci => ci.id === p.id && ci.selectedWeight === p.weight && !ci.selectedSubOption);
+                return (
+                  <ProductCard
+                    key={p.id}
+                    product={p}
+                    onAddToCart={(prod) => onAddToCart(prod, prod.weights?.[0] || prod.weight)}
+                    onOpen={(prod) => onSelectProduct?.(prod)}
+                    cartQuantity={cartIndex >= 0 ? cart[cartIndex].quantity : 0}
+                    onDecrement={() => cartIndex >= 0 && onUpdateQuantity?.(cartIndex, -1)}
+                  />
+                );
+              })}
             </div>
           </section>
         )}

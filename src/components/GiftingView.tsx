@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Gift, Sparkles, Heart, ChevronRight, MessageSquareText, PackageCheck, SendHorizontal, Image as ImageIcon, Home, ShieldCheck, Package, MessageCircle, Clock, Star, Users, Trophy, Mail, Sparkle } from 'lucide-react';
 import { PRODUCTS, WHATSAPP_NUMBER, isProductVisible } from '../constants.ts';
-import { Category, Product } from '../types.ts';
+import { Category, Product, CartItem } from '../types.ts';
 import PersonalizationModal from './PersonalizationModal.tsx';
 import WellnessPersonalizationModal from './WellnessPersonalizationModal.tsx';
 import SweetMemoriesModal from './SweetMemoriesModal.tsx';
@@ -16,6 +16,8 @@ interface HamperCardProps {
 interface GiftingViewProps {
   onAddToCart: (product: Product) => void;
   onSelectProduct: (product: Product) => void;
+  cart?: CartItem[];
+  onUpdateQuantity?: (index: number, delta: number) => void;
 }
 
 const HamperCard: React.FC<HamperCardProps> = ({ item, onAddToCart, onSelectProduct }) => {
@@ -252,7 +254,7 @@ const HamperCard: React.FC<HamperCardProps> = ({ item, onAddToCart, onSelectProd
   );
 };
 
-const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct }) => {
+const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct, cart = [], onUpdateQuantity }) => {
   const giftItems = useMemo(() => PRODUCTS.filter(p => p.category === Category.GIFTING && isProductVisible(p)), []);
   const [customName, setCustomName] = useState('');
   const [customPhone, setCustomPhone] = useState('');
@@ -301,14 +303,19 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct 
             actually gets wider on desktop instead of sitting narrow with a
             large empty gap where a 3rd/4th card would've gone. */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-10 max-w-4xl mx-auto mb-10 sm:mb-32">
-          {giftItems.map(item => (
-            <ProductCard
-              key={item.id}
-              product={item}
-              onAddToCart={(p) => onAddToCart(p)}
-              onOpen={(p) => onSelectProduct(p)}
-            />
-          ))}
+          {giftItems.map(item => {
+            const cartIndex = cart.findIndex(ci => ci.id === item.id && ci.selectedWeight === item.weight && !ci.selectedSubOption);
+            return (
+              <ProductCard
+                key={item.id}
+                product={item}
+                onAddToCart={(p) => onAddToCart(p)}
+                onOpen={(p) => onSelectProduct(p)}
+                cartQuantity={cartIndex >= 0 ? cart[cartIndex].quantity : 0}
+                onDecrement={() => cartIndex >= 0 && onUpdateQuantity?.(cartIndex, -1)}
+              />
+            );
+          })}
         </div>
 
         {/* Custom hamper enquiry — a lightweight form instead of a big promo
