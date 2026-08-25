@@ -8,7 +8,7 @@ interface HeroProps {
 
 // Two product hero shots — both on the same sage-green studio backdrop, so the
 // whole stage is sage and the photography melts into the page.
-const IMG_RANGE = 'https://ik.imagekit.io/amieshomemade/067A4322-1.jpg'; // full range: pouches, sweets box + jars
+const IMG_RANGE = 'https://ik.imagekit.io/amieshomemade/067A4324-1.jpg'; // mukhwas jars only
 const IMG_JARS = 'https://ik.imagekit.io/amieshomemade/067A4323-1.jpg';  // the mukhwas jar pyramid
 const tr = (url: string, w: number) => `${url}?tr=w-${w},q-80,f-auto`;
 
