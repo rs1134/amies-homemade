@@ -954,13 +954,6 @@ _Please confirm my order and share delivery details._
             </div>
 
             <div className="flex flex-col gap-4">
-              <a
-                href={(window as any).lastOrderWhatsappUrl || `https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}`}
-                target="_blank" rel="noopener noreferrer"
-                className="w-full py-4 sm:py-6 bg-[#25D366] text-white rounded-2xl sm:rounded-[1.5rem] font-bold brand-rounded uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[11px] hover:shadow-2xl hover:shadow-[#25D366]/30 transition-all flex items-center justify-center gap-3 active:scale-[0.98]"
-              >
-                <MessageCircle size={20} /> Confirm on WhatsApp
-              </a>
               <button
                 onClick={() => onComplete()}
                 className="w-full py-4 sm:py-6 bg-[#4A3728] text-white rounded-2xl sm:rounded-[1.5rem] font-bold brand-rounded uppercase tracking-[0.2em] sm:tracking-[0.3em] text-[11px] hover:bg-black transition-all shadow-xl active:scale-[0.98]"
