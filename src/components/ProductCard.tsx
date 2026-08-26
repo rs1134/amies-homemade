@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Plus, Minus, ImageOff, Images } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { Plus, Minus, Check, ImageOff, Images } from 'lucide-react';
 import { Product } from '../types.ts';
 
 const BESTSELLER_IDS = new Set(['m5', 'm2', 'm4', 'sf3', 'hw1', 'sm1', 'm1']);
@@ -27,6 +27,16 @@ const slugify = (name: string) =>
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onOpen, cartQuantity = 0, onDecrement, onRemove }) => {
   const [imageError, setImageError] = useState(false);
+  // Brief "Added ✓" confirmation on the button/icon that was actually
+  // clicked, so adding a first item feels acknowledged before the button
+  // swaps to the quantity stepper on the next render.
+  const [justAdded, setJustAdded] = useState(false);
+  const flashTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const flashAdded = () => {
+    setJustAdded(true);
+    if (flashTimeoutRef.current) clearTimeout(flashTimeoutRef.current);
+    flashTimeoutRef.current = setTimeout(() => setJustAdded(false), 700);
+  };
   const availableWeights = product.weights || [product.weight];
   // Real href so search engines can crawl product pages from the grid
   const productPath = `/${product.category === 'Gifting & Hampers' ? 'gifting' : 'shop'}/${slugify(product.name)}`;
@@ -121,11 +131,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onOpen,
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
+                if (!needsOptions) flashAdded();
                 handleAdd();
               }}
-              className="p-3 bg-[#F14E4E] text-white rounded-full shadow-lg hover:bg-[#d43d3d] transition-colors"
+              className={`p-3 rounded-full shadow-lg transition-colors duration-200 ${justAdded ? 'bg-green-600' : 'bg-[#F14E4E] hover:bg-[#d43d3d]'}`}
             >
-              <Plus size={20} />
+              {justAdded ? <Check size={20} className="animate-in zoom-in duration-200" /> : <Plus size={20} />}
             </button>
           </div>
         )}
@@ -173,16 +184,19 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onOpen,
         </p>
 
         {!isOOS && !needsOptions && cartQuantity > 0 ? (
-          <div className="flex items-center justify-center rounded-full bg-[#F14E4E] text-white shadow-md shadow-[#F14E4E]/30 p-1">
+          <div className={`flex items-center justify-center rounded-full text-white shadow-md p-1 animate-in zoom-in-95 duration-300 transition-colors duration-500 ${justAdded ? 'bg-green-600 shadow-green-600/30' : 'bg-[#F14E4E] shadow-[#F14E4E]/30'}`}>
             <button
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); cartQuantity === 1 ? onRemove?.() : onDecrement?.(); }}
               className="p-2 hover:bg-white/15 rounded-full transition-all"
             >
               <Minus size={16} />
             </button>
-            <span className="flex-1 text-center text-sm font-bold brand-rounded">{cartQuantity}</span>
+            <span className="flex-1 text-center text-sm font-bold brand-rounded flex items-center justify-center gap-1">
+              {justAdded && <Check size={14} className="animate-in zoom-in duration-200" />}
+              {cartQuantity}
+            </span>
             <button
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleAdd(); }}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); flashAdded(); handleAdd(); }}
               className="p-2 hover:bg-white/15 rounded-full transition-all"
             >
               <Plus size={16} />
@@ -194,6 +208,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onOpen,
               e.preventDefault();
               e.stopPropagation();
               if (isOOS) { onOpen(product); return; } // still let them read the product
+              if (!needsOptions) flashAdded();
               handleAdd();
             }}
             className={`w-full py-3 sm:py-3.5 rounded-full text-xs sm:text-sm font-bold transition-all duration-300 flex items-center justify-center gap-1.5 border ${isOOS ? 'border-[#4A3728]/20 text-[#4A3728]/60 hover:bg-[#4A3728]/5' : 'border-[#F14E4E] bg-[#F14E4E] text-white shadow-md shadow-[#F14E4E]/30 hover:bg-[#d43d3d] hover:border-[#d43d3d] hover:shadow-lg hover:shadow-[#F14E4E]/40 active:scale-[0.98]'}`}
