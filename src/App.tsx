@@ -1101,6 +1101,7 @@ const App: React.FC = () => {
           onSelectProduct={(p) => openProduct(p)}
           cart={cart}
           onUpdateQuantity={updateQuantity}
+          onRemoveFromCart={removeFromCart}
         />
       );
     }
@@ -1152,7 +1153,7 @@ const App: React.FC = () => {
       case 'refundPolicy': return <RefundPolicyPage onNavigate={navigate} />;
       case 'cancellationPolicy': return <CancellationPolicyPage onNavigate={navigate} />;
       case 'about': return <AboutUs onNavigate={navigate} />;
-      case 'gifting': return <GiftingView onAddToCart={(p) => addToCart(p)} onSelectProduct={(p) => openProduct(p)} cart={cart} onUpdateQuantity={updateQuantity} />;
+      case 'gifting': return <GiftingView onAddToCart={(p) => addToCart(p)} onSelectProduct={(p) => openProduct(p)} cart={cart} onUpdateQuantity={updateQuantity} onRemoveFromCart={removeFromCart} />;
       case 'shop': return (
         <section id="shop" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 sm:pt-32 sm:pb-32 relative z-10">
 
@@ -1185,6 +1186,7 @@ const App: React.FC = () => {
                   onOpen={(p) => openProduct(p)}
                   cartQuantity={cartIndex >= 0 ? cart[cartIndex].quantity : 0}
                   onDecrement={() => cartIndex >= 0 && updateQuantity(cartIndex, -1)}
+                  onRemove={() => cartIndex >= 0 && removeFromCart(cartIndex)}
                 />
               );
             })}

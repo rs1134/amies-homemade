@@ -26,6 +26,7 @@ interface ProductDetailProps {
   onSelectProduct?: (product: Product) => void;
   cart?: CartItem[];
   onUpdateQuantity?: (index: number, delta: number) => void;
+  onRemoveFromCart?: (index: number) => void;
 }
 
 /** Small collapsible section used for Ingredients / Usage Info / Additional Information. */
@@ -50,7 +51,7 @@ const Accordion: React.FC<{ title: string; defaultOpen?: boolean; children: Reac
   );
 };
 
-const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onClose, onNavigateHome, related = [], onSelectProduct, cart = [], onUpdateQuantity }) => {
+const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onClose, onNavigateHome, related = [], onSelectProduct, cart = [], onUpdateQuantity, onRemoveFromCart }) => {
   const [selectedWeight, setSelectedWeight] = useState(product.weights?.[0] || product.weight);
   const [selectedSubOption, setSelectedSubOption] = useState(product.subOptions?.[0]?.name || '');
   const [quantity, setQuantity] = useState(1);
@@ -413,6 +414,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
                     onOpen={(prod) => onSelectProduct?.(prod)}
                     cartQuantity={cartIndex >= 0 ? cart[cartIndex].quantity : 0}
                     onDecrement={() => cartIndex >= 0 && onUpdateQuantity?.(cartIndex, -1)}
+                    onRemove={() => cartIndex >= 0 && onRemoveFromCart?.(cartIndex)}
                   />
                 );
               })}

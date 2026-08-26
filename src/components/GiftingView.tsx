@@ -18,6 +18,7 @@ interface GiftingViewProps {
   onSelectProduct: (product: Product) => void;
   cart?: CartItem[];
   onUpdateQuantity?: (index: number, delta: number) => void;
+  onRemoveFromCart?: (index: number) => void;
 }
 
 const HamperCard: React.FC<HamperCardProps> = ({ item, onAddToCart, onSelectProduct }) => {
@@ -254,7 +255,7 @@ const HamperCard: React.FC<HamperCardProps> = ({ item, onAddToCart, onSelectProd
   );
 };
 
-const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct, cart = [], onUpdateQuantity }) => {
+const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct, cart = [], onUpdateQuantity, onRemoveFromCart }) => {
   const giftItems = useMemo(() => PRODUCTS.filter(p => p.category === Category.GIFTING && isProductVisible(p)), []);
   const [customName, setCustomName] = useState('');
   const [customPhone, setCustomPhone] = useState('');
@@ -313,6 +314,7 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct,
                 onOpen={(p) => onSelectProduct(p)}
                 cartQuantity={cartIndex >= 0 ? cart[cartIndex].quantity : 0}
                 onDecrement={() => cartIndex >= 0 && onUpdateQuantity?.(cartIndex, -1)}
+                onRemove={() => cartIndex >= 0 && onRemoveFromCart?.(cartIndex)}
               />
             );
           })}

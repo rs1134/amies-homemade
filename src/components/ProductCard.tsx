@@ -18,12 +18,14 @@ interface ProductCardProps {
   cartQuantity?: number;
   /** Only called once cartQuantity > 0 — lets the card show a stepper instead of "Add to Cart". */
   onDecrement?: () => void;
+  /** Called instead of onDecrement when quantity is 1 — removes the item entirely rather than clamping at 1. */
+  onRemove?: () => void;
 }
 
 const slugify = (name: string) =>
   name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onOpen, cartQuantity = 0, onDecrement }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onOpen, cartQuantity = 0, onDecrement, onRemove }) => {
   const [imageError, setImageError] = useState(false);
   const availableWeights = product.weights || [product.weight];
   // Real href so search engines can crawl product pages from the grid
@@ -173,7 +175,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onOpen,
         {!isOOS && !needsOptions && cartQuantity > 0 ? (
           <div className="flex items-center justify-center rounded-full bg-[#F14E4E] text-white shadow-md shadow-[#F14E4E]/30 p-1">
             <button
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onDecrement?.(); }}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); cartQuantity === 1 ? onRemove?.() : onDecrement?.(); }}
               className="p-2 hover:bg-white/15 rounded-full transition-all"
             >
               <Minus size={16} />
