@@ -54,7 +54,7 @@ export const PRODUCTS: Product[] = [
     name: 'The Gourmet Discovery',
     category: Category.GIFTING,
     price: 1499,
-    weight: 'Premium Hamper',
+    weight: 'Gift Hamper',
     description: 'A premium trio for the discerning palate — wholesome Dryfruit & Seeds, our 12-ingredient Homemade Granola, and the indulgent Almond Motichoor Ladoo. A thoughtfully curated hamper that balances everyday nourishment with a touch of celebration.',
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(14).png',
     images: [
