@@ -283,7 +283,7 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct,
         />
         <div className="relative z-20 text-center px-4 max-w-4xl mx-auto">
           <h1 className="text-4xl sm:text-6xl lg:text-8xl font-bold text-white serif mb-4 sm:mb-6 leading-tight drop-shadow-2xl animate-in fade-in zoom-in duration-1000">
-            Celebrate Rakhi, <span className="text-[#D4AF37] brand-script">Beautifully.</span>
+            Gift Hampers, <span className="text-[#D4AF37] brand-script">Beautifully.</span>
           </h1>
         </div>
       </section>
@@ -291,11 +291,11 @@ const GiftingView: React.FC<GiftingViewProps> = ({ onAddToCart, onSelectProduct,
       {/* Main Gifting Gallery */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-32">
         <div className="text-center mb-10 sm:mb-32">
-          <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em] block mb-4 sm:mb-6">Rakhi Hampers</span>
-          <h2 className="text-3xl sm:text-5xl lg:text-7xl font-bold serif text-[#4A3728]">Hampers for Every Rakhi</h2>
+          <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em] block mb-4 sm:mb-6">Gift Hampers</span>
+          <h2 className="text-3xl sm:text-5xl lg:text-7xl font-bold serif text-[#4A3728]">Hampers for Every Occasion</h2>
           <div className="w-24 h-2 bg-[#D4AF37] mx-auto rounded-full mt-8 shadow-sm"></div>
           <p className="mt-10 text-[#4A3728]/50 max-w-2xl mx-auto brand-rounded font-bold uppercase text-[10px] tracking-[0.2em] leading-relaxed">
-            Handpicked hampers for the sibling who means everything. <br/>Beautifully packaged, ready to gift.
+            Handpicked hampers for the people who mean everything. <br/>Beautifully packaged, ready to gift.
           </p>
         </div>
 
