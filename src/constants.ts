@@ -25,7 +25,7 @@ export const isCategoryVisible = (c: Category): boolean =>
 // Category value stays 'Gifting & Hampers' everywhere else (routing, SEO,
 // schema), this just changes what's actually shown on screen.
 export const CATEGORY_DISPLAY_LABEL: Partial<Record<Category, string>> = {
-  [Category.GIFTING]: 'Rakhi Hampers',
+  [Category.GIFTING]: 'Gift Hampers',
 };
 export const categoryLabel = (c: Category): string => CATEGORY_DISPLAY_LABEL[c] ?? c;
 
