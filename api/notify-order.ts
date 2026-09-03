@@ -215,17 +215,21 @@ export default async function handler(req: any, res: any) {
     const isCod = method === 'COD';
 
     if (isCod) {
-      // Fire-and-forget — never let a Meta send delay or break the actual
-      // order confirmation. event_id `cod-<orderId>` matches the browser's
-      // own trackMetaEvent('Purchase', ..., `cod-${orderId}`) call exactly.
-      sendMetaCodPurchaseBackstop({
+      // Awaited (not fire-and-forget) — Vercel can freeze/kill an unawaited
+      // promise the instant the handler returns, so this needs to finish
+      // before the function does, same as the ntfy/SMS/email sends below.
+      // Failure here never blocks order confirmation — sendMetaCodPurchaseBackstop
+      // catches its own errors internally and just logs them.
+      // event_id `cod-<orderId>` matches the browser's own
+      // trackMetaEvent('Purchase', ..., `cod-${orderId}`) call exactly.
+      await sendMetaCodPurchaseBackstop({
         eventId: `cod-${orderId}`,
         value: grandTotal,
         name, phone, email: email || '', city, state: state || '', zip: pincode || '',
         cookieHeader: req.headers['cookie'],
         clientIp: String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket?.remoteAddress,
         clientUserAgent: req.headers['user-agent'],
-      }).catch(() => { /* non-fatal, already logged internally */ });
+      });
     }
 
     const message = [
