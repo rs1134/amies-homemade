@@ -1,4 +1,5 @@
 import { neon } from '@neondatabase/serverless';
+import crypto from 'crypto';
 
 // HTTP headers can only contain Latin-1 (ByteString) characters. Customer
 // names/addresses can contain em-dashes, smart quotes, emoji, etc., which
@@ -84,13 +85,97 @@ async function sendOrderConfirmationEmail(params: {
   }
 }
 
+// ── Meta Conversions API Purchase — COD server-side backstop ───────────────
+// COD orders have no Razorpay webhook (no payment gateway involved), so the
+// browser-fired Purchase event (in CheckoutView.tsx, event_id `cod-<orderId>`)
+// is normally the only signal Meta ever gets for these. If that browser call
+// is lost (ad-blocker, tab closed right after tapping "Place Order", flaky
+// mobile connection), the purchase never reaches Meta at all — unlike online
+// payments, which have the Razorpay webhook as a backstop. This closes that
+// gap the same way: same deterministic event_id, so Meta dedupes the two if
+// both arrive, and still gets a clean single event if only this one does.
+// Hashing logic duplicated from api/meta-capi.ts (not imported — see the
+// hashing-helper comment there for why Vercel's bundler needs this per-file).
+const sha256Hex = (s: string) => crypto.createHash('sha256').update(s, 'utf8').digest('hex');
+const normEmail = (v: string) => v.trim().toLowerCase();
+const normPhone = (v: string) => {
+  let digits = v.replace(/\D/g, '');
+  if (digits.length === 10) digits = '91' + digits;
+  else if (digits.length === 11 && digits.startsWith('0')) digits = '91' + digits.slice(1);
+  return digits;
+};
+const normName = (v: string) => v.trim().toLowerCase();
+const normLocation = (v: string) => v.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+const hashField = (value: string | undefined, normalize: (v: string) => string): string | undefined => {
+  if (!value) return undefined;
+  const normalized = normalize(String(value));
+  if (!normalized) return undefined;
+  return sha256Hex(normalized);
+};
+
+async function sendMetaCodPurchaseBackstop(params: {
+  eventId: string; value: number; name: string; phone: string; email: string;
+  city: string; state: string; zip: string; cookieHeader?: string; clientIp?: string; clientUserAgent?: string;
+}): Promise<void> {
+  const PIXEL_ID = process.env.META_PIXEL_ID;
+  const ACCESS_TOKEN = process.env.META_CAPI_ACCESS_TOKEN;
+  if (!PIXEL_ID || !ACCESS_TOKEN) return;
+
+  const [firstName, ...lastNameParts] = params.name.trim().split(/\s+/);
+  const userData: Record<string, string[] | string> = {};
+  const em = hashField(params.email, normEmail); if (em) userData.em = [em];
+  const ph = hashField(params.phone, normPhone); if (ph) userData.ph = [ph];
+  const fn = hashField(firstName, normName); if (fn) userData.fn = [fn];
+  const ln = hashField(lastNameParts.join(' '), normName); if (ln) userData.ln = [ln];
+  const ct = hashField(params.city, normLocation); if (ct) userData.ct = [ct];
+  const st = hashField(params.state, normLocation); if (st) userData.st = [st];
+  const zp = hashField(params.zip, normLocation); if (zp) userData.zp = [zp];
+  const country = hashField('in', normLocation); if (country) userData.country = [country];
+
+  const cookieHeader = params.cookieHeader || '';
+  const fbp = /(?:^|;\s*)_fbp=([^;]+)/.exec(cookieHeader)?.[1];
+  const fbc = /(?:^|;\s*)_fbc=([^;]+)/.exec(cookieHeader)?.[1];
+  if (fbp) userData.fbp = fbp;
+  if (fbc) userData.fbc = fbc;
+  if (params.clientIp) userData.client_ip_address = params.clientIp;
+  if (params.clientUserAgent) userData.client_user_agent = params.clientUserAgent;
+
+  const testEventCode = process.env.META_TEST_EVENT_CODE;
+  const payload = {
+    data: [{
+      event_name: 'Purchase',
+      event_time: Math.floor(Date.now() / 1000),
+      event_id: params.eventId,
+      event_source_url: 'https://amieshomemade.com/checkout',
+      action_source: 'website',
+      user_data: userData,
+      custom_data: { value: params.value, currency: 'INR' },
+    }],
+    ...(testEventCode ? { test_event_code: testEventCode } : {}),
+  };
+
+  try {
+    const res = await fetch(`https://graph.facebook.com/v21.0/${PIXEL_ID}/events?access_token=${ACCESS_TOKEN}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const text = await res.text().catch(() => '');
+      console.error(`[notify-order] Meta CAPI COD Purchase send failed: ${res.status} ${text}`);
+    }
+  } catch (err: any) {
+    console.error('[notify-order] Meta CAPI COD Purchase send error:', err.message);
+  }
+}
+
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   const {
-    orderId, name, phone, city, address, pincode, email, itemsSummary,
+    orderId, name, phone, city, state, address, pincode, email, itemsSummary,
     totalWeight, subtotal, shippingFee, codFee, grandTotal, paymentId, couponDiscount,
     paymentMethod, mapPin, gender,
   } = req.body;
@@ -128,6 +213,21 @@ export default async function handler(req: any, res: any) {
     }
 
     const isCod = method === 'COD';
+
+    if (isCod) {
+      // Fire-and-forget — never let a Meta send delay or break the actual
+      // order confirmation. event_id `cod-<orderId>` matches the browser's
+      // own trackMetaEvent('Purchase', ..., `cod-${orderId}`) call exactly.
+      sendMetaCodPurchaseBackstop({
+        eventId: `cod-${orderId}`,
+        value: grandTotal,
+        name, phone, email: email || '', city, state: state || '', zip: pincode || '',
+        cookieHeader: req.headers['cookie'],
+        clientIp: String(req.headers['x-forwarded-for'] || '').split(',')[0].trim() || req.socket?.remoteAddress,
+        clientUserAgent: req.headers['user-agent'],
+      }).catch(() => { /* non-fatal, already logged internally */ });
+    }
+
     const message = [
       isCod ? `💰 CASH ON DELIVERY — COLLECT Rs.${grandTotal}` : `NEW ORDER: ${orderId}`,
       `---------------------------`,

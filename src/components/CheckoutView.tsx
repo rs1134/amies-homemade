@@ -618,7 +618,7 @@ _Please confirm my order and share delivery details._
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           orderId, name: formData.name, phone: formData.phone,
-          city: formData.city, address: fullDeliveryAddress, pincode: formData.pincode, email: formData.email,
+          city: formData.city, state: formData.state, address: fullDeliveryAddress, pincode: formData.pincode, email: formData.email,
           itemsSummary, totalWeight, subtotal: total,
           shippingFee: shippingFee ?? 0, codFee, grandTotal, paymentId: paymentIdForOrder,
           paymentMethod: isCod ? 'COD' : 'RAZORPAY',
