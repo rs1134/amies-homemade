@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Truck, Wallet, ChevronRight, ChevronLeft, Smartphone, Loader2, MessageCircle, CheckCircle, MapPin, Calendar, Building2, Minus, Plus, Trash2, Scale, Search, Banknote } from 'lucide-react';
+import { Truck, Wallet, ChevronRight, ChevronLeft, Loader2, MessageCircle, CheckCircle, MapPin, Calendar, Building2, Minus, Plus, Trash2, Scale, Search, Banknote } from 'lucide-react';
 import { CartItem } from '../types.ts';
 import { WHATSAPP_NUMBER } from '../constants.ts';
 import { trackMetaEvent } from '../metaTracking.ts';
@@ -1383,7 +1383,7 @@ _Please confirm my order and share delivery details._
                 disabled={isSubmitting}
                 className={`w-full p-3 lg:p-4 rounded-2xl border-2 flex items-center gap-3 shadow-sm transition-all text-left disabled:opacity-50 ${paymentMethod === 'online' ? 'border-[#F04E4E] bg-[#F04E4E]/5' : 'border-[#4A3728]/10 hover:border-[#4A3728]/20'}`}
               >
-                <Smartphone size={22} className="text-blue-500 flex-shrink-0" />
+                <img src="https://ik.imagekit.io/amieshomemade/how-does-upi-work.avif" alt="UPI" className="h-7 w-auto flex-shrink-0" />
                 <span className="text-[10px] font-black uppercase brand-rounded tracking-widest flex-1">Secure Online Payment (UPI, Cards, Netbanking)</span>
                 <img src="https://ik.imagekit.io/amieshomemade/razorpay-icon.webp" alt="Razorpay" className="w-11 h-11 flex-shrink-0 rounded-md" />
               </button>
