@@ -1440,6 +1440,12 @@ _Please confirm my order and share delivery details._
                       <path fill="#EA4335" d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"/>
                     </svg>
                   </div>
+                  <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-sm ring-1 ring-black/5 overflow-hidden">
+                    <img src="https://ik.imagekit.io/amieshomemade/Mastercard_logo.webp" alt="Mastercard" className="w-5 h-auto" />
+                  </div>
+                  <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-sm ring-1 ring-black/5 overflow-hidden">
+                    <img src="https://ik.imagekit.io/amieshomemade/HDB-bb6241fe.png" alt="" className="w-5 h-auto" />
+                  </div>
                 </div>
               </div>
             </div>
