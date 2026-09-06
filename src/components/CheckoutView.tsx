@@ -1421,7 +1421,7 @@ _Please confirm my order and share delivery details._
                   right where they're about to tap Pay Now. */}
               <div className="flex items-center justify-between gap-3 pt-3 mt-1 border-t border-[#4A3728]/5">
                 <div className="flex items-center gap-1.5 text-[#4A3728]/50">
-                  <img src="https://ik.imagekit.io/amieshomemade/razorpay-icon.webp" alt="Razorpay" className="w-4 h-4 flex-shrink-0 rounded" />
+                  <img src="https://ik.imagekit.io/amieshomemade/razorpay-icon.webp" alt="Razorpay" className="w-7 h-7 flex-shrink-0 rounded-md" />
                   <span className="text-[9px] font-bold uppercase brand-rounded tracking-wider">100% Secure · Powered by Razorpay</span>
                 </div>
                 <div className="flex -space-x-1.5 flex-shrink-0">
