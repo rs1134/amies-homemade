@@ -766,7 +766,7 @@ _Please confirm my order and share delivery details._
         key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_SpwPwC9cvjewrn',
         amount: order.amount, currency: order.currency,
         name: "Amie's Homemade", description: "Order Payment",
-        image: "https://ik.imagekit.io/amieshomemade/Whats-App-Image-2026-02-12-at-18-57-42-1.jpg",
+        image: "https://ik.imagekit.io/amieshomemade/Whats-App-Image-2026-02-12-at-18-59-03-1.jpg",
         order_id: order.id,
         handler: async function (response: any) {
           // Fire Meta Purchase tracking first, before anything else in this
