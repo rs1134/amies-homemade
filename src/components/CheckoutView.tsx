@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Truck, Wallet, ChevronRight, ChevronLeft, Loader2, MessageCircle, CheckCircle, MapPin, Calendar, Building2, Minus, Plus, Trash2, Scale, Search, Banknote } from 'lucide-react';
+import { Truck, Wallet, ChevronRight, ChevronLeft, Loader2, MessageCircle, CheckCircle, MapPin, Calendar, Building2, Minus, Plus, Trash2, Scale, Search, Banknote, AlertTriangle, MoreVertical } from 'lucide-react';
 import { CartItem } from '../types.ts';
 import { WHATSAPP_NUMBER } from '../constants.ts';
 import { trackMetaEvent } from '../metaTracking.ts';
@@ -91,8 +91,19 @@ interface OrderSnapshot {
   email: string;
 }
 
+// Instagram/Facebook's in-app "browser" is a restricted WebView, not a real
+// browser — it's a known, widespread source of silently failing checkouts
+// (blocked cookies/APIs, fetches that never land) across e-commerce sites in
+// general. We had a real customer hit exactly this: address/payment step
+// looked fine, but Place Order never reached our server at all. Detecting it
+// and nudging toward the real browser is the standard, reliable mitigation
+// (there's no way to fix the WebView's own restrictions from our code).
+const isInAppBrowser = () =>
+  typeof navigator !== 'undefined' && /Instagram|FBAN|FBAV/i.test(navigator.userAgent);
+
 const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdateQuantity, onRemove, total, couponApplied = false, onShopClick, onOrderPlaced }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showInAppWarning] = useState(isInAppBrowser);
   const [isSuccess, setIsSuccess] = useState(false);
   const [paymentId, setPaymentId] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<'online' | 'cod'>('online');
@@ -476,7 +487,7 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   };
 
   const goToSummaryStep = () => {
-    if (!validateStepFields(['name', 'phone', 'city', 'state', 'flat', 'pincode'])) return;
+    if (!validateStepFields(['name', 'phone', 'email', 'city', 'state', 'flat', 'pincode'])) return;
     setCheckoutStep('summary');
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
   };
@@ -688,6 +699,27 @@ _Please confirm my order and share delivery details._
     ? `${formData.flat}, ${formData.address}`
     : formData.address;
 
+  // Which mobile step owns each field — on mobile, a field belonging to a
+  // step other than the current one is rendered with a `hidden` class (no
+  // layout box), so scrollIntoView on it is a silent no-op. Without
+  // switching back to the right step first, a validation failure on an
+  // earlier-step field (most commonly email, which isn't re-checked by
+  // goToDetailsStep/goToSummaryStep when advancing) looks to the customer
+  // like clicking "Place Order" does nothing at all — this is a real bug we
+  // traced from a customer report, not browser-specific.
+  const FIELD_STEP: Record<FieldName, CheckoutStep> = {
+    address: 'address', city: 'address', state: 'address', flat: 'address', pincode: 'address',
+    name: 'details', phone: 'details', email: 'details',
+  };
+  const revealFieldAndScroll = (fieldName: FieldName) => {
+    const step = FIELD_STEP[fieldName];
+    if (step !== checkoutStep) setCheckoutStep(step);
+    // Wait a tick for the step switch to un-hide the field before scrolling to it.
+    requestAnimationFrame(() => {
+      document.getElementById(`field-${fieldName}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  };
+
   const handleProceed = async () => {
     if (items.length === 0) return; // nothing to pay for
     const fieldNames: FieldName[] = ['name', 'phone', 'city', 'state', 'email', 'address', 'flat', 'pincode'];
@@ -703,7 +735,7 @@ _Please confirm my order and share delivery details._
     setTouched(fieldNames.reduce((acc, name) => ({ ...acc, [name]: true }), {}));
 
     if (Object.keys(newErrors).length > 0) {
-      if (firstErrorField) document.getElementById(`field-${firstErrorField}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (firstErrorField) revealFieldAndScroll(firstErrorField);
       return;
     }
 
@@ -713,7 +745,7 @@ _Please confirm my order and share delivery details._
       if (usedPhones.includes(cleanPhone)) {
         setFieldErrors(prev => ({ ...prev, phone: 'This phone number has already used the THANKS10 coupon.' }));
         setTouched(prev => ({ ...prev, phone: true }));
-        document.getElementById('field-phone')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        revealFieldAndScroll('phone');
         return;
       }
     }
@@ -1036,6 +1068,21 @@ _Please confirm my order and share delivery details._
   // ── Checkout Form ───────────────────────────────────────────────────────────
   return (
     <div className="pt-[86px] lg:pt-24 pb-28 sm:pb-12 px-4 sm:px-6 lg:px-8 bg-cream min-h-screen" onFocus={handleFormFocus} onBlur={handleFormBlur}>
+      {/* Instagram/Facebook's in-app browser is a restricted WebView that can
+          silently fail to complete checkout (blocked cookies/APIs, fetches
+          that never land) — a real customer hit exactly this. There's no
+          code fix for the WebView's own restrictions, so the standard
+          mitigation is nudging toward opening in a real browser instead. */}
+      {showInAppWarning && (
+        <div className="max-w-6xl mx-auto mb-4 flex items-start gap-2.5 p-3.5 rounded-2xl bg-amber-50 border border-amber-300 text-amber-900">
+          <AlertTriangle size={18} className="flex-shrink-0 mt-0.5" />
+          <p className="text-[12px] leading-relaxed">
+            <span className="font-bold">You're checking out inside Instagram's built-in browser</span>, which can sometimes fail to complete orders.
+            For a smoother checkout, tap the <MoreVertical size={13} className="inline -mt-0.5" /> menu above and choose <span className="font-bold">"Open in Safari" / "Open in Chrome"</span>.
+          </p>
+        </div>
+      )}
+
       {/* Mobile-only step progress indicator — sits outside the reorderable
           grid below so it always stays at the top regardless of which
           grid item (form vs summary) is visually first for the current step. */}
