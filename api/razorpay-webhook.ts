@@ -99,6 +99,15 @@ async function sendOrderConfirmationEmail(params: {
   }
 }
 
+// Owner's own phone numbers, used for placing test orders (Rushil Shah,
+// Bhadresh Shah) — these are never real customers, so their Purchase events
+// must never reach Meta and get counted as real ad conversions/ROAS.
+// Exact-match only (normalized to last 10 digits) — deliberately not a
+// prefix/pattern match, so it can never catch a real customer's number.
+const INTERNAL_TEST_PHONES = new Set(['9054038876', '9909942126']);
+const isInternalTestPhone = (phone?: string): boolean =>
+  !!phone && INTERNAL_TEST_PHONES.has(String(phone).replace(/\D/g, '').slice(-10));
+
 async function sendMetaPurchaseBackstop(params: {
   eventId: string;
   value: number;
@@ -399,13 +408,17 @@ export default async function handler(req: any, res: any) {
     // Shares the deterministic event_id `purchase-${paymentId}` with the
     // client-fired Purchase in CheckoutView.tsx, so this only adds a second
     // counted purchase on Meta's side if the client one never landed.
-    await sendMetaPurchaseBackstop({
-      eventId: `purchase-${paymentId}`,
-      value: grandTotal,
-      contentIds: [],
-      name, phone, email, city, state, zip: pincode,
-      fbp, fbc,
-    });
+    // Skipped for the owner's own test-order phone numbers (see
+    // INTERNAL_TEST_PHONES below) — those are never real conversions.
+    if (!isInternalTestPhone(phone)) {
+      await sendMetaPurchaseBackstop({
+        eventId: `purchase-${paymentId}`,
+        value: grandTotal,
+        contentIds: [],
+        name, phone, email, city, state, zip: pincode,
+        fbp, fbc,
+      });
+    }
 
     console.log(`[razorpay-webhook] payment ${paymentId}: logged + notified`);
     return res.status(200).json({ ok: true, isNew: true });

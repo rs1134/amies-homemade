@@ -113,6 +113,15 @@ const hashField = (value: string | undefined, normalize: (v: string) => string):
   return sha256Hex(normalized);
 };
 
+// Owner's own phone numbers, used for placing test orders (Rushil Shah,
+// Bhadresh Shah) — these are never real customers, so their Purchase events
+// must never reach Meta and get counted as real ad conversions/ROAS.
+// Exact-match only (normalized to last 10 digits) — deliberately not a
+// prefix/pattern match, so it can never catch a real customer's number.
+const INTERNAL_TEST_PHONES = new Set(['9054038876', '9909942126']);
+const isInternalTestPhone = (phone?: string): boolean =>
+  !!phone && INTERNAL_TEST_PHONES.has(String(phone).replace(/\D/g, '').slice(-10));
+
 async function sendMetaCodPurchaseBackstop(params: {
   eventId: string; value: number; name: string; phone: string; email: string;
   city: string; state: string; zip: string; cookieHeader?: string; clientIp?: string; clientUserAgent?: string;
@@ -214,7 +223,7 @@ export default async function handler(req: any, res: any) {
 
     const isCod = method === 'COD';
 
-    if (isCod) {
+    if (isCod && !isInternalTestPhone(phone)) {
       // Awaited (not fire-and-forget) — Vercel can freeze/kill an unawaited
       // promise the instant the handler returns, so this needs to finish
       // before the function does, same as the ntfy/SMS/email sends below.

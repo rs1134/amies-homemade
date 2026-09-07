@@ -59,12 +59,26 @@ const getOrCreateExternalId = (): string => {
  * dedupe into one on Meta's side. Omit for events with a single client-only
  * trigger (PageView, ViewContent, AddToCart, InitiateCheckout).
  */
+// Owner's own phone numbers, used for placing test orders (Rushil Shah,
+// Bhadresh Shah) — these are never real customers, so their Purchase events
+// must never reach Meta and get counted as real ad conversions/ROAS. Scoped
+// to Purchase only: earlier funnel events (PageView/AddToCart/etc.) from the
+// same test session are harmless noise, but a counted Purchase directly
+// skews campaign optimization and reported spend efficiency.
+const INTERNAL_TEST_PHONES = new Set(['9054038876', '9909942126']);
+const isInternalTestPhone = (phone?: string): boolean =>
+  !!phone && INTERNAL_TEST_PHONES.has(phone.replace(/\D/g, '').slice(-10));
+
 export function trackMetaEvent(
   eventName: MetaEventName,
   opts: { customData?: Record<string, unknown>; userData?: MetaUserData } = {},
   explicitEventId?: string,
 ): string {
   const eventId = explicitEventId || genEventId();
+
+  if (eventName === 'Purchase' && isInternalTestPhone(opts.userData?.phone)) {
+    return eventId; // internal test order — never counted as a real conversion
+  }
 
   const fbq = (window as any).fbq;
   if (typeof fbq === 'function') {
