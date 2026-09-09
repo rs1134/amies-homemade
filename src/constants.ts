@@ -124,7 +124,7 @@ export const PRODUCTS: Product[] = [
     id: 'm5',
     name: 'Cranberry Mix',
     category: Category.MUKHWAS,
-    price: 391,
+    price: 390,
     weight: '215 G',
     description: 'Tart cranberries and crunchy almonds come together in this nutrient-rich blend for a naturally energizing snack. A perfect balance of wholesome goodness and refreshing flavour.',
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(9)_HGXuT3C1DV.jpg',
@@ -138,7 +138,7 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(9)_HGXuT3C1DV.jpg',
     ],
     ingredients: ['Cranberries', 'Black Grapes', 'Kismis', 'Almonds', 'Anardana Churan'],
-    prices: { '215 G': 391 },
+    prices: { '215 G': 390 },
     rating: 4.5, reviewCount: 34
   },
   {
