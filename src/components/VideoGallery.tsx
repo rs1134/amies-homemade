@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Play } from 'lucide-react';
 
 interface ReelVideo {
