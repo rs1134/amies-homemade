@@ -1,6 +1,6 @@
 import { neon } from '@neondatabase/serverless';
 import crypto from 'crypto';
-import catalog from './_shiprocket-catalog.generated.json';
+import catalog from './_shiprocket-catalog.generated.json' with { type: 'json' };
 
 // Single dispatcher for the whole Shiprocket Checkout integration, combining
 // what would otherwise be 4 separate function files (Fetch Products, Fetch
