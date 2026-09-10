@@ -46,23 +46,34 @@ const posterFor = (videoUrl: string) => `${videoUrl.split('?')[0]}/ik-thumbnail.
 
 const ReelCard: React.FC<{ reel: ReelVideo }> = ({ reel }) => {
   const [playing, setPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Toggling the `autoPlay` prop after mount doesn't reliably start
+  // playback in React — the browser only honors autoplay tied to the
+  // element's initial parse, not a JS-set property later. Calling .play()
+  // directly inside the click handler (a real user gesture) is what
+  // actually starts it on the first tap, on both desktop and mobile.
+  const handlePlay = () => {
+    setPlaying(true);
+    videoRef.current?.play().catch(() => { /* ignore — browser may still need controls tap */ });
+  };
 
   return (
     <div className="flex-shrink-0 w-[220px] sm:w-[260px] snap-start">
       <div className="relative aspect-[9/16] rounded-[1.75rem] overflow-hidden bg-[#2A1E14] shadow-lg">
         <video
+          ref={videoRef}
           src={reel.url}
           poster={posterFor(reel.url)}
           className="w-full h-full object-cover"
           preload="metadata"
           playsInline
           controls={playing}
-          autoPlay={playing}
           onEnded={() => setPlaying(false)}
         />
         {!playing && (
           <button
-            onClick={() => setPlaying(true)}
+            onClick={handlePlay}
             aria-label={`Play video: ${reel.title}`}
             className="absolute inset-0 flex items-center justify-center bg-black/10 hover:bg-black/25 transition-colors group"
           >
