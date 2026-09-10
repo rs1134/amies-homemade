@@ -378,7 +378,7 @@ export const PRODUCTS: Product[] = [
     id: 'm14',
     name: 'Everyday Mukhwas Trio',
     category: Category.MUKHWAS,
-    price: 759,
+    price: 823,
     weight: '530 G',
     description: 'Three of our best-loved mukhwas in one combo — the sweet-crunchy Kharek Coconut Almond, the tangy nutrient-rich Cranberry Mix, and the light, tropical Tender Coconut Vanilla Chips. A perfect way to try our range, at a special combo price.',
     image: 'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jul%209,%202026,%2003_20_50%20PM.png',
@@ -391,7 +391,7 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jul%209,%202026,%2003_20_50%20PM.png',
     ],
     ingredients: ['Kharek', 'Coconut', 'Almond', 'Natural Flavouring Substance', 'Cranberries', 'Black Grapes', 'Kismis', 'Anardana Churan', 'Vanilla Extract', 'Salt', 'Sugar'],
-    prices: { '530 G': 759 },
+    prices: { '530 G': 823 },
     rating: 5, reviewCount: 41
   },
 
