@@ -8,6 +8,7 @@ import Navbar from './components/Navbar.tsx';
 import SearchOverlay from './components/SearchOverlay.tsx';
 import Hero from './components/Hero.tsx';
 import ProductCard from './components/ProductCard.tsx';
+import VideoGallery from './components/VideoGallery.tsx';
 import ProductDetail from './components/ProductDetail.tsx';
 import AboutUs from './components/AboutUs.tsx';
 import GiftingView from './components/GiftingView.tsx';
@@ -1335,10 +1336,11 @@ const App: React.FC = () => {
       );
       default: return (
         <>
-          <Hero 
+          <Hero
             onShopClick={() => navigate('shop')}
             onAboutClick={() => navigate('about')}
           />
+          <VideoGallery />
           {/* ── Featured Products ───────────────────────────────────────────── */}
           <section className="py-16 sm:py-24 px-4 bg-white">
             <div className="max-w-7xl mx-auto">
