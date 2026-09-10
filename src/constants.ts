@@ -166,8 +166,8 @@ export const PRODUCTS: Product[] = [
     id: 'm10',
     name: 'Dryfruit and Seeds',
     category: Category.MUKHWAS,
-    price: 329,
-    weight: '200 G',
+    price: 313,
+    weight: '190 G',
     description: 'More than just a mukhwas, this premium blend combines roasted almonds, cashews, dates, rose petals, and wholesome seeds for the perfect balance of crunch and natural sweetness. Rich, satisfying, and crafted to keep you energized throughout the day.',
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(36)_aAxJbrDew.jpg',
     images: [
@@ -180,7 +180,7 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(36)_aAxJbrDew.jpg',
     ],
     ingredients: ['Almond', 'Cashews', 'Dry Dates', 'Coconut', 'Pumpkin Seeds', 'Sunflower Seeds', 'Saunf', 'Dhana Dal', 'Rose Petals', 'Natural Flavouring Substance'],
-    prices: { '200 G': 329 },
+    prices: { '190 G': 313 },
     rating: 4.5, reviewCount: 56
   },
   {
