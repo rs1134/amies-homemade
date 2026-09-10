@@ -146,8 +146,6 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
                 <Mail size={18} className="text-[#F14E4E] flex-shrink-0" />
                 <a href="mailto:hello@amieshomemade.com" className="hover:text-white transition-colors">hello@amieshomemade.com</a>
               </li>
-              {/* Required by Razorpay for SBI/Bandhan Bank netbanking activation, remove once confirmed */}
-              <li className="text-white/30 text-xs">Amiben Bhadreshbhai Shah</li>
             </ul>
           </div>
         </div>
