@@ -16,6 +16,11 @@ const REELS: ReelVideo[] = [
     url: 'https://ik.imagekit.io/amieshomemade/IMG_4009.MP4?updatedAt=1783521371269',
     title: 'Made for Those Who Love Authentic Mukhwas',
   },
+  {
+    id: 'reel-2',
+    url: 'https://ik.imagekit.io/amieshomemade/0A3E902E-498B-4FA2-9191-E882D1649588%20(1)%20(1).mp4',
+    title: 'Freshly Made, Straight From Ahmedabad',
+  },
 ];
 
 const ReelCard: React.FC<{ reel: ReelVideo }> = ({ reel }) => {
