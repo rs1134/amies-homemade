@@ -1340,7 +1340,6 @@ const App: React.FC = () => {
             onShopClick={() => navigate('shop')}
             onAboutClick={() => navigate('about')}
           />
-          <VideoGallery />
           {/* ── Featured Products ───────────────────────────────────────────── */}
           <section className="py-16 sm:py-24 px-4 bg-white">
             <div className="max-w-7xl mx-auto">
@@ -1401,6 +1400,8 @@ const App: React.FC = () => {
               </div>
             </div>
           </section>
+
+          <VideoGallery />
 
           {/* ── Meet the Maker — founder trust section ──────────────────────── */}
           <section className="relative bg-gradient-to-b from-[#FFF8EE] via-[#E5EBDB] to-[#FFF8EE] py-16 sm:py-28 px-4 sm:px-6 lg:px-8 overflow-hidden">
