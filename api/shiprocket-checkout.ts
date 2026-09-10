@@ -1,9 +1,6 @@
 import { neon } from '@neondatabase/serverless';
 import crypto from 'crypto';
-import {
-  toShiprocketProduct, getVisibleProducts, getProductsByCollectionId,
-  toShiprocketCollection, CATEGORY_ID, variantShiprocketId, resolveVariant,
-} from '../src/shiprocketCatalog';
+import catalog from './_shiprocket-catalog.generated.json';
 
 // Single dispatcher for the whole Shiprocket Checkout integration, combining
 // what would otherwise be 4 separate function files (Fetch Products, Fetch
@@ -22,14 +19,14 @@ import {
 function fetchProducts(req: any, res: any) {
   const page = parseInt(String(req.query.page || '1'), 10);
   const limit = parseInt(String(req.query.limit || '100'), 10);
-  const collectionId = req.query.collection_id ? parseInt(String(req.query.collection_id), 10) : undefined;
+  const collectionId = req.query.collection_id ? String(parseInt(String(req.query.collection_id), 10)) : undefined;
 
-  const source = collectionId !== undefined ? getProductsByCollectionId(collectionId) : getVisibleProducts();
+  const source: any[] = collectionId !== undefined ? (catalog.productsByCollectionId as any)[collectionId] || [] : catalog.products;
   const start = (page - 1) * limit;
   const pageItems = source.slice(start, start + limit);
 
   return res.status(200).json({
-    data: { total: source.length, products: pageItems.map(toShiprocketProduct) },
+    data: { total: source.length, products: pageItems },
   });
 }
 
@@ -37,13 +34,11 @@ function fetchCollections(req: any, res: any) {
   const page = parseInt(String(req.query.page || '1'), 10);
   const limit = parseInt(String(req.query.limit || '100'), 10);
 
-  const visibleCategories = [...new Set(getVisibleProducts().map(p => p.category))]
-    .filter(c => CATEGORY_ID[c] !== undefined);
   const start = (page - 1) * limit;
-  const pageItems = visibleCategories.slice(start, start + limit);
+  const pageItems = catalog.collections.slice(start, start + limit);
 
   return res.status(200).json({
-    data: { total: visibleCategories.length, collections: pageItems.map(toShiprocketCollection) },
+    data: { total: catalog.collections.length, collections: pageItems },
   });
 }
 
@@ -61,7 +56,7 @@ async function accessToken(req: any, res: any) {
   }
 
   const mappedItems = items.map((item: any) => {
-    const variantId = variantShiprocketId(item.productId, item.weight);
+    const variantId = (catalog.productVariantMap as any)[item.productId]?.[item.weight];
     return variantId !== undefined ? { variant_id: String(variantId), quantity: item.quantity } : null;
   });
   if (mappedItems.some((i: any) => i === null)) {
@@ -234,12 +229,12 @@ async function orderWebhook(req: any, res: any) {
   }
 
   const itemsSummary = cartItems.map((item: any) => {
-    const resolved = resolveVariant(item.variant_id);
+    const resolved = (catalog.variantIndex as any)[String(item.variant_id)];
     const label = resolved ? `${resolved.productId} (${resolved.weight})` : `variant ${item.variant_id}`;
     return `${item.quantity}x ${label}`;
   }).join('\n');
   const totalWeight = cartItems.reduce((sum: number, item: any) => {
-    const resolved = resolveVariant(item.variant_id);
+    const resolved = (catalog.variantIndex as any)[String(item.variant_id)];
     const grams = resolved ? parseInt(resolved.weight, 10) || 0 : 0;
     return sum + grams * (item.quantity || 1);
   }, 0);
