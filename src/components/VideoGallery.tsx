@@ -31,6 +31,11 @@ const REELS: ReelVideo[] = [
     url: 'https://ik.imagekit.io/amieshomemade/8ec7a427f345417689013b4078d6e88b.mp4',
     title: 'Handcrafted With Love, Every Batch',
   },
+  {
+    id: 'reel-5',
+    url: 'https://ik.imagekit.io/amieshomemade/7a211d6446bc4f6bbc29512093ce6f74.mp4',
+    title: 'Real Ingredients, No Shortcuts',
+  },
 ];
 
 const ReelCard: React.FC<{ reel: ReelVideo }> = ({ reel }) => {
