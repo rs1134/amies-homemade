@@ -57,7 +57,7 @@ const VideoGallery: React.FC = () => {
     <section className="py-16 sm:py-20 px-4 bg-[#FFF8EE]">
       <div className="max-w-7xl mx-auto">
         <h2 className="text-3xl sm:text-4xl font-bold serif text-[#4A3728] text-center mb-10 sm:mb-14">
-          The Buzz Around Amie's
+          The Buzz Around Amie's Homemade
         </h2>
         <div className="flex gap-4 sm:gap-6 overflow-x-auto snap-x snap-mandatory pb-2 -mx-4 px-4 sm:mx-0 sm:px-0">
           {REELS.map(reel => <ReelCard key={reel.id} reel={reel} />)}
