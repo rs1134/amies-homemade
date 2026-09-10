@@ -26,6 +26,11 @@ const REELS: ReelVideo[] = [
     url: 'https://ik.imagekit.io/amieshomemade/Amies%20homemade%20hamper%20(1)%20(1)%20(1).mp4',
     title: 'Beautifully Packed, Ready to Gift',
   },
+  {
+    id: 'reel-4',
+    url: 'https://ik.imagekit.io/amieshomemade/8ec7a427f345417689013b4078d6e88b.mp4',
+    title: 'Handcrafted With Love, Every Batch',
+  },
 ];
 
 const ReelCard: React.FC<{ reel: ReelVideo }> = ({ reel }) => {
