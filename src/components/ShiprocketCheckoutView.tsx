@@ -49,7 +49,7 @@ const ShiprocketCheckoutView: React.FC<ShiprocketCheckoutViewProps> = ({ items, 
     setIsSubmitting(true);
     setError(null);
     try {
-      const res = await fetch('/api/shiprocket-access-token', {
+      const res = await fetch('/api/shiprocket-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

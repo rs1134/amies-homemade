@@ -1,22 +1,101 @@
 import { neon } from '@neondatabase/serverless';
 import crypto from 'crypto';
-import { resolveVariant } from '../../src/shiprocketCatalog';
+import {
+  toShiprocketProduct, getVisibleProducts, getProductsByCollectionId,
+  toShiprocketCollection, CATEGORY_ID, variantShiprocketId, resolveVariant,
+} from '../src/shiprocketCatalog';
 
-// Receives the order-placed webhook from Shiprocket Checkout once a customer
-// completes payment in the hosted iframe. This is the ONLY place a
-// Shiprocket-Checkout Purchase can be recorded/tracked from — we don't
-// control JS inside their iframe, unlike the legacy checkout where the
-// browser fires Meta's Purchase event directly. Mirrors the exact
-// notification pattern already proven in api/notify-order.ts (ntfy, SMS,
-// email, Meta CAPI backstop with the same internal-test-phone exclusion).
-//
-// NOTE: the integration guide's sample payload only shows
-// {order_id, cart_data, status, phone, email, payment_type,
-// total_amount_payable} — no shipping address fields, and no auth headers
-// on the *incoming* request (unlike the catalog webhooks we send TO
-// Shiprocket, which do carry X-Api-Key/HMAC). Until a real webhook is
-// observed, this logs the full raw payload on every call so field names
-// can be corrected quickly without guessing blind.
+// Single dispatcher for the whole Shiprocket Checkout integration, combining
+// what would otherwise be 4 separate function files (Fetch Products, Fetch
+// Collections, Access Token, Order Webhook). Vercel's Hobby plan caps a
+// deployment at 12 Serverless Functions — this project already had 11 before
+// this feature, so 4 more files would have broken production deploys (which
+// is exactly what happened; see git history). Every URL below is one we
+// control and hand to Shiprocket ourselves, so consolidating behind query
+// params costs nothing on their end:
+//   GET  /api/shiprocket-checkout                       -> Fetch Products
+//   GET  /api/shiprocket-checkout?collection_id=1        -> Fetch Products by Collection
+//   GET  /api/shiprocket-checkout?type=collections        -> Fetch Collections
+//   POST /api/shiprocket-checkout                       -> Access Token (called by our own frontend)
+//   POST /api/shiprocket-checkout?action=order-webhook   -> Order Webhook (called by Shiprocket)
+
+function fetchProducts(req: any, res: any) {
+  const page = parseInt(String(req.query.page || '1'), 10);
+  const limit = parseInt(String(req.query.limit || '100'), 10);
+  const collectionId = req.query.collection_id ? parseInt(String(req.query.collection_id), 10) : undefined;
+
+  const source = collectionId !== undefined ? getProductsByCollectionId(collectionId) : getVisibleProducts();
+  const start = (page - 1) * limit;
+  const pageItems = source.slice(start, start + limit);
+
+  return res.status(200).json({
+    data: { total: source.length, products: pageItems.map(toShiprocketProduct) },
+  });
+}
+
+function fetchCollections(req: any, res: any) {
+  const page = parseInt(String(req.query.page || '1'), 10);
+  const limit = parseInt(String(req.query.limit || '100'), 10);
+
+  const visibleCategories = [...new Set(getVisibleProducts().map(p => p.category))]
+    .filter(c => CATEGORY_ID[c] !== undefined);
+  const start = (page - 1) * limit;
+  const pageItems = visibleCategories.slice(start, start + limit);
+
+  return res.status(200).json({
+    data: { total: visibleCategories.length, collections: pageItems.map(toShiprocketCollection) },
+  });
+}
+
+async function accessToken(req: any, res: any) {
+  const API_KEY = process.env.SHIPROCKET_CHECKOUT_API_KEY;
+  const SECRET_KEY = process.env.SHIPROCKET_CHECKOUT_SECRET_KEY;
+  if (!API_KEY || !SECRET_KEY) {
+    console.error('[shiprocket-checkout/access-token] API key/secret not configured');
+    return res.status(500).json({ error: 'Shiprocket Checkout not configured' });
+  }
+
+  const { items, redirectUrl } = req.body || {};
+  if (!Array.isArray(items) || items.length === 0) {
+    return res.status(400).json({ error: 'items are required' });
+  }
+
+  const mappedItems = items.map((item: any) => {
+    const variantId = variantShiprocketId(item.productId, item.weight);
+    return variantId !== undefined ? { variant_id: String(variantId), quantity: item.quantity } : null;
+  });
+  if (mappedItems.some((i: any) => i === null)) {
+    console.error('[shiprocket-checkout/access-token] Could not map one or more cart items:', items);
+    return res.status(400).json({ error: 'One or more items could not be mapped to Shiprocket catalog' });
+  }
+
+  const payload = {
+    cart_data: { items: mappedItems },
+    redirect_url: redirectUrl || 'https://amieshomemade.com/order-confirmed',
+    timestamp: new Date().toISOString(),
+  };
+  const body = JSON.stringify(payload);
+  const hmac = crypto.createHmac('sha256', SECRET_KEY).update(body).digest('base64');
+
+  try {
+    const shiprocketRes = await fetch('https://checkout-api.shiprocket.com/api/v1/access-token/checkout', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Api-Key': API_KEY, 'X-Api-HMAC-SHA256': hmac },
+      body,
+    });
+    const data = await shiprocketRes.json();
+    if (!shiprocketRes.ok) {
+      console.error('[shiprocket-checkout/access-token] Shiprocket returned an error:', shiprocketRes.status, JSON.stringify(data));
+      return res.status(502).json({ error: 'Shiprocket Checkout rejected the request', details: data });
+    }
+    return res.status(200).json({ token: data?.result?.token, orderId: data?.result?.order_id });
+  } catch (err: any) {
+    console.error('[shiprocket-checkout/access-token] Request failed:', err.message);
+    return res.status(500).json({ error: 'Failed to reach Shiprocket Checkout' });
+  }
+}
+
+// --- Order webhook helpers (mirrors api/notify-order.ts's pattern exactly) ---
 
 const toHeaderSafe = (s: any) =>
   String(s ?? '')
@@ -67,9 +146,9 @@ async function sendOrderConfirmationEmail(params: { to: string; orderId: string;
         html: buildOrderEmailHtml(params),
       }),
     });
-    if (!res.ok) console.error(`[shiprocket-order-webhook] Resend failed: ${res.status} ${await res.text().catch(() => '')}`);
+    if (!res.ok) console.error(`[shiprocket-checkout/order-webhook] Resend failed: ${res.status} ${await res.text().catch(() => '')}`);
   } catch (err: any) {
-    console.error('[shiprocket-order-webhook] Resend error:', err.message);
+    console.error('[shiprocket-checkout/order-webhook] Resend error:', err.message);
   }
 }
 
@@ -127,20 +206,16 @@ async function sendMetaPurchaseBackstop(params: { eventId: string; value: number
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-    if (!res.ok) console.error(`[shiprocket-order-webhook] Meta CAPI failed: ${res.status} ${await res.text().catch(() => '')}`);
+    if (!res.ok) console.error(`[shiprocket-checkout/order-webhook] Meta CAPI failed: ${res.status} ${await res.text().catch(() => '')}`);
   } catch (err: any) {
-    console.error('[shiprocket-order-webhook] Meta CAPI error:', err.message);
+    console.error('[shiprocket-checkout/order-webhook] Meta CAPI error:', err.message);
   }
 }
 
-export default async function handler(req: any, res: any) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
+async function orderWebhook(req: any, res: any) {
   // Log every raw payload until we've confirmed the real field names against
   // a live order — cheap insurance against silently losing shipping details.
-  console.log('[shiprocket-order-webhook] raw payload:', JSON.stringify(req.body));
+  console.log('[shiprocket-checkout/order-webhook] raw payload:', JSON.stringify(req.body));
 
   const body = req.body || {};
   const orderId = String(body.order_id || `SR-${Date.now()}`);
@@ -155,7 +230,7 @@ export default async function handler(req: any, res: any) {
   const cartItems = body.cart_data?.items || [];
 
   if (!address || !city) {
-    console.error('[shiprocket-order-webhook] Missing shipping address fields in payload — check field names against a real webhook and adjust this handler.');
+    console.error('[shiprocket-checkout/order-webhook] Missing shipping address fields in payload — check field names against a real webhook and adjust this handler.');
   }
 
   const itemsSummary = cartItems.map((item: any) => {
@@ -172,7 +247,7 @@ export default async function handler(req: any, res: any) {
   try {
     const dbUrl = process.env.DATABASE_URL;
     if (!dbUrl) {
-      console.error('[shiprocket-order-webhook] DATABASE_URL not set');
+      console.error('[shiprocket-checkout/order-webhook] DATABASE_URL not set');
       return res.status(200).json({ ok: true, warning: 'no db configured' });
     }
 
@@ -190,7 +265,7 @@ export default async function handler(req: any, res: any) {
     `;
 
     if (inserted.length === 0) {
-      console.log(`[shiprocket-order-webhook] order ${orderId} already logged`);
+      console.log(`[shiprocket-checkout/order-webhook] order ${orderId} already logged`);
       return res.status(200).json({ ok: true, isNew: false });
     }
 
@@ -226,9 +301,9 @@ export default async function handler(req: any, res: any) {
           'Tags': 'shopping_cart,package,star',
         },
       });
-      if (!ntfyRes.ok) console.error(`[shiprocket-order-webhook] ntfy failed: ${ntfyRes.status}`);
+      if (!ntfyRes.ok) console.error(`[shiprocket-checkout/order-webhook] ntfy failed: ${ntfyRes.status}`);
     } catch (err: any) {
-      console.error('[shiprocket-order-webhook] ntfy error:', err.message);
+      console.error('[shiprocket-checkout/order-webhook] ntfy error:', err.message);
     }
 
     const FAST2SMS_KEY = process.env.FAST2SMS_API_KEY;
@@ -242,9 +317,9 @@ export default async function handler(req: any, res: any) {
           body: JSON.stringify({ route: 'q', message: smsText, language: 'english', flash: 0, numbers: mobile }),
         });
         const smsResult = await smsRes.json() as any;
-        if (smsResult.return !== true) console.error('[shiprocket-order-webhook] SMS failed:', JSON.stringify(smsResult));
+        if (smsResult.return !== true) console.error('[shiprocket-checkout/order-webhook] SMS failed:', JSON.stringify(smsResult));
       } catch (err: any) {
-        console.error('[shiprocket-order-webhook] SMS error:', err.message);
+        console.error('[shiprocket-checkout/order-webhook] SMS error:', err.message);
       }
     }
 
@@ -254,8 +329,20 @@ export default async function handler(req: any, res: any) {
 
     return res.status(200).json({ ok: true, isNew: true });
   } catch (err: any) {
-    console.error('[shiprocket-order-webhook] Failed:', err.message);
+    console.error('[shiprocket-checkout/order-webhook] Failed:', err.message);
     // Still 200 — Shiprocket may retry/disable the webhook on non-2xx.
     return res.status(200).json({ ok: false, error: err.message });
   }
+}
+
+export default async function handler(req: any, res: any) {
+  if (req.method === 'GET') {
+    if (req.query.type === 'collections') return fetchCollections(req, res);
+    return fetchProducts(req, res);
+  }
+  if (req.method === 'POST') {
+    if (req.query.action === 'order-webhook') return orderWebhook(req, res);
+    return accessToken(req, res);
+  }
+  return res.status(405).json({ error: 'Method not allowed' });
 }
