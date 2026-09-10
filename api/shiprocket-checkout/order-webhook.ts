@@ -1,6 +1,6 @@
 import { neon } from '@neondatabase/serverless';
 import crypto from 'crypto';
-import { resolveVariant } from '../../src/shiprocketCatalog.ts';
+import { resolveVariant } from '../../src/shiprocketCatalog';
 
 // Receives the order-placed webhook from Shiprocket Checkout once a customer
 // completes payment in the hosted iframe. This is the ONLY place a

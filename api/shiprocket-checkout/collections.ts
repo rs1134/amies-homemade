@@ -1,4 +1,4 @@
-import { toShiprocketCollection, getVisibleProducts, CATEGORY_ID } from '../../src/shiprocketCatalog.ts';
+import { toShiprocketCollection, getVisibleProducts, CATEGORY_ID } from '../../src/shiprocketCatalog';
 
 // Seller-hosted "Fetch Collections" API — maps our Category enum (only the
 // categories that actually have a visible product) into Shiprocket's

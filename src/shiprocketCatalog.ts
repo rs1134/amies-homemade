@@ -1,5 +1,5 @@
-import { PRODUCTS, isProductVisible } from './constants.ts';
-import { Category, Product } from './types.ts';
+import { PRODUCTS, isProductVisible } from './constants';
+import { Category, Product } from './types';
 
 // Shiprocket Checkout's catalog API requires numeric ("long") ids for both
 // products[].id and variants[].id, but every product in this codebase has a

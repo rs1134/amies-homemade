@@ -1,4 +1,4 @@
-import { toShiprocketProduct, getVisibleProducts, getProductsByCollectionId } from '../../src/shiprocketCatalog.ts';
+import { toShiprocketProduct, getVisibleProducts, getProductsByCollectionId } from '../../src/shiprocketCatalog';
 
 // Seller-hosted catalog API Shiprocket Checkout calls to sync our product
 // list. Handles both "Fetch Products" and "Fetch Products by Collection"

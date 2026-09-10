@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { variantShiprocketId } from '../src/shiprocketCatalog.ts';
+import { variantShiprocketId } from '../src/shiprocketCatalog';
 
 // Generates the checkout access token Shiprocket's hosted iframe needs to
 // open — the one server-side hop in the flow, since it's the only place the

@@ -1,4 +1,4 @@
-import { Product, Category } from './types.ts';
+import { Product, Category } from './types';
 
 // ── Catalog visibility (revamp / launch-reveal control) ──────────────────────
 // Temporarily hides categories/products from the live site WITHOUT deleting any
