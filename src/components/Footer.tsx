@@ -233,26 +233,14 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           <div className="space-y-4">
             <div className="flex items-center gap-3 px-2">
               <Scale size={18} className="text-coral" />
-              <h4 className="text-[10px] brand-rounded font-black uppercase tracking-widest text-[#4A3728]/40">National Tiered Rates (Outside Ahmedabad)</h4>
+              <h4 className="text-[10px] brand-rounded font-black uppercase tracking-widest text-[#4A3728]/40">Shipping Rate (Outside Ahmedabad)</h4>
             </div>
-            
-            <div className="bg-white rounded-3xl border border-coral/5 overflow-hidden shadow-sm">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-[#FFF8EE] text-[#4A3728]/40 uppercase tracking-widest font-black text-[9px] border-b border-coral/5">
-                  <tr>
-                    <th className="p-4">Weight Slot</th>
-                    <th className="p-4 text-right">Courier Fee</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-coral/5 font-bold text-[#4A3728]">
-                  <tr><td className="p-4">Up to 500g</td><td className="p-4 text-right">₹60</td></tr>
-                  <tr><td className="p-4">500g to 1000g</td><td className="p-4 text-right">₹100</td></tr>
-                  <tr><td className="p-4">1000g to 2000g</td><td className="p-4 text-right">₹150</td></tr>
-                  <tr><td className="p-4">2000g to 5000g</td><td className="p-4 text-right">₹200</td></tr>
-                  <tr className="bg-coral/5"><td className="p-4">Above 5000g</td><td className="p-4 text-right text-coral">₹250</td></tr>
-                </tbody>
-              </table>
+
+            <div className="bg-white rounded-3xl border border-coral/5 overflow-hidden shadow-sm p-5 flex items-center justify-between">
+              <span className="text-xs font-bold text-[#4A3728]">Flat Courier Fee</span>
+              <span className="text-xs font-black text-coral">₹100</span>
             </div>
+            <p className="text-[11px] text-[#4A3728]/60 px-2">Orders of <span className="font-bold">₹999 or more</span> (outside Ahmedabad too) get <span className="font-bold">FREE shipping</span>.</p>
           </div>
 
           <ul className="space-y-4 list-none p-0 text-xs text-[#4A3728]/70">

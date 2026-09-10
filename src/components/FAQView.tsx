@@ -88,7 +88,7 @@ const FAQ_DATA: FAQCategory[] = [
       },
       {
         q: 'What are the delivery charges?',
-        a: 'Delivery within Ahmedabad is FREE. Outside Ahmedabad: up to 500g — ₹60 | 500g–1kg — ₹100 | 1–2kg — ₹150 | 2–5kg — ₹200 | above 5kg — ₹250. Pan-India shipping is FREE on orders above ₹1,499.',
+        a: 'Delivery within Ahmedabad is FREE. Outside Ahmedabad, shipping is a flat ₹100 — and FREE on orders of ₹999 or more.',
       },
       {
         q: 'Do you offer same-day delivery in Ahmedabad?',

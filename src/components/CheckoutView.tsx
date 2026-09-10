@@ -515,25 +515,16 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   }, [items]);
 
   // Shipping Fee — Ahmedabad: always FREE
-  // Pan-India: under 300g total → ₹60 flat (cheap to pack & ship, and based
-  // on actual weight rather than item count so it can't be gamed by
-  // splitting one order into several single-item ones) | otherwise ₹999+
-  // (after coupon) → FREE | else ₹100
+  // Pan-India: ₹999+ (after coupon) → FREE | else flat ₹100
   const subtotalAfterDiscount = total - couponDiscount;
-  const isLightOrder = totalWeight < 300;
   const shippingFee = useMemo(() => {
     if (!formData.city || validateField('city', formData.city)) return null;
     if (AHMEDABAD_VARIANTS.includes(formData.city.trim().toLowerCase())) return 0;
-    if (isLightOrder) return 60;
     if (subtotalAfterDiscount >= 999) return 0;
     return 100;
-  }, [formData.city, isLightOrder, subtotalAfterDiscount]);
+  }, [formData.city, subtotalAfterDiscount]);
 
-  // Amount needed to unlock free shipping (pan-India). Deliberately not
-  // gated on isLightOrder — customers just see "add ₹X for free shipping"
-  // regardless of which fee tier they're currently in; the weight-based
-  // ₹60 rate is an internal pricing detail, not something to explain in
-  // the UI.
+  // Amount needed to unlock free shipping (pan-India).
   const amountToFreeShipping = useMemo(() => {
     if (isAhmedabad) return 0;
     return Math.max(0, 999 - subtotalAfterDiscount);
@@ -1453,13 +1444,8 @@ _Please confirm my order and share delivery details._
                   <div className="w-6 h-6 rounded-full bg-[#5F259F] flex items-center justify-center shadow-sm ring-1 ring-black/5">
                     <span className="text-white text-[10px] font-black italic leading-none">पे</span>
                   </div>
-                  <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-sm ring-1 ring-black/5">
-                    <svg width="12" height="12" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-                      <path fill="#4285F4" d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"/>
-                      <path fill="#34A853" d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"/>
-                      <path fill="#FBBC05" d="M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34C2.85 17.09 2 20.45 2 24c0 3.55.85 6.91 2.34 9.88l7.35-5.7z"/>
-                      <path fill="#EA4335" d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"/>
-                    </svg>
+                  <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-sm ring-1 ring-black/5 overflow-hidden">
+                    <img src="https://ik.imagekit.io/amieshomemade/google-pay-icon.webp" alt="Google Pay" className="w-4 h-auto" />
                   </div>
                   <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-sm ring-1 ring-black/5 overflow-hidden">
                     <img src="https://ik.imagekit.io/amieshomemade/Mastercard_logo.webp" alt="Mastercard" className="w-5 h-auto" />
