@@ -38,6 +38,12 @@ const REELS: ReelVideo[] = [
   },
 ];
 
+// ImageKit can extract a real thumbnail frame from a hosted video by
+// appending /ik-thumbnail.jpg to its path — needed because iOS Safari (and
+// some other mobile browsers) never paints a video's first frame on its own,
+// even with preload="metadata", leaving the card solid black until played.
+const posterFor = (videoUrl: string) => `${videoUrl.split('?')[0]}/ik-thumbnail.jpg`;
+
 const ReelCard: React.FC<{ reel: ReelVideo }> = ({ reel }) => {
   const [playing, setPlaying] = useState(false);
 
@@ -46,6 +52,7 @@ const ReelCard: React.FC<{ reel: ReelVideo }> = ({ reel }) => {
       <div className="relative aspect-[9/16] rounded-[1.75rem] overflow-hidden bg-[#2A1E14] shadow-lg">
         <video
           src={reel.url}
+          poster={posterFor(reel.url)}
           className="w-full h-full object-cover"
           preload="metadata"
           playsInline
