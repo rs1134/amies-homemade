@@ -122,7 +122,7 @@ const INTERNAL_TEST_PHONES = new Set(['9054038876', '9909942126']);
 const isInternalTestPhone = (phone?: string): boolean =>
   !!phone && INTERNAL_TEST_PHONES.has(String(phone).replace(/\D/g, '').slice(-10));
 
-async function sendMetaCodPurchaseBackstop(params: {
+async function sendMetaPurchaseBackstop(params: {
   eventId: string; value: number; name: string; phone: string; email: string;
   city: string; state: string; zip: string; cookieHeader?: string; clientIp?: string; clientUserAgent?: string;
 }): Promise<void> {
@@ -171,10 +171,10 @@ async function sendMetaCodPurchaseBackstop(params: {
     });
     if (!res.ok) {
       const text = await res.text().catch(() => '');
-      console.error(`[notify-order] Meta CAPI COD Purchase send failed: ${res.status} ${text}`);
+      console.error(`[notify-order] Meta CAPI Purchase send failed: ${res.status} ${text}`);
     }
   } catch (err: any) {
-    console.error('[notify-order] Meta CAPI COD Purchase send error:', err.message);
+    console.error('[notify-order] Meta CAPI Purchase send error:', err.message);
   }
 }
 
@@ -223,16 +223,31 @@ export default async function handler(req: any, res: any) {
 
     const isCod = method === 'COD';
 
-    if (isCod && !isInternalTestPhone(phone)) {
+    if (!isInternalTestPhone(phone)) {
       // Awaited (not fire-and-forget) — Vercel can freeze/kill an unawaited
       // promise the instant the handler returns, so this needs to finish
       // before the function does, same as the ntfy/SMS/email sends below.
-      // Failure here never blocks order confirmation — sendMetaCodPurchaseBackstop
+      // Failure here never blocks order confirmation — sendMetaPurchaseBackstop
       // catches its own errors internally and just logs them.
-      // event_id `cod-<orderId>` matches the browser's own
-      // trackMetaEvent('Purchase', ..., `cod-${orderId}`) call exactly.
-      await sendMetaCodPurchaseBackstop({
-        eventId: `cod-${orderId}`,
+      //
+      // Covers BOTH COD and RAZORPAY orders (not just COD): this endpoint's
+      // own DB insert above is what reliably fires the instant the customer's
+      // browser calls it, regardless of whether the *separate*, parallel
+      // trackMetaEvent('Purchase', ...) fetch in CheckoutView.tsx actually
+      // survives to completion (a real customer's tab closing/backgrounding
+      // right after paying can kill that fetch even with keepalive, while
+      // this request — already in flight and awaited by the checkout UI
+      // before it can show the success screen — has a much better chance of
+      // finishing). Without this, an online order whose parallel Purchase
+      // fetch fails has *no* backstop at all: the Razorpay-webhook backstop
+      // only fires if ITS insert wins the ON-CONFLICT race, which it won't
+      // once this endpoint's insert above has already succeeded.
+      //
+      // event_id matches the browser's own trackMetaEvent('Purchase', ...)
+      // call exactly (`cod-<orderId>` / `purchase-<paymentId>`), so Meta
+      // dedupes into one counted purchase if both sources land.
+      await sendMetaPurchaseBackstop({
+        eventId: isCod ? `cod-${orderId}` : `purchase-${paymentId}`,
         value: grandTotal,
         name, phone, email: email || '', city, state: state || '', zip: pincode || '',
         cookieHeader: req.headers['cookie'],
