@@ -1,22 +1,26 @@
 import { neon } from '@neondatabase/serverless';
 import crypto from 'crypto';
-import catalog from '../_shiprocket-catalog.generated.json' with { type: 'json' };
+import catalog from './_shiprocket-catalog.generated.json' with { type: 'json' };
 
 // Single dispatcher for the whole Shiprocket Checkout integration, combining
 // what would otherwise be 4 separate function files (Fetch Products, Fetch
 // Collections, Access Token, Order Webhook). Vercel's Hobby plan caps a
 // deployment at 12 Serverless Functions — this project already had 11 before
 // this feature, so 4 more files would have broken production deploys (which
-// is exactly what happened; see git history). A single dynamic-route file
-// (this one, `[endpoint].ts`) still counts as ONE function while giving
-// every URL below its own clean path — no query-param discriminator, which
-// Shiprocket's own integration platform can't accept (their form has no
-// way to pass a custom query param when you register an endpoint URL):
-//   GET  /api/shiprocket-checkout/products                    -> Fetch Products
-//   GET  /api/shiprocket-checkout/products?collection_id=1    -> Fetch Products by Collection
-//   GET  /api/shiprocket-checkout/collections                 -> Fetch Collections
-//   POST /api/shiprocket-checkout/access-token                -> Access Token (called by our own frontend)
-//   POST /api/shiprocket-checkout/order-webhook                -> Order Webhook (called by Shiprocket)
+// is exactly what happened; see git history).
+//
+// Shiprocket's integration platform can't call a URL with a query param to
+// pick the endpoint, so the clean-looking URLs below are NOT separate files
+// or a dynamic [param] route (Vercel's generic, non-Next.js function
+// convention doesn't honor bracket segments — that silently fell through to
+// the SPA catch-all rewrite in production; see git history). They're plain
+// vercel.json rewrites that forward to this one file with `endpoint` as an
+// internal query param — Shiprocket only ever sees the clean path:
+//   GET  /api/shiprocket-checkout/products                 -> Fetch Products
+//   GET  /api/shiprocket-checkout/products?collection_id=1 -> Fetch Products by Collection
+//   GET  /api/shiprocket-checkout/collections               -> Fetch Collections
+//   POST /api/shiprocket-checkout/access-token              -> Access Token (called by our own frontend)
+//   POST /api/shiprocket-checkout/order-webhook             -> Order Webhook (called by Shiprocket)
 
 function fetchProducts(req: any, res: any) {
   const page = parseInt(String(req.query.page || '1'), 10);

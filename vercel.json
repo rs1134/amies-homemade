@@ -22,6 +22,10 @@
     { "source": "/privacy-policy", "destination": "/privacy-policy.html" },
     { "source": "/refund-policy", "destination": "/refund-policy.html" },
     { "source": "/cancellation-policy", "destination": "/cancellation-policy.html" },
+    { "source": "/api/shiprocket-checkout/products", "destination": "/api/shiprocket-checkout?endpoint=products" },
+    { "source": "/api/shiprocket-checkout/collections", "destination": "/api/shiprocket-checkout?endpoint=collections" },
+    { "source": "/api/shiprocket-checkout/access-token", "destination": "/api/shiprocket-checkout?endpoint=access-token" },
+    { "source": "/api/shiprocket-checkout/order-webhook", "destination": "/api/shiprocket-checkout?endpoint=order-webhook" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "crons": [
