@@ -660,7 +660,7 @@ _Please confirm my order and share delivery details._
     // Order completed — don't let the abandoned-cart reminder cron email
     // them about something they already bought, and start the next cart
     // this browser builds as a fresh attempt rather than a continuation.
-    fetch('/api/clear-abandoned-cart', {
+    fetch('/api/abandoned-cart', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ sessionId: getOrCreateCartSessionId() }),

@@ -1055,6 +1055,43 @@ const App: React.FC = () => {
     }
   }, [setSelectedProduct, setIsCartOpen]);
 
+  // Manually-sent cart-recovery links (e.g. "?restore=<session id>" on a
+  // WhatsApp message to someone whose cart the abandoned-cart cron caught)
+  // re-populate the cart from that row's items_summary in api/abandoned-cart.ts,
+  // matching each "<qty>x <Name> (<weight>)" line back to a real product by
+  // name + weight. Runs once on mount; the query param is stripped
+  // afterward so refreshing the page never re-adds the same items again.
+  useEffect(() => {
+    const restoreSessionId = new URLSearchParams(window.location.search).get('restore');
+    if (!restoreSessionId) return;
+
+    (async () => {
+      try {
+        const res = await fetch(`/api/abandoned-cart?session=${encodeURIComponent(restoreSessionId)}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        const lines = String(data.itemsSummary || '').split('\n').filter(Boolean);
+        for (const line of lines) {
+          const match = line.match(/^(\d+)x (.+) \((.+)\)$/);
+          if (!match) continue;
+          const [, qtyStr, name, weight] = match;
+          const product = PRODUCTS.find(p => p.name === name);
+          if (!product) continue;
+          const quantity = parseInt(qtyStr, 10) || 1;
+          for (let i = 0; i < quantity; i++) addToCart(product, weight);
+        }
+      } catch {
+        // Best-effort convenience feature — an expired/invalid link should
+        // never break the page it's opened on.
+      } finally {
+        window.history.replaceState(null, '', window.location.pathname);
+      }
+    })();
+    // Intentionally once-on-mount: re-running on every addToCart identity
+    // change would risk re-processing the same link.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Auto-dismiss the "added to bag" toast
   useEffect(() => {
     if (!addedToast) return;
