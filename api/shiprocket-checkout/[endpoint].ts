@@ -1,20 +1,22 @@
 import { neon } from '@neondatabase/serverless';
 import crypto from 'crypto';
-import catalog from './_shiprocket-catalog.generated.json' with { type: 'json' };
+import catalog from '../_shiprocket-catalog.generated.json' with { type: 'json' };
 
 // Single dispatcher for the whole Shiprocket Checkout integration, combining
 // what would otherwise be 4 separate function files (Fetch Products, Fetch
 // Collections, Access Token, Order Webhook). Vercel's Hobby plan caps a
 // deployment at 12 Serverless Functions — this project already had 11 before
 // this feature, so 4 more files would have broken production deploys (which
-// is exactly what happened; see git history). Every URL below is one we
-// control and hand to Shiprocket ourselves, so consolidating behind query
-// params costs nothing on their end:
-//   GET  /api/shiprocket-checkout                       -> Fetch Products
-//   GET  /api/shiprocket-checkout?collection_id=1        -> Fetch Products by Collection
-//   GET  /api/shiprocket-checkout?type=collections        -> Fetch Collections
-//   POST /api/shiprocket-checkout                       -> Access Token (called by our own frontend)
-//   POST /api/shiprocket-checkout?action=order-webhook   -> Order Webhook (called by Shiprocket)
+// is exactly what happened; see git history). A single dynamic-route file
+// (this one, `[endpoint].ts`) still counts as ONE function while giving
+// every URL below its own clean path — no query-param discriminator, which
+// Shiprocket's own integration platform can't accept (their form has no
+// way to pass a custom query param when you register an endpoint URL):
+//   GET  /api/shiprocket-checkout/products                    -> Fetch Products
+//   GET  /api/shiprocket-checkout/products?collection_id=1    -> Fetch Products by Collection
+//   GET  /api/shiprocket-checkout/collections                 -> Fetch Collections
+//   POST /api/shiprocket-checkout/access-token                -> Access Token (called by our own frontend)
+//   POST /api/shiprocket-checkout/order-webhook                -> Order Webhook (called by Shiprocket)
 
 function fetchProducts(req: any, res: any) {
   const page = parseInt(String(req.query.page || '1'), 10);
@@ -331,13 +333,17 @@ async function orderWebhook(req: any, res: any) {
 }
 
 export default async function handler(req: any, res: any) {
+  const endpoint = String(req.query.endpoint || '');
+
   if (req.method === 'GET') {
-    if (req.query.type === 'collections') return fetchCollections(req, res);
-    return fetchProducts(req, res);
+    if (endpoint === 'collections') return fetchCollections(req, res);
+    if (endpoint === 'products') return fetchProducts(req, res);
+    return res.status(404).json({ error: 'Unknown endpoint' });
   }
   if (req.method === 'POST') {
-    if (req.query.action === 'order-webhook') return orderWebhook(req, res);
-    return accessToken(req, res);
+    if (endpoint === 'order-webhook') return orderWebhook(req, res);
+    if (endpoint === 'access-token') return accessToken(req, res);
+    return res.status(404).json({ error: 'Unknown endpoint' });
   }
   return res.status(405).json({ error: 'Method not allowed' });
 }
