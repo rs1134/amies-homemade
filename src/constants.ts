@@ -124,7 +124,7 @@ export const PRODUCTS: Product[] = [
     id: 'm5',
     name: 'Cranberry Mix',
     category: Category.MUKHWAS,
-    price: 390,
+    price: 355,
     weight: '215 G',
     description: 'Tart cranberries and crunchy almonds come together in this nutrient-rich blend for a naturally energizing snack. A perfect balance of wholesome goodness and refreshing flavour.',
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(9)_HGXuT3C1DV.jpg',
@@ -138,7 +138,7 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(9)_HGXuT3C1DV.jpg',
     ],
     ingredients: ['Cranberries', 'Black Grapes', 'Kismis', 'Almonds', 'Anardana Churan'],
-    prices: { '215 G': 390 },
+    prices: { '215 G': 355 },
     rating: 4.5, reviewCount: 34
   },
   {
@@ -166,8 +166,8 @@ export const PRODUCTS: Product[] = [
     id: 'm10',
     name: 'Dryfruit and Seeds',
     category: Category.MUKHWAS,
-    price: 315,
-    weight: '190 G',
+    price: 299,
+    weight: '200 G',
     description: 'More than just a mukhwas, this premium blend combines roasted almonds, cashews, dates, rose petals, and wholesome seeds for the perfect balance of crunch and natural sweetness. Rich, satisfying, and crafted to keep you energized throughout the day.',
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(36)_aAxJbrDew.jpg',
     images: [
@@ -180,7 +180,7 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(36)_aAxJbrDew.jpg',
     ],
     ingredients: ['Almond', 'Cashews', 'Dry Dates', 'Coconut', 'Pumpkin Seeds', 'Sunflower Seeds', 'Saunf', 'Dhana Dal', 'Rose Petals', 'Natural Flavouring Substance'],
-    prices: { '190 G': 315 },
+    prices: { '200 G': 299 },
     rating: 4.5, reviewCount: 56
   },
   {
@@ -251,7 +251,7 @@ export const PRODUCTS: Product[] = [
     id: 'm8',
     name: 'Date & Almond',
     category: Category.MUKHWAS,
-    price: 314,
+    price: 285,
     weight: '215 G',
     description: 'A perfect pairing of naturally sweet dates and crunchy almonds, this wholesome blend delivers rich flavour, satisfying texture, and lasting energy. More than just a mukhwas, it\'s a delicious snack and the perfect light finish to every meal.',
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(34)_mG5k2TTAJc.jpg',
@@ -265,7 +265,7 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(34)_mG5k2TTAJc.jpg',
     ],
     ingredients: ['Dates', 'Almond', 'Anardana Churan'],
-    prices: { '215 G': 314 },
+    prices: { '215 G': 285 },
     rating: 4.5, reviewCount: 32
   },
   {
@@ -293,7 +293,7 @@ export const PRODUCTS: Product[] = [
     id: 'sf3',
     name: 'Kharek Coconut Almond',
     category: Category.MUKHWAS,
-    price: 315,
+    price: 285,
     weight: '190 G',
     description: 'Rooted in Gujarati tradition, this premium blend combines sun-dried kharek, toasted coconut flakes, and whole almonds for the perfect balance of sweetness and crunch. Naturally sweetened with zero added sugar, it\'s a wholesome mukhwas crafted for a satisfying finish to every meal.',
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(15)_9rgFNnNhw.jpg',
@@ -307,7 +307,7 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(15)_9rgFNnNhw.jpg',
     ],
     ingredients: ['Kharek', 'Coconut', 'Almond', 'Natural Flavouring Substance'],
-    prices: { '190 G': 315 },
+    prices: { '190 G': 285 },
     rating: 5, reviewCount: 52
   },
   {
@@ -378,7 +378,7 @@ export const PRODUCTS: Product[] = [
     id: 'm14',
     name: 'Everyday Mukhwas Trio',
     category: Category.MUKHWAS,
-    price: 823,
+    price: 759,
     weight: '530 G',
     description: 'Three of our best-loved mukhwas in one combo — the sweet-crunchy Kharek Coconut Almond, the tangy nutrient-rich Cranberry Mix, and the light, tropical Tender Coconut Vanilla Chips. A perfect way to try our range, at a special combo price.',
     image: 'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jul%209,%202026,%2003_20_50%20PM.png',
@@ -391,7 +391,7 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jul%209,%202026,%2003_20_50%20PM.png',
     ],
     ingredients: ['Kharek', 'Coconut', 'Almond', 'Natural Flavouring Substance', 'Cranberries', 'Black Grapes', 'Kismis', 'Anardana Churan', 'Vanilla Extract', 'Salt', 'Sugar'],
-    prices: { '530 G': 823 },
+    prices: { '530 G': 759 },
     rating: 5, reviewCount: 41
   },
 
