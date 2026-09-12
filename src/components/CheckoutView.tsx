@@ -1393,7 +1393,7 @@ _Please confirm my order and share delivery details._
                 type="button"
                 onClick={() => setPaymentMethod('online')}
                 disabled={isSubmitting}
-                className={`w-full p-3 lg:p-4 rounded-2xl border-2 flex items-center gap-3 shadow-sm transition-all text-left disabled:opacity-50 ${paymentMethod === 'online' ? 'border-[#F04E4E] bg-[#F04E4E]/5' : 'border-[#4A3728]/10 hover:border-[#4A3728]/20'}`}
+                className={`w-full min-h-[52px] p-3 lg:p-4 rounded-2xl border-2 flex items-center gap-3 shadow-sm transition-all text-left disabled:opacity-50 ${paymentMethod === 'online' ? 'border-[#F04E4E] bg-[#F04E4E]/5' : 'border-[#4A3728]/10 hover:border-[#4A3728]/20'}`}
               >
                 <span className="text-[10px] font-black uppercase brand-rounded tracking-widest flex-1">Secure Online Payment (UPI, Cards, Netbanking)</span>
               </button>
@@ -1403,7 +1403,7 @@ _Please confirm my order and share delivery details._
                   type="button"
                   onClick={() => setPaymentMethod('cod')}
                   disabled={isSubmitting}
-                  className={`w-full p-3 lg:p-4 rounded-2xl border-2 flex items-center gap-3 shadow-sm transition-all text-left disabled:opacity-50 ${paymentMethod === 'cod' ? 'border-[#F04E4E] bg-[#F04E4E]/5' : 'border-[#4A3728]/10 hover:border-[#4A3728]/20'}`}
+                  className={`w-full min-h-[52px] p-3 lg:p-4 rounded-2xl border-2 flex items-center gap-3 shadow-sm transition-all text-left disabled:opacity-50 ${paymentMethod === 'cod' ? 'border-[#F04E4E] bg-[#F04E4E]/5' : 'border-[#4A3728]/10 hover:border-[#4A3728]/20'}`}
                 >
                   <Banknote size={22} className="text-green-600 flex-shrink-0" />
                   <span className="text-[10px] font-black uppercase brand-rounded tracking-widest flex-1">Cash on Delivery (Ahmedabad Only)</span>
