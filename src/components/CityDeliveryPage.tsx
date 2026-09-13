@@ -15,7 +15,7 @@ interface Props {
 const SHOWCASE_PRODUCTS = PRODUCTS.filter(p => p.category !== Category.GIFTING).slice(0, 4);
 
 const STEPS = [
-  { step: '01', title: 'Browse & Pick',            desc: 'Choose your favourite mukhwas, snacks or sweets from our full menu.' },
+  { step: '01', title: 'Browse & Pick',            desc: 'Choose your favourite mukhwas, wellness treats or gift hampers from our full menu.' },
   { step: '02', title: 'Order via WhatsApp or Web', desc: 'Place your order on the website or message us on WhatsApp — we\'ll confirm and dispatch fast.' },
   { step: '03', title: 'Delivered to Your City',   desc: 'We pack securely and ship pan-India via trusted courier. No preservatives — always fresh.' },
 ];
@@ -41,7 +41,7 @@ const HubPage: React.FC<{ onNavigateToCity: (s: string) => void; onShopClick: ()
         </h1>
         <div className="w-16 h-1.5 bg-coral rounded-full mx-auto mb-6" />
         <p className="max-w-2xl mx-auto text-[#4A3728]/70 text-lg leading-relaxed">
-          Amie's Homemade ships authentic homemade mukhwas, snacks &amp; sweets from Ahmedabad to every major city across India.
+          Amie's Homemade ships authentic homemade mukhwas &amp; wellness treats from Ahmedabad to every major city across India.
           Select your city below to learn more.
         </p>
       </div>
@@ -72,7 +72,7 @@ const HubPage: React.FC<{ onNavigateToCity: (s: string) => void; onShopClick: ()
           We ship to every pin code in India. WhatsApp us with your location and we'll arrange delivery right to your door.
         </p>
         <a
-          href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=${encodeURIComponent("Hi Ami! I'd like to order mukhwas & snacks for delivery to my city. Can you help?")}`}
+          href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=${encodeURIComponent("Hi Ami! I'd like to order mukhwas & wellness treats for delivery to my city. Can you help?")}`}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-3 px-10 py-5 bg-[#25D366] text-white rounded-full font-bold brand-rounded text-xs uppercase tracking-[0.2em] hover:shadow-2xl hover:shadow-[#25D366]/30 hover:scale-105 transition-all"
@@ -97,7 +97,7 @@ const HubPage: React.FC<{ onNavigateToCity: (s: string) => void; onShopClick: ()
 const CityPage: React.FC<{ city: City; onShopClick: () => void; onNavigateToCity: (s: string) => void; onNavigate: (p: string) => void }> =
   ({ city, onShopClick, onNavigateToCity, onNavigate }) => {
   const otherCities = CITIES.filter(c => c.slug !== city.slug).slice(0, 8);
-  const waText = encodeURIComponent(`Hi Ami! I'd like to order mukhwas & snacks for delivery to ${city.name}, ${city.state}.`);
+  const waText = encodeURIComponent(`Hi Ami! I'd like to order mukhwas & wellness treats for delivery to ${city.name}, ${city.state}.`);
 
   return (
     <div className="min-h-screen">
@@ -117,12 +117,12 @@ const CityPage: React.FC<{ city: City; onShopClick: () => void; onNavigateToCity
             Pan-India Delivery · {city.name}, {city.state}
           </span>
           <h1 className="text-4xl sm:text-6xl font-bold serif text-[#4A3728] mb-6 leading-tight">
-            Homemade Mukhwas &amp; Snacks<br />
+            Homemade Mukhwas &amp; Wellness Treats<br />
             Delivered to <span className="text-coral">{city.name}</span>
           </h1>
           <div className="w-16 h-1.5 bg-coral rounded-full mx-auto mb-6" />
           <p className="max-w-2xl mx-auto text-[#4A3728]/70 text-lg leading-relaxed mb-10">
-            {city.tagline}. Order fresh homemade mukhwas, chakli, ladoo, snacks &amp; sweets made by Ami Shah in Ahmedabad —
+            {city.tagline}. Order fresh homemade mukhwas, granola, chai masala &amp; gift hampers made by Ami Shah in Ahmedabad —
             shipped directly to your door in {city.name}. No preservatives. Made in small batches with love.
           </p>
 
@@ -259,7 +259,7 @@ const CityPage: React.FC<{ city: City; onShopClick: () => void; onNavigateToCity
             {[
               {
                 q: `Do you deliver homemade mukhwas to ${city.name}?`,
-                a: `Yes! We ship our fresh homemade mukhwas, snacks and sweets from Ahmedabad to ${city.name}, ${city.state} via trusted courier partners across India.`,
+                a: `Yes! We ship our fresh homemade mukhwas and wellness treats from Ahmedabad to ${city.name}, ${city.state} via trusted courier partners across India.`,
               },
               {
                 q: `How long does shipping to ${city.name} take?`,
@@ -271,7 +271,7 @@ const CityPage: React.FC<{ city: City; onShopClick: () => void; onNavigateToCity
               },
               {
                 q: 'What products can I order for delivery to my city?',
-                a: 'You can order our full range — mukhwas, chakli, ladoo, masalas, snacks and festive gift hampers — all made fresh with zero preservatives by Ami Shah in Ahmedabad.',
+                a: 'You can order our full range — mukhwas, wellness masalas, granola and festive gift hampers — all made fresh with zero preservatives by Ami Shah in Ahmedabad.',
               },
             ].map((faq, i) => (
               <div key={i} className="bg-white p-6 sm:p-8 rounded-[1.5rem] border border-coral/10">
@@ -318,7 +318,7 @@ const CityPage: React.FC<{ city: City; onShopClick: () => void; onNavigateToCity
       <section className="py-16 sm:py-20 px-4 bg-coral">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl sm:text-4xl font-bold serif text-white mb-4">
-            Order Mukhwas &amp; Snacks in {city.name} Today
+            Order Mukhwas &amp; Wellness Treats in {city.name} Today
           </h2>
           <p className="text-white/80 mb-8 text-lg">Fresh. Homemade. Shipped from Ahmedabad to your door.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">

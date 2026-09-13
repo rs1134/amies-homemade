@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Search, X, ArrowRight, Tag } from 'lucide-react';
 import { Product, Category } from '../types.ts';
-import { PRODUCTS, isProductVisible, categoryLabel } from '../constants.ts';
+import { PRODUCTS, isProductVisible, isCategoryVisible, categoryLabel } from '../constants.ts';
 
 interface SearchOverlayProps {
   isOpen: boolean;
@@ -17,7 +17,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   [Category.GIFTING]:  'bg-purple-100 text-purple-700',
 };
 
-const POPULAR_QUERIES = ['Amla Ginger', 'Granola', 'Chakri', 'Pista Ghugra', 'Gift Hampers', 'Cranberry Mix'];
+const POPULAR_QUERIES = ['Amla Ginger', 'Granola', 'Chatpati Mango', 'Chai Masala', 'Hampers', 'Cranberry Mix'];
 
 function searchProducts(query: string): Product[] {
   if (!query.trim()) return [];
@@ -194,7 +194,7 @@ const SearchOverlay: React.FC<SearchOverlayProps> = ({ isOpen, onClose, onSelect
               {/* Browse by category */}
               <p className="text-[11px] font-bold tracking-widest text-[#4A3728]/40 mt-6 mb-3 uppercase">Browse by Category</p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                {Object.values(Category).map(cat => (
+                {Object.values(Category).filter(isCategoryVisible).map(cat => (
                   <button
                     key={cat}
                     onClick={() => handlePopular(cat)}

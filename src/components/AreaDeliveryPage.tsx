@@ -15,7 +15,7 @@ interface Props {
 const SHOWCASE_PRODUCTS = PRODUCTS.filter(p => p.category !== Category.GIFTING).slice(0, 4);
 
 const STEPS = [
-  { step: '01', title: 'Browse & Pick',           desc: 'Choose your favourite mukhwas, snacks or sweets from our menu.' },
+  { step: '01', title: 'Browse & Pick',           desc: 'Choose your favourite mukhwas, wellness treats or gift hampers from our menu.' },
   { step: '02', title: 'Order Online or WhatsApp', desc: 'Place your order on the website or send us a quick WhatsApp message.' },
   { step: '03', title: 'Delivered Fresh',          desc: 'We pack and deliver fresh to your doorstep — no preservatives, ever.' },
 ];
@@ -41,7 +41,7 @@ const HubPage: React.FC<{ onNavigateToArea: (s: string) => void; onShopClick: ()
         </h1>
         <div className="w-16 h-1.5 bg-coral rounded-full mx-auto mb-6" />
         <p className="max-w-2xl mx-auto text-[#4A3728]/70 text-lg leading-relaxed">
-          Fresh homemade mukhwas, snacks &amp; sweets delivered to your doorstep across every neighbourhood in Ahmedabad. Select your area below.
+          Fresh homemade mukhwas &amp; wellness treats delivered to your doorstep across every neighbourhood in Ahmedabad. Select your area below.
         </p>
       </div>
 
@@ -75,7 +75,7 @@ const HubPage: React.FC<{ onNavigateToArea: (s: string) => void; onShopClick: ()
           This isn't the full list — we deliver to every neighbourhood across Ahmedabad. WhatsApp us your location and we'll arrange delivery right to your door.
         </p>
         <a
-          href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=${encodeURIComponent("Hi Ami! I'd like to order mukhwas & snacks for delivery in Ahmedabad. Can you help?")}`}
+          href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=${encodeURIComponent("Hi Ami! I'd like to order mukhwas & wellness treats for delivery in Ahmedabad. Can you help?")}`}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-3 px-10 py-5 bg-[#25D366] text-white rounded-full font-bold brand-rounded text-xs uppercase tracking-[0.2em] hover:shadow-2xl hover:shadow-[#25D366]/30 hover:scale-105 transition-all"
@@ -100,7 +100,7 @@ const HubPage: React.FC<{ onNavigateToArea: (s: string) => void; onShopClick: ()
 const AreaPage: React.FC<{ area: DeliveryArea; onShopClick: () => void; onNavigateToArea: (s: string) => void; onNavigate: (p: string) => void }> =
   ({ area, onShopClick, onNavigateToArea, onNavigate }) => {
   const otherAreas = DELIVERY_AREAS.filter(a => a.slug !== area.slug).slice(0, 8);
-  const waText = encodeURIComponent(`Hi Ami! I'd like to order mukhwas & snacks for delivery to ${area.name}, Ahmedabad.`);
+  const waText = encodeURIComponent(`Hi Ami! I'd like to order mukhwas & wellness treats for delivery to ${area.name}, Ahmedabad.`);
 
   return (
     <div className="min-h-screen">
@@ -120,12 +120,12 @@ const AreaPage: React.FC<{ area: DeliveryArea; onShopClick: () => void; onNaviga
             Delivery in {area.name} · Ahmedabad
           </span>
           <h1 className="text-4xl sm:text-6xl font-bold serif text-[#4A3728] mb-6 leading-tight">
-            Homemade Mukhwas &amp; Snacks<br />
+            Homemade Mukhwas &amp; Wellness Treats<br />
             Delivered to <span className="text-coral">{area.name}</span>
           </h1>
           <div className="w-16 h-1.5 bg-coral rounded-full mx-auto mb-6" />
           <p className="max-w-2xl mx-auto text-[#4A3728]/70 text-lg leading-relaxed mb-10">
-            {area.tagline}. Order fresh homemade mukhwas, chakli, ladoo, snacks &amp; sweets made by Ami Shah —
+            {area.tagline}. Order fresh homemade mukhwas, granola, chai masala &amp; gift hampers made by Ami Shah —
             delivered right to your door in {area.name}, Ahmedabad.
             No preservatives. Made in small batches with love.
           </p>
@@ -242,9 +242,9 @@ const AreaPage: React.FC<{ area: DeliveryArea; onShopClick: () => void; onNaviga
           </div>
           <div className="space-y-4">
             {[
-              { q: `Do you deliver to ${area.name}, Ahmedabad?`,   a: `Yes! We deliver fresh homemade mukhwas, snacks, and sweets directly to ${area.name} and nearby areas in Ahmedabad.` },
+              { q: `Do you deliver to ${area.name}, Ahmedabad?`,   a: `Yes! We deliver fresh homemade mukhwas and wellness treats directly to ${area.name} and nearby areas in Ahmedabad.` },
               { q: 'How long does delivery take?',                  a: `Orders to ${area.name} are typically delivered within 1–2 business days. WhatsApp us at ${WHATSAPP_NUMBER} to check same-day availability.` },
-              { q: 'What products can I order?',                    a: 'We offer a wide range of mukhwas, snacks, chakli, ladoo, masalas and festive gift hampers — all made fresh with zero preservatives.' },
+              { q: 'What products can I order?',                    a: 'We offer a wide range of mukhwas, wellness masalas, granola and festive gift hampers — all made fresh with zero preservatives.' },
               { q: 'Is there a minimum order amount?',              a: 'No strict minimum, but orders above ₹299 qualify for free delivery. WhatsApp us for details.' },
             ].map((faq, i) => (
               <div key={i} className="bg-white p-6 sm:p-8 rounded-[1.5rem] border border-coral/10">
@@ -291,7 +291,7 @@ const AreaPage: React.FC<{ area: DeliveryArea; onShopClick: () => void; onNaviga
       <section className="py-16 sm:py-20 px-4 bg-coral">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl sm:text-4xl font-bold serif text-white mb-4">
-            Order Mukhwas &amp; Snacks in {area.name} Today
+            Order Mukhwas &amp; Wellness Treats in {area.name} Today
           </h2>
           <p className="text-white/80 mb-8 text-lg">Fresh. Homemade. Delivered to your door.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
