@@ -750,7 +750,6 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jul%204,%202026,%2006_27_02%20PM.png',
       'https://ik.imagekit.io/amieshomemade/amies_ingredients_2000x2000_v10.png',
       'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%203.03.42%E2%80%AFPM.png',
-      'https://ik.imagekit.io/amieshomemade/067A4406.JPG?updatedAt=1782443778252',
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(37).jpg',
     ],
     ingredients: ['Dry Ginger', 'Cinnamon', 'Clove', 'Cardamom (Elaichi)', 'Black Pepper'],
