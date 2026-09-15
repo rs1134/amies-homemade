@@ -160,7 +160,8 @@ export const PRODUCTS: Product[] = [
     ],
     ingredients: ['Raw Mango', 'Homemade Anardana Churan'],
     prices: { '200 G': 264 },
-    rating: 5, reviewCount: 64
+    rating: 5, reviewCount: 64,
+    outOfStock: true
   },
   {
     id: 'm10',
