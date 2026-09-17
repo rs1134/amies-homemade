@@ -5,6 +5,11 @@ interface ReelVideo {
   id: string;
   url: string;
   title: string;
+  // Explicit poster override — required for non-ImageKit-hosted videos
+  // (e.g. Vercel Blob), since the /ik-thumbnail.jpg trick below only works
+  // for ImageKit URLs. Omit for ImageKit-hosted videos; posterFor() derives
+  // it automatically for those.
+  poster?: string;
 }
 
 // Add more entries here as videos come in — each just needs a hosted URL
@@ -36,6 +41,12 @@ const REELS: ReelVideo[] = [
     url: 'https://ik.imagekit.io/amieshomemade/7a211d6446bc4f6bbc29512093ce6f74.mp4',
     title: 'Real Ingredients, No Shortcuts',
   },
+  {
+    id: 'reel-6',
+    url: 'https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/06B02CB0-E532-400D-B460-0C4AC34E8F51%20%281%29%20%281%29.mp4',
+    poster: 'https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/video6-poster-v2.jpg',
+    title: 'Straight From the Kitchen',
+  },
 ];
 
 // ImageKit can extract a real thumbnail frame from a hosted video by
@@ -64,7 +75,7 @@ const ReelCard: React.FC<{ reel: ReelVideo }> = ({ reel }) => {
         <video
           ref={videoRef}
           src={reel.url}
-          poster={posterFor(reel.url)}
+          poster={reel.poster || posterFor(reel.url)}
           className="w-full h-full object-cover"
           preload="metadata"
           playsInline
