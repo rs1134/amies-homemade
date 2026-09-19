@@ -14,6 +14,7 @@ import AboutUs from './components/AboutUs.tsx';
 import GiftingView from './components/GiftingView.tsx';
 import CheckoutView from './components/CheckoutView.tsx';
 import ShiprocketCheckoutView from './components/ShiprocketCheckoutView.tsx';
+import ShopfloCheckoutView from './components/ShopfloCheckoutView.tsx';
 import Cart from './components/Cart.tsx';
 import Footer from './components/Footer.tsx';
 import Reviews from './components/Reviews.tsx';
@@ -1234,10 +1235,16 @@ const App: React.FC = () => {
       );
       // Feature flag — flip VITE_CHECKOUT_PROVIDER in Vercel env vars (+ redeploy)
       // to switch providers. Defaults to 'legacy' (the proven Razorpay/COD flow)
-      // until Shiprocket confirms catalog sync is live on their end. Reverting
-      // is always just this one env var, never a code change.
+      // until a hosted-checkout provider confirms it's ready to go live.
+      // Reverting is always just this one env var, never a code change.
       case 'checkout': return import.meta.env.VITE_CHECKOUT_PROVIDER === 'shiprocket' ? (
         <ShiprocketCheckoutView
+          items={cart}
+          total={cartTotal}
+          onShopClick={() => navigate('shop')}
+        />
+      ) : import.meta.env.VITE_CHECKOUT_PROVIDER === 'shopflo' ? (
+        <ShopfloCheckoutView
           items={cart}
           total={cartTotal}
           onShopClick={() => navigate('shop')}

@@ -26,6 +26,8 @@
     { "source": "/api/shiprocket-checkout/collections", "destination": "/api/shiprocket-checkout?endpoint=collections" },
     { "source": "/api/shiprocket-checkout/access-token", "destination": "/api/shiprocket-checkout?endpoint=access-token" },
     { "source": "/api/shiprocket-checkout/order-webhook", "destination": "/api/shiprocket-checkout?endpoint=order-webhook" },
+    { "source": "/api/shopflo-checkout/token", "destination": "/api/shopflo-checkout?endpoint=token" },
+    { "source": "/api/shopflo-checkout/order-webhook", "destination": "/api/shopflo-checkout?endpoint=order-webhook" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "crons": [
