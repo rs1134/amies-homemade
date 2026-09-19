@@ -532,7 +532,7 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
 
   // Flat convenience fee for Cash on Delivery — covers the extra handling
   // cost of collecting cash at the doorstep vs. prepaid online orders.
-  const codFee = paymentMethod === 'cod' ? 50 : 0;
+  const codFee = paymentMethod === 'cod' ? 75 : 0;
 
   const grandTotal = total - couponDiscount + (shippingFee || 0) + codFee;
   // MRP = price before the site-wide 10% discount, backed out the same way
@@ -1408,13 +1408,13 @@ _Please confirm my order and share delivery details._
                 >
                   <Banknote size={22} className="text-green-600 flex-shrink-0" />
                   <span className="text-[10px] font-black uppercase brand-rounded tracking-widest flex-1">Cash on Delivery (Ahmedabad Only)</span>
-                  <span className="text-[9px] font-black uppercase brand-rounded tracking-widest text-[#4A3728]/40 flex-shrink-0">+₹50 fee</span>
+                  <span className="text-[9px] font-black uppercase brand-rounded tracking-widest text-[#4A3728]/40 flex-shrink-0">+₹75 fee</span>
                 </button>
               ) : null}
 
               {isAhmedabad && paymentMethod === 'cod' && (
                 <p className="text-[11px] font-bold text-[#4A3728]/80 brand-rounded bg-[#4A3728]/5 p-2.5 rounded-lg border border-[#4A3728]/5">
-                  Please note: Cash on Delivery orders have a ₹50 convenience fee and may take up to 1 extra day to be delivered compared to prepaid orders.
+                  Please note: Cash on Delivery orders have a ₹75 convenience fee and may take up to 1 extra day to be delivered compared to prepaid orders.
                 </p>
               )}
 
