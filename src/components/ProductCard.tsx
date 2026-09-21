@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Plus, Minus, Check, ImageOff, Images } from 'lucide-react';
 import { Product } from '../types.ts';
 
-const BESTSELLER_IDS = new Set(['m5', 'm2', 'm4', 'sf3', 'hw1', 'sm1', 'm1']);
+const BESTSELLER_IDS = new Set(['m5', 'm2', 'm4', 'sf3', 'hw1', 'sm2', 'm1']);
 
 const ikImg = (url: string, w: number) => {
   if (!url.includes('ik.imagekit.io')) return url;

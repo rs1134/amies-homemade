@@ -36,7 +36,7 @@ const FAQ_DATA: FAQCategory[] = [
       },
       {
         q: 'What are your best-selling products?',
-        a: 'Our top six are: Dryfruit and Seeds, Chatpati Mango, Tender Coconut Vanilla Chips, Kharek Coconut Almond, Homemade Healthy Granola, and Dry Fruit Milk Masala. All six are marked with a Bestseller badge in our shop.',
+        a: 'Our top six are: Dryfruit and Seeds, Chatpati Mango, Tender Coconut Vanilla Chips, Kharek Coconut Almond, Homemade Healthy Granola, and Chai Masala. All six are marked with a Bestseller badge in our shop.',
       },
       {
         q: 'What sizes are available?',
