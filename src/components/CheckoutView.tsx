@@ -537,7 +537,7 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   const grandTotal = total - couponDiscount + (shippingFee || 0) + codFee;
   // MRP = price before the site-wide 10% discount, backed out the same way
   // ProductCard/Cart compute it, so the "You saved" figure here matches.
-  const mrpTotal = items.reduce((sum, item) => sum + (Math.ceil(item.price / 0.9 / 5) * 5) * item.quantity, 0);
+  const mrpTotal = items.reduce((sum, item) => sum + (item.mrp ?? Math.ceil(item.price / 0.9 / 5) * 5) * item.quantity, 0);
 
   // Abandoned-cart reminder: once there's a valid email and items in the
   // cart, keep the server's record of "what to remind them about" in sync
@@ -923,10 +923,10 @@ _Please confirm my order and share delivery details._
                     </div>
                     <div className="flex flex-col items-end">
                       <div className="flex items-center gap-1.5">
-                        <span className="text-[10px] text-[#4A3728]/30 line-through">₹{Math.ceil(item.price / 0.9 / 5) * 5 * item.quantity}</span>
+                        <span className="text-[10px] text-[#4A3728]/30 line-through">₹{(item.mrp ?? Math.ceil(item.price / 0.9 / 5) * 5) * item.quantity}</span>
                         <p className="text-sm font-bold text-[#4A3728]">₹{item.price * item.quantity}</p>
                       </div>
-                      <span className="text-[8px] font-black text-green-600 uppercase tracking-wide">Saved ₹{(Math.ceil(item.price / 0.9 / 5) * 5 - item.price) * item.quantity}</span>
+                      <span className="text-[8px] font-black text-green-600 uppercase tracking-wide">Saved ₹{((item.mrp ?? Math.ceil(item.price / 0.9 / 5) * 5) - item.price) * item.quantity}</span>
                     </div>
                   </div>
                 ))}
@@ -1511,10 +1511,10 @@ _Please confirm my order and share delivery details._
                       the strikethrough shown on product pages. */}
                   <div className="flex flex-col items-end">
                     <div className="flex items-center gap-1.5">
-                      <span className="text-[10px] text-[#4A3728]/30 line-through">₹{Math.ceil(item.price / 0.9 / 5) * 5 * item.quantity}</span>
+                      <span className="text-[10px] text-[#4A3728]/30 line-through">₹{(item.mrp ?? Math.ceil(item.price / 0.9 / 5) * 5) * item.quantity}</span>
                       <span className="font-bold text-[#4A3728] text-sm">₹{item.price * item.quantity}</span>
                     </div>
-                    <span className="text-[8px] font-black text-green-600 uppercase tracking-wide">Saved ₹{(Math.ceil(item.price / 0.9 / 5) * 5 - item.price) * item.quantity}</span>
+                    <span className="text-[8px] font-black text-green-600 uppercase tracking-wide">Saved ₹{((item.mrp ?? Math.ceil(item.price / 0.9 / 5) * 5) - item.price) * item.quantity}</span>
                   </div>
                   {/* Mobile: always-visible remove button (no hover on touch) */}
                   <button onClick={() => onRemove(idx)} aria-label={`Remove ${item.name}`} className="sm:hidden p-2.5 -m-1 min-w-[36px] min-h-[36px] flex items-center justify-center text-[#4A3728]/30 hover:text-red-500 transition-colors">

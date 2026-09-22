@@ -91,7 +91,8 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
 
   // Dynamic price calculation
   const currentPrice = activePrices[selectedWeight] || product.price;
-  const originalPrice = Math.ceil(currentPrice / 0.9 / 5) * 5;
+  const originalPrice = product.mrp ?? Math.ceil(currentPrice / 0.9 / 5) * 5;
+  const savePct = Math.round((1 - currentPrice / originalPrice) * 100);
 
   // Ingredients are variant-specific when a sub-option supplies them.
   const displayIngredients = product.subOptions?.find(o => o.name === selectedSubOption)?.ingredients ?? product.ingredients;
@@ -218,7 +219,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
             <div className="flex items-center gap-2 flex-wrap mb-1.5">
               <span className="text-2xl sm:text-3xl font-bold text-coral">MRP ₹{currentPrice}</span>
               <span className="text-sm text-gray-400 line-through">MRP ₹{originalPrice}</span>
-              <span className="text-[10px] font-bold bg-[#F14E4E] text-white px-2 py-0.5 rounded-full uppercase tracking-wide">SAVE 10%</span>
+              <span className="text-[10px] font-bold bg-[#F14E4E] text-white px-2 py-0.5 rounded-full uppercase tracking-wide">SAVE {savePct}%</span>
             </div>
             <p className="text-xs text-[#4A3728]/50 brand-rounded mb-3">Inclusive of taxes</p>
 

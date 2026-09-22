@@ -43,8 +43,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onOpen,
 
   // Display price: use the default weight's price
   const displayPrice = product.prices?.[product.weight] ?? product.price;
-  // MRP = price before 10% discount, rounded to nearest ₹5
-  const mrp = Math.ceil(displayPrice / 0.9 / 5) * 5;
+  // MRP: explicit override if set, else price before 10% discount, rounded to nearest ₹5
+  const mrp = product.mrp ?? Math.ceil(displayPrice / 0.9 / 5) * 5;
+  const savePct = Math.round((1 - displayPrice / mrp) * 100);
 
   // Products with varieties need the modal so the customer can choose
   const needsOptions = !!product.subOptions;
@@ -160,7 +161,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onOpen,
         <div className="flex flex-wrap items-center gap-1.5 mb-1.5">
           <span className="text-[15px] sm:text-base font-bold text-[#F14E4E]">₹{displayPrice}</span>
           <span className="text-xs text-gray-400 line-through">₹{mrp}</span>
-          <span className="text-[10px] font-bold bg-[#F14E4E] text-white px-1.5 py-0.5 rounded-full uppercase tracking-wide">SAVE 10%</span>
+          <span className="text-[10px] font-bold bg-[#F14E4E] text-white px-1.5 py-0.5 rounded-full uppercase tracking-wide">SAVE {savePct}%</span>
         </div>
 
         {!product.isNew && product.rating && product.reviewCount && (

@@ -25,6 +25,8 @@ export interface Product {
   ingredients: string[];
   weights?: string[];
   prices?: Record<string, number>; // Mapping weight string to price
+  /** Explicit MRP override. Default (unset): auto-derived as price / 0.9 rounded up to nearest ₹5 (10% off). */
+  mrp?: number;
   rating?: number;
   reviewCount?: number;
   /** Shelf life shown in Additional Information, e.g. '6 months' (default) or '1 year'. */

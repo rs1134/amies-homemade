@@ -27,7 +27,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, o
   // MRP = price before the site-wide 10% discount, backed out the same way
   // ProductCard/CheckoutView compute it, so the savings shown here match
   // what's shown everywhere else.
-  const mrpSubtotal = items.reduce((sum, item) => sum + (Math.ceil(item.price / 0.9 / 5) * 5) * item.quantity, 0);
+  const mrpSubtotal = items.reduce((sum, item) => sum + (item.mrp ?? Math.ceil(item.price / 0.9 / 5) * 5) * item.quantity, 0);
   const totalSavings = mrpSubtotal - orderTotal;
 
   const handleApplyCoupon = () => {
