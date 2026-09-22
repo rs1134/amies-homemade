@@ -87,6 +87,8 @@ interface OrderSnapshot {
   city: string;
   address: string;
   isAhmedabad: boolean;
+  /** Ahmedabad or Gandhinagar — the 1-working-day delivery estimate tier. */
+  isFastDeliveryCity: boolean;
   paymentMethod: 'online' | 'cod';
   email: string;
 }
@@ -402,6 +404,10 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   // Accept common spellings/variants of Ahmedabad (Gujarati: Amdavad)
   const AHMEDABAD_VARIANTS = ['ahmedabad', 'amdavad', 'amdaavad', 'ahmadabad', 'ahemdabad', 'ahembdabad'];
   const isAhmedabad = AHMEDABAD_VARIANTS.includes(formData.city.trim().toLowerCase());
+  // Gandhinagar gets the same 1-working-day delivery estimate as Ahmedabad
+  // (it doesn't get free shipping or COD — those stay Ahmedabad-only).
+  const GANDHINAGAR_VARIANTS = ['gandhinagar'];
+  const isFastDeliveryCity = isAhmedabad || GANDHINAGAR_VARIANTS.includes(formData.city.trim().toLowerCase());
 
   // COD is strictly Ahmedabad-only — if the customer edits the city away
   // from Ahmedabad after selecting COD, silently fall back to online
@@ -643,7 +649,7 @@ _Please confirm my order and share delivery details._
     setOrderSnapshot({
       items, total, couponDiscount,
       shippingFee: shippingFee ?? 0, codFee, grandTotal,
-      city: formData.city, address: fullDeliveryAddress, isAhmedabad,
+      city: formData.city, address: fullDeliveryAddress, isAhmedabad, isFastDeliveryCity,
       paymentMethod: method, email: formData.email,
     });
     setPaymentId(paymentIdForOrder);
@@ -967,7 +973,7 @@ _Please confirm my order and share delivery details._
                 <Calendar className="text-[#F04E4E] flex-shrink-0" size={20} />
                 <div>
                   <p className="text-[9px] font-black brand-rounded uppercase text-[#4A3728]/40 tracking-widest mb-1">Estimated Arrival</p>
-                  <p className="text-[12px] font-bold text-[#4A3728]">{snap.isAhmedabad ? '1 Working Day' : '3-5 Working Days'}</p>
+                  <p className="text-[12px] font-bold text-[#4A3728]">{snap.isFastDeliveryCity ? '1 Working Day' : '3-5 Working Days'}</p>
                 </div>
               </div>
             </div>
@@ -1388,6 +1394,17 @@ _Please confirm my order and share delivery details._
             <h2 className="text-base lg:text-lg font-bold serif mb-3 lg:mb-4 flex items-center gap-3 text-[#4A3728]">
               <Wallet className="text-[#F04E4E]" size={22} /> Payment Method
             </h2>
+
+            {/* Estimated delivery time — shown once the city is known, right
+                where the customer is about to pay, so it's the last thing
+                they see before committing. */}
+            {touched.city && !fieldErrors.city && formData.city && (
+              <p className="flex items-center gap-2 text-[11px] font-bold text-[#4A3728]/80 brand-rounded bg-[#4A3728]/5 p-2.5 rounded-lg border border-[#4A3728]/5 mb-2.5 lg:mb-3">
+                <Truck size={15} className="text-[#F04E4E] flex-shrink-0" />
+                Estimated delivery: {isFastDeliveryCity ? '1 Working Day' : '3-5 Working Days'}
+              </p>
+            )}
+
             <div className="flex flex-col gap-2.5 lg:gap-3">
               <button
                 type="button"
