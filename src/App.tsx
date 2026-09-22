@@ -438,6 +438,24 @@ const App: React.FC = () => {
   const [orderComplete, setOrderComplete] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [addedToast, setAddedToast] = useState<string | null>(null);
+  // Private Shopflo test switch — loading the site once with "?checkout=shopflo"
+  // flips this tab (only) onto the Shopflo checkout, regardless of the
+  // VITE_CHECKOUT_PROVIDER env var, so it can be tried end-to-end with real
+  // orders without exposing it to any other customer. Persisted in
+  // sessionStorage so it survives navigating shop → cart → checkout (each of
+  // which replaces the URL and would otherwise drop the query param) and a
+  // page refresh mid-test, but never a new tab/session.
+  const [forceShopfloCheckout, setForceShopfloCheckout] = useState(() => {
+    try {
+      if (new URLSearchParams(window.location.search).get('checkout') === 'shopflo') return true;
+      return sessionStorage.getItem('forceShopfloCheckout') === '1';
+    } catch { return false; }
+  });
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('checkout') !== 'shopflo') return;
+    try { sessionStorage.setItem('forceShopfloCheckout', '1'); } catch { /* ignore */ }
+    setForceShopfloCheckout(true);
+  }, []);
   // Persist cart so it survives refresh / accidental tab close
   useEffect(() => {
     try {
@@ -1243,7 +1261,7 @@ const App: React.FC = () => {
           total={cartTotal}
           onShopClick={() => navigate('shop')}
         />
-      ) : import.meta.env.VITE_CHECKOUT_PROVIDER === 'shopflo' ? (
+      ) : (forceShopfloCheckout || import.meta.env.VITE_CHECKOUT_PROVIDER === 'shopflo') ? (
         <ShopfloCheckoutView
           items={cart}
           total={cartTotal}
