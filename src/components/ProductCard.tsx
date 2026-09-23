@@ -3,6 +3,9 @@ import { Plus, Minus, Check, ImageOff, Images } from 'lucide-react';
 import { Product } from '../types.ts';
 
 const BESTSELLER_IDS = new Set(['m5', 'm2', 'm4', 'sf3', 'hw1', 'sm2', 'm1']);
+// Combo pack — best worth-for-money in the range, so it gets its own badge
+// instead of (or alongside) Bestseller.
+const BEST_VALUE_IDS = new Set(['m14']);
 
 const ikImg = (url: string, w: number) => {
   if (!url.includes('ik.imagekit.io')) return url;
@@ -148,6 +151,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onOpen,
                 <polygon points="5,0 6.2,3.8 10,3.8 7,6.1 8.1,10 5,7.6 1.9,10 3,6.1 0,3.8 3.8,3.8" />
               </svg>
               Bestseller
+            </span>
+          </div>
+        )}
+        {BEST_VALUE_IDS.has(product.id) && !isOOS && (
+          <div className="absolute top-3 left-3">
+            <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-emerald-800 text-[9px] font-semibold brand-rounded uppercase tracking-[0.15em] bg-white/85 backdrop-blur-sm ring-1 ring-emerald-600/25">
+              <Check size={8} strokeWidth={3} />
+              Best Value
             </span>
           </div>
         )}
