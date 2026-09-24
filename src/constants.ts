@@ -184,8 +184,8 @@ export const PRODUCTS: Product[] = [
     id: 'm4',
     name: 'Tender Coconut Vanilla Chips',
     category: Category.MUKHWAS,
-    price: 165,
-    weight: '100 G',
+    price: 185,
+    weight: '110 G',
     description: 'Coconut sourced from the sun-drenched groves of Kerala, our tender coconuts are picked at peak freshness for a light, satisfying crunch. Naturally wholesome and irresistibly delicious, every bite is a tropical escape and the perfect post-meal treat.',
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(24)_HQvaLeprU.jpg',
     images: [
@@ -197,7 +197,7 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(24)_HQvaLeprU.jpg',
     ],
     ingredients: ['Coconut', 'Vanilla Extract', 'Salt', 'Sugar'],
-    prices: { '100 G': 165 },
+    prices: { '110 G': 185 },
     rating: 5, reviewCount: 60
   },
   {
@@ -346,8 +346,8 @@ export const PRODUCTS: Product[] = [
     id: 'm9',
     name: 'Tender Coconut Chocolate Chips',
     category: Category.MUKHWAS,
-    price: 165,
-    weight: '100 G',
+    price: 185,
+    weight: '110 G',
     description: 'Handpicked from Kerala\'s sun-drenched groves, our tender coconuts are blended with real cocoa for a rich, chocolatey crunch. High in fibre and naturally satisfying, it\'s the perfect post-meal treat or an energizing snack on the go.',
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(30)_lviUwnaufS.jpg',
     images: [
@@ -359,7 +359,7 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(30)_lviUwnaufS.jpg',
     ],
     ingredients: ['Coconut', 'Cocoa Powder', 'Salt', 'Sugar'],
-    prices: { '100 G': 165 },
+    prices: { '110 G': 185 },
     rating: 4.5, reviewCount: 48
   },
   {
