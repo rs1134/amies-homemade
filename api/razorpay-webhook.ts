@@ -347,23 +347,63 @@ export default async function handler(req: any, res: any) {
       `---------------------------`,
     ].join('\n');
 
-    try {
-      const ntfyRes = await fetch(`https://ntfy.sh/${NTFY_TOPIC}`, {
-        method: 'POST',
-        body: message,
-        headers: {
-          'Content-Type': 'text/plain; charset=utf-8',
-          'Title': toHeaderSafe(`New Order: ${name} (Rs. ${grandTotal})`),
-          'Priority': 'high',
-          'Tags': 'shopping_cart,package,star',
-        },
-      });
-      if (!ntfyRes.ok) {
-        const errText = await ntfyRes.text().catch(() => 'unknown');
-        console.error(`[razorpay-webhook] ntfy failed: ${ntfyRes.status} - ${errText}`);
+    // This webhook is the ONLY notification attempt for orders whose
+    // customer browser never reported back (the common case — see the
+    // comment on this handler). A single unretried ntfy call here means one
+    // transient network blip loses the order alert forever even though the
+    // order itself is safely in the DB above — exactly what happened to the
+    // AM-WHgIo5O order (Harsh Raval, 22 Sep) that started this fix. Retry
+    // ntfy a few times, and if it still fails, fall back to an SMS to the
+    // admin phone so silence requires BOTH channels to fail at once.
+    let ntfyOk = false;
+    for (let attempt = 1; attempt <= 3 && !ntfyOk; attempt++) {
+      try {
+        const ntfyRes = await fetch(`https://ntfy.sh/${NTFY_TOPIC}`, {
+          method: 'POST',
+          body: message,
+          headers: {
+            'Content-Type': 'text/plain; charset=utf-8',
+            'Title': toHeaderSafe(`New Order: ${name} (Rs. ${grandTotal})`),
+            'Priority': 'high',
+            'Tags': 'shopping_cart,package,star',
+          },
+        });
+        if (ntfyRes.ok) {
+          ntfyOk = true;
+        } else {
+          const errText = await ntfyRes.text().catch(() => 'unknown');
+          console.error(`[razorpay-webhook] ntfy attempt ${attempt} failed: ${ntfyRes.status} - ${errText}`);
+        }
+      } catch (err: any) {
+        console.error(`[razorpay-webhook] ntfy attempt ${attempt} request failed:`, err.message);
       }
-    } catch (err: any) {
-      console.error('[razorpay-webhook] ntfy request failed:', err.message);
+      if (!ntfyOk && attempt < 3) await new Promise(r => setTimeout(r, 500 * attempt));
+    }
+
+    if (!ntfyOk) {
+      const ADMIN_PHONE = process.env.ADMIN_ALERT_PHONE || '9054038876';
+      const FAST2SMS_KEY = process.env.FAST2SMS_API_KEY;
+      if (FAST2SMS_KEY) {
+        try {
+          const smsRes = await fetch('https://www.fast2sms.com/dev/bulkV2', {
+            method: 'POST',
+            headers: { 'authorization': FAST2SMS_KEY, 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              route: 'q',
+              message: `Amie's Homemade: NEW ORDER ${orderId}, ${name}, Rs.${grandTotal}. (Push notification failed - check site for details.)`,
+              language: 'english',
+              flash: 0,
+              numbers: ADMIN_PHONE,
+            }),
+          });
+          if (!smsRes.ok) console.error(`[razorpay-webhook] admin fallback SMS failed: ${smsRes.status}`);
+          else console.error('[razorpay-webhook] ntfy failed 3x — sent admin fallback SMS instead');
+        } catch (err: any) {
+          console.error('[razorpay-webhook] admin fallback SMS request failed:', err.message);
+        }
+      } else {
+        console.error('[razorpay-webhook] ntfy failed 3x and FAST2SMS_API_KEY not configured — order alert fully lost for', orderId);
+      }
     }
 
     // ── Customer SMS via Fast2SMS ─────────────────────────────────────────

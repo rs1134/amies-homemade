@@ -281,23 +281,58 @@ export default async function handler(req: any, res: any) {
       `---------------------------`,
     ].join('\n');
 
-    try {
-      const ntfyRes = await fetch(`https://ntfy.sh/${NTFY_TOPIC}`, {
-        method: 'POST',
-        body: message,
-        headers: {
-          'Content-Type': 'text/plain; charset=utf-8',
-          'Title': toHeaderSafe(isCod ? `COD Order: ${name} (Rs. ${grandTotal})` : `New Order: ${name} (Rs. ${grandTotal})`),
-          'Priority': 'high',
-          'Tags': isCod ? 'moneybag,package,star' : 'shopping_cart,package,star',
-        },
-      });
-      if (!ntfyRes.ok) {
-        const errText = await ntfyRes.text().catch(() => 'unknown');
-        console.error(`[notify-order] ntfy failed: ${ntfyRes.status} - ${errText}`);
+    // Retry + admin-SMS fallback so a single ntfy.sh hiccup can't silently
+    // lose an order alert (see the matching comment in razorpay-webhook.ts —
+    // this is the client-reported twin of that same failure mode).
+    let ntfyOk = false;
+    for (let attempt = 1; attempt <= 3 && !ntfyOk; attempt++) {
+      try {
+        const ntfyRes = await fetch(`https://ntfy.sh/${NTFY_TOPIC}`, {
+          method: 'POST',
+          body: message,
+          headers: {
+            'Content-Type': 'text/plain; charset=utf-8',
+            'Title': toHeaderSafe(isCod ? `COD Order: ${name} (Rs. ${grandTotal})` : `New Order: ${name} (Rs. ${grandTotal})`),
+            'Priority': 'high',
+            'Tags': isCod ? 'moneybag,package,star' : 'shopping_cart,package,star',
+          },
+        });
+        if (ntfyRes.ok) {
+          ntfyOk = true;
+        } else {
+          const errText = await ntfyRes.text().catch(() => 'unknown');
+          console.error(`[notify-order] ntfy attempt ${attempt} failed: ${ntfyRes.status} - ${errText}`);
+        }
+      } catch (err: any) {
+        console.error(`[notify-order] ntfy attempt ${attempt} request failed:`, err.message);
       }
-    } catch (err: any) {
-      console.error('[notify-order] ntfy request failed:', err.message);
+      if (!ntfyOk && attempt < 3) await new Promise(r => setTimeout(r, 500 * attempt));
+    }
+
+    if (!ntfyOk) {
+      const ADMIN_PHONE = process.env.ADMIN_ALERT_PHONE || '9054038876';
+      const FAST2SMS_KEY = process.env.FAST2SMS_API_KEY;
+      if (FAST2SMS_KEY) {
+        try {
+          const smsRes = await fetch('https://www.fast2sms.com/dev/bulkV2', {
+            method: 'POST',
+            headers: { 'authorization': FAST2SMS_KEY, 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              route: 'q',
+              message: `Amie's Homemade: NEW ORDER ${orderId}, ${name}, Rs.${grandTotal}. (Push notification failed - check site for details.)`,
+              language: 'english',
+              flash: 0,
+              numbers: ADMIN_PHONE,
+            }),
+          });
+          if (!smsRes.ok) console.error(`[notify-order] admin fallback SMS failed: ${smsRes.status}`);
+          else console.error('[notify-order] ntfy failed 3x — sent admin fallback SMS instead');
+        } catch (err: any) {
+          console.error('[notify-order] admin fallback SMS request failed:', err.message);
+        }
+      } else {
+        console.error('[notify-order] ntfy failed 3x and FAST2SMS_API_KEY not configured — order alert fully lost for', orderId);
+      }
     }
 
     // ── Customer SMS via Fast2SMS ─────────────────────────────────────────
