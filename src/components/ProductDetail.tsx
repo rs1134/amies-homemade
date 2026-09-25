@@ -153,10 +153,15 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
                     <p className="brand-rounded text-xs font-bold uppercase tracking-widest mt-2">Homemade With Love</p>
                   </div>
                 )}
-                {/* Preload all gallery images so switching is instant */}
+                {/* Preload all gallery images so switching is instant. These must load
+                    eagerly (no `loading="lazy"`) — the container is `display:none`, and a
+                    lazy image inside a display:none element never counts as "near viewport",
+                    so the browser never actually fetches it. That silently broke this preload
+                    and made every image switch do a fresh network fetch instead of hitting a
+                    warm cache. */}
                 <div aria-hidden className="hidden">
                   {gallery.map((img, i) => i !== activeImg && (
-                    <img key={img} src={ikImg(img, 800)} alt="" loading="lazy" decoding="async" />
+                    <img key={img} src={ikImg(img, 800)} alt="" decoding="async" />
                   ))}
                 </div>
               </div>
