@@ -13,7 +13,7 @@ import { Product, Category } from './types';
 // snack/sweet its new photos + (if different) a `shelfLife` value, since the
 // product page defaults to "6 months" best-before.
 export const HIDDEN_CATEGORIES: Category[] = [Category.SNACKS, Category.SWEETS];
-export const HIDDEN_PRODUCT_IDS: string[] = ['s13', 's14', 'hw2', 'g1', 'g2', 'g3', 'm11']; // Peri-Peri Makhana, Dry Fruit Makhana, Masala Protein Beans Mix; legacy hampers (replaced by Trio of Traditions & The Gourmet Discovery); Amla Ginger Beet (temporarily out of stock)
+export const HIDDEN_PRODUCT_IDS: string[] = ['s13', 's14', 'hw2', 'g1', 'g2', 'g3']; // Peri-Peri Makhana, Dry Fruit Makhana, Masala Protein Beans Mix; legacy hampers (replaced by Trio of Traditions & The Gourmet Discovery)
 
 export const isProductVisible = (p: Product): boolean =>
   !HIDDEN_CATEGORIES.includes(p.category) && !HIDDEN_PRODUCT_IDS.includes(p.id);
@@ -225,7 +225,7 @@ export const PRODUCTS: Product[] = [
     name: 'Amla Ginger',
     category: Category.MUKHWAS,
     price: 165,
-    weight: '125 G',
+    weight: '100 G',
     description: 'Inspired by traditional Indian home remedies, our Amla Ginger mukhwas is a light, functional blend designed to refresh your taste and aid digestion naturally.',
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(6)_Pmm7gKkpw.jpg',
     images: [
@@ -237,9 +237,8 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(6)_Pmm7gKkpw.jpg',
     ],
     ingredients: ['Amla', 'Ginger', 'Salt', 'Sugar', 'Black Pepper', 'Black Salt'],
-    prices: { '125 G': 165 },
-    rating: 4.5, reviewCount: 39,
-    outOfStock: true
+    prices: { '100 G': 165 },
+    rating: 4.5, reviewCount: 39
   },
   {
     id: 'm8',
@@ -339,8 +338,7 @@ export const PRODUCTS: Product[] = [
     ],
     ingredients: ['Amla', 'Beet', 'Ginger', 'Salt', 'Sugar', 'Black Pepper', 'Black Salt'],
     prices: { '100 G': 154 },
-    rating: 4.5, reviewCount: 38,
-    outOfStock: true
+    rating: 4.5, reviewCount: 38
   },
   {
     id: 'm9',
