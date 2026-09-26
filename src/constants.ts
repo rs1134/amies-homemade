@@ -158,7 +158,7 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%209.00.41%E2%80%AFAM.png',
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(36)_aAxJbrDew.jpg',
     ],
-    ingredients: ['Almond', 'Cashews', 'Dry Dates', 'Coconut', 'Pumpkin Seeds', 'Sunflower Seeds', 'Saunf', 'Dhana Dal', 'Rose Petals', 'Natural Flavouring Substance'],
+    ingredients: ['Almond', 'Cashews', 'Dry Dates', 'Coconut', 'Pumpkin Seeds', 'Sunflower Seeds', 'Saunf', 'Dhana Dal', 'Rose Petals', 'Lovely'],
     prices: { '200 G': 299 },
     rating: 4.5, reviewCount: 56
   },
@@ -305,7 +305,7 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%209.04.09%E2%80%AFAM.png?updatedAt=1782444865788',
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(15)_9rgFNnNhw.jpg',
     ],
-    ingredients: ['Kharek', 'Coconut', 'Almond', 'Natural Flavouring Substance'],
+    ingredients: ['Kharek', 'Coconut', 'Almond', 'Lovely'],
     prices: { '190 G': 285 },
     rating: 5, reviewCount: 52
   },
