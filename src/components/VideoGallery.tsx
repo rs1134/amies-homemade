@@ -27,6 +27,11 @@ const REELS: ReelVideo[] = [
     title: 'Freshly Made, Straight From Ahmedabad',
   },
   {
+    id: 'reel-7',
+    url: 'https://ik.imagekit.io/amieshomemade/finall.mp4',
+    title: 'Loved by Customers, Batch After Batch',
+  },
+  {
     id: 'reel-3',
     url: 'https://ik.imagekit.io/amieshomemade/Amies%20homemade%20hamper%20(1)%20(1)%20(1).mp4',
     title: 'Beautifully Packed, Ready to Gift',
