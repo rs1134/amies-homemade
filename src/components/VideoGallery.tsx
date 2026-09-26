@@ -29,6 +29,9 @@ const REELS: ReelVideo[] = [
   {
     id: 'reel-7',
     url: 'https://ik.imagekit.io/amieshomemade/finall.mp4',
+    // Explicit poster: ImageKit's auto-thumbnail grabs frame 0, which is a
+    // black frame for this clip. Using a locally-hosted frame instead.
+    poster: '/video-reel7-poster.jpg',
     title: 'Loved by Customers, Batch After Batch',
   },
   {
