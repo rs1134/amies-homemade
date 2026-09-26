@@ -142,27 +142,6 @@ export const PRODUCTS: Product[] = [
     rating: 4.5, reviewCount: 34
   },
   {
-    id: 'm8',
-    name: 'Date & Almond',
-    category: Category.MUKHWAS,
-    price: 285,
-    weight: '215 G',
-    description: 'A perfect pairing of naturally sweet dates and crunchy almonds, this wholesome blend delivers rich flavour, satisfying texture, and lasting energy. More than just a mukhwas, it\'s a delicious snack and the perfect light finish to every meal.',
-    image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(34)_mG5k2TTAJc.jpg',
-    images: [
-      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(34)_mG5k2TTAJc.jpg',
-      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(3).png',
-      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(35)_gehGRvrQd.jpg',
-      'https://ik.imagekit.io/amieshomemade/amies_ingredients_2000x2000_v5.png',
-      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png',
-      'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%202.19.47%E2%80%AFPM.png',
-      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(34)_mG5k2TTAJc.jpg',
-    ],
-    ingredients: ['Dates', 'Almond', 'Anardana Churan'],
-    prices: { '215 G': 285 },
-    rating: 4.5, reviewCount: 32
-  },
-  {
     id: 'm10',
     name: 'Dryfruit and Seeds',
     category: Category.MUKHWAS,
@@ -182,6 +161,27 @@ export const PRODUCTS: Product[] = [
     ingredients: ['Almond', 'Cashews', 'Dry Dates', 'Coconut', 'Pumpkin Seeds', 'Sunflower Seeds', 'Saunf', 'Dhana Dal', 'Rose Petals', 'Natural Flavouring Substance'],
     prices: { '200 G': 299 },
     rating: 4.5, reviewCount: 56
+  },
+  {
+    id: 'm8',
+    name: 'Date & Almond',
+    category: Category.MUKHWAS,
+    price: 285,
+    weight: '215 G',
+    description: 'A perfect pairing of naturally sweet dates and crunchy almonds, this wholesome blend delivers rich flavour, satisfying texture, and lasting energy. More than just a mukhwas, it\'s a delicious snack and the perfect light finish to every meal.',
+    image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(34)_mG5k2TTAJc.jpg',
+    images: [
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(34)_mG5k2TTAJc.jpg',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(3).png',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(35)_gehGRvrQd.jpg',
+      'https://ik.imagekit.io/amieshomemade/amies_ingredients_2000x2000_v5.png',
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png',
+      'https://ik.imagekit.io/amieshomemade/Screenshot%202026-06-26%20at%202.19.47%E2%80%AFPM.png',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(34)_mG5k2TTAJc.jpg',
+    ],
+    ingredients: ['Dates', 'Almond', 'Anardana Churan'],
+    prices: { '215 G': 285 },
+    rating: 4.5, reviewCount: 32
   },
   {
     id: 'm4',
