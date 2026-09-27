@@ -313,7 +313,7 @@ export const PRODUCTS: Product[] = [
     id: 'm8',
     name: 'Date & Almond',
     category: Category.MUKHWAS,
-    price: 285,
+    price: 299,
     weight: '215 G',
     description: 'A perfect pairing of naturally sweet dates and crunchy almonds, this wholesome blend delivers rich flavour, satisfying texture, and lasting energy. More than just a mukhwas, it\'s a delicious snack and the perfect light finish to every meal.',
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(34)_mG5k2TTAJc.jpg',
@@ -327,7 +327,7 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(34)_mG5k2TTAJc.jpg',
     ],
     ingredients: ['Dates', 'Almond', 'Anardana Churan'],
-    prices: { '215 G': 285 },
+    prices: { '215 G': 299 },
     rating: 4.5, reviewCount: 32
   },
   {
