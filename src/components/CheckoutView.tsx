@@ -1397,8 +1397,12 @@ _Please confirm my order and share delivery details._
 
             {/* Estimated delivery time — shown once the city is known, right
                 where the customer is about to pay, so it's the last thing
-                they see before committing. */}
-            {touched.city && !fieldErrors.city && formData.city && (
+                they see before committing. Doesn't gate on `touched.city`:
+                by the time the customer reaches this Payment step, the
+                Address step has already validated city, but `touched` isn't
+                reliably set from that (only from a real blur/submit), which
+                made this banner wrongly wait until Pay Now was pressed. */}
+            {!fieldErrors.city && formData.city && (
               <p className="flex items-center gap-2 text-[11px] font-bold text-[#4A3728]/80 brand-rounded bg-[#4A3728]/5 p-2.5 rounded-lg border border-[#4A3728]/5 mb-2.5 lg:mb-3">
                 <Truck size={15} className="text-[#F04E4E] flex-shrink-0" />
                 Estimated delivery: {isFastDeliveryCity ? '1 Working Day' : '3-5 Working Days'}
