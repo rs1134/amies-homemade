@@ -13,7 +13,7 @@ import { Product, Category } from './types';
 // snack/sweet its new photos + (if different) a `shelfLife` value, since the
 // product page defaults to "6 months" best-before.
 export const HIDDEN_CATEGORIES: Category[] = [Category.SNACKS, Category.SWEETS];
-export const HIDDEN_PRODUCT_IDS: string[] = ['s13', 's14', 'hw2', 'g1', 'g2', 'g3']; // Peri-Peri Makhana, Dry Fruit Makhana, Masala Protein Beans Mix; legacy hampers (replaced by Trio of Traditions & The Gourmet Discovery)
+export const HIDDEN_PRODUCT_IDS: string[] = ['s13', 's14', 'hw2', 'g1', 'g2', 'g3', 'g5']; // Peri-Peri Makhana, Dry Fruit Makhana, Masala Protein Beans Mix; legacy hampers (replaced by Trio of Traditions & The Gourmet Discovery); Gourmet Discovery pulled from the collection for the Diwali hamper relaunch
 
 export const isProductVisible = (p: Product): boolean =>
   !HIDDEN_CATEGORIES.includes(p.category) && !HIDDEN_PRODUCT_IDS.includes(p.id);
@@ -31,6 +31,113 @@ export const categoryLabel = (c: Category): string => CATEGORY_DISPLAY_LABEL[c] 
 
 export const PRODUCTS: Product[] = [
   // --- GIFTING ---
+  {
+    id: 'g6',
+    name: 'The Ultimate Diwali Luxury Hamper',
+    category: Category.GIFTING,
+    price: 2249,
+    mrp: 2750,
+    weight: 'Luxury Hamper',
+    description: 'Our most indulgent Diwali offering — four signature mukhwas bottles paired with a scented candle, a mini chai masala jar, and a traditional diya, finished with a Diwali greeting card. A complete celebration in one beautifully presented box.',
+    image: 'https://ik.imagekit.io/amieshomemade/067A8538.JPG',
+    images: [
+      'https://ik.imagekit.io/amieshomemade/067A8538.JPG',
+      'https://ik.imagekit.io/amieshomemade/067A8531.JPG',
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Sep%2029,%202026,%2012_19_19%20PM.png',
+    ],
+    ingredients: [
+      'Tender Coconut Vanilla Chips',
+      'Dryfruit & Seeds',
+      'Cranberry Mix',
+      'Digestive Crunch',
+      'Iris Damask Rose Scented Candle',
+      'Mini Chai Masala Glass Jar',
+      'Traditional Diya',
+      'Diwali Greeting Card',
+    ],
+    isGift: true
+  },
+  {
+    id: 'g7',
+    name: 'The Royal Diwali Hamper',
+    category: Category.GIFTING,
+    price: 1450,
+    mrp: 1799,
+    weight: 'Gift Hamper',
+    description: 'A regal Diwali gift — two signature mukhwas bottles, a jar of Date Bites and a jar of Mini Khasta Kachori, paired with tea candles, a phool incense stick, and a Happy Diwali greeting card. Festive indulgence, elegantly boxed.',
+    image: 'https://ik.imagekit.io/amieshomemade/067A8560.JPG',
+    images: [
+      'https://ik.imagekit.io/amieshomemade/067A8560.JPG',
+      'https://ik.imagekit.io/amieshomemade/067A8573.JPG',
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Sep%2029,%202026,%2012_38_15%20PM.png',
+    ],
+    ingredients: [
+      'Tender Coconut Vanilla Chips',
+      'Kharek Coconut Almond',
+      'Date Bites (Glass Jar)',
+      'Mini Khasta Kachori (Glass Jar)',
+      'Tea Candles (Set of 2)',
+      'Phool Incense Stick',
+      'Happy Diwali Greeting Card',
+    ],
+    isGift: true
+  },
+  {
+    id: 'g9',
+    name: 'The Diwali Sweet Celebrations Hamper',
+    category: Category.GIFTING,
+    price: 1100,
+    mrp: 1399,
+    weight: 'Gift Hamper',
+    description: 'A celebration of sweetness and crunch — a 9-piece set of Almond Motichoor Ladoo alongside 150g each of premium cashews and almonds. Simple, generous, and perfect for gifting this Diwali.',
+    image: 'https://ik.imagekit.io/amieshomemade/067A8608.JPG?updatedAt=1790662993420',
+    images: [
+      'https://ik.imagekit.io/amieshomemade/067A8608.JPG?updatedAt=1790662993420',
+      'https://ik.imagekit.io/amieshomemade/067A8621.JPG?updatedAt=1790662992938',
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Sep%2029,%202026,%2003_14_17%20PM.png',
+    ],
+    ingredients: [
+      'Almond Motichoor Ladoo (9 pc)',
+      'Cashews (150g)',
+      'Almonds (150g)',
+    ],
+    isGift: true
+  },
+  {
+    id: 'g10',
+    name: 'The Royal Mithai Duo',
+    category: Category.GIFTING,
+    price: 730,
+    mrp: 899,
+    weight: 'Gift Hamper',
+    description: 'A classic Diwali duo — Almond Motichoor Ladoo and Dryfruit Mathadi, 200g and 150g of pure festive indulgence, ready to gift.',
+    image: 'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Sep%2029,%202026,%2004_20_29%20PM.png',
+    images: [
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Sep%2029,%202026,%2004_20_29%20PM.png',
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Sep%2029,%202026,%2004_07_27%20PM.png',
+    ],
+    ingredients: [
+      'Almond Motichoor Ladoo (200g)',
+      'Dryfruit Mathadi (150g)',
+    ],
+    isGift: true
+  },
+  {
+    id: 'g11',
+    name: 'Diwali Special Dryfruit Ghughra Tin',
+    category: Category.GIFTING,
+    price: 599,
+    mrp: 799,
+    weight: '250g',
+    description: 'A festive tin of our handcrafted Dryfruit Ghughra — rich, flaky, and packed with dry fruits. A classic Diwali sweet, gift-ready in its own tin.',
+    image: 'https://ik.imagekit.io/amieshomemade/067A8693.JPG?updatedAt=1790662992592',
+    images: [
+      'https://ik.imagekit.io/amieshomemade/067A8693.JPG?updatedAt=1790662992592',
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Sep%2029,%202026,%2004_51_00%20PM.png',
+    ],
+    ingredients: ['Dryfruit Ghughra (250g)'],
+    isGift: true
+  },
   {
     id: 'g4',
     name: 'Trio of Traditions',
