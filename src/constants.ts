@@ -139,6 +139,27 @@ export const PRODUCTS: Product[] = [
     isGift: true
   },
   {
+    id: 'g12',
+    name: 'The Diwali Elegance Hamper',
+    category: Category.GIFTING,
+    price: 799,
+    mrp: 1099,
+    weight: 'Gift Hamper',
+    description: 'An elegant, everyday Diwali gift — Tender Coconut Chocolate Chips and Dates & Almond mukhwas, a jar of Roasted Cashews, and a decorative hanging to complete the festive touch.',
+    image: 'https://ik.imagekit.io/amieshomemade/067A8682.JPG?updatedAt=1790662989973',
+    images: [
+      'https://ik.imagekit.io/amieshomemade/067A8682.JPG?updatedAt=1790662989973',
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Sep%2029,%202026,%2003_25_36%20PM.png',
+    ],
+    ingredients: [
+      'Tender Coconut Chocolate Chips',
+      'Dates and Almond',
+      'Roasted Cashews (Glass Jar)',
+      'Decorative Hanging',
+    ],
+    isGift: true
+  },
+  {
     id: 'g4',
     name: 'Trio of Traditions',
     category: Category.GIFTING,
