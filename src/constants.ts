@@ -13,7 +13,7 @@ import { Product, Category } from './types';
 // snack/sweet its new photos + (if different) a `shelfLife` value, since the
 // product page defaults to "6 months" best-before.
 export const HIDDEN_CATEGORIES: Category[] = [Category.SNACKS, Category.SWEETS];
-export const HIDDEN_PRODUCT_IDS: string[] = ['s13', 's14', 'hw2', 'g1', 'g2', 'g3', 'g5']; // Peri-Peri Makhana, Dry Fruit Makhana, Masala Protein Beans Mix; legacy hampers (replaced by Trio of Traditions & The Gourmet Discovery); Gourmet Discovery pulled from the collection for the Diwali hamper relaunch
+export const HIDDEN_PRODUCT_IDS: string[] = ['s13', 's14', 'hw2', 'g1', 'g2', 'g3', 'g5', 'g6', 'g7', 'g9', 'g10', 'g11', 'g12']; // Peri-Peri Makhana, Dry Fruit Makhana, Masala Protein Beans Mix; legacy hampers (replaced by Trio of Traditions & The Gourmet Discovery); Gourmet Discovery pulled from the collection for the Diwali hamper relaunch; g6/g7/g9/g10/g11/g12 — new Diwali hampers hidden again until announcement
 
 export const isProductVisible = (p: Product): boolean =>
   !HIDDEN_CATEGORIES.includes(p.category) && !HIDDEN_PRODUCT_IDS.includes(p.id);
