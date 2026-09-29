@@ -44,9 +44,9 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/067A8538.JPG',
       'https://ik.imagekit.io/amieshomemade/067A8531.JPG',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Sep%2029,%202026,%2012_19_19%20PM.png',
-      'https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/diwali-luxury-hamper.mp4',
+      'https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/diwali-luxury-hamper-v2.mp4',
     ],
-    videoPoster: 'https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/diwali-luxury-hamper-poster.jpg',
+    videoPoster: 'https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/diwali-luxury-hamper-poster-v2.jpg',
     ingredients: [
       'Tender Coconut Vanilla Chips',
       'Dryfruit & Seeds',
@@ -72,7 +72,9 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/067A8560.JPG',
       'https://ik.imagekit.io/amieshomemade/067A8573.JPG',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Sep%2029,%202026,%2012_38_15%20PM.png',
+      'https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/royal-diwali-hamper.mp4',
     ],
+    videoPoster: 'https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/royal-diwali-hamper-poster.jpg',
     ingredients: [
       'Tender Coconut Vanilla Chips',
       'Kharek Coconut Almond',
