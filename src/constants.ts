@@ -44,7 +44,9 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/067A8538.JPG',
       'https://ik.imagekit.io/amieshomemade/067A8531.JPG',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Sep%2029,%202026,%2012_19_19%20PM.png',
+      'https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/diwali-luxury-hamper.mp4',
     ],
+    videoPoster: 'https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/diwali-luxury-hamper-poster.jpg',
     ingredients: [
       'Tender Coconut Vanilla Chips',
       'Dryfruit & Seeds',

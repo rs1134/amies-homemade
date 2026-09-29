@@ -22,6 +22,8 @@ export interface Product {
   description: string;
   image: string;
   images?: string[];
+  /** Poster frame for a video URL included in `images` (e.g. a .mp4 from Vercel Blob, which has no auto-thumbnail like ImageKit does). */
+  videoPoster?: string;
   ingredients: string[];
   weights?: string[];
   prices?: Record<string, number>; // Mapping weight string to price

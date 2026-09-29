@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import { Gift, Sparkles, Heart, ChevronRight, MessageSquareText, PackageCheck, SendHorizontal, Image as ImageIcon, Home, ShieldCheck, Package, MessageCircle, Clock, Star, Users, Trophy, Mail, Sparkle } from 'lucide-react';
+import React, { useMemo, useRef, useState } from 'react';
+import { Gift, Sparkles, Heart, ChevronRight, MessageSquareText, PackageCheck, SendHorizontal, Image as ImageIcon, Home, ShieldCheck, Package, MessageCircle, Clock, Star, Users, Trophy, Mail, Sparkle, Play } from 'lucide-react';
 import { PRODUCTS, WHATSAPP_NUMBER, isProductVisible } from '../constants.ts';
 import { Category, Product, CartItem } from '../types.ts';
 import PersonalizationModal from './PersonalizationModal.tsx';
@@ -21,9 +21,13 @@ interface GiftingViewProps {
   onRemoveFromCart?: (index: number) => void;
 }
 
+const isVideoUrl = (url: string) => /\.(mp4|mov|webm)(\?|#|$)/i.test(url);
+
 const HamperCard: React.FC<HamperCardProps> = ({ item, onAddToCart, onSelectProduct }) => {
   const images = item.images && item.images.length > 0 ? item.images : [item.image];
   const [activeImgIdx, setActiveImgIdx] = useState(0);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
   const [isPersonalizing, setIsPersonalizing] = useState(false);
   const [currentTreats, setCurrentTreats] = useState<string[]>(item.ingredients);
   const [currentPrice, setCurrentPrice] = useState<number>(item.price);
@@ -87,28 +91,61 @@ const HamperCard: React.FC<HamperCardProps> = ({ item, onAddToCart, onSelectProd
       {/* Gallery Section */}
       <div className="lg:w-2/5 flex flex-col bg-[#FDFBF7] relative">
         <div className="relative w-full h-52 sm:h-96 lg:h-full overflow-hidden bg-white">
-          <img
-            src={images[activeImgIdx]}
-            alt={item.name}
-            loading="lazy"
-            className={`w-full h-full block transition-transform duration-1000 group-hover:scale-110 ${isHeritageBox ? 'object-contain' : 'object-cover object-center'}`}
-          />
+          {isVideoUrl(images[activeImgIdx]) ? (
+            <>
+              <video
+                ref={videoRef}
+                src={images[activeImgIdx]}
+                poster={item.videoPoster}
+                className="w-full h-full block object-cover object-center"
+                playsInline
+                controls={isVideoPlaying}
+                onEnded={() => setIsVideoPlaying(false)}
+              />
+              {!isVideoPlaying && (
+                <button
+                  onClick={() => {
+                    setIsVideoPlaying(true);
+                    videoRef.current?.play().catch(() => {});
+                  }}
+                  aria-label={`Play video: ${item.name}`}
+                  className="absolute inset-0 flex items-center justify-center bg-black/10 hover:bg-black/25 transition-colors group/play"
+                >
+                  <span className="w-16 h-16 rounded-full bg-white/90 flex items-center justify-center shadow-xl group-hover/play:scale-110 transition-transform">
+                    <Play size={26} className="text-coral ml-1" fill="currentColor" />
+                  </span>
+                </button>
+              )}
+            </>
+          ) : (
+            <img
+              src={images[activeImgIdx]}
+              alt={item.name}
+              loading="lazy"
+              className={`w-full h-full block transition-transform duration-1000 group-hover:scale-110 ${isHeritageBox ? 'object-contain' : 'object-cover object-center'}`}
+            />
+          )}
           <div className="absolute top-6 left-6 z-10">
             <span className="bg-white/90 backdrop-blur-md px-4 py-2 rounded-full text-[10px] font-black text-[#D4AF37] uppercase tracking-widest shadow-lg border border-[#D4AF37]/10">
               {item.category === Category.GIFTING ? 'Premium Hamper' : item.category}
             </span>
           </div>
-          
+
           {/* Internal Thumbnails */}
           {images.length > 1 && (
             <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-3 z-10 p-2 bg-white/20 backdrop-blur-md rounded-2xl border border-white/30">
               {images.map((img, idx) => (
-                <button 
+                <button
                   key={idx}
-                  onClick={() => setActiveImgIdx(idx)}
-                  className={`w-12 h-12 rounded-xl overflow-hidden border-2 transition-all duration-300 ${activeImgIdx === idx ? 'border-[#D4AF37] scale-110 shadow-lg' : 'border-transparent opacity-60 hover:opacity-100'}`}
+                  onClick={() => { setActiveImgIdx(idx); setIsVideoPlaying(false); }}
+                  className={`relative w-12 h-12 rounded-xl overflow-hidden border-2 transition-all duration-300 ${activeImgIdx === idx ? 'border-[#D4AF37] scale-110 shadow-lg' : 'border-transparent opacity-60 hover:opacity-100'}`}
                 >
-                  <img src={img} className="w-full h-full object-cover" alt={`${item.name} view ${idx + 1}`} />
+                  <img src={isVideoUrl(img) ? (item.videoPoster || img) : img} className="w-full h-full object-cover" alt={`${item.name} view ${idx + 1}`} />
+                  {isVideoUrl(img) && (
+                    <span className="absolute inset-0 flex items-center justify-center bg-black/20">
+                      <Play size={12} className="text-white" fill="currentColor" />
+                    </span>
+                  )}
                 </button>
               ))}
             </div>
