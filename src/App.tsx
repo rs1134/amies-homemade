@@ -1217,6 +1217,18 @@ const App: React.FC = () => {
 
           {/* Free Delivery popup */}
 
+          {/* Diwali festive banner — links through to the Gift Hampers collection */}
+          <button
+            onClick={() => navigate('gifting')}
+            className="w-full mb-10 sm:mb-12 flex items-center justify-center gap-3 px-6 py-3.5 rounded-full bg-gradient-to-r from-[#D4AF37] via-coral to-[#D4AF37] bg-[length:200%_100%] animate-[shimmer_4s_linear_infinite] text-white shadow-lg shadow-[#D4AF37]/20 hover:scale-[1.01] active:scale-[0.99] transition-transform"
+          >
+            <Sparkles size={16} className="shrink-0" />
+            <span className="brand-rounded font-black text-[10px] sm:text-xs uppercase tracking-[0.2em]">
+              ✨ Diwali Collection is Here — Shop Gift Hampers
+            </span>
+            <Sparkles size={16} className="shrink-0" />
+          </button>
+
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 text-center md:text-left">
             <div>
               <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em]">Fresh from Our Kitchen</span>
