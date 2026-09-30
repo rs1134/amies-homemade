@@ -7,6 +7,7 @@ import { trackMetaEvent } from './metaTracking.ts';
 import Navbar from './components/Navbar.tsx';
 import SearchOverlay from './components/SearchOverlay.tsx';
 import Hero from './components/Hero.tsx';
+import DiwaliBanner from './components/DiwaliBanner.tsx';
 import ProductCard from './components/ProductCard.tsx';
 import VideoGallery from './components/VideoGallery.tsx';
 import ProductDetail from './components/ProductDetail.tsx';
@@ -1409,6 +1410,7 @@ const App: React.FC = () => {
       );
       default: return (
         <>
+          <DiwaliBanner onClick={() => navigate('gifting')} />
           <Hero
             onShopClick={() => navigate('shop')}
             onAboutClick={() => navigate('about')}
