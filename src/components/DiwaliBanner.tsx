@@ -7,12 +7,11 @@ interface DiwaliBannerProps {
 
 const tr = (url: string, w: number) => `${url.split('?')[0]}?tr=w-${w},q-80,f-auto`;
 
-// Four real hamper photos rotating behind one fixed headline.
+// Three real hamper photos rotating behind one fixed headline.
 const SLIDES: { id: string; image: string; alt: string }[] = [
   { id: 'g6', image: 'https://ik.imagekit.io/amieshomemade/067A8538.JPG', alt: 'The Ultimate Diwali Luxury Hamper' },
   { id: 'g7', image: 'https://ik.imagekit.io/amieshomemade/067A8560.JPG', alt: 'The Royal Diwali Hamper' },
   { id: 'g9', image: 'https://ik.imagekit.io/amieshomemade/067A8608.JPG?updatedAt=1790662993420', alt: 'The Diwali Sweet Celebrations Hamper' },
-  { id: 'g12', image: 'https://ik.imagekit.io/amieshomemade/067A8682.JPG?updatedAt=1790662989973', alt: 'The Diwali Elegance Hamper' },
 ];
 
 const SLIDE_DURATION_MS = 4500;
