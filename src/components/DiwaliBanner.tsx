@@ -7,12 +7,11 @@ interface DiwaliBannerProps {
 
 const tr = (url: string, w: number) => `${url.split('?')[0]}?tr=w-${w},q-80,f-auto`;
 
-// Four real hamper photos rotating behind one fixed headline.
+// Three real hamper photos rotating behind one fixed headline.
 const SLIDES: { id: string; image: string; alt: string }[] = [
   { id: 'g6', image: 'https://ik.imagekit.io/amieshomemade/067A8538.JPG', alt: 'The Ultimate Diwali Luxury Hamper' },
   { id: 'g7', image: 'https://ik.imagekit.io/amieshomemade/067A8560.JPG', alt: 'The Royal Diwali Hamper' },
   { id: 'g9', image: 'https://ik.imagekit.io/amieshomemade/067A8608.JPG?updatedAt=1790662993420', alt: 'The Diwali Sweet Celebrations Hamper' },
-  { id: 'g12', image: 'https://ik.imagekit.io/amieshomemade/067A8682.JPG?updatedAt=1790662989973', alt: 'The Diwali Elegance Hamper' },
 ];
 
 const SLIDE_DURATION_MS = 4500;
@@ -20,10 +19,21 @@ const SLIDE_DURATION_MS = 4500;
 const DiwaliBanner: React.FC<DiwaliBannerProps> = ({ onShopClick }) => {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
+  // Only slides that have actually been shown get their <img> mounted — an absolutely
+  // positioned img inside the viewport downloads immediately regardless of opacity:0 or
+  // loading="lazy", so mounting all 3 up front was silently fetching two full-size hero
+  // photos (~1.5MB) nobody was looking at yet.
+  const [shown, setShown] = useState<Set<number>>(() => new Set([0]));
 
   useEffect(() => {
     if (paused) return;
-    const t = setInterval(() => setActive(i => (i + 1) % SLIDES.length), SLIDE_DURATION_MS);
+    const t = setInterval(() => {
+      setActive(i => {
+        const next = (i + 1) % SLIDES.length;
+        setShown(prev => (prev.has(next) ? prev : new Set(prev).add(next)));
+        return next;
+      });
+    }, SLIDE_DURATION_MS);
     return () => clearInterval(t);
   }, [paused]);
 
@@ -40,16 +50,18 @@ const DiwaliBanner: React.FC<DiwaliBannerProps> = ({ onShopClick }) => {
           style={{ opacity: i === active ? 1 : 0 }}
           aria-hidden={i !== active}
         >
-          <img
-            src={tr(s.image, 1600)}
-            srcSet={`${tr(s.image, 800)} 800w, ${tr(s.image, 1200)} 1200w, ${tr(s.image, 1600)} 1600w, ${tr(s.image, 2000)} 2000w`}
-            sizes="100vw"
-            alt={s.alt}
-            className="absolute inset-0 w-full h-full object-cover"
-            fetchPriority={i === 0 ? 'high' : 'low'}
-            loading={i === 0 ? 'eager' : 'lazy'}
-            decoding="async"
-          />
+          {shown.has(i) && (
+            <img
+              src={tr(s.image, 1600)}
+              srcSet={`${tr(s.image, 800)} 800w, ${tr(s.image, 1200)} 1200w, ${tr(s.image, 1600)} 1600w, ${tr(s.image, 2000)} 2000w`}
+              sizes="100vw"
+              alt={s.alt}
+              className="absolute inset-0 w-full h-full object-cover"
+              fetchPriority={i === 0 ? 'high' : 'low'}
+              loading={i === 0 ? 'eager' : 'lazy'}
+              decoding="async"
+            />
+          )}
           {/* Light wash, just enough for text contrast — the photo should still read clearly */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#2A1E14]/45 via-transparent to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#2A1E14]/40 sm:from-[#2A1E14]/45 via-[#2A1E14]/5 to-transparent" />

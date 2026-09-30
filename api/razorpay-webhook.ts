@@ -104,7 +104,7 @@ async function sendOrderConfirmationEmail(params: {
 // must never reach Meta and get counted as real ad conversions/ROAS.
 // Exact-match only (normalized to last 10 digits) — deliberately not a
 // prefix/pattern match, so it can never catch a real customer's number.
-const INTERNAL_TEST_PHONES = new Set(['9054038876', '9909942126']);
+const INTERNAL_TEST_PHONES = new Set(['9054038876', '9909942126', '7842010929']);
 const isInternalTestPhone = (phone?: string): boolean =>
   !!phone && INTERNAL_TEST_PHONES.has(String(phone).replace(/\D/g, '').slice(-10));
 
@@ -450,7 +450,9 @@ export default async function handler(req: any, res: any) {
     // counted purchase on Meta's side if the client one never landed.
     // Skipped for the owner's own test-order phone numbers (see
     // INTERNAL_TEST_PHONES below) — those are never real conversions.
-    if (!isInternalTestPhone(phone)) {
+    // grandTotal <= 0 is never a real order either (defense in depth for
+    // any zero-value webhook ping, same reasoning as shopflo-checkout.ts).
+    if (!isInternalTestPhone(phone) && grandTotal > 0) {
       await sendMetaPurchaseBackstop({
         eventId: `purchase-${paymentId}`,
         value: grandTotal,

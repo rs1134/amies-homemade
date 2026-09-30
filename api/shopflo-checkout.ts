@@ -155,7 +155,7 @@ const hashField = (value: string | undefined, normalize: (v: string) => string):
 };
 
 // Same exact set as api/notify-order.ts / api/razorpay-webhook.ts / src/metaTracking.ts.
-const INTERNAL_TEST_PHONES = new Set(['9054038876', '9909942126']);
+const INTERNAL_TEST_PHONES = new Set(['9054038876', '9909942126', '7842010929']);
 const isInternalTestPhone = (phone?: string): boolean =>
   !!phone && INTERNAL_TEST_PHONES.has(String(phone).replace(/\D/g, '').slice(-10));
 
@@ -255,7 +255,10 @@ async function orderWebhook(req: any, res: any) {
       return res.status(200).json({ success_url: successUrl, platform_order_id: orderId });
     }
 
-    if (!isInternalTestPhone(phone)) {
+    // grandTotal <= 0 is never a real order (e.g. Shopflo's own webhook
+    // connectivity tests, which arrive with no phone/email either — an
+    // empty phone can't be matched against INTERNAL_TEST_PHONES at all).
+    if (!isInternalTestPhone(phone) && grandTotal > 0) {
       await sendMetaPurchaseBackstop({ eventId: `shopflo-${shopfloOrderId || orderId}`, value: grandTotal, name, phone, email, city });
     }
 
