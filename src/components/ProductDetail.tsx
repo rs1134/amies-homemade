@@ -1,9 +1,10 @@
 
 import React, { useState, useMemo } from 'react';
-import { Heart, ShieldCheck, Clock, Truck, ImageOff, ChevronLeft, ChevronRight, ChevronDown, Minus, Plus, ChevronRight as Crumb } from 'lucide-react';
+import { Heart, ShieldCheck, Clock, Truck, ImageOff, ChevronLeft, ChevronRight, ChevronDown, Minus, Plus, Play, ChevronRight as Crumb } from 'lucide-react';
 import { Product, CartItem } from '../types.ts';
 import { FSSAI_LICENSE, categoryLabel } from '../constants.ts';
 import { trackMetaEvent } from '../metaTracking.ts';
+import { isVideoUrl } from '../mediaUtils.ts';
 import ProductCard from './ProductCard.tsx';
 
 // Resize ImageKit images on the fly so the gallery loads fast (some source
@@ -60,11 +61,14 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
   // Gallery: use product.images if provided, otherwise fall back to the single image
   const gallery = (product.images && product.images.length > 0) ? product.images : [product.image];
   const [activeImg, setActiveImg] = useState(0);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+  const videoRef = React.useRef<HTMLVideoElement>(null);
 
   // Reset state whenever a different product opens, and scroll to top.
   React.useEffect(() => {
     setActiveImg(0);
     setImageError(false);
+    setIsVideoPlaying(false);
     setQuantity(1);
     setSelectedWeight(product.weights?.[0] || product.weight);
     setSelectedSubOption(product.subOptions?.[0]?.name || '');
@@ -104,6 +108,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
     if (touchStartX.current === null) return;
     const dx = e.changedTouches[0].clientX - touchStartX.current;
     if (Math.abs(dx) > 40) {
+      setIsVideoPlaying(false);
       if (dx < 0) setActiveImg(i => (i + 1) % gallery.length);
       else setActiveImg(i => (i - 1 + gallery.length) % gallery.length);
     }
@@ -138,14 +143,42 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
                 onTouchEnd={handleTouchEnd}
               >
                 {!imageError ? (
-                  <img
-                    src={ikImg(gallery[activeImg], 800)}
-                    alt={`${product.name} — photo ${activeImg + 1}`}
-                    onError={() => setImageError(true)}
-                    decoding="async"
-                    fetchPriority="high"
-                    className="absolute inset-0 w-full h-full object-contain"
-                  />
+                  isVideoUrl(gallery[activeImg]) ? (
+                    <>
+                      <video
+                        ref={videoRef}
+                        src={gallery[activeImg]}
+                        poster={product.videoPoster}
+                        className="absolute inset-0 w-full h-full object-contain"
+                        playsInline
+                        controls={isVideoPlaying}
+                        onEnded={() => setIsVideoPlaying(false)}
+                      />
+                      {!isVideoPlaying && (
+                        <button
+                          onClick={() => {
+                            setIsVideoPlaying(true);
+                            videoRef.current?.play().catch(() => {});
+                          }}
+                          aria-label={`Play video: ${product.name}`}
+                          className="absolute inset-0 flex items-center justify-center bg-black/10 hover:bg-black/25 transition-colors group/play"
+                        >
+                          <span className="w-16 h-16 rounded-full bg-white/90 flex items-center justify-center shadow-xl group-hover/play:scale-110 transition-transform">
+                            <Play size={26} className="text-coral ml-1" fill="currentColor" />
+                          </span>
+                        </button>
+                      )}
+                    </>
+                  ) : (
+                    <img
+                      src={ikImg(gallery[activeImg], 800)}
+                      alt={`${product.name} — photo ${activeImg + 1}`}
+                      onError={() => setImageError(true)}
+                      decoding="async"
+                      fetchPriority="high"
+                      className="absolute inset-0 w-full h-full object-contain"
+                    />
+                  )
                 ) : (
                   <div className="absolute inset-0 flex flex-col items-center justify-center bg-coral/5 text-coral/30 p-12 text-center">
                     <ImageOff size={48} strokeWidth={1} className="mb-4" />
@@ -158,9 +191,10 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
                     lazy image inside a display:none element never counts as "near viewport",
                     so the browser never actually fetches it. That silently broke this preload
                     and made every image switch do a fresh network fetch instead of hitting a
-                    warm cache. */}
+                    warm cache. Videos are excluded — they'd fail to decode as <img> and
+                    trip the onError fallback for the whole gallery. */}
                 <div aria-hidden className="hidden">
-                  {gallery.map((img, i) => i !== activeImg && (
+                  {gallery.map((img, i) => i !== activeImg && !isVideoUrl(img) && (
                     <img key={img} src={ikImg(img, 800)} alt="" decoding="async" />
                   ))}
                 </div>
@@ -169,14 +203,14 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
               {gallery.length > 1 && !imageError && (
                 <div className="absolute inset-0 hidden md:flex items-center justify-between px-3 pointer-events-none z-10">
                   <button
-                    onClick={() => setActiveImg(i => (i - 1 + gallery.length) % gallery.length)}
+                    onClick={() => { setIsVideoPlaying(false); setActiveImg(i => (i - 1 + gallery.length) % gallery.length); }}
                     aria-label="Previous photo"
                     className="pointer-events-auto flex w-9 h-9 items-center justify-center rounded-full bg-white/85 hover:bg-white text-[#4A3728] shadow-lg transition-colors"
                   >
                     <ChevronLeft size={18} />
                   </button>
                   <button
-                    onClick={() => setActiveImg(i => (i + 1) % gallery.length)}
+                    onClick={() => { setIsVideoPlaying(false); setActiveImg(i => (i + 1) % gallery.length); }}
                     aria-label="Next photo"
                     className="pointer-events-auto flex w-9 h-9 items-center justify-center rounded-full bg-white/85 hover:bg-white text-[#4A3728] shadow-lg transition-colors"
                   >
@@ -192,7 +226,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
                 {gallery.map((_, i) => (
                   <button
                     key={i}
-                    onClick={() => setActiveImg(i)}
+                    onClick={() => { setActiveImg(i); setIsVideoPlaying(false); }}
                     className={`rounded-full transition-all duration-200 ${i === activeImg ? 'w-4 h-1.5 bg-coral' : 'w-1.5 h-1.5 bg-[#4A3728]/20'}`}
                   />
                 ))}
@@ -204,11 +238,16 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
                 {gallery.map((img, i) => (
                   <button
                     key={img}
-                    onClick={() => setActiveImg(i)}
+                    onClick={() => { setActiveImg(i); setIsVideoPlaying(false); }}
                     aria-label={`View photo ${i + 1}`}
-                    className={`w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden flex-shrink-0 border-2 transition-all bg-[#F5EFE6] ${i === activeImg ? 'border-coral' : 'border-transparent opacity-70 hover:opacity-100'}`}
+                    className={`relative w-14 h-14 sm:w-16 sm:h-16 rounded-xl overflow-hidden flex-shrink-0 border-2 transition-all bg-[#F5EFE6] ${i === activeImg ? 'border-coral' : 'border-transparent opacity-70 hover:opacity-100'}`}
                   >
-                    <img src={ikImg(img, 120)} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+                    <img src={isVideoUrl(img) ? (product.videoPoster || '') : ikImg(img, 120)} alt="" loading="lazy" decoding="async" className="w-full h-full object-cover" />
+                    {isVideoUrl(img) && (
+                      <span className="absolute inset-0 flex items-center justify-center bg-black/20">
+                        <Play size={14} className="text-white" fill="currentColor" />
+                      </span>
+                    )}
                   </button>
                 ))}
               </div>

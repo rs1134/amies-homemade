@@ -6,6 +6,7 @@ import PersonalizationModal from './PersonalizationModal.tsx';
 import WellnessPersonalizationModal from './WellnessPersonalizationModal.tsx';
 import SweetMemoriesModal from './SweetMemoriesModal.tsx';
 import ProductCard from './ProductCard.tsx';
+import { isVideoUrl } from '../mediaUtils.ts';
 
 interface HamperCardProps {
   item: Product;
@@ -20,8 +21,6 @@ interface GiftingViewProps {
   onUpdateQuantity?: (index: number, delta: number) => void;
   onRemoveFromCart?: (index: number) => void;
 }
-
-const isVideoUrl = (url: string) => /\.(mp4|mov|webm)(\?|#|$)/i.test(url);
 
 const HamperCard: React.FC<HamperCardProps> = ({ item, onAddToCart, onSelectProduct }) => {
   const images = item.images && item.images.length > 0 ? item.images : [item.image];
