@@ -13,7 +13,7 @@ import { Product, Category } from './types';
 // snack/sweet its new photos + (if different) a `shelfLife` value, since the
 // product page defaults to "6 months" best-before.
 export const HIDDEN_CATEGORIES: Category[] = [Category.SNACKS, Category.SWEETS];
-export const HIDDEN_PRODUCT_IDS: string[] = ['s13', 's14', 'hw2', 'g1', 'g2', 'g3', 'g5', 'g6', 'g7', 'g9', 'g10', 'g11', 'g12']; // Peri-Peri Makhana, Dry Fruit Makhana, Masala Protein Beans Mix; legacy hampers (replaced by Trio of Traditions & The Gourmet Discovery); Gourmet Discovery pulled from the collection for the Diwali hamper relaunch; g6/g7/g9/g10/g11/g12 — new Diwali hampers hidden again until announcement
+export const HIDDEN_PRODUCT_IDS: string[] = ['s13', 's14', 'hw2', 'g1', 'g2', 'g3', 'g5']; // Peri-Peri Makhana, Dry Fruit Makhana, Masala Protein Beans Mix; legacy hampers (replaced by Trio of Traditions & The Gourmet Discovery); Gourmet Discovery pulled from the collection for the Diwali hamper relaunch
 
 export const isProductVisible = (p: Product): boolean =>
   !HIDDEN_CATEGORIES.includes(p.category) && !HIDDEN_PRODUCT_IDS.includes(p.id);
@@ -87,6 +87,32 @@ export const PRODUCTS: Product[] = [
     isGift: true
   },
   {
+    id: 'g8',
+    name: 'The Diwali Sweet & Savoury Hamper',
+    category: Category.GIFTING,
+    price: 1100,
+    mrp: 1499,
+    weight: 'Gift Hamper',
+    description: 'A festive mix of sweet and savoury — Date Bites, Mini Khasta Kachori, Mathadi, and Chakri, each in their own glass jar, paired with a tea candle and a Diwali greeting card.',
+    image: 'https://ik.imagekit.io/amieshomemade/067A8581.JPG?updatedAt=1790662992789',
+    images: [
+      'https://ik.imagekit.io/amieshomemade/067A8581.JPG?updatedAt=1790662992789',
+      'https://ik.imagekit.io/amieshomemade/067A8587.JPG?updatedAt=1790662992768',
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Sep%2029,%202026,%2001_11_54%20PM.png',
+      'https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/sweet-savoury-hamper.mp4',
+    ],
+    videoPoster: 'https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/sweet-savoury-hamper-poster.jpg',
+    ingredients: [
+      'Date Bites (Glass Jar)',
+      'Mini Khasta Kachori (Glass Jar)',
+      'Mathadi (Glass Jar)',
+      'Chakri (Glass Jar)',
+      'Tea Candle',
+      'Diwali Greeting Card',
+    ],
+    isGift: true
+  },
+  {
     id: 'g9',
     name: 'The Diwali Sweet Celebrations Hamper',
     category: Category.GIFTING,
@@ -99,7 +125,9 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/067A8608.JPG?updatedAt=1790662993420',
       'https://ik.imagekit.io/amieshomemade/067A8621.JPG?updatedAt=1790662992938',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Sep%2029,%202026,%2003_14_17%20PM.png',
+      'https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/diwali-sweet-celebrations-hamper-mEQOYo2R4ow9aqYzBwTcgTifaEU2tV.mp4',
     ],
+    videoPoster: 'https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/diwali-sweet-celebrations-hamper-poster-UebPzYJw7ZYnk0KYd0nqjDD1etTpIB.jpg',
     ingredients: [
       'Almond Motichoor Ladoo (9 pc)',
       'Cashews (150g)',
@@ -138,7 +166,9 @@ export const PRODUCTS: Product[] = [
     images: [
       'https://ik.imagekit.io/amieshomemade/067A8693.JPG?updatedAt=1790662992592',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Sep%2029,%202026,%2004_51_00%20PM.png',
+      'https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/ghughra-tin.mp4',
     ],
+    videoPoster: 'https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/ghughra-tin-poster.jpg',
     ingredients: ['Dryfruit Ghughra (250g)'],
     isGift: true
   },
