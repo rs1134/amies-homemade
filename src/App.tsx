@@ -261,7 +261,8 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, o
           const isAll = cat === 'All';
           const isActive = activeCategory === cat;
           const isOpen = !isAll && openCat === cat;
-          const catLabel = isAll ? 'All' : (CATEGORY_DISPLAY_LABEL[cat as Category] ?? cat);
+          const isGifting = cat === Category.GIFTING;
+          const catLabel = isAll ? 'All' : isGifting ? 'Diwali Gift Hampers' : (CATEGORY_DISPLAY_LABEL[cat as Category] ?? cat);
 
           return (
             <div
@@ -273,9 +274,15 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, o
               <div
                 className={`brand-rounded transition-all rounded-full border-2 flex items-center ${
                   isActive
-                    ? 'bg-[#F04E4E] border-[#F04E4E] text-white shadow-xl shadow-[#F04E4E]/30 scale-105'
+                    ? isGifting
+                      ? 'bg-[#F04E4E] border-[#D4AF37] text-white shadow-xl shadow-[#D4AF37]/40 scale-105'
+                      : 'bg-[#F04E4E] border-[#F04E4E] text-white shadow-xl shadow-[#F04E4E]/30 scale-105'
                     : isOpen
-                    ? 'border-[#F04E4E] text-coral bg-[#F04E4E]/5'
+                    ? isGifting
+                      ? 'border-[#D4AF37] text-[#B8892A] bg-[#D4AF37]/8'
+                      : 'border-[#F04E4E] text-coral bg-[#F04E4E]/5'
+                    : isGifting
+                    ? 'border-[#D4AF37]/60 text-[#B8892A] bg-[#D4AF37]/5 hover:border-[#D4AF37] hover:bg-[#D4AF37]/10'
                     : 'border-[#F04E4E]/10 text-[#4A3728]/50 hover:text-coral hover:bg-[#F04E4E]/5'
                 }`}
               >
@@ -287,7 +294,7 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, o
                     onSelect(cat);
                     setOpenCat(null);
                   }}
-                  className={`text-[10px] uppercase tracking-[0.1em] sm:tracking-[0.2em] font-bold cursor-pointer ${
+                  className={`text-[10px] uppercase tracking-[0.1em] sm:tracking-[0.2em] cursor-pointer ${isGifting ? 'font-black' : 'font-bold'} ${
                     isAll ? 'px-4 sm:px-8 py-2.5 sm:py-3' : 'pl-4 sm:pl-8 py-2.5 sm:py-3 pr-1'
                   }`}
                 >
