@@ -1,49 +1,119 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 
 interface DiwaliBannerProps {
-  onClick: () => void;
+  /** Navigate to the gifting page, optionally scrolling to a specific hamper's card. */
+  onClick: (hamperId?: string) => void;
 }
 
-const IMG = 'https://ik.imagekit.io/amieshomemade/067A8668.JPG?updatedAt=1790739362437';
 const tr = (url: string, w: number) => `${url.split('?')[0]}?tr=w-${w},q-80,f-auto`;
 
-/** Full-bleed clickable promo banner for the Diwali Gift Hampers collection — sits above the main Hero. */
-const DiwaliBanner: React.FC<DiwaliBannerProps> = ({ onClick }) => {
-  return (
-    <button
-      onClick={onClick}
-      aria-label="Shop the Diwali Gift Hampers collection"
-      className="group relative block w-full h-[52vh] sm:h-[64vh] lg:h-[72vh] overflow-hidden text-left"
-    >
-      <img
-        src={tr(IMG, 1600)}
-        srcSet={`${tr(IMG, 800)} 800w, ${tr(IMG, 1200)} 1200w, ${tr(IMG, 1600)} 1600w, ${tr(IMG, 2000)} 2000w`}
-        sizes="100vw"
-        alt="Diwali Gift Hampers"
-        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-        fetchPriority="high"
-        loading="eager"
-        decoding="async"
-      />
-      {/* Warm gradient for text legibility — coral/brown wash, not a flat dark overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-[#2A1E14]/80 via-[#2A1E14]/15 to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#2A1E14]/50 sm:from-[#2A1E14]/60 via-transparent to-transparent" />
+// Four real hampers, four real photos — no stock-photo feel, no generic
+// "This Diwali ✨" filler copy. Each slide just says what it is and what
+// it costs, like a person writing a caption rather than an ad template.
+const SLIDES: { hamperId: string; image: string; name: string; line: string; price: number }[] = [
+  {
+    hamperId: 'g6',
+    image: 'https://ik.imagekit.io/amieshomemade/067A8538.JPG',
+    name: 'The Ultimate Diwali Luxury Hamper',
+    line: 'Four mukhwas jars, a scented candle, a diya, the works.',
+    price: 2249,
+  },
+  {
+    hamperId: 'g7',
+    image: 'https://ik.imagekit.io/amieshomemade/067A8560.JPG',
+    name: 'The Royal Diwali Hamper',
+    line: 'Mukhwas, date bites, khasta kachori, tea candles.',
+    price: 1450,
+  },
+  {
+    hamperId: 'g9',
+    image: 'https://ik.imagekit.io/amieshomemade/067A8608.JPG?updatedAt=1790662993420',
+    name: 'The Diwali Sweet Celebrations Hamper',
+    line: 'Motichoor ladoo with cashews and almonds on the side.',
+    price: 1100,
+  },
+  {
+    hamperId: 'g12',
+    image: 'https://ik.imagekit.io/amieshomemade/067A8682.JPG?updatedAt=1790662989973',
+    name: 'The Diwali Elegance Hamper',
+    line: 'A smaller, simpler box that still feels like a gift.',
+    price: 799,
+  },
+];
 
-      <div className="relative z-10 h-full flex flex-col justify-end sm:justify-center px-6 sm:px-12 lg:px-20 pb-10 sm:pb-0 max-w-2xl">
-        <span className="inline-flex items-center gap-2.5 text-[#F6C94C] brand-rounded uppercase tracking-[0.35em] font-black text-[10px] sm:text-xs mb-4 sm:mb-6">
-          <span className="w-6 h-px bg-[#F6C94C]/60" /> This Diwali
-        </span>
-        <h2 className="text-white serif font-bold leading-[0.95] text-4xl sm:text-6xl lg:text-7xl mb-6 sm:mb-8 drop-shadow-lg">
-          Diwali Gift<br />
-          <span className="brand-script text-[#F6C94C] text-5xl sm:text-7xl lg:text-8xl">Hampers</span>
-        </h2>
-        <span className="inline-flex items-center gap-3 self-start px-8 sm:px-10 py-4 sm:py-5 bg-coral text-white rounded-full font-bold tracking-[0.2em] uppercase text-xs shadow-2xl shadow-coral/30 group-hover:scale-[1.04] group-hover:shadow-coral/40 transition-all duration-300">
-          Shop Now
-          <ArrowRight size={16} className="group-hover:translate-x-1.5 transition-transform" />
-        </span>
+const SLIDE_DURATION_MS = 4500;
+
+const DiwaliBanner: React.FC<DiwaliBannerProps> = ({ onClick }) => {
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    if (paused) return;
+    const t = setInterval(() => setActive(i => (i + 1) % SLIDES.length), SLIDE_DURATION_MS);
+    return () => clearInterval(t);
+  }, [paused]);
+
+  return (
+    <section
+      className="relative w-full h-[56vh] sm:h-[64vh] lg:h-[72vh] overflow-hidden"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      {SLIDES.map((s, i) => (
+        <div
+          key={s.hamperId}
+          className="absolute inset-0 transition-opacity duration-1000"
+          style={{ opacity: i === active ? 1 : 0, pointerEvents: i === active ? 'auto' : 'none' }}
+          aria-hidden={i !== active}
+        >
+          <img
+            src={tr(s.image, 1600)}
+            srcSet={`${tr(s.image, 800)} 800w, ${tr(s.image, 1200)} 1200w, ${tr(s.image, 1600)} 1600w, ${tr(s.image, 2000)} 2000w`}
+            sizes="100vw"
+            alt={s.name}
+            className="absolute inset-0 w-full h-full object-cover"
+            fetchPriority={i === 0 ? 'high' : 'low'}
+            loading={i === 0 ? 'eager' : 'lazy'}
+            decoding="async"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#2A1E14]/85 via-[#2A1E14]/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#2A1E14]/55 sm:from-[#2A1E14]/65 via-transparent to-transparent" />
+
+          <button
+            onClick={() => onClick(s.hamperId)}
+            aria-label={`Shop ${s.name}`}
+            className="group absolute inset-0 flex flex-col justify-end sm:justify-center text-left px-6 sm:px-12 lg:px-20 pb-16 sm:pb-0 max-w-2xl"
+          >
+            <span className="text-[#F6C94C] brand-rounded uppercase tracking-[0.25em] font-black text-[10px] sm:text-xs mb-3 sm:mb-4">
+              Diwali Hamper · ₹{s.price.toLocaleString('en-IN')}
+            </span>
+            <h2 className="text-white serif font-bold leading-[1.05] text-3xl sm:text-5xl lg:text-6xl mb-3 sm:mb-4 drop-shadow-lg max-w-xl">
+              {s.name}
+            </h2>
+            <p className="text-white/80 text-sm sm:text-lg font-medium mb-6 sm:mb-8 max-w-md">
+              {s.line}
+            </p>
+            <span className="inline-flex items-center gap-3 self-start px-7 sm:px-9 py-3.5 sm:py-4 bg-coral text-white rounded-full font-bold tracking-[0.2em] uppercase text-xs shadow-2xl shadow-coral/30 group-hover:scale-[1.04] group-hover:shadow-coral/40 transition-all duration-300">
+              Shop This
+              <ArrowRight size={16} className="group-hover:translate-x-1.5 transition-transform" />
+            </span>
+          </button>
+        </div>
+      ))}
+
+      {/* Slide dots */}
+      <div className="absolute bottom-5 sm:bottom-8 right-6 sm:right-12 z-10 flex gap-2">
+        {SLIDES.map((s, i) => (
+          <button
+            key={s.hamperId}
+            onClick={() => setActive(i)}
+            aria-label={`Show ${s.name}`}
+            className={`h-1.5 rounded-full transition-all duration-300 ${i === active ? 'w-7 bg-coral' : 'w-1.5 bg-white/50 hover:bg-white/80'}`}
+          />
+        ))}
       </div>
-    </button>
+    </section>
   );
 };
 
