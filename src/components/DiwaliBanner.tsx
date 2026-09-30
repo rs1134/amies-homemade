@@ -14,7 +14,7 @@ const SLIDES: { id: string; image: string; alt: string }[] = [
   { id: 'g9', image: 'https://ik.imagekit.io/amieshomemade/067A8608.JPG?updatedAt=1790662993420', alt: 'The Diwali Sweet Celebrations Hamper' },
 ];
 
-const SLIDE_DURATION_MS = 4500;
+const SLIDE_DURATION_MS = 3000;
 
 const DiwaliBanner: React.FC<DiwaliBannerProps> = ({ onShopClick }) => {
   const [active, setActive] = useState(0);
