@@ -11,33 +11,29 @@ const tr = (url: string, w: number) => `${url.split('?')[0]}?tr=w-${w},q-80,f-au
 // Four real hampers, four real photos — no stock-photo feel, no generic
 // "This Diwali ✨" filler copy. Each slide just says what it is and what
 // it costs, like a person writing a caption rather than an ad template.
-const SLIDES: { hamperId: string; image: string; name: string; line: string; price: number }[] = [
+const SLIDES: { hamperId: string; image: string; name: string; price: number }[] = [
   {
     hamperId: 'g6',
     image: 'https://ik.imagekit.io/amieshomemade/067A8538.JPG',
     name: 'The Ultimate Diwali Luxury Hamper',
-    line: 'Four mukhwas jars, a scented candle, a diya, the works.',
     price: 2249,
   },
   {
     hamperId: 'g7',
     image: 'https://ik.imagekit.io/amieshomemade/067A8560.JPG',
     name: 'The Royal Diwali Hamper',
-    line: 'Mukhwas, date bites, khasta kachori, tea candles.',
     price: 1450,
   },
   {
     hamperId: 'g9',
     image: 'https://ik.imagekit.io/amieshomemade/067A8608.JPG?updatedAt=1790662993420',
     name: 'The Diwali Sweet Celebrations Hamper',
-    line: 'Motichoor ladoo with cashews and almonds on the side.',
     price: 1100,
   },
   {
     hamperId: 'g12',
     image: 'https://ik.imagekit.io/amieshomemade/067A8682.JPG?updatedAt=1790662989973',
     name: 'The Diwali Elegance Hamper',
-    line: 'A smaller, simpler box that still feels like a gift.',
     price: 799,
   },
 ];
@@ -85,17 +81,17 @@ const DiwaliBanner: React.FC<DiwaliBannerProps> = ({ onClick }) => {
             aria-label={`Shop ${s.name}`}
             className="group absolute inset-0 flex flex-col justify-end sm:justify-center text-left px-6 sm:px-12 lg:px-20 pb-16 sm:pb-0 max-w-2xl"
           >
-            <span className="text-[#F6C94C] brand-rounded uppercase tracking-[0.25em] font-black text-[10px] sm:text-xs mb-3 sm:mb-4">
-              Diwali Hamper · ₹{s.price.toLocaleString('en-IN')}
-            </span>
-            <h2 className="text-white serif font-bold leading-[1.05] text-3xl sm:text-5xl lg:text-6xl mb-3 sm:mb-4 drop-shadow-lg max-w-xl">
-              {s.name}
+            <h2 className="brand-devanagari text-[#F6C94C] leading-none text-5xl sm:text-7xl lg:text-8xl mb-3 sm:mb-4 drop-shadow-lg">
+              शुभ दिवाली
             </h2>
-            <p className="text-white/80 text-sm sm:text-lg font-medium mb-6 sm:mb-8 max-w-md">
-              {s.line}
+            <p className="text-white serif font-bold text-xl sm:text-3xl lg:text-4xl mb-1.5 sm:mb-2 drop-shadow-lg">
+              Celebrate the Art of Gifting
+            </p>
+            <p className="text-white/75 text-xs sm:text-base font-medium mb-6 sm:mb-8">
+              Homemade with love. Packed with tradition.
             </p>
             <span className="inline-flex items-center gap-3 self-start px-7 sm:px-9 py-3.5 sm:py-4 bg-coral text-white rounded-full font-bold tracking-[0.2em] uppercase text-xs shadow-2xl shadow-coral/30 group-hover:scale-[1.04] group-hover:shadow-coral/40 transition-all duration-300">
-              Shop This
+              {s.name} · ₹{s.price.toLocaleString('en-IN')}
               <ArrowRight size={16} className="group-hover:translate-x-1.5 transition-transform" />
             </span>
           </button>
