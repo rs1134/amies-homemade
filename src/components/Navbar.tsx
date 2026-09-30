@@ -7,11 +7,13 @@ interface NavbarProps {
   cartCount: number;
   onCartClick: () => void;
   onNavigate: (page: string) => void;
+  /** Gift Hampers now lives on the Shop All page (filtered), not the standalone /gifting page. */
+  onGiftHampersClick: () => void;
   onSearchOpen: () => void;
   currentPage: string;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ cartCount, onCartClick, onNavigate, onSearchOpen, currentPage }) => {
+const Navbar: React.FC<NavbarProps> = ({ cartCount, onCartClick, onNavigate, onGiftHampersClick, onSearchOpen, currentPage }) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   // Lock body scroll while the mobile menu is open — without this, the menu
@@ -48,7 +50,7 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount, onCartClick, onNavigate, onS
           <div className="hidden md:flex items-center space-x-8 uppercase text-[15px] tracking-widest font-bold brand-rounded">
             <a href="/" onClick={(e) => { e.preventDefault(); onNavigate('home'); }} className={`transition-colors ${currentPage === 'home' ? 'text-[#F04E4E]' : 'text-[#4A3728]/80 hover:text-[#F04E4E]'}`}>Home</a>
             <a href="/shop" onClick={(e) => { e.preventDefault(); onNavigate('shop'); }} className={`transition-colors ${currentPage === 'shop' ? 'text-[#F04E4E]' : 'text-[#4A3728]/80 hover:text-[#F04E4E]'}`}>Shop All</a>
-            <a href="/gifting" onClick={(e) => { e.preventDefault(); onNavigate('gifting'); }} className={`transition-colors flex items-center gap-2 ${currentPage === 'gifting' ? 'text-[#F04E4E]' : 'text-[#4A3728]/80 hover:text-[#F04E4E]'}`}>
+            <a href="/shop/hampers" onClick={(e) => { e.preventDefault(); onGiftHampersClick(); }} className={`transition-colors flex items-center gap-2 ${currentPage === 'gifting' ? 'text-[#F04E4E]' : 'text-[#4A3728]/80 hover:text-[#F04E4E]'}`}>
               <Gift size={14} className={currentPage === 'gifting' ? 'text-[#F04E4E]' : ''} /> Gifting
             </a>
             <a href="/about" onClick={(e) => { e.preventDefault(); onNavigate('about'); }} className={`transition-colors ${currentPage === 'about' ? 'text-[#F04E4E]' : 'text-[#4A3728]/80 hover:text-[#F04E4E]'}`}>Our Story</a>
@@ -79,7 +81,7 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount, onCartClick, onNavigate, onS
           <div className="md:hidden relative z-50 bg-[#FFF8EE] border-b border-[#F04E4E]/10 animate-fade-in-down shadow-xl brand-rounded font-bold text-center py-8">
             <a href="/" onClick={(e) => { e.preventDefault(); onNavigate('home'); setIsOpen(false); }} className="block w-full py-3">Home</a>
             <a href="/shop" onClick={(e) => { e.preventDefault(); onNavigate('shop'); setIsOpen(false); }} className="block w-full py-3">Shop All</a>
-            <a href="/gifting" onClick={(e) => { e.preventDefault(); onNavigate('gifting'); setIsOpen(false); }} className="block w-full py-3">Gifting</a>
+            <a href="/shop/hampers" onClick={(e) => { e.preventDefault(); onGiftHampersClick(); setIsOpen(false); }} className="block w-full py-3">Gifting</a>
             <a href="/about" onClick={(e) => { e.preventDefault(); onNavigate('about'); setIsOpen(false); }} className="block w-full py-3">Our Story</a>
             <a href="/contact" onClick={(e) => { e.preventDefault(); onNavigate('contact'); setIsOpen(false); }} className="block w-full py-3">Contact</a>
             <a href="/blog" onClick={(e) => { e.preventDefault(); onNavigate('blog'); setIsOpen(false); }} className="block w-full py-3">Blog</a>

@@ -1410,16 +1410,7 @@ const App: React.FC = () => {
       );
       default: return (
         <>
-          <DiwaliBanner onClick={(hamperId) => {
-            navigate('gifting');
-            if (hamperId) {
-              // Wait a tick for the gifting page to mount before scrolling to the card.
-              setTimeout(() => {
-                window.history.replaceState(null, '', `/gifting#hamper-${hamperId}`);
-                document.getElementById(`hamper-${hamperId}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              }, 50);
-            }
-          }} />
+          <DiwaliBanner onShopClick={() => navigateToCategory(Category.GIFTING)} />
           <Hero
             onShopClick={() => navigate('shop')}
             onAboutClick={() => navigate('about')}
@@ -1590,6 +1581,7 @@ const App: React.FC = () => {
         cartCount={cartCount}
         onCartClick={() => setIsCartOpen(true)}
         onNavigate={navigate}
+        onGiftHampersClick={() => navigateToCategory(Category.GIFTING)}
         onSearchOpen={() => setIsSearchOpen(true)}
         currentPage={currentPage}
       />
