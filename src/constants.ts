@@ -413,7 +413,7 @@ export const PRODUCTS: Product[] = [
     name: 'Dryfruit and Seeds',
     category: Category.MUKHWAS,
     price: 299,
-    weight: '200 G',
+    weight: '190 G',
     description: 'More than just a mukhwas, this premium blend combines roasted almonds, cashews, dates, rose petals, and wholesome seeds for the perfect balance of crunch and natural sweetness. Rich, satisfying, and crafted to keep you energized throughout the day.',
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(36)_aAxJbrDew.jpg',
     images: [
@@ -426,14 +426,14 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(36)_aAxJbrDew.jpg',
     ],
     ingredients: ['Almond', 'Cashews', 'Dry Dates', 'Coconut', 'Pumpkin Seeds', 'Sunflower Seeds', 'Saunf', 'Dhana Dal', 'Rose Petals', 'Lovely'],
-    prices: { '200 G': 299 },
+    prices: { '190 G': 299 },
     rating: 4.5, reviewCount: 56
   },
   {
     id: 'm12',
     name: 'Ginger Chat',
     category: Category.MUKHWAS,
-    price: 225,
+    price: 224,
     weight: '170 G',
     description: 'Experience the authentic taste of a traditional Indian digestive. Made with real ginger, kala namak, and roasted spices, this premium blend delivers bold flavour in every bite. With zero added sugar and no artificial ingredients, it\'s the perfect clean finish to every meal.',
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(12)_6VRr_dQg8.jpg',
@@ -447,15 +447,15 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(12)_6VRr_dQg8.jpg',
     ],
     ingredients: ['Ginger', 'Chaat Masala', 'Black Salt'],
-    prices: { '170 G': 225 },
+    prices: { '170 G': 224 },
     rating: 4.5, reviewCount: 29
   },
   {
     id: 'sf3',
     name: 'Kharek Coconut Almond',
     category: Category.MUKHWAS,
-    price: 285,
-    weight: '190 G',
+    price: 299,
+    weight: '180 G',
     description: 'Rooted in Gujarati tradition, this premium blend combines sun-dried kharek, toasted coconut flakes, and whole almonds for the perfect balance of sweetness and crunch. Naturally sweetened with zero added sugar, it\'s a wholesome mukhwas crafted for a satisfying finish to every meal.',
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(15)_9rgFNnNhw.jpg',
     images: [
@@ -468,15 +468,15 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(15)_9rgFNnNhw.jpg',
     ],
     ingredients: ['Kharek', 'Coconut', 'Almond', 'Lovely'],
-    prices: { '190 G': 285 },
+    prices: { '180 G': 299 },
     rating: 5, reviewCount: 52
   },
   {
     id: 'm8',
     name: 'Date & Almond',
     category: Category.MUKHWAS,
-    price: 299,
-    weight: '215 G',
+    price: 319,
+    weight: '200 G',
     description: 'A perfect pairing of naturally sweet dates and crunchy almonds, this wholesome blend delivers rich flavour, satisfying texture, and lasting energy. More than just a mukhwas, it\'s a delicious snack and the perfect light finish to every meal.',
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(34)_mG5k2TTAJc.jpg',
     images: [
@@ -489,7 +489,7 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(34)_mG5k2TTAJc.jpg',
     ],
     ingredients: ['Dates', 'Almond', 'Anardana Churan'],
-    prices: { '215 G': 299 },
+    prices: { '200 G': 319 },
     rating: 4.5, reviewCount: 32
   },
   {
