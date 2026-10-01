@@ -1004,7 +1004,7 @@ _Please confirm my order and share delivery details._
           </div>
           <h2 className="text-2xl sm:text-3xl font-bold serif text-[#4A3728] mb-3">Your order was received</h2>
           <p className="text-sm text-[#4A3728]/60 brand-rounded leading-relaxed mb-8">
-            Thank you! We'll confirm the details with you on WhatsApp shortly. If you have any questions, just message us.
+            Thank you! You'll receive a confirmation on email shortly. If you have any questions, just message us.
           </p>
           <div className="flex flex-col gap-3">
             <a
