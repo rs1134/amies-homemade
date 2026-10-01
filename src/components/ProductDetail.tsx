@@ -151,6 +151,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
                         poster={product.videoPoster}
                         className="absolute inset-0 w-full h-full object-contain"
                         playsInline
+                        preload="auto"
                         controls={isVideoPlaying}
                         onEnded={() => setIsVideoPlaying(false)}
                       />

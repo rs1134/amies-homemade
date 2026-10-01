@@ -98,6 +98,7 @@ const HamperCard: React.FC<HamperCardProps> = ({ item, onAddToCart, onSelectProd
                 poster={item.videoPoster}
                 className="w-full h-full block object-cover object-center"
                 playsInline
+                preload="auto"
                 controls={isVideoPlaying}
                 onEnded={() => setIsVideoPlaying(false)}
               />
