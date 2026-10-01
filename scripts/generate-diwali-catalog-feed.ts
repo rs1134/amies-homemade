@@ -17,7 +17,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const distDir = join(__dirname, '..', 'dist');
 
 const BASE = 'https://amieshomemade.com';
-const DIWALI_HAMPER_IDS = ['g4', 'g6', 'g7', 'g8', 'g9', 'g10', 'g11', 'g12'];
+// Order here is the feed's row order — Ultimate Diwali Luxury Hamper first, per request.
+const DIWALI_HAMPER_IDS = ['g6', 'g7', 'g8', 'g9', 'g10', 'g11', 'g12', 'g4'];
 
 const slugify = (name: string) =>
   name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -40,7 +41,15 @@ const headers = [
 ];
 
 const warnings: string[] = [];
-const included = PRODUCTS.filter(p => isProductVisible(p) && DIWALI_HAMPER_IDS.includes(p.id));
+// Map over DIWALI_HAMPER_IDS (not PRODUCTS.filter) so the feed's row order
+// matches that list exactly, rather than falling back to PRODUCTS' own order.
+const included = DIWALI_HAMPER_IDS
+  .map(id => PRODUCTS.find(p => p.id === id))
+  .filter((p): p is NonNullable<typeof p> => {
+    if (!p) return false;
+    if (!isProductVisible(p)) return false;
+    return true;
+  });
 
 if (included.length !== DIWALI_HAMPER_IDS.length) {
   const foundIds = included.map(p => p.id);
