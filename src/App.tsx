@@ -1284,6 +1284,7 @@ const App: React.FC = () => {
           items={cart}
           total={cartTotal}
           onShopClick={() => navigate('shop')}
+          onOrderPlaced={() => { setCart([]); setCouponApplied(false); }}
         />
       ) : (
         <CheckoutView

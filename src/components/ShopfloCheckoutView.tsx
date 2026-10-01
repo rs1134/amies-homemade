@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Truck, ChevronRight, Loader2 } from 'lucide-react';
+import { Truck, ChevronRight, Loader2, CheckCircle } from 'lucide-react';
 import { CartItem } from '../types.ts';
 
 declare global {
@@ -15,6 +15,7 @@ interface ShopfloCheckoutViewProps {
   items: CartItem[];
   total: number;
   onShopClick?: () => void;
+  onOrderPlaced?: () => void;
 }
 
 // Loads the Shopflo SDK script and hands off to it on click — per "Steps to
@@ -25,10 +26,23 @@ interface ShopfloCheckoutViewProps {
 // is fetching a valid checkout token and invoking the SDK.
 const SHOPFLO_MERCHANT_ID = '5f263146-6556-4071-a0ec-a0577ea274d7';
 
-const ShopfloCheckoutView: React.FC<ShopfloCheckoutViewProps> = ({ items, total, onShopClick }) => {
+const ShopfloCheckoutView: React.FC<ShopfloCheckoutViewProps> = ({ items, total, onShopClick, onOrderPlaced }) => {
   const [sdkReady, setSdkReady] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Shopflo's hosted checkout does a full-page redirect back to this exact
+  // URL after payment (not an in-app navigation), so this component remounts
+  // fresh with whatever was still in the cart — without this check it just
+  // showed its normal "Ready to Checkout" screen again instead of a
+  // confirmation, since it had no idea the order had already been placed.
+  const isOrderConfirmed = typeof window !== 'undefined' && window.location.pathname === '/order-confirmed';
+  const platformOrderId = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('platform_order_id') : null;
+
+  useEffect(() => {
+    if (isOrderConfirmed) onOrderPlaced?.();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (window.Shopflo) { setSdkReady(true); return; }
@@ -85,6 +99,31 @@ const ShopfloCheckoutView: React.FC<ShopfloCheckoutViewProps> = ({ items, total,
       setIsSubmitting(false);
     }
   };
+
+  if (isOrderConfirmed) {
+    return (
+      <div className="pt-28 sm:pt-32 pb-16 px-4 bg-cream min-h-screen flex items-center justify-center text-center">
+        <div className="max-w-md w-full bg-white rounded-[2rem] sm:rounded-[3rem] shadow-2xl border border-[#4A3728]/5 p-8 sm:p-12">
+          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-green-600 mx-auto mb-6">
+            <CheckCircle size={36} />
+          </div>
+          <h2 className="text-2xl sm:text-3xl font-bold serif text-[#4A3728] mb-3">Your order was received</h2>
+          <p className="text-sm text-[#4A3728]/60 brand-rounded leading-relaxed mb-2">
+            Thank you! You'll receive a confirmation on email shortly. If you have any questions, just message us.
+          </p>
+          {platformOrderId && (
+            <p className="text-xs text-[#4A3728]/40 brand-rounded mb-6">Order ID: {platformOrderId}</p>
+          )}
+          <button
+            onClick={() => onShopClick?.()}
+            className="w-full mt-6 py-4 bg-[#4A3728] text-white rounded-2xl font-bold brand-rounded uppercase tracking-[0.2em] text-[11px] hover:shadow-xl transition-all active:scale-[0.98]"
+          >
+            Continue Shopping
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (items.length === 0) {
     return (
