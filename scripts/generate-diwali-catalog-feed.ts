@@ -1,5 +1,6 @@
 /**
- * Diwali-only Meta catalog feed — just the 7 Diwali gift hampers (g6-g12),
+ * Diwali-only Meta catalog feed — the Diwali gift hampers (g6-g12) plus
+ * Trio of Traditions (g4), a year-round hamper included in this catalog too,
  * with sale_price (mrp vs price) and video included so Commerce Manager
  * shows the strike-through discount and the hamper video. Written to
  * dist/diwali-gift-hampers-feed.csv, served live at
@@ -16,7 +17,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const distDir = join(__dirname, '..', 'dist');
 
 const BASE = 'https://amieshomemade.com';
-const DIWALI_HAMPER_IDS = ['g6', 'g7', 'g8', 'g9', 'g10', 'g11', 'g12'];
+const DIWALI_HAMPER_IDS = ['g4', 'g6', 'g7', 'g8', 'g9', 'g10', 'g11', 'g12'];
 
 const slugify = (name: string) =>
   name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
