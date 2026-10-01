@@ -1227,9 +1227,19 @@ const App: React.FC = () => {
 
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6 text-center md:text-left">
             <div>
-              <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em]">Fresh from Our Kitchen</span>
-              <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-[#4A3728] serif mt-4 leading-tight">Handcrafted Treats</h2>
-              <div className="w-20 h-1.5 bg-coral rounded-full mx-auto md:mx-0 mt-4"></div>
+              {activeCategory === Category.GIFTING ? (
+                <>
+                  <span className="brand-rounded text-[#B8892A] font-bold text-xs uppercase tracking-[0.3em]">Fresh from Our Kitchen</span>
+                  <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-[#4A3728] serif mt-4 leading-tight">Celebrate the Art of Gifting</h2>
+                  <div className="w-20 h-1.5 bg-[#D4AF37] rounded-full mx-auto md:mx-0 mt-4"></div>
+                </>
+              ) : (
+                <>
+                  <span className="brand-rounded text-coral font-bold text-xs uppercase tracking-[0.3em]">Fresh from Our Kitchen</span>
+                  <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-[#4A3728] serif mt-4 leading-tight">Handcrafted Treats</h2>
+                  <div className="w-20 h-1.5 bg-coral rounded-full mx-auto md:mx-0 mt-4"></div>
+                </>
+              )}
             </div>
             <CategoryFilterBar
               activeCategory={activeCategory}
