@@ -169,7 +169,7 @@ const hashField = (value: string | undefined, normalize: (v: string) => string):
 };
 
 // Same exact set as api/notify-order.ts / api/razorpay-webhook.ts / src/metaTracking.ts.
-const INTERNAL_TEST_PHONES = new Set(['9054038876', '9909942126']);
+const INTERNAL_TEST_PHONES = new Set(['9054038876', '9909942126', '7842010929']);
 const isInternalTestPhone = (phone?: string): boolean =>
   !!phone && INTERNAL_TEST_PHONES.has(String(phone).replace(/\D/g, '').slice(-10));
 

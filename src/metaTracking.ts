@@ -65,7 +65,7 @@ const getOrCreateExternalId = (): string => {
 // to Purchase only: earlier funnel events (PageView/AddToCart/etc.) from the
 // same test session are harmless noise, but a counted Purchase directly
 // skews campaign optimization and reported spend efficiency.
-const INTERNAL_TEST_PHONES = new Set(['9054038876', '9909942126']);
+const INTERNAL_TEST_PHONES = new Set(['9054038876', '9909942126', '7842010929']);
 const isInternalTestPhone = (phone?: string): boolean =>
   !!phone && INTERNAL_TEST_PHONES.has(phone.replace(/\D/g, '').slice(-10));
 
