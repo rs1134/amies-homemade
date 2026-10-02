@@ -180,10 +180,11 @@ export const PRODUCTS: Product[] = [
     mrp: 1099,
     weight: 'Gift Hamper',
     description: 'An elegant, everyday Diwali gift — Tender Coconut Chocolate Chips and Dates & Almond mukhwas, a jar of Roasted Cashews, and a decorative hanging to complete the festive touch.',
-    image: 'https://ik.imagekit.io/amieshomemade/067A8682.JPG?updatedAt=1790662989973',
+    image: 'https://ik.imagekit.io/amieshomemade/Festive%20Gift%20Box%20and%20Snack%20Jars.png',
     images: [
-      'https://ik.imagekit.io/amieshomemade/067A8682.JPG?updatedAt=1790662989973',
-      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Sep%2029,%202026,%2003_25_36%20PM.png',
+      'https://ik.imagekit.io/amieshomemade/Festive%20Gift%20Box%20and%20Snack%20Jars.png',
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Oct%202,%202026,%2006_25_38%20PM.png',
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Oct%202,%202026,%2006_29_49%20PM.png',
     ],
     ingredients: [
       'Tender Coconut Chocolate Chips',
