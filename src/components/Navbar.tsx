@@ -11,9 +11,11 @@ interface NavbarProps {
   onGiftHampersClick: () => void;
   onSearchOpen: () => void;
   currentPage: string;
+  /** Shop All page with the Diwali Gift Hampers filter active — /gifting was retired, so this replaces the old currentPage === 'gifting' check. */
+  isGiftingActive: boolean;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ cartCount, onCartClick, onNavigate, onGiftHampersClick, onSearchOpen, currentPage }) => {
+const Navbar: React.FC<NavbarProps> = ({ cartCount, onCartClick, onNavigate, onGiftHampersClick, onSearchOpen, currentPage, isGiftingActive }) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   // Lock body scroll while the mobile menu is open — without this, the menu
@@ -50,8 +52,8 @@ const Navbar: React.FC<NavbarProps> = ({ cartCount, onCartClick, onNavigate, onG
           <div className="hidden md:flex items-center space-x-8 uppercase text-[15px] tracking-widest font-bold brand-rounded">
             <a href="/" onClick={(e) => { e.preventDefault(); onNavigate('home'); }} className={`transition-colors ${currentPage === 'home' ? 'text-[#F04E4E]' : 'text-[#4A3728]/80 hover:text-[#F04E4E]'}`}>Home</a>
             <a href="/shop" onClick={(e) => { e.preventDefault(); onNavigate('shop'); }} className={`transition-colors ${currentPage === 'shop' ? 'text-[#F04E4E]' : 'text-[#4A3728]/80 hover:text-[#F04E4E]'}`}>Shop All</a>
-            <a href="/shop/hampers" onClick={(e) => { e.preventDefault(); onGiftHampersClick(); }} className={`transition-colors flex items-center gap-2 ${currentPage === 'gifting' ? 'text-[#F04E4E]' : 'text-[#4A3728]/80 hover:text-[#F04E4E]'}`}>
-              <Gift size={14} className={currentPage === 'gifting' ? 'text-[#F04E4E]' : ''} /> Gifting
+            <a href="/shop/hampers" onClick={(e) => { e.preventDefault(); onGiftHampersClick(); }} className={`transition-colors flex items-center gap-2 ${isGiftingActive ? 'text-[#F04E4E]' : 'text-[#4A3728]/80 hover:text-[#F04E4E]'}`}>
+              <Gift size={14} className={isGiftingActive ? 'text-[#F04E4E]' : ''} /> Gifting
             </a>
             <a href="/about" onClick={(e) => { e.preventDefault(); onNavigate('about'); }} className={`transition-colors ${currentPage === 'about' ? 'text-[#F04E4E]' : 'text-[#4A3728]/80 hover:text-[#F04E4E]'}`}>Our Story</a>
             <a href="/contact" onClick={(e) => { e.preventDefault(); onNavigate('contact'); }} className={`transition-colors ${currentPage === 'contact' ? 'text-[#F04E4E]' : 'text-[#4A3728]/80 hover:text-[#F04E4E]'}`}>Contact</a>

@@ -12,7 +12,6 @@ import ProductCard from './components/ProductCard.tsx';
 import VideoGallery from './components/VideoGallery.tsx';
 import ProductDetail from './components/ProductDetail.tsx';
 import AboutUs from './components/AboutUs.tsx';
-import GiftingView from './components/GiftingView.tsx';
 import CheckoutView from './components/CheckoutView.tsx';
 import ShiprocketCheckoutView from './components/ShiprocketCheckoutView.tsx';
 import ShopfloCheckoutView from './components/ShopfloCheckoutView.tsx';
@@ -196,6 +195,11 @@ const SLUG_TO_CATEGORY: Record<string, Category | 'All'> = {
   'hampers':           Category.GIFTING,
 };
 const getCategoryFromPath = (path: string): Category | 'All' => {
+  // /gifting (bare, or with a product slug) always means the Diwali Gift
+  // Hampers filter — the standalone /gifting page was retired in favor of
+  // this filtered view on Shop All, so any /gifting link should land here
+  // pre-filtered rather than on an empty "All" grid.
+  if (path === '/gifting' || path.startsWith('/gifting/')) return Category.GIFTING;
   const m = path.match(/^\/shop\/([^/]+)$/);
   if (!m) return 'All';
   return SLUG_TO_CATEGORY[m[1]] ?? 'All';
@@ -220,7 +224,9 @@ const getPageFromPath = (path: string): string => {
   if (path.startsWith('/delivery')) return 'delivery';
   if (path.startsWith('/cities')) return 'cities';
   if (path.startsWith('/shop')) return 'shop';
-  if (path.startsWith('/gifting')) return 'gifting';
+  // Standalone /gifting page retired — it now resolves to Shop All with the
+  // Diwali Gift Hampers filter pre-applied (see getCategoryFromPath).
+  if (path.startsWith('/gifting')) return 'shop';
   if (path.startsWith('/blog')) return 'blog';
   if (path.startsWith('/faq')) return 'faq';
   if (path === '/order-confirmed') return 'checkout';
@@ -538,16 +544,19 @@ const App: React.FC = () => {
 
   const openProduct = useCallback((product: Product) => {
     // Remember where we're opening this from, so closing it returns to the
-    // same tab/category instead of guessing from the product's own category
-    // (e.g. a hamper opened from Shop's Gifting & Hampers tab should return
-    // there, not to the separate /gifting marketing page).
+    // same tab/category it was opened from.
     productOriginRef.current = { page: currentPage, category: activeCategory };
     const slug = slugify(product.name);
     const isGifting = product.category === Category.GIFTING;
+    // URL still uses /gifting/<slug> for hampers (external links, the Meta
+    // catalog feed, and old bookmarks all point here) — only the page STATE
+    // behind it changes, to the unified Shop All view, not the retired
+    // standalone /gifting page.
     const basePath = isGifting ? '/gifting' : '/shop';
     window.history.pushState(null, '', `${basePath}/${slug}`);
     setSelectedProduct(product);
-    setCurrentPage(isGifting ? 'gifting' : 'shop');
+    setCurrentPage('shop');
+    if (isGifting) setActiveCategory(Category.GIFTING);
   }, [currentPage, activeCategory]);
 
   const closeProduct = useCallback(() => {
@@ -559,16 +568,13 @@ const App: React.FC = () => {
       window.history.pushState(null, '', slug ? `/shop/${slug}` : '/shop');
       setActiveCategory(cat);
       setCurrentPage('shop');
-    } else if (origin && origin.page === 'gifting') {
-      window.history.pushState(null, '', '/gifting');
-      setCurrentPage('gifting');
     } else {
       // No known origin (e.g. product opened via a direct deep link) —
       // fall back to the product's own category, same as before.
       const isGifting = selectedProduct?.category === Category.GIFTING;
       window.history.pushState(null, '', isGifting ? '/gifting' : '/shop');
-      if (!isGifting) setActiveCategory('All');
-      setCurrentPage(isGifting ? 'gifting' : 'shop');
+      setActiveCategory(isGifting ? Category.GIFTING : 'All');
+      setCurrentPage('shop');
     }
     setSelectedProduct(null);
   }, [selectedProduct]);
@@ -968,8 +974,8 @@ const App: React.FC = () => {
   // Scroll to top on every page/area/city/blog/product change (instant to
   // avoid smooth-scroll delay). Includes selectedProduct because opening or
   // closing a product view often doesn't change currentPage on its own
-  // (e.g. closing a hamper opened from /gifting returns to 'gifting' ->
-  // 'gifting', no page transition) -- without it, the page would land
+  // (e.g. closing a hamper opened from the Gifting tab returns to 'shop' ->
+  // 'shop', no page transition) -- without it, the page would land
   // wherever the product detail happened to be scrolled instead of the top.
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
@@ -1219,7 +1225,6 @@ const App: React.FC = () => {
       case 'refundPolicy': return <RefundPolicyPage onNavigate={navigate} />;
       case 'cancellationPolicy': return <CancellationPolicyPage onNavigate={navigate} />;
       case 'about': return <AboutUs onNavigate={navigate} />;
-      case 'gifting': return <GiftingView onAddToCart={(p) => addToCart(p)} onSelectProduct={(p) => openProduct(p)} cart={cart} onUpdateQuantity={updateQuantity} onRemoveFromCart={removeFromCart} />;
       case 'shop': return (
         <section id="shop" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16 sm:pt-32 sm:pb-32 relative z-10">
 
@@ -1602,6 +1607,7 @@ const App: React.FC = () => {
         onGiftHampersClick={() => navigateToCategory(Category.GIFTING)}
         onSearchOpen={() => setIsSearchOpen(true)}
         currentPage={currentPage}
+        isGiftingActive={currentPage === 'shop' && activeCategory === Category.GIFTING}
       />
 
       <SearchOverlay
