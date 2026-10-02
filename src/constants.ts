@@ -139,7 +139,7 @@ export const PRODUCTS: Product[] = [
     id: 'g10',
     name: 'The Royal Mithai Duo',
     category: Category.GIFTING,
-    price: 730,
+    price: 729,
     mrp: 899,
     weight: 'Gift Hamper',
     description: 'A classic Diwali duo — Almond Motichoor Ladoo and Dryfruit Mathadi, 200g and 150g of pure festive indulgence, ready to gift.',
