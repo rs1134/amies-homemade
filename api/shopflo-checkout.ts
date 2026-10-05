@@ -1,6 +1,73 @@
 import { neon } from '@neondatabase/serverless';
 import crypto from 'crypto';
 
+// id -> display name, duplicated from src/constants.ts (not imported — same
+// reason as the rest of this file's duplicated helpers: Vercel's per-function
+// bundler doesn't reliably trace modules outside each function's own file).
+// Used to turn a line item's variant_id ("m5-215 G") into a readable name
+// ("Cranberry Mix") for the order notification. Keep in sync with
+// src/constants.ts if a product is added, renamed, or removed.
+const PRODUCT_NAMES: Record<string, string> = {
+  g6: 'The Ultimate Diwali Luxury Hamper',
+  g7: 'The Royal Diwali Hamper',
+  g8: 'The Diwali Sweet & Savoury Hamper',
+  g9: 'The Diwali Sweet Celebrations Hamper',
+  g10: 'The Royal Mithai Duo',
+  g11: 'Diwali Special Dryfruit Ghughra Tin',
+  g12: 'The Diwali Elegance Hamper',
+  g4: 'Trio of Traditions',
+  g5: 'The Gourmet Discovery',
+  g1: 'The Royal Heritage Box',
+  g2: 'Wellness Mukhwas Collection',
+  g3: 'Sweet Memories Platter',
+  m5: 'Cranberry Mix',
+  m2: 'Chatpati Mango',
+  m13: 'Digestive Crunch',
+  m4: 'Tender Coconut Vanilla Chips',
+  m3: 'Black Grape & Til Goli',
+  m1: 'Amla Ginger',
+  m10: 'Dryfruit and Seeds',
+  m12: 'Ginger Chat',
+  sf3: 'Kharek Coconut Almond',
+  m8: 'Date & Almond',
+  m11: 'Amla Ginger Beet',
+  m9: 'Tender Coconut Chocolate Chips',
+  m14: 'Everyday Mukhwas Trio',
+  sw1: 'Pista Ghugra / Rava Dryfruit Ghugra',
+  sw3: 'Kaju/Badam/Pista Badam Rotla',
+  sw4: 'Kaju / Badam / Pista Badam Puri',
+  sw5: 'Almond Motichoor Ladoo',
+  sw10: 'Magaz',
+  sw11: 'Dryfruit Mathdi',
+  s1: 'Chakri',
+  s3: 'Farsi Puri',
+  s4: 'Masala Puri / Kothmir Marcha Puri',
+  s6: 'Banana Chips',
+  s8: 'Sweet Sakarpara',
+  s9: 'Thiki Sev',
+  s10: 'Mini Khasta Kachori',
+  s2: 'Roasted Chevdo',
+  s12: 'Methi Masala Stick',
+  s13: 'Peri-Peri Makhana',
+  s14: 'Dry Fruit Makhana',
+  s15: 'Cheese Herb Sticks',
+  hw2: 'Masala Protein Beans Mix',
+  hw1: 'Homemade Healthy Granola',
+  sm1: 'Dry Fruit Milk Masala',
+  sm2: 'Chai Masala',
+};
+
+// variant_id is "${productId}-${weight}" (e.g. "m5-215 G") — same convention
+// used by scripts/shopflo-catalog-sync.ts and ShopfloCheckoutView.tsx.
+const describeVariant = (variantId: string): string => {
+  const dashIndex = variantId.indexOf('-');
+  if (dashIndex === -1) return variantId;
+  const productId = variantId.slice(0, dashIndex);
+  const weight = variantId.slice(dashIndex + 1);
+  const name = PRODUCT_NAMES[productId];
+  return name ? `${name} (${weight})` : variantId;
+};
+
 // Single dispatcher for the whole Shopflo Checkout integration (token
 // creation + order webhook), matching the same pattern already proven for
 // Shiprocket Checkout in this codebase — see api/shiprocket-checkout.ts for
@@ -225,7 +292,7 @@ async function orderWebhook(req: any, res: any) {
   }
 
   const itemsSummary = lineItems.map((item: any) =>
-    `${item.quantity}x ${item.variant_id || item.name || 'item'}`
+    `${item.quantity}x ${item.variant_id ? describeVariant(item.variant_id) : (item.name || 'item')}`
   ).join('\n');
 
   const successUrl = `https://amieshomemade.com/order-confirmed`;
