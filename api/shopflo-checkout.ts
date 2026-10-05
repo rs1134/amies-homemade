@@ -200,24 +200,25 @@ async function sendMetaPurchaseBackstop(params: { eventId: string; value: number
 }
 
 async function orderWebhook(req: any, res: any) {
-  // Log every raw payload until we've confirmed the real field names against
-  // a live order — Shopflo's own doc admits its sample is "a standard
-  // example" and defers to a per-merchant orderapi.json we don't have
-  // access to, so this is the same defensive posture used for Shiprocket's
-  // webhook when its sample payload was similarly incomplete.
+  // Field names confirmed against two real live orders (2026-10-05) — the
+  // payload is Shopify-style, nested one level under `order`, not flat as
+  // Shopflo's generic sample doc implied. Keeping the log line since it's
+  // cheap insurance if Shopflo ever changes their payload shape again.
   console.log('[shopflo-checkout/order-webhook] raw payload:', JSON.stringify(req.body));
 
   const body = req.body || {};
-  const shopfloOrderId = String(body.order_id || body.order_number || '');
+  const order = body.order || body;
+  const shippingAddr = order.shipping_address || order.billing_address || {};
+  const shopfloOrderId = String(order.id || order.name || '');
   const orderId = `AM-SF${Date.now().toString().slice(-8)}`;
-  const phone = body.customer?.phone || body.phone || '';
-  const email = body.customer?.email || body.email || '';
-  const name = body.customer?.name || body.name || 'Customer';
-  const address = body.customer?.address || body.shipping_address?.address || body.address || '';
-  const city = body.customer?.city || body.shipping_address?.city || body.city || '';
-  const pincode = body.customer?.pincode || body.shipping_address?.pincode || body.pincode || '';
-  const grandTotal = Number(body.amount || body.total || 0);
-  const lineItems = body.line_items || [];
+  const phone = order.phone || shippingAddr.phone || order.customer?.phone || '';
+  const email = order.email || order.customer?.email || '';
+  const name = shippingAddr.name || order.billing_address?.name || order.customer?.name || 'Customer';
+  const address = [shippingAddr.address1, shippingAddr.address2].filter(Boolean).join(', ');
+  const city = shippingAddr.city || '';
+  const pincode = shippingAddr.zip || shippingAddr.pincode || '';
+  const grandTotal = Number(order.total_price || order.subtotal_price || 0);
+  const lineItems = order.line_items || [];
 
   if (!address || !city) {
     console.error('[shopflo-checkout/order-webhook] Missing shipping address fields in payload — check field names against a real webhook and adjust this handler.');
