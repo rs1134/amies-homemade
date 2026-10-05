@@ -671,6 +671,13 @@ const App: React.FC = () => {
       }
     }
 
+    // Shop All filtered to Diwali Gift Hampers (/shop/hampers) — dedicated
+    // thumbnail instead of the generic shop OG image, matching the static
+    // prerendered page's ogImage for this path.
+    if (currentPage === 'shop' && activeCategory === Category.GIFTING) {
+      ogImage = 'https://ik.imagekit.io/amieshomemade/067A8538.JPG?updatedAt=1790662989989&tr=w-1200,h-630,fo-auto';
+    }
+
     // ── Product page meta tags ───────────────────────────────────────────────
     if (selectedProduct) {
       const isGifting = selectedProduct.category === Category.GIFTING;
@@ -969,7 +976,7 @@ const App: React.FC = () => {
       ],
     });
 
-  }, [currentPage, currentArea, currentCity, currentBlogSlug, selectedProduct]);
+  }, [currentPage, currentArea, currentCity, currentBlogSlug, selectedProduct, activeCategory]);
 
   // Scroll to top on every page/area/city/blog/product change (instant to
   // avoid smooth-scroll delay). Includes selectedProduct because opening or

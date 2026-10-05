@@ -113,6 +113,13 @@ const PAGES: PageEntry[] = [
     description: "Healthy homemade snacks — Makhana, Granola, Masala Protein Beans Mix and more. No preservatives, no artificial additives.",
     ogImage: 'https://ik.imagekit.io/amieshomemade/Granola-jar-with-colorful-label-and-hand.png?tr=w-1200,h-630,fo-auto',
   },
+  {
+    path: 'shop/hampers',
+    url: 'https://amieshomemade.com/shop/hampers',
+    title: "Gift Hampers & Corporate Gifting | Amie's Homemade",
+    description: "Thoughtfully curated gift hampers for every occasion. Corporate gifting, festive hampers, and personalised artisanal gift boxes — all handmade with love.",
+    ogImage: 'https://ik.imagekit.io/amieshomemade/067A8538.JPG?updatedAt=1790662989989&tr=w-1200,h-630,fo-auto',
+  },
 ];
 
 // Skip static category pages for hidden categories (see HIDDEN_CATEGORIES
