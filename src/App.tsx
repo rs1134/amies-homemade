@@ -452,6 +452,20 @@ const App: React.FC = () => {
   const [orderComplete, setOrderComplete] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [addedToast, setAddedToast] = useState<string | null>(null);
+  // Small "Chat with us" bubble over the floating WhatsApp button. On mobile the
+  // button is icon-only (the text pill is sm+ only), so this nudges people to
+  // notice it. Shows once per session after a short delay, auto-hides, and
+  // stays gone once dismissed or after the first showing.
+  const [showChatHint, setShowChatHint] = useState(false);
+  useEffect(() => {
+    try { if (sessionStorage.getItem('chatHintSeen') === '1') return; } catch { /* ignore */ }
+    const showTimer = setTimeout(() => {
+      setShowChatHint(true);
+      try { sessionStorage.setItem('chatHintSeen', '1'); } catch { /* ignore */ }
+    }, 3000);
+    const hideTimer = setTimeout(() => setShowChatHint(false), 12000);
+    return () => { clearTimeout(showTimer); clearTimeout(hideTimer); };
+  }, []);
   // Private Shopflo test switch — loading the site once with "?checkout=shopflo"
   // flips this tab (only) onto the Shopflo checkout, regardless of the
   // VITE_CHECKOUT_PROVIDER env var, so it can be tried end-to-end with real
@@ -1635,6 +1649,28 @@ const App: React.FC = () => {
       {/* Fixed floating buttons live outside <main> so the footer's z-40 stacking context can't cover them.
           Hidden on mobile checkout — the sticky pay bar occupies that same bottom-of-screen
           strip there, and the two would visually collide. */}
+      {showChatHint && currentPage !== 'checkout' && (
+        <div className="fixed bottom-[4.9rem] right-3 z-50 sm:hidden animate-in fade-in slide-in-from-bottom-2 duration-300">
+          <div className="relative bg-white text-[#4A3728] rounded-2xl shadow-xl border border-[#4A3728]/10 flex items-center pl-3.5 pr-1.5 py-1.5">
+            <a
+              href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs font-bold brand-rounded whitespace-nowrap py-1"
+            >
+              Chat with us
+            </a>
+            <button
+              onClick={() => setShowChatHint(false)}
+              aria-label="Dismiss chat hint"
+              className="ml-1 px-2 py-1 text-[#4A3728]/40 text-sm leading-none"
+            >
+              ×
+            </button>
+            <span className="absolute -bottom-1.5 right-6 w-3 h-3 bg-white border-r border-b border-[#4A3728]/10 rotate-45" />
+          </div>
+        </div>
+      )}
       <a
         href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}`}
         target="_blank"
