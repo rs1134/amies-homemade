@@ -454,17 +454,19 @@ const App: React.FC = () => {
   const [addedToast, setAddedToast] = useState<string | null>(null);
   // Small "Chat with us" bubble over the floating WhatsApp button. On mobile the
   // button is icon-only (the text pill is sm+ only), so this nudges people to
-  // notice it. Shows once per session after a short delay, auto-hides, and
+  // notice it. Shows once per session after a short delay, auto-hides after 10s, and
   // stays gone once dismissed or after the first showing.
   const [showChatHint, setShowChatHint] = useState(false);
   useEffect(() => {
     try { if (sessionStorage.getItem('chatHintSeen') === '1') return; } catch { /* ignore */ }
+    let hideTimer: ReturnType<typeof setTimeout> | undefined;
     const showTimer = setTimeout(() => {
       setShowChatHint(true);
       try { sessionStorage.setItem('chatHintSeen', '1'); } catch { /* ignore */ }
+      // Stays up for 10 seconds from the moment it pops up, then disappears.
+      hideTimer = setTimeout(() => setShowChatHint(false), 10000);
     }, 3000);
-    const hideTimer = setTimeout(() => setShowChatHint(false), 12000);
-    return () => { clearTimeout(showTimer); clearTimeout(hideTimer); };
+    return () => { clearTimeout(showTimer); if (hideTimer) clearTimeout(hideTimer); };
   }, []);
   // Private Shopflo test switch — loading the site once with "?checkout=shopflo"
   // flips this tab (only) onto the Shopflo checkout, regardless of the
