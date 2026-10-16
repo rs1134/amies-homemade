@@ -1425,14 +1425,6 @@ _Please confirm my order and share delivery details._
                 </p>
               )}
 
-              {!isAhmedabad && (
-                touched.city && !fieldErrors.city && formData.city && (
-                  <p className="text-[9px] text-[#4A3728]/40 italic brand-rounded bg-[#4A3728]/5 p-2.5 rounded-lg border border-[#4A3728]/5">
-                    Cash on Delivery is available only for orders delivered within Ahmedabad.
-                  </p>
-                )
-              )}
-
               {/* Trust row — online payment goes through Razorpay's own
                   hosted checkout (not our servers), but first-time visitors
                   don't know that; naming the processor + showing familiar
