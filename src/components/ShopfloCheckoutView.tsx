@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Truck, ChevronRight, Loader2, CheckCircle } from 'lucide-react';
 import { CartItem } from '../types.ts';
 
@@ -45,8 +45,16 @@ const ShopfloCheckoutView: React.FC<ShopfloCheckoutViewProps> = ({ items, total,
   }, []);
 
   useEffect(() => {
-    if (window.Shopflo) { setSdkReady(true); return; }
-    if (document.getElementById('shopflo-sdk')) return;
+    // The loader snippet pre-creates window.Shopflo as `{ m_id }` before the
+    // script has actually loaded, so "exists" isn't "ready" — wait for the
+    // real SDK method instead (matters when the tag survives from an earlier
+    // mount of this page and auto-start fires immediately).
+    const isReady = () => typeof window.Shopflo?.getSessionId === 'function';
+    if (isReady()) { setSdkReady(true); return; }
+    const poll = setInterval(() => {
+      if (isReady()) { setSdkReady(true); clearInterval(poll); }
+    }, 100);
+    if (document.getElementById('shopflo-sdk')) return () => clearInterval(poll);
 
     (function (f: any, l: Document, o: string, j: string, s: string) {
       f[o] = f[o] || { m_id: s };
@@ -59,6 +67,7 @@ const ShopfloCheckoutView: React.FC<ShopfloCheckoutViewProps> = ({ items, total,
       const k = l.getElementsByTagName(j)[0];
       k.parentNode?.insertBefore(d, k);
     })(window, document, 'Shopflo', 'script', SHOPFLO_MERCHANT_ID);
+    return () => clearInterval(poll);
   }, []);
 
   const handleCheckout = async () => {
@@ -103,6 +112,18 @@ const ShopfloCheckoutView: React.FC<ShopfloCheckoutViewProps> = ({ items, total,
     }
   };
 
+  // Open Shopflo straight away when the customer lands here from the bag, so
+  // they don't have to tap a second "Checkout" button on an in-between page.
+  // Once per mount: if they close Shopflo's overlay, the manual button below
+  // is still there to reopen it. Skipped on the post-payment return trip.
+  const autoStartedRef = useRef(false);
+  useEffect(() => {
+    if (!sdkReady || isOrderConfirmed || items.length === 0 || autoStartedRef.current) return;
+    autoStartedRef.current = true;
+    handleCheckout();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sdkReady]);
+
   if (isOrderConfirmed) {
     return (
       <div className="pt-28 sm:pt-32 pb-16 px-4 bg-cream min-h-screen flex items-center justify-center text-center">
@@ -145,6 +166,17 @@ const ShopfloCheckoutView: React.FC<ShopfloCheckoutViewProps> = ({ items, total,
           >
             Browse Products <ChevronRight size={18} />
           </button>
+        </div>
+      </div>
+    );
+  }
+
+  if ((!sdkReady || isSubmitting) && !error) {
+    return (
+      <div className="pt-28 sm:pt-32 pb-16 px-4 bg-cream min-h-screen flex items-center justify-center text-center">
+        <div className="flex flex-col items-center gap-4 text-[#4A3728]/70">
+          <Loader2 size={32} className="animate-spin text-coral" />
+          <p className="text-sm brand-rounded font-bold">Opening secure checkout…</p>
         </div>
       </div>
     );
