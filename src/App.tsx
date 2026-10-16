@@ -9,7 +9,6 @@ import SearchOverlay from './components/SearchOverlay.tsx';
 import Hero from './components/Hero.tsx';
 import DiwaliBanner from './components/DiwaliBanner.tsx';
 import ProductCard from './components/ProductCard.tsx';
-import VideoGallery from './components/VideoGallery.tsx';
 import ProductDetail from './components/ProductDetail.tsx';
 import AboutUs from './components/AboutUs.tsx';
 import CheckoutView from './components/CheckoutView.tsx';
@@ -1535,8 +1534,6 @@ const App: React.FC = () => {
               </div>
             </div>
           </section>
-
-          <VideoGallery />
 
           {/* ── Meet the Maker — founder trust section ──────────────────────── */}
           <section className="relative bg-gradient-to-b from-[#FFF8EE] via-[#E5EBDB] to-[#FFF8EE] py-16 sm:py-28 px-4 sm:px-6 lg:px-8 overflow-hidden">
