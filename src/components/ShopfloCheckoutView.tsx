@@ -83,7 +83,10 @@ const ShopfloCheckoutView: React.FC<ShopfloCheckoutViewProps> = ({ items, total,
             price: item.price,
             image: item.image,
           })),
-          backUrl: 'https://amieshomemade.com/checkout',
+          // Shopflo's back arrow lands here: /shop with the bag drawer open (see
+          // the ?cart=open effect in App.tsx) so the customer is back at their
+          // products, not looped to this same checkout page.
+          backUrl: 'https://amieshomemade.com/shop?cart=open',
           successUrl: 'https://amieshomemade.com/order-confirmed?checkout_id={checkout_id}&platform_order_id={platform_order_id}',
         }),
       });

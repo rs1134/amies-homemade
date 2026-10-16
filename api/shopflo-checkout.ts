@@ -127,7 +127,7 @@ async function createToken(req: any, res: any) {
         metadata: { is_order_summary_open: true, is_flash_redirect: true },
       },
     },
-    back_url: backUrl || 'https://amieshomemade.com/checkout',
+    back_url: backUrl || 'https://amieshomemade.com/shop?cart=open',
     success_url: successUrl || 'https://amieshomemade.com/order-confirmed?checkout_id={checkout_id}&platform_order_id={platform_order_id}',
   };
 

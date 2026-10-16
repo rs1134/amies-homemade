@@ -1109,6 +1109,20 @@ const App: React.FC = () => {
     }
   }, [setSelectedProduct, setIsCartOpen]);
 
+  // "?cart=open" opens the bag drawer on load. It's the back_url we hand to
+  // Shopflo: its back arrow sends the customer there so they land on their
+  // products again, instead of looping back to our own /checkout page (which
+  // just re-offers the Shopflo checkout). Param is stripped afterward so a
+  // refresh doesn't re-open the drawer.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('cart') !== 'open') return;
+    setIsCartOpen(true);
+    params.delete('cart');
+    const qs = params.toString();
+    window.history.replaceState(null, '', window.location.pathname + (qs ? `?${qs}` : '') + window.location.hash);
+  }, []);
+
   // Manually-sent cart-recovery links (e.g. "?restore=<session id>" on a
   // WhatsApp message to someone whose cart the abandoned-cart cron caught)
   // re-populate the cart from that row's items_summary in api/abandoned-cart.ts,
