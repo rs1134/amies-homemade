@@ -29,6 +29,14 @@ export const CATEGORY_DISPLAY_LABEL: Partial<Record<Category, string>> = {
 };
 export const categoryLabel = (c: Category): string => CATEGORY_DISPLAY_LABEL[c] ?? c;
 
+// Vercel Blob (which hosts the hamper videos) is currently blocked ("Your store is
+// blocked"), so every Blob-hosted video returns 403 and shows as a broken thumbnail.
+// While this is true those videos are left out of the galleries. Set it to false
+// once the Blob store is unblocked or the files are re-hosted — the video URLs
+// below are untouched, so nothing else needs to change.
+const BLOB_VIDEOS_BLOCKED = true;
+const blobVideo = (url: string): string[] => (BLOB_VIDEOS_BLOCKED ? [] : [url]);
+
 export const PRODUCTS: Product[] = [
   // --- GIFTING ---
   {
@@ -44,7 +52,7 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/067A8538.JPG',
       'https://ik.imagekit.io/amieshomemade/067A8531.JPG',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Sep%2029,%202026,%2012_19_19%20PM.png',
-      'https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/diwali-luxury-hamper-v2.mp4',
+      ...blobVideo('https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/diwali-luxury-hamper-v2.mp4'),
     ],
     videoPoster: 'https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/diwali-luxury-hamper-poster-v2.jpg',
     ingredients: [
@@ -72,7 +80,7 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/067A8560.JPG',
       'https://ik.imagekit.io/amieshomemade/067A8573.JPG',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Sep%2029,%202026,%2012_38_15%20PM.png',
-      'https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/royal-diwali-hamper.mp4',
+      ...blobVideo('https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/royal-diwali-hamper.mp4'),
     ],
     videoPoster: 'https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/royal-diwali-hamper-poster.jpg',
     ingredients: [
@@ -99,7 +107,7 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/067A8581.JPG?updatedAt=1790662992789',
       'https://ik.imagekit.io/amieshomemade/067A8587.JPG?updatedAt=1790662992768',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Sep%2029,%202026,%2001_11_54%20PM.png',
-      'https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/sweet-savoury-hamper.mp4',
+      ...blobVideo('https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/sweet-savoury-hamper.mp4'),
     ],
     videoPoster: 'https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/sweet-savoury-hamper-poster.jpg',
     ingredients: [
@@ -125,7 +133,7 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/067A8608.JPG?updatedAt=1790662993420',
       'https://ik.imagekit.io/amieshomemade/067A8621.JPG?updatedAt=1790662992938',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Sep%2029,%202026,%2003_14_17%20PM.png',
-      'https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/diwali-sweet-celebrations-hamper-mEQOYo2R4ow9aqYzBwTcgTifaEU2tV.mp4',
+      ...blobVideo('https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/diwali-sweet-celebrations-hamper-mEQOYo2R4ow9aqYzBwTcgTifaEU2tV.mp4'),
     ],
     videoPoster: 'https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/diwali-sweet-celebrations-hamper-poster-UebPzYJw7ZYnk0KYd0nqjDD1etTpIB.jpg',
     ingredients: [
@@ -166,7 +174,7 @@ export const PRODUCTS: Product[] = [
     images: [
       'https://ik.imagekit.io/amieshomemade/067A8693.JPG?updatedAt=1790662992592',
       'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Sep%2029,%202026,%2004_51_00%20PM.png',
-      'https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/ghughra-tin.mp4',
+      ...blobVideo('https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/ghughra-tin.mp4'),
     ],
     videoPoster: 'https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/ghughra-tin-poster.jpg',
     ingredients: ['Dryfruit Ghughra (250g)'],
