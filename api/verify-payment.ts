@@ -1,6 +1,27 @@
 import crypto from 'crypto';
 
 export default async function handler(req: any, res: any) {
+  // Redirect-mode return (?cb=1): Razorpay POSTs the customer here when
+  // checkout runs in redirect mode instead of the popup (phone in-app
+  // browsers such as Instagram/Facebook, UPI app hand-offs). Without a
+  // callback_url they end up stranded on a Razorpay page. The order itself is
+  // created from the payment notes by api/razorpay-webhook.ts, so this only
+  // verifies the signature and sends the customer back to the site. Kept in
+  // this file because the plan caps the number of api/ functions.
+  if (req.query?.cb === '1') {
+    const secret = process.env.RAZORPAY_KEY_SECRET;
+    const b = req.body || {};
+    let ok = false;
+    if (secret && b.razorpay_order_id && b.razorpay_payment_id && b.razorpay_signature) {
+      const exp = crypto.createHmac('sha256', secret).update(`${b.razorpay_order_id}|${b.razorpay_payment_id}`).digest('hex');
+      const x = Buffer.from(exp);
+      const y = Buffer.from(String(b.razorpay_signature));
+      ok = x.length === y.length && crypto.timingSafeEqual(x, y);
+    }
+    res.setHeader('Cache-Control', 'no-store');
+    return res.redirect(303, ok ? 'https://amieshomemade.com/order-confirmed' : 'https://amieshomemade.com/shop?cart=open');
+  }
+
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }

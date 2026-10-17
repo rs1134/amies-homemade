@@ -788,7 +788,7 @@ _Please confirm my order and share delivery details._
         order_id: order.id,
         // Used only when Razorpay falls back to redirect mode (phone in-app
         // browsers); the popup path below still uses `handler`.
-        callback_url: `${window.location.origin}/api/razorpay-callback`,
+        callback_url: `${window.location.origin}/api/verify-payment?cb=1`,
         handler: async function (response: any) {
           // Fire Meta Purchase tracking first, before anything else in this
           // handler. Razorpay only invokes this callback after the payment
