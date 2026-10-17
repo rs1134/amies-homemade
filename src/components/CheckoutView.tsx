@@ -786,6 +786,9 @@ _Please confirm my order and share delivery details._
         name: "Amie's Homemade", description: "Order Payment",
         image: "https://ik.imagekit.io/amieshomemade/Whats-App-Image-2026-02-12-at-18-59-03-1.jpg",
         order_id: order.id,
+        // Used only when Razorpay falls back to redirect mode (phone in-app
+        // browsers); the popup path below still uses `handler`.
+        callback_url: `${window.location.origin}/api/razorpay-callback`,
         handler: async function (response: any) {
           // Fire Meta Purchase tracking first, before anything else in this
           // handler. Razorpay only invokes this callback after the payment
