@@ -1398,6 +1398,30 @@ _Please confirm my order and share delivery details._
               <Wallet className="text-[#F04E4E]" size={22} /> Payment Method
             </h2>
 
+            {/* Estimated delivery — shown on the payment step, after the
+                customer has entered their delivery details, so they know when
+                the order will reach them before they pay. Sundays are skipped
+                when counting working days. */}
+            {!fieldErrors.city && formData.city && (() => {
+              const addWorkingDays = (n: number) => {
+                const d = new Date();
+                while (n > 0) { d.setDate(d.getDate() + 1); if (d.getDay() !== 0) n--; }
+                return d;
+              };
+              const fmt = (d: Date) => d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short' });
+              const from = isFastDeliveryCity ? 1 : 3;
+              const to = isFastDeliveryCity ? 1 : 5;
+              return (
+                <p className="flex items-center gap-2 text-[11px] font-bold text-[#4A3728]/80 brand-rounded bg-[#4A3728]/5 p-2.5 rounded-lg border border-[#4A3728]/5 mb-2.5 lg:mb-3">
+                  <Truck size={15} className="text-[#F04E4E] flex-shrink-0" />
+                  <span>
+                    Estimated delivery: {from === to ? fmt(addWorkingDays(from)) : `${fmt(addWorkingDays(from))} – ${fmt(addWorkingDays(to))}`}
+                    <span className="font-medium text-[#4A3728]/60"> ({isFastDeliveryCity ? '1 working day' : '3-5 working days'})</span>
+                  </span>
+                </p>
+              );
+            })()}
+
             <div className="flex flex-col gap-2.5 lg:gap-3">
               <button
                 type="button"
