@@ -1308,6 +1308,22 @@ const App: React.FC = () => {
               );
             })}
           </div>
+          {activeCategory === Category.GIFTING && (
+            <div className="mt-12 sm:mt-16 rounded-[2rem] bg-white border border-[#D4AF37]/30 shadow-sm px-6 py-8 sm:px-10 sm:py-10 flex flex-col md:flex-row items-center justify-between gap-5 text-center md:text-left">
+              <div>
+                <h3 className="text-2xl sm:text-3xl font-bold serif text-[#4A3728]">Want a customised hamper?</h3>
+                <p className="mt-2 text-sm sm:text-base text-[#4A3728]/70 brand-rounded">Corporate gifting, bulk orders or a hamper made your way. Tell us what you need and we'll put it together.</p>
+              </div>
+              <a
+                href={`https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=${encodeURIComponent("Hi Amie's Homemade! I'd like to enquire about a customised Diwali hamper.")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-shrink-0 inline-flex items-center gap-2 bg-[#25D366] text-white font-bold brand-rounded text-sm uppercase tracking-wider px-7 py-4 rounded-full shadow-lg hover:scale-105 transition-transform"
+              >
+                <MessageCircle size={18} /> Contact Us on WhatsApp
+              </a>
+            </div>
+          )}
         </section>
       );
       // Feature flag — flip VITE_CHECKOUT_PROVIDER in Vercel env vars (+ redeploy)
