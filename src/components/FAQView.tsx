@@ -64,7 +64,7 @@ const FAQ_DATA: FAQCategory[] = [
       },
       {
         q: 'Can I get a custom gift hamper?',
-        a: 'Yes. We offer two ready hampers — Trio of Traditions (₹999) and The Gourmet Discovery (₹1,499) — available directly on the Gifting page. For fully custom hampers with specific products, quantities, or sizes, WhatsApp us and we will build one around your budget.',
+        a: 'Yes. We have ready-made Diwali hampers from ₹599 to ₹2,249 on the Gifting page. For fully custom hampers with specific products, quantities, sizes or packaging, tap the Contact Us on WhatsApp button at the bottom of the Gifting page and we will build one around your budget.',
       },
       {
         q: 'Is there a minimum order quantity?',
@@ -112,7 +112,7 @@ const FAQ_DATA: FAQCategory[] = [
       },
       {
         q: 'What hamper options are available for corporate gifting?',
-        a: 'Our two signature hampers are Trio of Traditions (₹999 — Dryfruit & Seeds, Chatpati Mango, Tender Coconut Vanilla Chips) and The Gourmet Discovery (₹1,499 — Dryfruit & Seeds, Homemade Healthy Granola, Almond Motichoor Ladoo). For fully custom corporate hampers with your preferred products and packaging, contact us on WhatsApp.',
+        a: 'We have ready-made Diwali hampers from ₹599 (Diwali Special Dryfruit Ghughra Tin) to ₹2,249 (The Ultimate Diwali Luxury Hamper), plus Trio of Traditions at ₹999 — all on the Gifting page. For fully custom corporate hampers with your preferred products and packaging, tap Contact Us on WhatsApp at the bottom of the Gifting page.',
       },
       {
         q: 'What is the minimum order for bulk pricing?',
