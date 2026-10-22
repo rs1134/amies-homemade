@@ -32,7 +32,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, o
 
   const handleApplyCoupon = () => {
     const code = couponInput.trim();
-    if (code !== COUPON_CODE) {
+    if (code.toLowerCase() !== COUPON_CODE.toLowerCase()) {
       setCouponError('Invalid coupon code.');
       return;
     }

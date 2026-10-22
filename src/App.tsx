@@ -8,6 +8,7 @@ import Navbar from './components/Navbar.tsx';
 import SearchOverlay from './components/SearchOverlay.tsx';
 import Hero from './components/Hero.tsx';
 import DiwaliBanner from './components/DiwaliBanner.tsx';
+import DiwaliOfferPopup from './components/DiwaliOfferPopup.tsx';
 import ProductCard from './components/ProductCard.tsx';
 import ProductDetail from './components/ProductDetail.tsx';
 import AboutUs from './components/AboutUs.tsx';
@@ -1678,6 +1679,11 @@ const App: React.FC = () => {
       {/* Fixed floating buttons live outside <main> so the footer's z-40 stacking context can't cover them.
           Hidden on mobile checkout — the sticky pay bar occupies that same bottom-of-screen
           strip there, and the two would visually collide. */}
+      <DiwaliOfferPopup
+        suppressed={isCartOpen || ['checkout', 'terms', 'privacyPolicy', 'refundPolicy', 'cancellationPolicy'].includes(currentPage)}
+        onShop={() => navigateToCategory(Category.GIFTING)}
+      />
+
       {showChatHint && currentPage !== 'checkout' && (
         <div className="fixed bottom-[4.9rem] right-3 z-50 sm:hidden animate-in fade-in slide-in-from-bottom-2 duration-300">
           <div className="relative bg-white text-[#4A3728] rounded-2xl shadow-xl border border-[#4A3728]/10 flex items-center pl-3.5 pr-1.5 py-1.5">
