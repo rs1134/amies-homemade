@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 
-const SEEN_KEY = 'amies_diwali_offer_seen_v1';
-const RESHOW_AFTER_MS = 24 * 60 * 60 * 1000;
+const SEEN_KEY = 'amies_diwali_offer_seen_v2';
 
 const BG = 'https://ik.imagekit.io/amieshomemade/6ada5f3b63d6d582f1ff4983af8c5593.jpg?updatedAt=1790747813640&tr=w-800,q-75,f-auto';
 
@@ -13,22 +12,24 @@ interface Props {
 }
 
 // First-visit Diwali offer pop-up. Listed prices on the site are already ~10%
-// below MRP, so no code is needed. Shows once per visitor per day, after a short delay.
+// below MRP, so no code is needed. Shows once per visit (browser session), after a short delay.
 const DiwaliOfferPopup: React.FC<Props> = ({ suppressed, onShop }) => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    try {
-      const last = Number(localStorage.getItem(SEEN_KEY) || 0);
-      if (last && Date.now() - last < RESHOW_AFTER_MS) return;
-    } catch { /* ignore */ }
-    const t = setTimeout(() => setOpen(true), 4000);
+    // "?offer=1" always shows it (handy for checking it on any device).
+    let force = false;
+    try { force = new URLSearchParams(window.location.search).get('offer') === '1'; } catch { /* ignore */ }
+    if (!force) {
+      try { if (sessionStorage.getItem(SEEN_KEY) === '1') return; } catch { /* ignore */ }
+    }
+    const t = setTimeout(() => setOpen(true), force ? 800 : 3000);
     return () => clearTimeout(t);
   }, []);
 
   const close = () => {
     setOpen(false);
-    try { localStorage.setItem(SEEN_KEY, String(Date.now())); } catch { /* ignore */ }
+    try { sessionStorage.setItem(SEEN_KEY, '1'); } catch { /* ignore */ }
   };
 
   if (!open || suppressed) return null;
