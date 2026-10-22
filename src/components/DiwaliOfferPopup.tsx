@@ -36,14 +36,14 @@ const DiwaliOfferPopup: React.FC<Props> = ({ suppressed, onShop }) => {
 
   return (
     <div
-      className="fixed inset-0 z-[80] flex items-center justify-center p-4 bg-black/60 animate-in fade-in duration-300"
+      className="fixed inset-0 z-[80] flex items-center justify-center p-6 sm:p-4 bg-black/60 animate-in fade-in duration-300"
       onClick={close}
       role="dialog"
       aria-modal="true"
       aria-label="Diwali special offer"
     >
       <div
-        className="relative w-full max-w-sm min-h-[30rem] rounded-[2rem] overflow-hidden border border-[#F5C86A]/50 shadow-2xl animate-in zoom-in-95 duration-300 flex flex-col items-center justify-center text-center px-7 py-10"
+        className="relative w-full max-w-[17.5rem] sm:max-w-sm min-h-[21rem] sm:min-h-[30rem] rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden border border-[#F5C86A]/50 shadow-2xl animate-in zoom-in-95 duration-300 flex flex-col items-center justify-center text-center px-5 sm:px-7 py-7 sm:py-10"
         onClick={e => e.stopPropagation()}
       >
         <img
@@ -60,15 +60,15 @@ const DiwaliOfferPopup: React.FC<Props> = ({ suppressed, onShop }) => {
 
         <div className="relative z-10">
           <span className="brand-rounded text-[#F5C86A] font-bold text-[11px] uppercase tracking-[0.35em]">✦ Happy Diwali ✦</span>
-          <p className="mt-3 brand-rounded text-white/90 text-sm font-bold uppercase tracking-[0.25em]">Diwali Special</p>
-          <h2 className="serif text-4xl font-bold text-white leading-tight mt-2 drop-shadow-lg">
+          <p className="mt-2 sm:mt-3 brand-rounded text-white/90 text-xs sm:text-sm font-bold uppercase tracking-[0.25em]">Diwali Special</p>
+          <h2 className="serif text-[1.65rem] sm:text-4xl font-bold text-white leading-tight mt-1.5 sm:mt-2 drop-shadow-lg">
             Minimum <span className="text-[#F5C86A]">10% OFF</span><br />on all products
           </h2>
-          <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-[#F5C86A]" />
+          <div className="mx-auto mt-3 sm:mt-4 h-1 w-12 sm:w-16 rounded-full bg-[#F5C86A]" />
 
           <button
             onClick={() => { close(); onShop(); }}
-            className="mt-8 w-full bg-[#F04E4E] text-white font-bold brand-rounded text-sm uppercase tracking-wider py-4 rounded-full shadow-lg hover:scale-[1.02] transition-transform"
+            className="mt-5 sm:mt-8 w-full bg-[#F04E4E] text-white font-bold brand-rounded text-xs sm:text-sm uppercase tracking-wider py-3 sm:py-4 rounded-full shadow-lg hover:scale-[1.02] transition-transform"
           >
             Shop Diwali Offers
           </button>
