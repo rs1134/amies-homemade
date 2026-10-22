@@ -48,7 +48,6 @@ const DiwaliOfferPopup: React.FC<Props> = ({ suppressed, onShop }) => {
         </button>
         <span className="brand-rounded text-[#B8892A] font-bold text-[11px] uppercase tracking-[0.3em]">Diwali Special</span>
         <h2 className="serif text-4xl font-bold text-[#4A3728] leading-tight mt-3">10% OFF<br />on all products</h2>
-        <p className="mt-3 text-sm text-[#4A3728]/70 brand-rounded">Already applied to every price on the site — no code needed.</p>
 
         <button
           onClick={() => { close(); onShop(); }}
