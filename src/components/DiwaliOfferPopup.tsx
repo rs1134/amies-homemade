@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { X, Copy, Check } from 'lucide-react';
+import { X } from 'lucide-react';
 
 const SEEN_KEY = 'amies_diwali_offer_seen_v1';
 const RESHOW_AFTER_MS = 24 * 60 * 60 * 1000;
-const CODE = 'Thanks10';
 
 interface Props {
   // Don't show over the cart/checkout, or while something else is blocking the page.
@@ -12,11 +11,9 @@ interface Props {
 }
 
 // First-visit Diwali offer pop-up. Listed prices on the site are already ~10%
-// below MRP, and the Thanks10 coupon in the cart takes a further 10% off, so
-// both claims below are real. Shows once per visitor per day, after a short delay.
+// below MRP, so no code is needed. Shows once per visitor per day, after a short delay.
 const DiwaliOfferPopup: React.FC<Props> = ({ suppressed, onShop }) => {
   const [open, setOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     try {
@@ -33,12 +30,6 @@ const DiwaliOfferPopup: React.FC<Props> = ({ suppressed, onShop }) => {
   };
 
   if (!open || suppressed) return null;
-
-  const copy = async () => {
-    try { await navigator.clipboard.writeText(CODE); } catch { /* ignore */ }
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
 
   return (
     <div
@@ -57,18 +48,11 @@ const DiwaliOfferPopup: React.FC<Props> = ({ suppressed, onShop }) => {
         </button>
         <span className="brand-rounded text-[#B8892A] font-bold text-[11px] uppercase tracking-[0.3em]">Diwali Special</span>
         <h2 className="serif text-4xl font-bold text-[#4A3728] leading-tight mt-3">10% OFF<br />on all products</h2>
-        <p className="mt-3 text-sm text-[#4A3728]/70 brand-rounded">Mukhwas, wellness treats and Diwali gift hampers — all at Diwali prices.</p>
-
-        <div className="mt-5 rounded-2xl border border-dashed border-[#D4AF37] bg-white px-4 py-3">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-[#4A3728]/60 brand-rounded">Extra 10% off at checkout with code</p>
-          <button onClick={copy} className="mt-1 inline-flex items-center gap-2 text-xl font-bold tracking-wider text-[#F04E4E]">
-            {CODE} {copied ? <Check size={16} /> : <Copy size={16} />}
-          </button>
-        </div>
+        <p className="mt-3 text-sm text-[#4A3728]/70 brand-rounded">Already applied to every price on the site — no code needed.</p>
 
         <button
           onClick={() => { close(); onShop(); }}
-          className="mt-5 w-full bg-[#F04E4E] text-white font-bold brand-rounded text-sm uppercase tracking-wider py-4 rounded-full shadow-lg hover:scale-[1.02] transition-transform"
+          className="mt-6 w-full bg-[#F04E4E] text-white font-bold brand-rounded text-sm uppercase tracking-wider py-4 rounded-full shadow-lg hover:scale-[1.02] transition-transform"
         >
           Shop Diwali Offers
         </button>
