@@ -27,6 +27,14 @@ const DiwaliOfferPopup: React.FC<Props> = ({ suppressed, onShop }) => {
     return () => clearTimeout(t);
   }, []);
 
+  // Freeze the page behind the pop-up so it can't scroll (or jump) while open.
+  useEffect(() => {
+    if (!open || suppressed) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = prev; };
+  }, [open, suppressed]);
+
   const close = () => {
     setOpen(false);
     try { sessionStorage.setItem(SEEN_KEY, '1'); } catch { /* ignore */ }
