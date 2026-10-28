@@ -228,7 +228,10 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
   };
   const handleFormBlur = (e: React.FocusEvent) => {
     if (!isTextEntryElement(e.target) || !isTouchDevice()) return;
-    keyboardCloseTimer.current = setTimeout(() => setKeyboardOpen(false), 100);
+    // Wait long enough for a tap on a button to finish before the compact layout
+    // is restored — otherwise the form grows under the finger (blur fires on
+    // touch-down) and the button moves away before the tap lands.
+    keyboardCloseTimer.current = setTimeout(() => setKeyboardOpen(false), 500);
   };
 
   // Enter-to-advance — the mobile keyboard shows "Next" (via enterKeyHint)
@@ -475,22 +478,49 @@ const CheckoutView: React.FC<CheckoutViewProps> = ({ items, onComplete, onUpdate
     return true;
   };
 
+  // Each mobile checkout step gets its own browser-history entry, so the phone's
+  // Back button (and swipe-back) moves one step back inside checkout instead of
+  // jumping out to whatever page came before it.
+  const pushStepHistory = (step: CheckoutStep) => {
+    try { window.history.pushState({ ckStep: step }, '', window.location.pathname + window.location.search); } catch { /* ignore */ }
+  };
+
   const goToDetailsStep = () => {
     if (!validateStepFields(['address'])) return;
     setCheckoutStep('details');
+    pushStepHistory('details');
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
   };
 
   const goToSummaryStep = () => {
     if (!validateStepFields(['name', 'phone', 'email', 'city', 'state', 'flat', 'pincode'])) return;
     setCheckoutStep('summary');
+    pushStepHistory('summary');
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
   };
 
   const goToPreviousStep = () => {
-    setCheckoutStep(prev => prev === 'summary' ? 'details' : 'address');
+    // If this step was reached via our own history entry, pop it (the popstate
+    // listener below updates the step) so the history stays in sync.
+    if (window.history.state && window.history.state.ckStep) {
+      window.history.back();
+    } else {
+      setCheckoutStep(prev => prev === 'summary' ? 'details' : 'address');
+    }
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
   };
+
+  // Phone Back / Forward / swipe: follow the step stored in the history entry.
+  useEffect(() => {
+    const onPop = () => {
+      if (window.location.pathname !== '/checkout') return;
+      const st = window.history.state && window.history.state.ckStep;
+      setCheckoutStep(st === 'details' || st === 'summary' ? st : 'address');
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+    };
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -1233,7 +1263,7 @@ _Please confirm my order and share delivery details._
                     </div>
                     <button
                       type="button"
-                      onClick={() => setCheckoutStep('address')}
+                      onClick={goToPreviousStep}
                       className="text-[10px] font-black uppercase brand-rounded text-[#F04E4E] tracking-widest flex-shrink-0 hover:underline"
                     >
                       Change

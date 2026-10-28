@@ -30,9 +30,10 @@ const DiwaliOfferPopup: React.FC<Props> = ({ suppressed, onShop }) => {
   // Freeze the page behind the pop-up so it can't scroll (or jump) while open.
   useEffect(() => {
     if (!open || suppressed) return;
-    const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
-    return () => { document.body.style.overflow = prev; };
+    // 'unset' (not the previous value) matches the other modals and can never
+    // leave the page stuck if another overlay opened/closed meanwhile.
+    return () => { document.body.style.overflow = 'unset'; };
   }, [open, suppressed]);
 
   const close = () => {
