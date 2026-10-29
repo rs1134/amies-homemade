@@ -33,6 +33,7 @@ export const PRODUCTS: Product[] = [
   // --- GIFTING ---
   {
     id: 'g6',
+    lowStock: true,
     name: 'The Ultimate Diwali Luxury Hamper',
     category: Category.GIFTING,
     price: 2249,
@@ -164,6 +165,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'g12',
+    lowStock: true,
     name: 'The Diwali Elegance Hamper',
     category: Category.GIFTING,
     price: 799,
@@ -186,6 +188,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'g4',
+    lowStock: true,
     name: 'Trio of Traditions',
     category: Category.GIFTING,
     price: 999,

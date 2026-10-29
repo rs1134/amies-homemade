@@ -36,6 +36,8 @@ export interface Product {
   isGift?: boolean;
   isNew?: boolean;
   outOfStock?: boolean;
+  /** Shows a "Last few pieces remaining" urgency tag on the product card. */
+  lowStock?: boolean;
   subOptions?: {
     name: string;
     prices: Record<string, number>;

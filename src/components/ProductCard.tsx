@@ -129,6 +129,17 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onOpen,
           </span>
         )}
 
+        {/* Low-stock urgency tag */}
+        {product.lowStock && !isOOS && (
+          <span className="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 px-2.5 py-1 bg-[#F04E4E] rounded-full text-white text-[10px] font-bold brand-rounded shadow-md">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full rounded-full bg-white opacity-75 animate-ping" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-white" />
+            </span>
+            Last few pieces remaining
+          </span>
+        )}
+
         {!isOOS && (
           <div className="absolute top-4 right-4 flex flex-col gap-2 translate-x-12 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300">
             <button
