@@ -3,17 +3,15 @@ import { X } from 'lucide-react';
 
 const SEEN_KEY = 'amies_diwali_offer_seen_v2';
 
-const BG = 'https://ik.imagekit.io/amieshomemade/6ada5f3b63d6d582f1ff4983af8c5593.jpg?updatedAt=1790747813640&tr=w-800,q-75,f-auto';
-
 interface Props {
   // Don't show over the cart/checkout, or while something else is blocking the page.
   suppressed: boolean;
-  onShop: () => void;
 }
 
 // First-visit Diwali offer pop-up. Listed prices on the site are already ~10%
-// below MRP, so no code is needed. Shows once per visit (browser session), after a short delay.
-const DiwaliOfferPopup: React.FC<Props> = ({ suppressed, onShop }) => {
+// below MRP, so no code is needed. Shows once per visit (browser session), after
+// a short delay. The only control is the close (×) button.
+const DiwaliOfferPopup: React.FC<Props> = ({ suppressed }) => {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -45,43 +43,52 @@ const DiwaliOfferPopup: React.FC<Props> = ({ suppressed, onShop }) => {
 
   return (
     <div
-      className="fixed inset-0 z-[80] flex items-center justify-center p-6 sm:p-4 bg-black/60 animate-in fade-in duration-300"
+      className="fixed inset-0 z-[80] flex items-center justify-center p-6 sm:p-4 bg-black/55 animate-in fade-in duration-300"
       onClick={close}
       role="dialog"
       aria-modal="true"
       aria-label="Diwali special offer"
     >
       <div
-        className="relative w-full max-w-[17.5rem] sm:max-w-sm min-h-[21rem] sm:min-h-[30rem] rounded-[1.5rem] sm:rounded-[2rem] overflow-hidden border border-[#F5C86A]/50 shadow-2xl animate-in zoom-in-95 duration-300 flex flex-col items-center justify-center text-center px-5 sm:px-7 py-7 sm:py-10"
+        className="relative w-full max-w-[19rem] sm:max-w-md rounded-[1.25rem] sm:rounded-[1.5rem] bg-[#F26B2E] shadow-2xl px-4 sm:px-7 pt-6 sm:pt-8 pb-5 sm:pb-7 animate-in zoom-in-95 duration-300"
         onClick={e => e.stopPropagation()}
       >
-        <img
-          src={BG}
-          alt=""
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-        {/* Dark wash so the text stays readable over the artwork */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#0B1030]/80 via-[#0B1030]/55 to-[#0B1030]/85" />
-
-        <button onClick={close} aria-label="Close" className="absolute top-4 right-4 p-1.5 text-white/70 hover:text-white z-10">
-          <X size={20} />
+        {/* Close — the only control on the pop-up */}
+        <button
+          onClick={close}
+          aria-label="Close"
+          className="absolute -top-3 -right-3 sm:-top-4 sm:-right-4 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white text-[#2B1A10] shadow-lg flex items-center justify-center"
+        >
+          <X size={18} strokeWidth={3} />
         </button>
 
-        <div className="relative z-10">
-          <span className="brand-rounded text-[#F5C86A] font-bold text-[11px] uppercase tracking-[0.35em]">✦ Happy Diwali ✦</span>
-          <p className="mt-2 sm:mt-3 brand-rounded text-white/90 text-xs sm:text-sm font-bold uppercase tracking-[0.25em]">Diwali Special</p>
-          <h2 className="serif text-[1.65rem] sm:text-4xl font-bold text-white leading-tight mt-1.5 sm:mt-2 drop-shadow-lg">
-            Minimum <span className="text-[#F5C86A]">10% OFF</span><br />on all products
-          </h2>
-          <div className="mx-auto mt-3 sm:mt-4 h-1 w-12 sm:w-16 rounded-full bg-[#F5C86A]" />
+        <span className="inline-block rounded-full bg-[#2B1A10] text-white brand-rounded font-black text-[10px] sm:text-xs uppercase tracking-[0.2em] px-3 sm:px-4 py-1.5 sm:py-2">
+          Diwali Special
+        </span>
 
-          <button
-            onClick={() => { close(); onShop(); }}
-            className="mt-5 sm:mt-8 w-full bg-[#F04E4E] text-white font-bold brand-rounded text-xs sm:text-sm uppercase tracking-wider py-3 sm:py-4 rounded-full shadow-lg hover:scale-[1.02] transition-transform"
-          >
-            Shop Diwali Offers
-          </button>
-          <button onClick={close} className="mt-3 text-xs text-white/70 brand-rounded underline">No thanks</button>
+        <h2 className="brand-rounded font-black leading-[0.95] tracking-tight mt-3 sm:mt-5 text-[2.1rem] sm:text-[3.2rem]">
+          <span className="block text-white">Festive offer.</span>
+          <span className="block text-[#2B1A10]">Save more.</span>
+        </h2>
+
+        {/* Ticket-style offer card */}
+        <div className="relative mt-4 sm:mt-6 flex items-stretch rounded-xl sm:rounded-2xl bg-[#FFF4DE] overflow-hidden">
+          <div className="flex-1 flex items-center gap-3 sm:gap-4 px-3.5 sm:px-5 py-3.5 sm:py-5">
+            <div className="leading-none text-[#2B1A10]">
+              <p className="brand-rounded font-black text-[9px] sm:text-[11px] uppercase tracking-[0.2em] mb-0.5">Minimum</p>
+              <p className="brand-rounded font-black text-[2.6rem] sm:text-[4rem] tracking-tighter">10%</p>
+              <p className="brand-rounded font-black text-sm sm:text-xl tracking-[0.15em] mt-0.5">OFF</p>
+            </div>
+            <p className="brand-rounded font-bold text-[#2B1A10] text-sm sm:text-lg leading-tight">
+              on all<br />products
+            </p>
+          </div>
+          <div className="relative w-[34%] flex flex-col items-center justify-center text-center border-l-2 border-dashed border-[#2B1A10]/25 px-2 py-3">
+            <span className="absolute -top-2 left-[-9px] w-4 h-4 rounded-full bg-[#F26B2E]" />
+            <span className="absolute -bottom-2 left-[-9px] w-4 h-4 rounded-full bg-[#F26B2E]" />
+            <p className="brand-rounded font-black text-[8px] sm:text-[10px] uppercase tracking-[0.2em] text-[#2B1A10]/70">Happy</p>
+            <p className="brand-rounded font-black text-base sm:text-2xl text-[#F04E4E] leading-none mt-0.5">Diwali</p>
+          </div>
         </div>
       </div>
     </div>

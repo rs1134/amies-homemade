@@ -1703,11 +1703,6 @@ const App: React.FC = () => {
           strip there, and the two would visually collide. */}
       <DiwaliOfferPopup
         suppressed={isCartOpen || ['checkout', 'terms', 'privacyPolicy', 'refundPolicy', 'cancellationPolicy'].includes(currentPage)}
-        onShop={() => {
-          navigate('shop'); // Shop All, not just the hampers
-          // Make sure the shop opens at the very top once it has rendered.
-          setTimeout(() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior }), 50);
-        }}
       />
 
       {showChatHint && currentPage !== 'checkout' && (
