@@ -294,7 +294,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
                 delivery promise already used elsewhere (Ahmedabad same day,
                 pan-India 3-5 days) rather than a blanket "next-day" claim
                 that wouldn't hold for customers outside Ahmedabad. */}
-            {(product.id === 'g4' || product.id === 'g5') && (
+            {product.id === 'g5' && (
               <div className="flex items-start gap-2.5 mb-5 p-3.5 rounded-2xl bg-[#F6C94C]/10 border border-[#F6C94C]/30">
                 <Truck size={18} className="text-coral flex-shrink-0 mt-0.5" />
                 <p className="text-[13px] text-[#4A3728]/80 leading-snug">
