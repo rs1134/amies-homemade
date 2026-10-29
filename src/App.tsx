@@ -415,13 +415,26 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, o
 const CART_STORAGE_KEY = 'amies_cart_v1';
 const COUPON_APPLIED_KEY = 'amies_coupon_applied_v1';
 
+// Names of out-of-stock items dropped from a saved bag when the page loaded,
+// shown once as a notice so the customer isn't surprised by a changed bag.
+let removedOutOfStockNames: string[] = [];
+
 const loadSavedCart = (): CartItem[] => {
   try {
     const saved = localStorage.getItem(CART_STORAGE_KEY);
     if (!saved) return [];
     const items: CartItem[] = JSON.parse(saved);
-    // Drop items for products that no longer exist on the site
-    return items.filter(i => PRODUCTS.some(p => p.id === i.id));
+    // Drop items for products that no longer exist on the site, and items that
+    // have since gone out of stock (a bag saved in the customer's browser would
+    // otherwise keep them, and checkout never re-checks stock).
+    const kept: CartItem[] = [];
+    for (const i of items) {
+      const product = PRODUCTS.find(p => p.id === i.id);
+      if (!product) continue;
+      if (product.outOfStock) { removedOutOfStockNames.push(product.name); continue; }
+      kept.push(i);
+    }
+    return kept;
   } catch {
     return [];
   }
@@ -452,6 +465,12 @@ const App: React.FC = () => {
   const [orderComplete, setOrderComplete] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [addedToast, setAddedToast] = useState<string | null>(null);
+  useEffect(() => {
+    if (removedOutOfStockNames.length === 0) return;
+    const names = Array.from(new Set(removedOutOfStockNames));
+    removedOutOfStockNames = [];
+    setAddedToast(`${names.join(', ')} ${names.length > 1 ? 'are' : 'is'} out of stock — removed from your bag`);
+  }, []);
   // Small "Chat with us" bubble over the floating WhatsApp button. On mobile the
   // button is icon-only (the text pill is sm+ only), so this nudges people to
   // notice it. Shows once per session after a short delay, auto-hides after 10s, and
@@ -1043,6 +1062,9 @@ const App: React.FC = () => {
   }, [activeCategory]);
 
   const addToCart = useCallback((product: Product, weight?: string, subOptionName?: string, openCart: boolean = false) => {
+    // Single gate for every way an item can be added (product cards, quick-add,
+    // reminder/restore links, hamper builder): out-of-stock items never enter the bag.
+    if (product.outOfStock) return;
     const finalWeight = weight || product.weight;
     
     // Determine the active price based on variety selection or defaults
