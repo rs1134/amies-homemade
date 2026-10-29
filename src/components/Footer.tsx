@@ -140,7 +140,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               </li>
               <li className="flex gap-4">
                 <MapPin size={18} className="text-[#F14E4E] flex-shrink-0" />
-                <span>1st Floor, A-102 Samasta Apartments, Opp. AMA, Near IIM Road, Ambawadi, Ahmedabad, Gujarat - 380015</span>
+                <a href="https://www.google.com/maps/place/Samasta+Apts./@23.0280391,72.537581,1159m/data=!3m2!1e3!4b1!4m6!3m5!1s0x395e84c3a4a7d991:0x62245b39fac9ed5d!8m2!3d23.0280391!4d72.5401559!16s%2Fg%2F11b90jlbzz?entry=ttu&g_ep=EgoyMDI2MTAyNy4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">1st Floor, A-102 Samasta Apartments, Opp. AMA, Near IIM Road, Ambawadi, Ahmedabad, Gujarat - 380015</a>
               </li>
               <li className="flex gap-4">
                 <Mail size={18} className="text-[#F14E4E] flex-shrink-0" />
