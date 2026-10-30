@@ -194,16 +194,16 @@ export const PRODUCTS: Product[] = [
     price: 999,
     mrp: 1400,
     weight: 'Gift Hamper',
-    description: 'Three of our most-loved blends in one elegant box — nutrient-rich Dryfruit & Seeds, tangy-sweet Chatpati Mango, and delicate Tender Coconut Vanilla Chips. A perfect introduction to Amie\'s handcrafted mukhwas, beautifully presented for gifting.',
+    description: 'Three of our most-loved blends in one elegant box — nutrient-rich Dryfruit & Seeds, tangy-sweet Cranberry Mix, and delicate Tender Coconut Vanilla Chips. A perfect introduction to Amie\'s handcrafted mukhwas, beautifully presented for gifting.',
     image: 'https://ik.imagekit.io/amieshomemade/Amie_s%20Homemade%20Cranberry%20Mukhwaas%20Display.png',
     images: [
       'https://ik.imagekit.io/amieshomemade/Amie_s%20Homemade%20Cranberry%20Mukhwaas%20Display.png',
       'https://ik.imagekit.io/amieshomemade/Cranberry%20Mix%20Gift%20Box%20Flat%20Lay.png',
       'https://ik.imagekit.io/amieshomemade/Amie_s%20Homemade%20Gift%20Box%20Still%20Life.png',
     ],
-    ingredients: ['Dryfruit & Seeds (200g)', 'Chatpati Mango (200g)', 'Tender Coconut Vanilla Chips (125g)'],
+    ingredients: ['Dryfruit & Seeds (200g)', 'Cranberry Mix (200g)', 'Tender Coconut Vanilla Chips (125g)'],
     isGift: true,
-    rating: 4.5, reviewCount: 26
+    rating: 4.5, reviewCount: 46
   },
   {
     id: 'g5',
