@@ -192,7 +192,7 @@ export const PRODUCTS: Product[] = [
     name: 'Trio of Traditions',
     category: Category.GIFTING,
     price: 1099,
-    mrp: 1400,
+    mrp: 1500,
     weight: 'Gift Hamper',
     description: 'Three of our most-loved blends in one elegant box — nutrient-rich Dryfruit & Seeds, tangy-sweet Cranberry Mix, and delicate Tender Coconut Vanilla Chips. A perfect introduction to Amie\'s handcrafted mukhwas, beautifully presented for gifting.',
     image: 'https://ik.imagekit.io/amieshomemade/Amie_s%20Homemade%20Cranberry%20Mukhwaas%20Display.png',
