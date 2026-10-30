@@ -268,6 +268,16 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
             </div>
             <p className="text-xs text-[#4A3728]/50 brand-rounded mb-3">Inclusive of taxes</p>
 
+            {product.lowStock && !product.outOfStock && (
+              <p className="inline-flex items-center gap-2 mb-4 px-3 py-1.5 rounded-full bg-[#F04E4E]/10 border border-[#F04E4E]/25 text-[#F04E4E] text-xs font-bold brand-rounded">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-[#F04E4E] opacity-75 animate-ping" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-[#F04E4E]" />
+                </span>
+                Last few pieces remaining in stock
+              </p>
+            )}
+
             {product.rating && product.reviewCount && (
               <div className="flex items-center gap-1.5 mb-5">
                 <div className="flex">
