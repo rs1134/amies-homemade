@@ -112,7 +112,7 @@ const FAQ_DATA: FAQCategory[] = [
       },
       {
         q: 'What hamper options are available for corporate gifting?',
-        a: 'We have ready-made Diwali hampers from ₹599 (Diwali Special Dryfruit Ghughra Tin) to ₹2,249 (The Ultimate Diwali Luxury Hamper), plus Trio of Traditions at ₹999 — all on the Gifting page. For fully custom corporate hampers with your preferred products and packaging, tap Contact Us on WhatsApp at the bottom of the Gifting page.',
+        a: 'We have ready-made Diwali hampers from ₹599 (Diwali Special Dryfruit Ghughra Tin) to ₹2,249 (The Ultimate Diwali Luxury Hamper), plus Trio of Traditions at ₹1,099 — all on the Gifting page. For fully custom corporate hampers with your preferred products and packaging, tap Contact Us on WhatsApp at the bottom of the Gifting page.',
       },
       {
         q: 'What is the minimum order for bulk pricing?',
