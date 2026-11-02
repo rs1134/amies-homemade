@@ -137,6 +137,14 @@ export default async function handler(req: any, res: any) {
       FROM abandoned_carts
       WHERE reminder_sent_at IS NULL
         AND updated_at < now() - interval '2 hours'
+        -- Customer already bought this exact basket (re-opening checkout
+        -- after paying re-saves the cart): don't nag them.
+        AND NOT EXISTS (
+          SELECT 1 FROM orders o
+          WHERE o.created_at > now() - interval '3 days'
+            AND o.items_summary = replace(abandoned_carts.items_summary, chr(10), ', ')
+            AND (o.email = abandoned_carts.email OR o.phone = abandoned_carts.phone)
+        )
     `;
 
     let sent = 0;
