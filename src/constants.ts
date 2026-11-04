@@ -108,7 +108,7 @@ export const PRODUCTS: Product[] = [
     isGift: true
   },
   {
-    id: 'g9',
+    id: 'g9', outOfStock: true,
     name: 'The Diwali Sweet Celebrations Hamper',
     category: Category.GIFTING,
     price: 1100,
@@ -129,7 +129,7 @@ export const PRODUCTS: Product[] = [
     isGift: true
   },
   {
-    id: 'g10',
+    id: 'g10', outOfStock: true,
     name: 'The Royal Mithai Duo',
     category: Category.GIFTING,
     price: 729,
