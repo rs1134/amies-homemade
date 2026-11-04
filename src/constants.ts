@@ -148,7 +148,7 @@ export const PRODUCTS: Product[] = [
     isGift: true
   },
   {
-    id: 'g11',
+    id: 'g11', outOfStock: true,
     name: 'Diwali Special Dryfruit Ghughra Tin',
     category: Category.GIFTING,
     price: 599,
