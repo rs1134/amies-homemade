@@ -281,10 +281,11 @@ export default async function handler(req: any, res: any) {
   const state = notes.state || '';
   const pincode = notes.pincode || '';
   const mapPin = notes.map_pin || '';
-  const fbp = notes.fbp || '';
-  const fbc = notes.fbc || '';
+  const [fbpPart, ...fbcParts] = String(notes.fb || '').split('|');
+  const fbp = notes.fbp || fbpPart || '';
+  const fbc = notes.fbc || fbcParts.join('|') || '';
   const address = notes.address || '';
-  const itemsSummary = notes.items || '';
+  const itemsSummary = `${notes.items || ''}${notes.items_2 || ''}`;
   const totalWeight = parseInt(String(notes.total_weight || '0').replace(/[^\d]/g, ''), 10) || 0;
   const subtotal = parseRs(notes.subtotal) || (payment.amount / 100);
   const shippingFee = parseRs(notes.shipping);

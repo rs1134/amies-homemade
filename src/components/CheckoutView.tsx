@@ -895,9 +895,14 @@ _Please confirm my order and share delivery details._
           // right as the customer returns from their UPI app), those two
           // match-quality signals are lost for that event. Stashing them in
           // notes here means the webhook has them either way.
-          fbp: (/(?:^|;\s*)_fbp=([^;]+)/.exec(document.cookie)?.[1]) || '',
-          fbc: (/(?:^|;\s*)_fbc=([^;]+)/.exec(document.cookie)?.[1]) || '',
+          // fbp + fbc share one key ("fbp|fbc") so the item list can spill
+          // into `items_2` without going over the 15-key cap.
+          fb: `${(/(?:^|;\s*)_fbp=([^;]+)/.exec(document.cookie)?.[1]) || ''}|${((/(?:^|;\s*)_fbc=([^;]+)/.exec(document.cookie)?.[1]) || '').slice(0, 180)}`,
+          // Razorpay caps each notes value at 256 chars — a big basket was
+          // being cut off mid-item (e.g. "1x Dat"). Split across two keys;
+          // the webhook joins them back.
           items: items.map(i => `${i.quantity}x ${i.name} (${i.selectedWeight || i.weight})`).join(', ').slice(0, 250),
+          items_2: items.map(i => `${i.quantity}x ${i.name} (${i.selectedWeight || i.weight})`).join(', ').slice(250, 500),
           subtotal: `Rs.${total}`, shipping: `Rs.${shippingFee ?? 0}`,
           grand_total: `Rs.${grandTotal}`, total_weight: `${totalWeight}g`,
         },
