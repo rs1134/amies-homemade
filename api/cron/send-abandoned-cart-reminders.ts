@@ -123,6 +123,26 @@ export default async function handler(req: any, res: any) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
+  // Site health check piggybacking on this daily cron: if the product-photo
+  // host stops serving (e.g. ImageKit account suspended) every product image
+  // on the site goes blank — alert the owner instead of letting them find out
+  // by opening the site.
+  try {
+    const probe = await fetch(
+      'https://ik.imagekit.io/amieshomemade/Amie_s%20Homemade%20Cranberry%20Mukhwaas%20Display.png',
+      { method: 'HEAD' },
+    );
+    if (!probe.ok) {
+      await fetch('https://ntfy.sh/amies-homemade-9157537842', {
+        method: 'POST',
+        body: `Product photos are NOT loading on amieshomemade.com (image host returned ${probe.status}). Check the ImageKit account/billing now.`,
+        headers: { 'Title': 'ALERT: website photos down', 'Priority': 'urgent', 'Tags': 'rotating_light' },
+      });
+    }
+  } catch (err: any) {
+    console.error('[abandoned-cart-cron] image health check failed:', err.message);
+  }
+
   const dbUrl = process.env.DATABASE_URL;
   if (!dbUrl) {
     console.error('[abandoned-cart-cron] DATABASE_URL not set');
