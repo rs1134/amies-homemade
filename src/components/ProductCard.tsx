@@ -92,7 +92,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onOpen,
               onError={() => setImageError(true)}
               loading="lazy"
               decoding="async"
-              className={`w-full h-full object-cover transition-transform duration-300 ${isOOS ? 'grayscale' : 'group-hover:scale-105'}`}
+              className={`w-full h-full object-cover transition-transform duration-300 ${isOOS ? '' : 'group-hover:scale-105'}`}
             />
             {/* Second photo — preloaded eagerly so it's in cache on hover */}
             {hasMultiplePhotos && !isOOS && (
@@ -115,8 +115,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart, onOpen,
 
         {/* Out of stock overlay */}
         {isOOS && (
-          <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-            <span className="px-5 py-2 bg-white text-[#4A3728] rounded-full text-[11px] font-black uppercase tracking-widest shadow-lg border-2 border-[#4A3728]/10">
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <span className="px-5 py-2 bg-white text-[#4A3728] rounded-full text-xs font-black uppercase tracking-widest shadow-xl border-2 border-[#4A3728]/20">
               Out of Stock
             </span>
           </div>
