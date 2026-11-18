@@ -1587,6 +1587,8 @@ const App: React.FC = () => {
             </div>
           </section>
 
+          <VideoGallery />
+
           {/* ── Meet the Maker — founder trust section ──────────────────────── */}
           <section className="relative bg-gradient-to-b from-[#FFF8EE] via-[#E5EBDB] to-[#FFF8EE] py-16 sm:py-28 px-4 sm:px-6 lg:px-8 overflow-hidden">
             <div className="pointer-events-none absolute top-1/4 -left-24 w-[34rem] h-[34rem] rounded-full bg-[#F6C94C]/8 blur-3xl" />
@@ -1657,8 +1659,6 @@ const App: React.FC = () => {
               </div>
             </div>
           </section>
-
-          <VideoGallery />
 
           <Reviews />
         </>
