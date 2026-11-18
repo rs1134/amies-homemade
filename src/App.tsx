@@ -18,6 +18,7 @@ import ShopfloCheckoutView from './components/ShopfloCheckoutView.tsx';
 import Cart from './components/Cart.tsx';
 import Footer from './components/Footer.tsx';
 import Reviews from './components/Reviews.tsx';
+import VideoGallery from './components/VideoGallery.tsx';
 import AreaDeliveryPage from './components/AreaDeliveryPage.tsx';
 import CityDeliveryPage from './components/CityDeliveryPage.tsx';
 import BlogView from './components/BlogView.tsx';
@@ -1656,6 +1657,8 @@ const App: React.FC = () => {
               </div>
             </div>
           </section>
+
+          <VideoGallery />
 
           <Reviews />
         </>
