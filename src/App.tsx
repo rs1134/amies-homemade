@@ -268,7 +268,7 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, o
           const isActive = activeCategory === cat;
           const isOpen = !isAll && openCat === cat;
           const isGifting = cat === Category.GIFTING;
-          const catLabel = isAll ? 'All' : isGifting ? 'Diwali Gift Hampers' : (CATEGORY_DISPLAY_LABEL[cat as Category] ?? cat);
+          const catLabel = isAll ? 'All' : isGifting ? 'Festive Gift Hampers' : (CATEGORY_DISPLAY_LABEL[cat as Category] ?? cat);
 
           return (
             <div
@@ -415,26 +415,13 @@ const CategoryFilterBar: React.FC<CategoryFilterBarProps> = ({ activeCategory, o
 const CART_STORAGE_KEY = 'amies_cart_v1';
 const COUPON_APPLIED_KEY = 'amies_coupon_applied_v1';
 
-// Names of out-of-stock items dropped from a saved bag when the page loaded,
-// shown once as a notice so the customer isn't surprised by a changed bag.
-let removedOutOfStockNames: string[] = [];
-
 const loadSavedCart = (): CartItem[] => {
   try {
     const saved = localStorage.getItem(CART_STORAGE_KEY);
     if (!saved) return [];
     const items: CartItem[] = JSON.parse(saved);
-    // Drop items for products that no longer exist on the site, and items that
-    // have since gone out of stock (a bag saved in the customer's browser would
-    // otherwise keep them, and checkout never re-checks stock).
-    const kept: CartItem[] = [];
-    for (const i of items) {
-      const product = PRODUCTS.find(p => p.id === i.id);
-      if (!product) continue;
-      if (product.outOfStock) { removedOutOfStockNames.push(product.name); continue; }
-      kept.push(i);
-    }
-    return kept;
+    // Drop items for products that no longer exist on the site
+    return items.filter(i => PRODUCTS.some(p => p.id === i.id));
   } catch {
     return [];
   }
@@ -465,19 +452,18 @@ const App: React.FC = () => {
   const [orderComplete, setOrderComplete] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [addedToast, setAddedToast] = useState<string | null>(null);
-  useEffect(() => {
-    if (removedOutOfStockNames.length === 0) return;
-    const names = Array.from(new Set(removedOutOfStockNames));
-    removedOutOfStockNames = [];
-    setAddedToast(`${names.join(', ')} ${names.length > 1 ? 'are' : 'is'} out of stock — removed from your bag`);
-  }, []);
   // Small "Chat with us" bubble over the floating WhatsApp button. On mobile the
   // button is icon-only (the text pill is sm+ only), so this nudges people to
+<<<<<<< Updated upstream
   // notice it. Shows once per session after a short delay, auto-hides after 10s, and
+=======
+  // notice it. Shows once per session after a short delay, auto-hides, and
+>>>>>>> Stashed changes
   // stays gone once dismissed or after the first showing.
   const [showChatHint, setShowChatHint] = useState(false);
   useEffect(() => {
     try { if (sessionStorage.getItem('chatHintSeen') === '1') return; } catch { /* ignore */ }
+<<<<<<< Updated upstream
     let hideTimer: ReturnType<typeof setTimeout> | undefined;
     const showTimer = setTimeout(() => {
       setShowChatHint(true);
@@ -486,6 +472,14 @@ const App: React.FC = () => {
       hideTimer = setTimeout(() => setShowChatHint(false), 10000);
     }, 3000);
     return () => { clearTimeout(showTimer); if (hideTimer) clearTimeout(hideTimer); };
+=======
+    const showTimer = setTimeout(() => {
+      setShowChatHint(true);
+      try { sessionStorage.setItem('chatHintSeen', '1'); } catch { /* ignore */ }
+    }, 3000);
+    const hideTimer = setTimeout(() => setShowChatHint(false), 12000);
+    return () => { clearTimeout(showTimer); clearTimeout(hideTimer); };
+>>>>>>> Stashed changes
   }, []);
   // Private Shopflo test switch — loading the site once with "?checkout=shopflo"
   // flips this tab (only) onto the Shopflo checkout, regardless of the
@@ -505,6 +499,27 @@ const App: React.FC = () => {
     try { sessionStorage.setItem('forceShopfloCheckout', '1'); } catch { /* ignore */ }
     setForceShopfloCheckout(true);
   }, []);
+  // Start loading Shopflo's SDK the moment there's something in the cart,
+  // instead of waiting until the customer actually lands on /checkout —
+  // ShopfloCheckoutView's own auto-launch effect used to be the first thing
+  // to request this script, so every checkout visit paid its full load time
+  // before the payment overlay could open. Loading it this early means it's
+  // very likely already cached and ready by the time "Set Delivery Info" is
+  // clicked. Guarded by document.getElementById so this is a genuine no-op
+  // once ShopfloCheckoutView's own loader (same script, same id) runs later.
+  useEffect(() => {
+    const usingShopflo = forceShopfloCheckout || import.meta.env.VITE_CHECKOUT_PROVIDER === 'shopflo';
+    if (!usingShopflo || cart.length === 0) return;
+    if (window.Shopflo || document.getElementById('shopflo-sdk')) return;
+    const SHOPFLO_MERCHANT_ID = '5f263146-6556-4071-a0ec-a0577ea274d7';
+    const d = document.createElement('script');
+    d.id = 'shopflo-sdk';
+    d.async = true;
+    d.src = 'https://bridge.shopflo.com/v2/shopflo.js';
+    (window as any).Shopflo = (window as any).Shopflo || { m_id: SHOPFLO_MERCHANT_ID };
+    document.head.appendChild(d);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cart.length, forceShopfloCheckout]);
   // Persist cart so it survives refresh / accidental tab close
   useEffect(() => {
     try {
@@ -1062,9 +1077,6 @@ const App: React.FC = () => {
   }, [activeCategory]);
 
   const addToCart = useCallback((product: Product, weight?: string, subOptionName?: string, openCart: boolean = false) => {
-    // Single gate for every way an item can be added (product cards, quick-add,
-    // reminder/restore links, hamper builder): out-of-stock items never enter the bag.
-    if (product.outOfStock) return;
     const finalWeight = weight || product.weight;
     
     // Determine the active price based on variety selection or defaults
@@ -1294,7 +1306,7 @@ const App: React.FC = () => {
               {activeCategory === Category.GIFTING ? (
                 <>
                   <span className="brand-rounded text-[#B8892A] font-bold text-xs uppercase tracking-[0.3em]">Fresh from Our Kitchen</span>
-                  <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-[#4A3728] serif mt-4 leading-tight">Celebrate the Art of Gifting</h2>
+                  <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-[#4A3728] serif mt-4 leading-tight">The Art of Diwali Gifting</h2>
                   <div className="w-20 h-1.5 bg-[#D4AF37] rounded-full mx-auto md:mx-0 mt-4"></div>
                 </>
               ) : (
@@ -1701,10 +1713,18 @@ const App: React.FC = () => {
       {/* Fixed floating buttons live outside <main> so the footer's z-40 stacking context can't cover them.
           Hidden on mobile checkout — the sticky pay bar occupies that same bottom-of-screen
           strip there, and the two would visually collide. */}
+<<<<<<< Updated upstream
       <DiwaliOfferPopup
         suppressed={isCartOpen || ['checkout', 'terms', 'privacyPolicy', 'refundPolicy', 'cancellationPolicy'].includes(currentPage)}
+        onShop={() => {
+          navigate('shop'); // Shop All, not just the hampers
+          // Make sure the shop opens at the very top once it has rendered.
+          setTimeout(() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior }), 50);
+        }}
       />
 
+=======
+>>>>>>> Stashed changes
       {showChatHint && currentPage !== 'checkout' && (
         <div className="fixed bottom-[4.9rem] right-3 z-50 sm:hidden animate-in fade-in slide-in-from-bottom-2 duration-300">
           <div className="relative bg-white text-[#4A3728] rounded-2xl shadow-xl border border-[#4A3728]/10 flex items-center pl-3.5 pr-1.5 py-1.5">
