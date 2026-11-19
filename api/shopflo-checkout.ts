@@ -8,13 +8,13 @@ import crypto from 'crypto';
 // ("Cranberry Mix") for the order notification. Keep in sync with
 // src/constants.ts if a product is added, renamed, or removed.
 const PRODUCT_NAMES: Record<string, string> = {
-  g6: 'The Ultimate Diwali Luxury Hamper',
-  g7: 'The Royal Diwali Hamper',
+  g6: 'The Ultimate Festive Luxury Hamper',
+  g7: 'The Royal Festive Hamper',
   g8: 'The Diwali Sweet & Savoury Hamper',
   g9: 'The Diwali Sweet Celebrations Hamper',
   g10: 'The Royal Mithai Duo',
   g11: 'Diwali Special Dryfruit Ghughra Tin',
-  g12: 'The Diwali Elegance Hamper',
+  g12: 'The Festive Elegance Hamper',
   g4: 'Trio of Traditions',
   g5: 'The Gourmet Discovery',
   g1: 'The Royal Heritage Box',

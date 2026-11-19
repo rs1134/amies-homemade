@@ -9,8 +9,8 @@ const tr = (url: string, w: number) => `${url.split('?')[0]}?tr=w-${w},q-80,f-au
 
 // Three real hamper photos rotating behind one fixed headline.
 const SLIDES: { id: string; image: string; alt: string }[] = [
-  { id: 'g6', image: 'https://ik.imagekit.io/amieshomemade/067A8538.JPG', alt: 'The Ultimate Diwali Luxury Hamper' },
-  { id: 'g7', image: 'https://ik.imagekit.io/amieshomemade/067A8560.JPG', alt: 'The Royal Diwali Hamper' },
+  { id: 'g6', image: 'https://ik.imagekit.io/amieshomemade/067A8538.JPG', alt: 'The Ultimate Festive Luxury Hamper' },
+  { id: 'g7', image: 'https://ik.imagekit.io/amieshomemade/067A8560.JPG', alt: 'The Royal Festive Hamper' },
   { id: 'g9', image: 'https://ik.imagekit.io/amieshomemade/067A8608.JPG?updatedAt=1790662993420', alt: 'The Diwali Sweet Celebrations Hamper' },
 ];
 
