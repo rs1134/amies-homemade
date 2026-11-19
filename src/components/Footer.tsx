@@ -13,6 +13,7 @@ interface ModalProps {
 
 interface FooterProps {
   onNavigate?: (page: string) => void;
+  onGiftHampersClick?: () => void;
 }
 
 const PolicyModal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, icon }) => {
@@ -50,7 +51,7 @@ const PolicyModal: React.FC<ModalProps> = ({ isOpen, onClose, title, children, i
   );
 };
 
-const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
+const Footer: React.FC<FooterProps> = ({ onNavigate, onGiftHampersClick }) => {
   const [activeModal, setActiveModal] = useState<'privacy' | 'shipping' | null>(() => {
     const hash = window.location.hash;
     if (hash === '#shipping') return 'shipping';
@@ -121,7 +122,7 @@ const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             <h4 className="text-sm font-bold uppercase tracking-[0.2em] mb-8 text-[#F14E4E]">Quick Links</h4>
             <ul className="space-y-4 text-white/60 text-lg font-medium">
               <li><a href="/shop" onClick={(e) => { e.preventDefault(); handleNav('shop'); }} className="hover:text-white transition-colors">Shop Collection</a></li>
-              <li><a href="/gifting" onClick={(e) => { e.preventDefault(); handleNav('gifting'); }} className="hover:text-white transition-colors">Gift Hampers</a></li>
+              <li><a href="/shop/hampers" onClick={(e) => { e.preventDefault(); if (onGiftHampersClick) { onGiftHampersClick(); window.scrollTo({ top: 0, behavior: 'smooth' }); } else { handleNav('shop'); } }} className="hover:text-white transition-colors">Gift Hampers</a></li>
               <li><a href="/about" onClick={(e) => { e.preventDefault(); handleNav('about'); }} className="hover:text-white transition-colors">Our Story</a></li>
               <li><a href="/contact" onClick={(e) => { e.preventDefault(); handleNav('contact'); }} className="hover:text-white transition-colors">Wholesale Inquiry</a></li>
               <li><a href="/blog" onClick={(e) => { e.preventDefault(); handleNav('blog'); }} className="hover:text-white transition-colors">The Journal</a></li>

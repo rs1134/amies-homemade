@@ -1696,7 +1696,7 @@ const App: React.FC = () => {
         {renderPage()}
       </main>
 
-      <Footer onNavigate={navigate} />
+      <Footer onNavigate={navigate} onGiftHampersClick={() => navigateToCategory(Category.GIFTING)} />
 
       {/* Fixed floating buttons live outside <main> so the footer's z-40 stacking context can't cover them.
           Hidden on mobile checkout — the sticky pay bar occupies that same bottom-of-screen
