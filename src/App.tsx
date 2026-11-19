@@ -1294,7 +1294,7 @@ const App: React.FC = () => {
               {activeCategory === Category.GIFTING ? (
                 <>
                   <span className="brand-rounded text-[#B8892A] font-bold text-xs uppercase tracking-[0.3em]">Fresh from Our Kitchen</span>
-                  <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-[#4A3728] serif mt-4 leading-tight">The Art of Diwali Gifting</h2>
+                  <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-[#4A3728] serif mt-4 leading-tight">The Art of Festive Gifting</h2>
                   <div className="w-20 h-1.5 bg-[#D4AF37] rounded-full mx-auto md:mx-0 mt-4"></div>
                 </>
               ) : (
