@@ -455,16 +455,11 @@ const App: React.FC = () => {
   const [addedToast, setAddedToast] = useState<string | null>(null);
   // Small "Chat with us" bubble over the floating WhatsApp button. On mobile the
   // button is icon-only (the text pill is sm+ only), so this nudges people to
-<<<<<<< Updated upstream
   // notice it. Shows once per session after a short delay, auto-hides after 10s, and
-=======
-  // notice it. Shows once per session after a short delay, auto-hides, and
->>>>>>> Stashed changes
   // stays gone once dismissed or after the first showing.
   const [showChatHint, setShowChatHint] = useState(false);
   useEffect(() => {
     try { if (sessionStorage.getItem('chatHintSeen') === '1') return; } catch { /* ignore */ }
-<<<<<<< Updated upstream
     let hideTimer: ReturnType<typeof setTimeout> | undefined;
     const showTimer = setTimeout(() => {
       setShowChatHint(true);
@@ -473,14 +468,6 @@ const App: React.FC = () => {
       hideTimer = setTimeout(() => setShowChatHint(false), 10000);
     }, 3000);
     return () => { clearTimeout(showTimer); if (hideTimer) clearTimeout(hideTimer); };
-=======
-    const showTimer = setTimeout(() => {
-      setShowChatHint(true);
-      try { sessionStorage.setItem('chatHintSeen', '1'); } catch { /* ignore */ }
-    }, 3000);
-    const hideTimer = setTimeout(() => setShowChatHint(false), 12000);
-    return () => { clearTimeout(showTimer); clearTimeout(hideTimer); };
->>>>>>> Stashed changes
   }, []);
   // Private Shopflo test switch — loading the site once with "?checkout=shopflo"
   // flips this tab (only) onto the Shopflo checkout, regardless of the
@@ -1716,7 +1703,6 @@ const App: React.FC = () => {
       {/* Fixed floating buttons live outside <main> so the footer's z-40 stacking context can't cover them.
           Hidden on mobile checkout — the sticky pay bar occupies that same bottom-of-screen
           strip there, and the two would visually collide. */}
-<<<<<<< Updated upstream
       <DiwaliOfferPopup
         suppressed={isCartOpen || ['checkout', 'terms', 'privacyPolicy', 'refundPolicy', 'cancellationPolicy'].includes(currentPage)}
         onShop={() => {
@@ -1726,8 +1712,6 @@ const App: React.FC = () => {
         }}
       />
 
-=======
->>>>>>> Stashed changes
       {showChatHint && currentPage !== 'checkout' && (
         <div className="fixed bottom-[4.9rem] right-3 z-50 sm:hidden animate-in fade-in slide-in-from-bottom-2 duration-300">
           <div className="relative bg-white text-[#4A3728] rounded-2xl shadow-xl border border-[#4A3728]/10 flex items-center pl-3.5 pr-1.5 py-1.5">
