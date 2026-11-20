@@ -102,7 +102,6 @@ const ReelCard: React.FC<{ reel: ReelVideo }> = ({ reel }) => {
           </button>
         )}
       </div>
-      <p className="mt-3 text-sm font-bold serif text-[#4A3728] leading-snug">{reel.title}</p>
     </div>
   );
 };
