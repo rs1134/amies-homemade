@@ -8,7 +8,7 @@ interface Props {
   suppressed: boolean;
 }
 
-// First-visit Diwali offer pop-up. Listed prices on the site are already ~10%
+// First-visit introductory offer pop-up. Listed prices on the site are already ~10%
 // below MRP, so no code is needed. Shows once per visit (browser session), after
 // a short delay. The only control is the close (×) button.
 const DiwaliOfferPopup: React.FC<Props> = ({ suppressed }) => {
@@ -47,7 +47,7 @@ const DiwaliOfferPopup: React.FC<Props> = ({ suppressed }) => {
       onClick={close}
       role="dialog"
       aria-modal="true"
-      aria-label="Diwali special offer"
+      aria-label="Limited time introductory offer"
     >
       <div
         className="relative w-full max-w-[19rem] sm:max-w-md rounded-[1.25rem] sm:rounded-[1.5rem] bg-[#F04E4E] shadow-2xl px-4 sm:px-7 pt-6 sm:pt-8 pb-5 sm:pb-7 animate-in zoom-in-95 duration-300"
@@ -63,7 +63,7 @@ const DiwaliOfferPopup: React.FC<Props> = ({ suppressed }) => {
         </button>
 
         <span className="inline-block rounded-full bg-[#FFF8EE] text-[#F04E4E] brand-rounded font-black text-[10px] sm:text-xs uppercase tracking-[0.2em] px-3 sm:px-4 py-1.5 sm:py-2">
-          Diwali Special
+          Limited Time Offer
         </span>
 
         <h2 className="brand-rounded font-black leading-[0.95] tracking-tight mt-3 sm:mt-5 text-[2.1rem] sm:text-[3.2rem]">
@@ -86,8 +86,8 @@ const DiwaliOfferPopup: React.FC<Props> = ({ suppressed }) => {
           <div className="relative w-[34%] flex flex-col items-center justify-center text-center border-l-2 border-dashed border-[#4A3728]/25 px-2 py-3">
             <span className="absolute -top-2 left-[-9px] w-4 h-4 rounded-full bg-[#F04E4E]" />
             <span className="absolute -bottom-2 left-[-9px] w-4 h-4 rounded-full bg-[#F04E4E]" />
-            <p className="brand-rounded font-black text-[8px] sm:text-[10px] uppercase tracking-[0.2em] text-[#4A3728]/70">Happy</p>
-            <p className="brand-rounded font-black text-base sm:text-2xl text-[#F04E4E] leading-none mt-0.5">Diwali</p>
+            <p className="brand-rounded font-black text-[8px] sm:text-[10px] uppercase tracking-[0.2em] text-[#4A3728]/70">Introductory</p>
+            <p className="brand-rounded font-black text-base sm:text-2xl text-[#F04E4E] leading-none mt-0.5">Offer</p>
           </div>
         </div>
       </div>
