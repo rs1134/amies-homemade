@@ -413,6 +413,7 @@ export const PRODUCTS: Product[] = [
     name: 'Dryfruit and Seeds',
     category: Category.MUKHWAS,
     price: 299,
+    mrp: 329,
     weight: '190 G',
     description: 'More than just a mukhwas, this premium blend combines roasted almonds, cashews, dates, rose petals, and wholesome seeds for the perfect balance of crunch and natural sweetness. Rich, satisfying, and crafted to keep you energized throughout the day.',
     image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(36)_aAxJbrDew.jpg',
