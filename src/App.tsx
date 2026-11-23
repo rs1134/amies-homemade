@@ -1664,7 +1664,7 @@ const App: React.FC = () => {
                 style={{ fontFamily: 'Georgia, "Times New Roman", serif', letterSpacing: '0.01em' }}
                 aria-hidden={i === 1}
               >
-                <span className="px-10">✦ Festive Special Offer: 10% OFF on All Products · Limited Time</span>
+                <span className="px-10">✦ Limited Time Introductory Offer: 10% OFF on All Products</span>
                 <span className="text-white/50">|</span>
                 <span className="px-10">Cash on Delivery Now Available in Ahmedabad</span>
                 <span className="text-white/50">|</span>

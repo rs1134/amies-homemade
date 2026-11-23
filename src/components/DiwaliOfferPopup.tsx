@@ -67,7 +67,7 @@ const DiwaliOfferPopup: React.FC<Props> = ({ suppressed }) => {
         </span>
 
         <h2 className="brand-rounded font-black leading-[0.95] tracking-tight mt-3 sm:mt-5 text-[2.1rem] sm:text-[3.2rem]">
-          <span className="block text-white">Festive offer.</span>
+          <span className="block text-white">Welcome offer.</span>
           <span className="block text-[#FFE9B8]">Save more.</span>
         </h2>
 
