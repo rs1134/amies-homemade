@@ -55,6 +55,11 @@ const REELS: ReelVideo[] = [
     poster: 'https://pylrhmzbpym3sbxd.public.blob.vercel-storage.com/video6-poster-v2.jpg',
     title: 'Straight From the Kitchen',
   },
+  {
+    id: 'reel-8',
+    url: 'https://ik.imagekit.io/amieshomemade/0BAC5AEA-2AC3-4E93-965C-11AA6622FA80.mp4',
+    title: 'Loved by Our Community',
+  },
 ];
 
 // ImageKit can extract a real thumbnail frame from a hosted video by
