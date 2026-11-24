@@ -1666,7 +1666,7 @@ const App: React.FC = () => {
               >
                 <span className="px-10">✦ Limited Time Introductory Offer: 10% OFF on All Products</span>
                 <span className="text-white/50">|</span>
-                <span className="px-10">Cash on Delivery Now Available in Ahmedabad</span>
+                <span className="px-10">Free Pan India Shipping Above ₹999</span>
                 <span className="text-white/50">|</span>
               </div>
             ))}
