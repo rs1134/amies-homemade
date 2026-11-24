@@ -267,6 +267,16 @@ export default async function handler(req: any, res: any) {
   };
 
   const notes = payment.notes || {};
+
+  // Shopflo takes payment through our Razorpay account, so Razorpay fires this
+  // webhook for those payments too — but without any of OUR checkout details
+  // (name, items, totals). Shopflo's own order webhook already records and
+  // notifies the real order, so logging this one only makes a duplicate
+  // "Unknown" order with no items. Our own checkout always sets these notes.
+  if (!notes.customer_name && !notes.items && !notes.grand_total) {
+    console.log(`[razorpay-webhook] payment ${payment.id} has no checkout notes (Shopflo-routed) - skipping`);
+    return res.status(200).json({ ok: true, skipped: 'no checkout notes' });
+  }
   const orderId = `AM-WH${String(payment.id).slice(-5)}`;
   const name = notes.customer_name || 'Unknown';
   const phone = notes.phone || payment.contact || '';
