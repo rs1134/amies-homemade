@@ -219,7 +219,7 @@ export const PRODUCTS: Product[] = [
     rating: 4.5, reviewCount: 34
   },
   {
-    id: 'm2', outOfStock: true,
+    id: 'm2',
     name: 'Chatpati Mango',
     category: Category.MUKHWAS,
     price: 264,
