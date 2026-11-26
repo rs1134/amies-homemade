@@ -8,7 +8,7 @@ interface AboutUsProps {
 
 // ── Founder photography (new shoot, sage studio backdrop) ──
 const FOUNDER_MAIN = 'https://ik.imagekit.io/amieshomemade/067A4315-1.jpg';
-const FOUNDER_CANDID = 'https://ik.imagekit.io/amieshomemade/067A4339-1.jpg';
+const FOUNDER_CANDID = 'https://ik.imagekit.io/amieshomemade/IMG_1540%202.HEIC'; // stall photo (portrait); ImageKit serves it as JPEG
 const img = (u: string, w: number) => `${u}?tr=w-${w},q-80,f-auto`;
 
 // ── Hand-drawn ingredient illustrations (original SVG, license-free) ──
@@ -138,12 +138,12 @@ const AboutUs: React.FC<AboutUsProps> = ({ onNavigate }) => {
       <section className="relative bg-[#3D2D1F] text-[#FFF8EE] overflow-hidden py-12 sm:py-20">
         <div className="pointer-events-none absolute top-0 right-1/4 w-[34rem] h-[34rem] rounded-full bg-[#F6C94C]/10 blur-3xl" />
         <div className="relative max-w-6xl mx-auto grid lg:grid-cols-2 items-center gap-8 lg:gap-14 px-4 sm:px-6 lg:px-12">
-          <div className="relative">
+          <div className="relative mx-auto w-full max-w-md lg:max-w-none">
             <img
               src={img(FOUNDER_CANDID, 1000)}
               srcSet={`${img(FOUNDER_CANDID, 600)} 600w, ${img(FOUNDER_CANDID, 1000)} 1000w`}
               sizes="(max-width: 1024px) 100vw, 50vw"
-              alt="Ami Shah with the Amie's Homemade range"
+              alt="Ami Shah at the Amie's Homemade stall"
               className="w-full h-auto block rounded-[1.5rem] shadow-2xl ring-1 ring-white/10"
               loading="lazy"
               decoding="async"
