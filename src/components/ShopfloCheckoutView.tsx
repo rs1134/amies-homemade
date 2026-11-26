@@ -198,6 +198,14 @@ const ShopfloCheckoutView: React.FC<ShopfloCheckoutViewProps> = ({ items, total,
         >
           {isSubmitting || !sdkReady ? <Loader2 size={18} className="animate-spin" /> : <>Checkout <ChevronRight size={18} /></>}
         </button>
+        {/* Way out of this page — the customer lands here after closing
+            Shopflo's window, and there was no other way back from it. */}
+        <button
+          onClick={() => onShopClick?.()}
+          className="mt-5 text-[11px] font-bold brand-rounded uppercase tracking-[0.15em] text-[#4A3728]/60 hover:text-[#4A3728] underline underline-offset-4 transition-colors"
+        >
+          ← Continue shopping
+        </button>
       </div>
     </div>
   );
