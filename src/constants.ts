@@ -272,7 +272,7 @@ export const PRODUCTS: Product[] = [
     image: 'https://ik.imagekit.io/amieshomemade/Icy%20Blue%20Snowflake%20Mukhwaas%20Jars.png',
     images: [
       'https://ik.imagekit.io/amieshomemade/Icy%20Blue%20Snowflake%20Mukhwaas%20Jars.png',
-      'https://ik.imagekit.io/amieshomemade/Winter%20Wellness%20Combo%20Jars.png',
+      'https://ik.imagekit.io/amieshomemade/Winter%20Wellness%20Combo%20Advertisement.png',
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(6)_Pmm7gKkpw.jpg',
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(21)_rjiVJVPS3.jpg',
     ],
