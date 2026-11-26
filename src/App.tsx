@@ -1583,10 +1583,10 @@ const App: React.FC = () => {
               <div className="relative mx-auto w-full max-w-md lg:max-w-none order-1">
                 <div className="relative rounded-[1.75rem] overflow-hidden shadow-[0_40px_80px_-25px_rgba(74,55,40,0.45)] ring-1 ring-white/60">
                   <img
-                    src="https://ik.imagekit.io/amieshomemade/067A4339-1.jpg?tr=w-1000,q-80,f-auto"
-                    srcSet="https://ik.imagekit.io/amieshomemade/067A4339-1.jpg?tr=w-600,q-80,f-auto 600w, https://ik.imagekit.io/amieshomemade/067A4339-1.jpg?tr=w-1000,q-80,f-auto 1000w"
+                    src="https://ik.imagekit.io/amieshomemade/IMG_1753%202.HEIC?tr=w-1000,q-80,f-auto"
+                    srcSet="https://ik.imagekit.io/amieshomemade/IMG_1753%202.HEIC?tr=w-600,q-80,f-auto 600w, https://ik.imagekit.io/amieshomemade/IMG_1753%202.HEIC?tr=w-1000,q-80,f-auto 1000w"
                     sizes="(max-width: 1024px) 90vw, 44vw"
-                    alt="Ami Shah, founder of Amie's Homemade, with the full product range"
+                    alt="Ami Shah, founder of Amie's Homemade, holding a jar of her mukhwas in a store"
                     className="w-full h-auto block"
                     loading="lazy"
                     decoding="async"
