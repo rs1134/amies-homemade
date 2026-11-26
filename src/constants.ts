@@ -275,6 +275,7 @@ export const PRODUCTS: Product[] = [
       'https://ik.imagekit.io/amieshomemade/Winter%20Wellness%20Combo%20Advertisement.png',
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(6).png?updatedAt=1785423409715',
       'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(22)_JbSpZiuRjA.jpg?updatedAt=1783678133396',
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png?updatedAt=1782705910617',
     ],
     ingredients: ['Amla', 'Ginger', 'Beet', 'Salt', 'Sugar', 'Black Pepper', 'Black Salt'],
     prices: { '200 G': 299 },
