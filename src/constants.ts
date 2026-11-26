@@ -273,8 +273,8 @@ export const PRODUCTS: Product[] = [
     images: [
       'https://ik.imagekit.io/amieshomemade/Icy%20Blue%20Snowflake%20Mukhwaas%20Jars.png',
       'https://ik.imagekit.io/amieshomemade/Winter%20Wellness%20Combo%20Advertisement.png',
-      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(6)_Pmm7gKkpw.jpg',
-      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(21)_rjiVJVPS3.jpg',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(6).png?updatedAt=1785423409715',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(22)_JbSpZiuRjA.jpg?updatedAt=1783678133396',
     ],
     ingredients: ['Amla', 'Ginger', 'Beet', 'Salt', 'Sugar', 'Black Pepper', 'Black Salt'],
     prices: { '200 G': 299 },
