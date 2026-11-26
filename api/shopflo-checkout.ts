@@ -31,6 +31,7 @@ const PRODUCT_NAMES: Record<string, string> = {
   sf3: 'Kharek Coconut Almond',
   m8: 'Date & Almond',
   m11: 'Amla Ginger Beet',
+  m15: 'Winter Wellness Combo',
   m9: 'Tender Coconut Chocolate Chips',
   m14: 'Everyday Mukhwas Trio',
   sw1: 'Pista Ghugra / Rava Dryfruit Ghugra',

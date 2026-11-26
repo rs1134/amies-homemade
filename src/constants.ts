@@ -261,6 +261,25 @@ export const PRODUCTS: Product[] = [
     rating: 4.5, reviewCount: 38
   },
   {
+    id: 'm15',
+    name: 'Winter Wellness Combo',
+    category: Category.MUKHWAS,
+    price: 299,
+    mrp: 360,
+    weight: '200 G',
+    isNew: true,
+    description: "A winter tradition in a jar, twice over. Two of our amla mukhwas in one combo: Amla Ginger, a light, tangy blend of amla and ginger, and Amla Ginger Beet, bold and naturally sweet with the added goodness of beetroot. Amla is in season right now and is rich in vitamin C, and ginger adds a warming kick, so this duo is a lovely after-meal habit for the colder months, and an easy gift for someone you care about.",
+    image: 'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(6)_Pmm7gKkpw.jpg',
+    images: [
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(6)_Pmm7gKkpw.jpg',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(21)_rjiVJVPS3.jpg',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(6).png',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(22)_JbSpZiuRjA.jpg',
+    ],
+    ingredients: ['Amla', 'Ginger', 'Beet', 'Salt', 'Sugar', 'Black Pepper', 'Black Salt'],
+    prices: { '200 G': 299 },
+  },
+  {
     id: 'm4',
     name: 'Tender Coconut Vanilla Chips',
     category: Category.MUKHWAS,
