@@ -261,26 +261,6 @@ export const PRODUCTS: Product[] = [
     rating: 4.5, reviewCount: 38
   },
   {
-    id: 'm15',
-    name: 'Winter Wellness Combo',
-    category: Category.MUKHWAS,
-    price: 299,
-    mrp: 360,
-    weight: '200 G',
-    isNew: true,
-    description: "A winter tradition in a jar, twice over. Two of our amla mukhwas in one combo: Amla Ginger, a light, tangy blend of amla and ginger, and Amla Ginger Beet, bold and naturally sweet with the added goodness of beetroot. Amla is in season right now and is rich in vitamin C, and ginger adds a warming kick, so this duo is a lovely after-meal habit for the colder months, and an easy gift for someone you care about.",
-    image: 'https://ik.imagekit.io/amieshomemade/Icy%20Blue%20Snowflake%20Mukhwaas%20Jars.png',
-    images: [
-      'https://ik.imagekit.io/amieshomemade/Icy%20Blue%20Snowflake%20Mukhwaas%20Jars.png',
-      'https://ik.imagekit.io/amieshomemade/Winter%20Wellness%20Combo%20Advertisement.png',
-      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(6).png?updatedAt=1785423409715',
-      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(22)_JbSpZiuRjA.jpg?updatedAt=1783678133396',
-      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png?updatedAt=1782705910617',
-    ],
-    ingredients: ['Amla', 'Ginger', 'Beet', 'Salt', 'Sugar', 'Black Pepper', 'Black Salt'],
-    prices: { '200 G': 299 },
-  },
-  {
     id: 'm4',
     name: 'Tender Coconut Vanilla Chips',
     category: Category.MUKHWAS,
@@ -855,7 +835,27 @@ export const PRODUCTS: Product[] = [
     prices: { '250 G': 399 },
     shelfLife: '1 year',
     rating: 4.5, reviewCount: 31
-  }
+  },
+  {
+    id: 'm15',
+    name: 'Winter Wellness Combo',
+    category: Category.MUKHWAS,
+    price: 299,
+    mrp: 360,
+    weight: '200 G',
+    isNew: true,
+    description: "A winter tradition in a jar, twice over. Two of our amla mukhwas in one combo: Amla Ginger, a light, tangy blend of amla and ginger, and Amla Ginger Beet, bold and naturally sweet with the added goodness of beetroot. Amla is in season right now and is rich in vitamin C, and ginger adds a warming kick, so this duo is a lovely after-meal habit for the colder months, and an easy gift for someone you care about.",
+    image: 'https://ik.imagekit.io/amieshomemade/Icy%20Blue%20Snowflake%20Mukhwaas%20Jars.png',
+    images: [
+      'https://ik.imagekit.io/amieshomemade/Icy%20Blue%20Snowflake%20Mukhwaas%20Jars.png',
+      'https://ik.imagekit.io/amieshomemade/Winter%20Wellness%20Combo%20Advertisement.png',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(6).png?updatedAt=1785423409715',
+      'https://ik.imagekit.io/amieshomemade/Untitled%20design%20(22)_JbSpZiuRjA.jpg?updatedAt=1783678133396',
+      'https://ik.imagekit.io/amieshomemade/ChatGPT%20Image%20Jun%2028,%202026,%2009_58_40%20AM.png?updatedAt=1782705910617',
+    ],
+    ingredients: ['Amla', 'Ginger', 'Beet', 'Salt', 'Sugar', 'Black Pepper', 'Black Salt'],
+    prices: { '200 G': 299 },
+  },
 ];
 
 // FSSAI license number shown in each product's Additional Information.
