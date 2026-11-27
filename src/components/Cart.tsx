@@ -162,40 +162,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, o
               </div>
             )}
 
-            {/* Coupon input */}
-            {!couponApplied ? (
-              <div>
-                <div className="flex gap-2">
-                  <div className="flex-1 flex items-center gap-2 border-2 border-[#4A3728]/10 rounded-xl sm:rounded-2xl px-3.5 sm:px-4 py-2.5 sm:py-3 bg-[#FFF8EE] focus-within:border-coral/40 transition-colors">
-                    <Tag size={14} className="text-coral/50 flex-shrink-0" />
-                    <input
-                      type="text"
-                      value={couponInput}
-                      onChange={e => { setCouponInput(e.target.value); setCouponError(''); }}
-                      onKeyDown={e => e.key === 'Enter' && handleApplyCoupon()}
-                      placeholder="Have a coupon code?"
-                      className="flex-1 bg-transparent text-xs font-bold brand-rounded tracking-widest outline-none text-[#4A3728] placeholder-[#4A3728]/30"
-                    />
-                  </div>
-                  <button
-                    onClick={handleApplyCoupon}
-                    className="px-4 py-2.5 sm:py-3 bg-[#4A3728] text-white rounded-xl sm:rounded-2xl text-[10px] font-black brand-rounded uppercase tracking-widest hover:bg-coral transition-colors"
-                  >
-                    Apply
-                  </button>
-                </div>
-                {couponError && <p className="text-[10px] text-red-500 font-bold brand-rounded mt-1.5 pl-1">{couponError}</p>}
-              </div>
-            ) : (
-              <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-2xl px-4 py-3">
-                <div className="flex items-center gap-2">
-                  <CheckCircle size={16} className="text-green-500" />
-                  <span className="text-xs font-black brand-rounded uppercase tracking-widest text-green-700">THANKS10 Applied!</span>
-                </div>
-                <button onClick={handleRemoveCoupon} className="text-[10px] text-green-600 hover:text-red-500 font-bold transition-colors">Remove</button>
-              </div>
-            )}
-
+            {/* Coupon input removed: the FIRSTTIME code is applied at the Shopflo checkout. */}
 
             <div className="space-y-2 sm:space-y-3">
               <div className="flex justify-between text-sm">
