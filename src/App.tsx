@@ -7,7 +7,7 @@ import { trackMetaEvent } from './metaTracking.ts';
 import Navbar from './components/Navbar.tsx';
 import SearchOverlay from './components/SearchOverlay.tsx';
 import Hero from './components/Hero.tsx';
-import DiwaliOfferPopup from './components/DiwaliOfferPopup.tsx';
+import FirstOrderOfferPopup from './components/FirstOrderOfferPopup.tsx';
 import ProductCard from './components/ProductCard.tsx';
 import ProductDetail from './components/ProductDetail.tsx';
 import AboutUs from './components/AboutUs.tsx';
@@ -1701,7 +1701,7 @@ const App: React.FC = () => {
       {/* Fixed floating buttons live outside <main> so the footer's z-40 stacking context can't cover them.
           Hidden on mobile checkout — the sticky pay bar occupies that same bottom-of-screen
           strip there, and the two would visually collide. */}
-      <DiwaliOfferPopup
+      <FirstOrderOfferPopup
         suppressed={isCartOpen || ['checkout', 'terms', 'privacyPolicy', 'refundPolicy', 'cancellationPolicy'].includes(currentPage)}
         onShop={() => {
           navigate('shop'); // Shop All, not just the hampers
