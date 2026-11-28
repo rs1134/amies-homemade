@@ -56,7 +56,7 @@ const Accordion: React.FC<{ title: string; defaultOpen?: boolean; children: Reac
 const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onBuyNow, onClose, onNavigateHome, related = [], onSelectProduct, cart = [], onUpdateQuantity, onRemoveFromCart }) => {
   const [selectedWeight, setSelectedWeight] = useState(product.weights?.[0] || product.weight);
   const [selectedSubOption, setSelectedSubOption] = useState(product.subOptions?.[0]?.name || '');
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(0);
   const [imageError, setImageError] = useState(false);
 
   // Gallery: use product.images if provided, otherwise fall back to the single image
@@ -70,7 +70,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onB
     setActiveImg(0);
     setImageError(false);
     setIsVideoPlaying(false);
-    setQuantity(1);
+    setQuantity(0);
     setSelectedWeight(product.weights?.[0] || product.weight);
     setSelectedSubOption(product.subOptions?.[0]?.name || '');
     window.scrollTo({ top: 0, behavior: 'auto' });
@@ -118,12 +118,13 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onB
 
   const handleAddToCart = () => {
     if (product.outOfStock) return;
-    for (let i = 0; i < quantity; i++) onAddToCart(product, selectedWeight, selectedSubOption);
+    // Quantity starts at 0; tapping the button with 0 selected adds one.
+    for (let i = 0; i < Math.max(1, quantity); i++) onAddToCart(product, selectedWeight, selectedSubOption);
   };
 
   const handleBuyNow = () => {
     if (product.outOfStock) return;
-    if (onBuyNow) onBuyNow(product, selectedWeight, selectedSubOption, quantity);
+    if (onBuyNow) onBuyNow(product, selectedWeight, selectedSubOption, Math.max(1, quantity));
     else handleAddToCart();
   };
 
@@ -366,7 +367,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onB
               {!product.outOfStock && (
                 <div className="flex items-center justify-between border-2 border-coral rounded-2xl bg-white w-[9.5rem] sm:w-44 flex-shrink-0">
                   <button
-                    onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                    onClick={() => setQuantity(q => Math.max(0, q - 1))}
                     aria-label="Decrease quantity"
                     className="px-4 py-4 text-coral hover:bg-coral/5 rounded-l-2xl transition-colors"
                   >
@@ -387,7 +388,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onB
                 onClick={handleAddToCart}
                 className={`flex-1 py-4 px-3 rounded-2xl font-bold brand-rounded text-sm sm:text-base transition-all ${product.outOfStock ? 'bg-[#4A3728]/10 text-[#4A3728]/40 cursor-not-allowed' : 'bg-white text-coral border-2 border-coral hover:bg-coral/5 active:scale-95'}`}
               >
-                {product.outOfStock ? 'Out of Stock' : `Add to cart · ₹${(currentPrice * quantity).toLocaleString('en-IN')}`}
+                {product.outOfStock ? 'Out of Stock' : (quantity > 0 ? `Add to cart · ₹${(currentPrice * quantity).toLocaleString('en-IN')}` : 'Add to cart')}
               </button>
             </div>
             {!product.outOfStock && (
