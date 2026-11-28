@@ -199,7 +199,18 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, o
               onClick={() => onCheckout(couponApplied)}
               className="w-full py-4 sm:py-6 bg-coral text-white rounded-2xl sm:rounded-[2rem] font-bold tracking-[0.2em] uppercase text-xs hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 shadow-2xl shadow-coral/30"
             >
-              Checkout <ArrowRight size={18} />
+              <span>Secure Checkout</span>
+              <div className="flex -space-x-2">
+                <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-sm ring-1 ring-black/5 overflow-hidden">
+                  <img src="https://ik.imagekit.io/amieshomemade/paytm-logo.svg" alt="Paytm" className="w-4 h-auto" />
+                </div>
+                <div className="w-6 h-6 rounded-full bg-[#5F259F] flex items-center justify-center shadow-sm ring-1 ring-black/5">
+                  <span className="text-white text-[10px] font-black italic leading-none">पे</span>
+                </div>
+                <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-sm ring-1 ring-black/5 overflow-hidden">
+                  <img src="https://ik.imagekit.io/amieshomemade/google-pay-icon.webp" alt="Google Pay" className="w-4 h-auto" />
+                </div>
+              </div>
             </button>
             <p className="hidden sm:block text-[10px] text-center text-[#4A3728]/40 uppercase tracking-widest font-black brand-rounded">
               Homemade with Love ❤️
