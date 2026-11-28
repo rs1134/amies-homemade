@@ -17,6 +17,7 @@ const ikImg = (url: string, w: number) => {
 interface ProductDetailProps {
   product: Product;
   onAddToCart: (product: Product, weight: string, subOption?: string) => void;
+  onBuyNow?: (product: Product, weight: string, subOption: string | undefined, quantity: number) => void;
   /** Back to the listing (also used for the breadcrumb crumb). */
   onClose: () => void;
   /** Navigate to the home page (breadcrumb "Home"). */
@@ -52,7 +53,7 @@ const Accordion: React.FC<{ title: string; defaultOpen?: boolean; children: Reac
   );
 };
 
-const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onClose, onNavigateHome, related = [], onSelectProduct, cart = [], onUpdateQuantity, onRemoveFromCart }) => {
+const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onBuyNow, onClose, onNavigateHome, related = [], onSelectProduct, cart = [], onUpdateQuantity, onRemoveFromCart }) => {
   const [selectedWeight, setSelectedWeight] = useState(product.weights?.[0] || product.weight);
   const [selectedSubOption, setSelectedSubOption] = useState(product.subOptions?.[0]?.name || '');
   const [quantity, setQuantity] = useState(1);
@@ -118,6 +119,12 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
   const handleAddToCart = () => {
     if (product.outOfStock) return;
     for (let i = 0; i < quantity; i++) onAddToCart(product, selectedWeight, selectedSubOption);
+  };
+
+  const handleBuyNow = () => {
+    if (product.outOfStock) return;
+    if (onBuyNow) onBuyNow(product, selectedWeight, selectedSubOption, quantity);
+    else handleAddToCart();
   };
 
   return (
@@ -376,36 +383,38 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onC
               </div>
             </div>
 
-            {/* Add to cart + wishlist */}
-            <div className="flex items-stretch gap-3 mb-6">
+            {/* Add to cart + wishlist, then Buy Now */}
+            <div className="flex items-stretch gap-3 mb-3">
               <button
                 disabled={product.outOfStock}
                 onClick={handleAddToCart}
-                className={`group/btn flex-1 py-4 px-5 rounded-2xl font-bold brand-rounded uppercase tracking-widest text-sm transition-all flex items-center justify-between gap-3 ${product.outOfStock ? 'bg-[#4A3728]/10 text-[#4A3728]/40 cursor-not-allowed' : 'bg-coral text-white hover:scale-[1.02] active:scale-95 shadow-xl shadow-coral/30'}`}
+                className={`flex-1 py-4 px-5 rounded-2xl font-bold brand-rounded uppercase tracking-widest text-sm transition-all ${product.outOfStock ? 'bg-[#4A3728]/10 text-[#4A3728]/40 cursor-not-allowed' : 'bg-white text-coral border-2 border-coral hover:bg-coral/5 active:scale-95'}`}
               >
-                {product.outOfStock ? (
-                  <span className="w-full text-center">Out of Stock</span>
-                ) : (
-                  <>
-                    <span>Add to Bag</span>
-                    <div className="flex -space-x-2">
-                      <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-sm ring-1 ring-black/5 overflow-hidden">
-                        <img src="https://ik.imagekit.io/amieshomemade/paytm-logo.svg" alt="Paytm" className="w-4 h-auto" />
-                      </div>
-                      <div className="w-6 h-6 rounded-full bg-[#5F259F] flex items-center justify-center shadow-sm ring-1 ring-black/5">
-                        <span className="text-white text-[10px] font-black italic leading-none">पे</span>
-                      </div>
-                      <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-sm ring-1 ring-black/5 overflow-hidden">
-                        <img src="https://ik.imagekit.io/amieshomemade/google-pay-icon.webp" alt="Google Pay" className="w-4 h-auto" />
-                      </div>
-                    </div>
-                  </>
-                )}
+                {product.outOfStock ? 'Out of Stock' : 'Add to Cart'}
               </button>
               <button aria-label="Add to wishlist" className="p-4 bg-pink-100 text-coral rounded-2xl hover:scale-105 transition-transform flex-shrink-0">
                 <Heart size={20} fill="#F04E4E" />
               </button>
             </div>
+            {!product.outOfStock && (
+              <button
+                onClick={handleBuyNow}
+                className="group/btn w-full mb-6 py-4 px-5 rounded-2xl font-bold brand-rounded uppercase tracking-widest text-sm transition-all flex items-center justify-center gap-3 bg-coral text-white hover:scale-[1.02] active:scale-95 shadow-xl shadow-coral/30"
+              >
+                <span>Buy Now</span>
+                <div className="flex -space-x-2">
+                  <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-sm ring-1 ring-black/5 overflow-hidden">
+                    <img src="https://ik.imagekit.io/amieshomemade/paytm-logo.svg" alt="Paytm" className="w-4 h-auto" />
+                  </div>
+                  <div className="w-6 h-6 rounded-full bg-[#5F259F] flex items-center justify-center shadow-sm ring-1 ring-black/5">
+                    <span className="text-white text-[10px] font-black italic leading-none">पे</span>
+                  </div>
+                  <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center shadow-sm ring-1 ring-black/5 overflow-hidden">
+                    <img src="https://ik.imagekit.io/amieshomemade/google-pay-icon.webp" alt="Google Pay" className="w-4 h-auto" />
+                  </div>
+                </div>
+              </button>
+            )}
 
             {/* Trust badges */}
             <div className="grid grid-cols-2 gap-3 mb-8">

@@ -491,7 +491,7 @@ const App: React.FC = () => {
   // ShopfloCheckoutView's own auto-launch effect used to be the first thing
   // to request this script, so every checkout visit paid its full load time
   // before the payment overlay could open. Loading it this early means it's
-  // very likely already cached and ready by the time "Set Delivery Info" is
+  // very likely already cached and ready by the time "Checkout" is
   // clicked. Guarded by document.getElementById so this is a genuine no-op
   // once ShopfloCheckoutView's own loader (same script, same id) runs later.
   useEffect(() => {
@@ -1225,6 +1225,12 @@ const App: React.FC = () => {
         <ProductDetail
           product={selectedProduct}
           onAddToCart={addToCart}
+          onBuyNow={(prod, weight, sub, qty) => {
+            for (let i = 0; i < qty; i++) addToCart(prod, weight, sub);
+            setAddedToast(null);
+            setIsCartOpen(false);
+            navigate('checkout');
+          }}
           onClose={closeProduct}
           onNavigateHome={() => navigate('home')}
           related={related}

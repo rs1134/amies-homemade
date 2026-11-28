@@ -199,7 +199,7 @@ const Cart: React.FC<CartProps> = ({ isOpen, onClose, items, onUpdateQuantity, o
               onClick={() => onCheckout(couponApplied)}
               className="w-full py-4 sm:py-6 bg-coral text-white rounded-2xl sm:rounded-[2rem] font-bold tracking-[0.2em] uppercase text-xs hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 shadow-2xl shadow-coral/30"
             >
-              Set Delivery Info <ArrowRight size={18} />
+              Checkout <ArrowRight size={18} />
             </button>
             <p className="hidden sm:block text-[10px] text-center text-[#4A3728]/40 uppercase tracking-widest font-black brand-rounded">
               Homemade with Love ❤️
