@@ -1670,7 +1670,7 @@ const App: React.FC = () => {
                 style={{ fontFamily: 'Georgia, "Times New Roman", serif', letterSpacing: '0.01em' }}
                 aria-hidden={i === 1}
               >
-                <span className="px-10">✦ Limited Time Introductory Offer: 10% OFF on All Products</span>
+                <span className="px-10">✦ Welcome Offer: Flat ₹50 OFF on your First Order above ₹500 · Code FIRSTTIME</span>
                 <span className="text-white/50">|</span>
                 <span className="px-10">Free Pan India Shipping Above ₹999</span>
                 <span className="text-white/50">|</span>

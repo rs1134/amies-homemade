@@ -361,39 +361,33 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ product, onAddToCart, onB
               </div>
             </div>
 
-            {/* Quantity stepper */}
-            <div className="mb-6">
-              <h4 className="text-xs font-bold brand-rounded mb-3 uppercase tracking-wider">Quantity</h4>
-              <div className="inline-flex items-center border-2 border-coral/20 rounded-full overflow-hidden">
-                <button
-                  onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                  aria-label="Decrease quantity"
-                  className="px-4 py-2.5 text-coral hover:bg-coral/5 transition-colors"
-                >
-                  <Minus size={16} />
-                </button>
-                <span className="px-5 font-bold brand-rounded text-sm text-[#4A3728] tabular-nums min-w-[2.5rem] text-center">{quantity}</span>
-                <button
-                  onClick={() => setQuantity(q => q + 1)}
-                  aria-label="Increase quantity"
-                  className="px-4 py-2.5 text-coral hover:bg-coral/5 transition-colors"
-                >
-                  <Plus size={16} />
-                </button>
-              </div>
-            </div>
-
-            {/* Add to cart + wishlist, then Buy Now */}
+            {/* Quantity stepper + Add to cart (with running total), side by side */}
             <div className="flex items-stretch gap-3 mb-3">
+              {!product.outOfStock && (
+                <div className="flex items-center justify-between border-2 border-coral rounded-2xl bg-white w-[9.5rem] sm:w-44 flex-shrink-0">
+                  <button
+                    onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                    aria-label="Decrease quantity"
+                    className="px-4 py-4 text-coral hover:bg-coral/5 rounded-l-2xl transition-colors"
+                  >
+                    <Minus size={16} />
+                  </button>
+                  <span className="font-bold brand-rounded text-lg text-coral tabular-nums text-center" aria-live="polite">{quantity}</span>
+                  <button
+                    onClick={() => setQuantity(q => q + 1)}
+                    aria-label="Increase quantity"
+                    className="px-4 py-4 text-coral hover:bg-coral/5 rounded-r-2xl transition-colors"
+                  >
+                    <Plus size={16} />
+                  </button>
+                </div>
+              )}
               <button
                 disabled={product.outOfStock}
                 onClick={handleAddToCart}
-                className={`flex-1 py-4 px-5 rounded-2xl font-bold brand-rounded uppercase tracking-widest text-sm transition-all ${product.outOfStock ? 'bg-[#4A3728]/10 text-[#4A3728]/40 cursor-not-allowed' : 'bg-white text-coral border-2 border-coral hover:bg-coral/5 active:scale-95'}`}
+                className={`flex-1 py-4 px-3 rounded-2xl font-bold brand-rounded text-sm sm:text-base transition-all ${product.outOfStock ? 'bg-[#4A3728]/10 text-[#4A3728]/40 cursor-not-allowed' : 'bg-white text-coral border-2 border-coral hover:bg-coral/5 active:scale-95'}`}
               >
-                {product.outOfStock ? 'Out of Stock' : 'Add to Cart'}
-              </button>
-              <button aria-label="Add to wishlist" className="p-4 bg-pink-100 text-coral rounded-2xl hover:scale-105 transition-transform flex-shrink-0">
-                <Heart size={20} fill="#F04E4E" />
+                {product.outOfStock ? 'Out of Stock' : `Add to cart · ₹${(currentPrice * quantity).toLocaleString('en-IN')}`}
               </button>
             </div>
             {!product.outOfStock && (
